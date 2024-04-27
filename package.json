@@ -6,19 +6,71 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "fix": "next lint --fix",
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test:silent": "npm test -- --silent",
+    "test:watch": "npm test -- --watchAll"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.3"
+    "@emotion/react": "*",
+    "@emotion/styled": "*",
+    "@mui/icons-material": "*",
+    "@mui/material": "*",
+    "class-validator": "*",
+    "graphql": "*",
+    "graphql-request": "*",
+    "graphql-yoga": "*",
+    "jsonwebtoken": "*",
+    "next": "*",
+    "pg": "*",
+    "react": "*",
+    "react-dom": "*",
+    "reflect-metadata": "*",
+    "type-graphql": "^2.0.0-beta.6"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "@jest/globals": "*",
+    "@testing-library/jest-dom": "*",
+    "@testing-library/react": "*",
+    "@testing-library/user-event": "*",
+    "@types/glob": "*",
+    "@types/jest": "*",
+    "@types/jsonwebtoken": "*",
+    "@types/node": "*",
+    "@types/pg": "*",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@types/supertest": "*",
+    "bestzip": "*",
+    "dotenv": "*",
+    "eslint": "*",
+    "eslint-config-next": "*",
+    "eslint-config-typescript": "*",
+    "jest": "*",
+    "jest-environment-jsdom": "*",
+    "msw": "*",
+    "next-router-mock": "*",
+    "prettier": "^3.2.5",
+    "supertest": "*",
+    "ts-jest": "*",
+    "ts-node": "*",
+    "ts-postgres": "*",
+    "typescript": "*"
+  },
+  "eslintConfig": {
+    "extends": [
+      "next/core-web-vitals",
+      "typescript"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 14
+    },
+    "rules": {
+      "indent": [
+        "warn",
+        2
+      ]
+    }
   }
 }
