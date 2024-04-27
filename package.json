@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "fix": "next lint --fix",
+    "fix": "prettier --write ./**/*.{ts,tsx} && next lint --fix",
     "test": "jest --runInBand --detectOpenHandles --forceExit",
     "test:silent": "npm test -- --silent",
     "test:watch": "npm test -- --watchAll"
