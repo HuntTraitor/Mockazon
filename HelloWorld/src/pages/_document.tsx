@@ -1,5 +1,9 @@
-import { Html, Head, Main, NextScript } from "next/document";
+import { Head, Html, Main, NextScript } from 'next/document';
 
+/**
+ * Renders the document.
+ * @return {JSX.Element} The rendered document.
+ */
 export default function Document() {
   return (
     <Html lang="en">
