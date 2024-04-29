@@ -18,6 +18,7 @@
     "@mui/icons-material": "*",
     "@mui/material": "*",
     "class-validator": "*",
+    "cors": "^2.8.5",
     "graphql": "*",
     "graphql-request": "*",
     "graphql-yoga": "*",
@@ -27,6 +28,8 @@
     "react": "*",
     "react-dom": "*",
     "reflect-metadata": "*",
+    "swagger-ui-express": "^5.0.0",
+    "tsoa": "^6.2.1",
     "type-graphql": "^2.0.0-beta.6"
   },
   "devDependencies": {
@@ -43,7 +46,7 @@
     "@types/react-dom": "*",
     "@types/supertest": "*",
     "bestzip": "*",
-    "dotenv": "*",
+    "dotenv": "^16.4.5",
     "eslint": "*",
     "eslint-config-google": "^0.14.0",
     "eslint-config-next": "*",
