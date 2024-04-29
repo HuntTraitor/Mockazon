@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS vendor CASCADE;
+CREATE TABLE vendor(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), data jsonb);
