@@ -1,0 +1,9 @@
+{
+  "extends": ["next/core-web-vitals", "google", "prettier", "typescript"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "eqeqeq": "error",
+    "no-unused-vars": "error"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "name": "mockazon",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "fix": "prettier --write ./**/*.{ts,tsx} && next lint --fix",
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test:silent": "npm test -- --silent",
+    "test:watch": "npm test -- --watchAll"
+  },
+  "dependencies": {
+    "@emotion/react": "*",
+    "@emotion/styled": "*",
+    "@mui/icons-material": "*",
+    "@mui/material": "*",
+    "class-validator": "*",
+    "cors": "^2.8.5",
+    "graphql": "*",
+    "graphql-request": "*",
+    "graphql-yoga": "*",
+    "jsonwebtoken": "*",
+    "next": "*",
+    "pg": "*",
+    "react": "*",
+    "react-dom": "*",
+    "reflect-metadata": "*",
+    "swagger-ui-express": "^5.0.0",
+    "tsoa": "^6.2.1",
+    "type-graphql": "^2.0.0-beta.6"
+  },
+  "devDependencies": {
+    "@jest/globals": "*",
+    "@testing-library/jest-dom": "*",
+    "@testing-library/react": "*",
+    "@testing-library/user-event": "*",
+    "@types/glob": "*",
+    "@types/jest": "*",
+    "@types/jsonwebtoken": "*",
+    "@types/node": "*",
+    "@types/pg": "*",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@types/supertest": "*",
+    "bestzip": "*",
+    "dotenv": "^16.4.5",
+    "eslint": "*",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-next": "*",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-typescript": "*",
+    "eslint-plugin-prettier": "^5.1.3",
+    "jest": "*",
+    "jest-environment-jsdom": "*",
+    "msw": "*",
+    "next-router-mock": "*",
+    "prettier": "^3.2.5",
+    "supertest": "*",
+    "ts-jest": "*",
+    "ts-node": "*",
+    "ts-postgres": "*",
+    "typescript": "*"
+  },
+  "eslintConfig": {
+    "extends": [
+      "next/core-web-vitals",
+      "typescript"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 14
+    },
+    "rules": {
+      "indent": [
+        "warn",
+        2
+      ]
+    }
+  }
+}
