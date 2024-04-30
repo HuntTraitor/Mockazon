@@ -1,5 +1,5 @@
 import { NewOrder, Order } from ".";
-import { pool } from '../../AuthService/src/db';
+import { pool } from '../db';
 
 export class OrderService {
   public async create( productId: string, NewOrder: NewOrder,): Promise<Order> {
