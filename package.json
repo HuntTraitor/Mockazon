@@ -2,7 +2,7 @@
   "name": "mockazon",
   "version": "1.0.0",
   "description": "Educational mock/clone of Amazon.com",
-  "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, FIXME: Insert names here",
+  "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, Evan Metcalf <evmetcal@ucsc.edu>, FIXME put names here",
   "license": "TBD (FIXME: MIT maybe)",
   "repository": "https://github.com/ekrishnamagaru/Mockazon",
   "scripts": {
