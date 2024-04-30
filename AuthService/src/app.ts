@@ -1,11 +1,11 @@
+import cors from 'cors';
 import express, {
+  ErrorRequestHandler,
+  Request as ExRequest,
+  Response as ExResponse,
   Express,
   Router,
-  Response as ExResponse,
-  Request as ExRequest,
-  ErrorRequestHandler,
 } from 'express';
-import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 
 import { RegisterRoutes } from '../build/routes';

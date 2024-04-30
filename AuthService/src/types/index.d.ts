@@ -14,9 +14,8 @@ export type Email = string;
 
 
 export type SessionUser = {
-  id: string;
-  email: string;
-  name: string;
+  id: UUID;
+  role: string;
 };
 
 declare global {

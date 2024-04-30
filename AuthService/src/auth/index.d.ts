@@ -1,17 +1,19 @@
+import { Email, UUID } from '../types';
+
 export interface User {
-  id: string;
-  email: string;
+  id: UUID;
+  email: Email;
   name: string;
-  roles: string[];
+  role: string;
 }
 
 export interface Credentials {
-  email: string;
+  email: Email;
   password: string;
 }
 
 export interface Authenticated {
-  id: string;
+  id: UUID;
   name: string;
   accessToken: string;
 }

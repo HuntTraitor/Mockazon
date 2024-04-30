@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { AuthService } from './authService';
 import { SessionUser } from '../types';
+import { AuthService } from './service';
 
 export function expressAuthentication(
   request: Request,

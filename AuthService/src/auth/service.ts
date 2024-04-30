@@ -1,15 +1,15 @@
 import * as jwt from 'jsonwebtoken';
 
-import { SessionUser } from '../types';
-import { Credentials, Authenticated, User } from '.';
+import { Authenticated, Credentials, User } from '.';
 import { pool } from '../db';
+import { SessionUser } from '../types';
 
 export class AuthService {
   public async login(
     credentials: Credentials
   ): Promise<Authenticated | undefined> {
     const select =
-      `SELECT * FROM member` +
+      `SELECT * FROM account` +
       ` WHERE data->>'email' = $1` +
       ` AND crypt($2, data->>'pwhash') = data->>'pwhash'`;
 
@@ -40,32 +40,20 @@ export class AuthService {
     }
   }
 
-  public async check(
-    authHeader?: string,
-    scopes?: string[]
-  ): Promise<SessionUser> {
+  public async check(accessToken: string): Promise<SessionUser>  {
     return new Promise((resolve, reject) => {
-      if (!authHeader) {
-        reject(new Error('Unauthorised'));
-      } else {
-        const token = authHeader.split(' ')[1];
-        jwt.verify(
-          token,
-          `${process.env.MASTER_SECRET}`,
+      try {
+        jwt.verify(accessToken, 
+          `${process.env.MASTER_SECRET}`, 
           (err: jwt.VerifyErrors | null, decoded?: object | string) => {
-            const user = decoded as User;
             if (err) {
               reject(err);
-            } else if (scopes) {
-              for (const scope of scopes) {
-                if (!user.roles || !user.roles.includes(scope)) {
-                  reject(new Error('Unauthorised'));
-                }
-              }
-            }
-            resolve({ id: user.id, email: user.email, name: user.name });
-          }
-        );
+            } 
+            const account = decoded as User
+            resolve({id: account.id, role: account.role});
+          });
+      } catch (e) {
+        reject(e);
       }
     });
   }

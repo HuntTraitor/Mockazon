@@ -1,10 +1,10 @@
 {
-  "name": "cse187-assignment1",
+  "name": "mockazon-auth-microservice",
   "version": "1.0.0",
-  "description": "CSE187 Assignment 1",
-  "author": "David Harrison <dcharris@ucsc.edu>",
-  "license": "UNLICENSED",
-  "repository": "none",
+  "description": "Micro Service responsible for all things authentication",
+  "author": "Lukas Teixeira Döpcke <lteixeir@ucsc.edu>, FIXME: Insert names",
+  "license": "FIXME: Insert license",
+  "repository": "FIXME: Insert repository",
   "devDependencies": {
     "@types/bcrypt": "*",
     "@types/cors": "*",
@@ -30,12 +30,12 @@
   },
   "dependencies": {
     "cors": "*",
-    "dotenv": "*",
+    "dotenv": "^16.4.5",
     "express": "*",
     "jsonwebtoken": "*",
     "pg": "*",
     "swagger-ui-express": "*",
-    "tsoa": "*"
+    "tsoa": "^6.2.1"
   },
   "nodemonConfig": {
     "watch": [

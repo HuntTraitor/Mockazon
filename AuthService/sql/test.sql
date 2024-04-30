@@ -1,0 +1,3 @@
+INSERT INTO account(data) VALUES (jsonb_build_object('email', 'molly@mockazon.com', 'pwhash', crypt('mollyvendor', '87'), 'role', 'vendor'));
+INSERT INTO account(data) VALUES (jsonb_build_object('email', 'anna@mockazon.com', 'pwhash', crypt('annaadmin', '87'), 'role', 'admin'));
+INSERT INTO account(data) VALUES (jsonb_build_object('email', 'bob@mockazon.com', 'pwhash', crypt('bobshopper', '87'), 'role', 'shoppper'));
