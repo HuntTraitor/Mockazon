@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Fragment } from 'react';
 
 export const App = () => {
