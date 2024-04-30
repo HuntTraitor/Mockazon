@@ -1,13 +1,22 @@
+import { UUID } from "../types";
+
+/**
+ * @pattern ^[2-9][0-9]*
+ * @example 1
+ */
+
+export type Quantity = number;
+
 export interface NewOrder {
-  purchaseDate: string;
-  quantity: number;
+  purchaseDate: Date;
+  quantity: Quantity;
 }
 
 export interface Order {
-  id: string;
-  product_id: string;
+  id: UUID;
+  product_id: UUID;
   data: {
-    purchaseDate: string;
-    quantity: number;
+    purchaseDate: Date;
+    quantity: Quantity;
   }
 }
