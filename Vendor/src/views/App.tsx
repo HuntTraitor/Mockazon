@@ -5,7 +5,7 @@ export const App = () => {
   return (
     <Fragment>
       <h1>Mockazon Vendor App</h1>
-      <Image
+      <img
         src="/mockazon_logo_white.png"
         alt="Mockazon Logo"
         style={{
