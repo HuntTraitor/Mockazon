@@ -1,0 +1,26 @@
+{
+  "name": "mockazon",
+  "version": "1.0.0",
+  "description": "Educational mock/clone of Amazon.com",
+  "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, FIXME: Insert names here",
+  "license": "TBD (FIXME: MIT maybe)",
+  "repository": "https://github.com/ekrishnamagaru/Mockazon",
+  "scripts": {
+    "docker": "npm run docker-accounts && npm run docker-books",
+    "docker-accounts": "cd AccountService && docker-compose up -d", 
+    "docker-books": "cd BookService && docker-compose up -d",
+    "installs": "npm install && npm run install-admin && npm run install-helloworld && npm run install-shopper && npm run install-vendor",
+    "install-admin": "cd Admin && npm install",
+    "install-helloworld": "cd HelloWorld && npm install",
+    "install-shopper": "cd Shopper && npm install",
+    "install-vendor": "cd Vendor && npm install",
+    "dev": "concurrently --kill-others \"npm run admin\" \"npm run helloworld\" \"npm run shopper\" \"npm run vendor\"",
+    "admin": "cd AccountService && npm run dev",
+    "helloworld": "cd BookService && npm run dev",
+    "shopper": "cd Shopper && npm run dev",
+    "vendor": "cd WebApp && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "*"
+  }
+}
