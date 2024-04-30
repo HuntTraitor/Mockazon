@@ -1,10 +1,11 @@
+import Image from 'next/image';
 import { Fragment } from 'react';
 
 export const App = () => {
   return (
     <Fragment>
       <h1>Mockazon Vendor App</h1>
-      <img
+      <Image
         src="/mockazon_logo_white.png"
         alt="Mockazon Logo"
         style={{
