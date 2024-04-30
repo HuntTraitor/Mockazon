@@ -1,10 +1,10 @@
 {
-  "name": "cse186-assignment8-e2etest",
+  "name": "mockazon-shopper-app-e2e-testing",
   "version": "1.0.0",
-  "description": "CSE186 Assignment 8 - End to End Test",
-  "author": "David Harrison <dcharris@ucsc.edu>",
-  "license": "UNLICENSED",
-  "repository": "none",
+  "description": "End-to-end tests for the Mockazon Shopper App",
+  "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, Evan Metcalf <evmetcal@ucsc.edu>, Eesha Krishnamagaru <elkrishn@ucsc.edu>, Hunter Tratar <htratar@ucsc.edu>, Trevor Ryles <tryles@ucsc.edu>",
+  "license": "TBD (FIXME: MIT maybe)",
+  "repository": "https://github.com/ekrishnamagaru/Mockazon",
   "devDependencies": {
     "dotenv": "*",
     "eslint": "*",
