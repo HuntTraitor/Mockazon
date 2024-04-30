@@ -6,17 +6,7 @@
     "outputDirectory": "build",
     "specVersion": 3,
     "schemes": [ "http" ],
-    "basePath": "/api/v0",
-    "securityDefinitions": {
-      "jwt": {
-        "type": "http",
-        "scheme": "bearer",
-        "scopes": {
-          "member": "member",
-          "admin": "admin"
-        }
-      }
-    }
+    "basePath": "/api/v0"
   },
   "routes": {
     "routesDir": "build"

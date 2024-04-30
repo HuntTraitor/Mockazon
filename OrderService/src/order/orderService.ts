@@ -11,7 +11,6 @@ export class OrderService {
       values: [productId, NewOrder]
     }
     const {rows} = await pool.query(query)
-    console.log(rows)
     return rows[0]
   }
 }
