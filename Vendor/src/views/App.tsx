@@ -1,13 +1,14 @@
-import Image from 'next/image';
 import { Fragment } from 'react';
-
+import Image from 'next/image';
 export const App = () => {
   return (
     <Fragment>
       <h1>Mockazon Vendor App</h1>
-      <img
+      <Image
         src="/mockazon_logo_white.png"
         alt="Mockazon Logo"
+        width={0}
+        height={0}
         style={{
           width: '400px',
           height: 'auto',
