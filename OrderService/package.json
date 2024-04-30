@@ -1,5 +1,5 @@
 {
-  "name": "mockazon-auth-microservice",
+  "name": "mockazon-order-microservice",
   "version": "1.0.0",
   "description": "Micro Service responsible for all things authentication",
   "author": "Lukas Teixeira Döpcke <lteixeir@ucsc.edu>, FIXME: Insert names",
