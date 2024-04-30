@@ -14,10 +14,10 @@ export type Email = string;
 
 
 export type SessionUser = {
-  id: string,
-  email: string,
-  name: string
-}
+  id: string;
+  email: string;
+  name: string;
+};
 
 declare global {
   namespace Express {
