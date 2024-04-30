@@ -1,5 +1,5 @@
 {
-  "name": "mockazon-order-microservice",
+  "name": "mockazon-product-microservice",
   "version": "1.0.0",
   "description": "Micro Service responsible for all things authentication",
   "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, Evan Metcalf <evmetcal@ucsc.edu>, Eesha Krishnamagaru <elkrishn@ucsc.edu>, Hunter Tratar <htratar@ucsc.edu>, Trevor Ryles <tryles@ucsc.edu>",

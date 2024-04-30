@@ -12,7 +12,6 @@ export type UUID = string;
  */
 export type Email = string;
 
-
 export type SessionUser = {
   id: UUID;
   role: string;

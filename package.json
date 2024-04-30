@@ -2,25 +2,32 @@
   "name": "mockazon",
   "version": "1.0.0",
   "description": "Educational mock/clone of Amazon.com",
-  "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, Evan Metcalf <evmetcal@ucsc.edu>, FIXME put names here",
-  "license": "TBD (FIXME: MIT maybe)",
+  "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, Evan Metcalf <evmetcal@ucsc.edu>, Eesha Krishnamagaru <elkrishn@ucsc.edu>, Hunter Tratar <htratar@ucsc.edu>, Trevor Ryles <tryles@ucsc.edu>",
+  "license": "none",
   "repository": "https://github.com/ekrishnamagaru/Mockazon",
   "scripts": {
-    "docker": "npm run docker-accounts && npm run docker-books",
-    "docker-accounts": "cd AccountService && docker-compose up -d", 
-    "docker-books": "cd BookService && docker-compose up -d",
-    "installs": "npm install && npm run install-admin && npm run install-helloworld && npm run install-shopper && npm run install-vendor",
+    "docker": "npm run docker-auth && npm run docker-order",
+    "docker-auth": "cd AuthService && docker-compose up -d",
+    "docker-order": "cd OrderService && docker-compose up -d",
+    "installs": "npm install && npm run install-admin && npm run install-helloworld && npm run install-shopper && npm run install-vendor && npm run install-auth && npm run install-order",
     "install-admin": "cd Admin && npm install",
+    "install-auth": "cd AuthService && npm install",
+    "install-order": "cd OrderService && npm install",
     "install-helloworld": "cd HelloWorld && npm install",
     "install-shopper": "cd Shopper && npm install",
     "install-vendor": "cd Vendor && npm install",
-    "dev": "concurrently --kill-others \"npm run admin\" \"npm run helloworld\" \"npm run shopper\" \"npm run vendor\"",
-    "admin": "cd AccountService && npm run dev",
-    "helloworld": "cd BookService && npm run dev",
+    "dev": "concurrently --kill-others \"npm run admin\" \"npm run helloworld\" \"npm run shopper\" \"npm run vendor\" \"npm run auth\" \"npm run order\"",
+    "admin": "cd Admin && npm run dev",
+    "auth": "cd AuthService && npm run dev",
+    "order": "cd OrderService && npm run dev",
+    "helloworld": "cd HelloWorld && npm run dev",
     "shopper": "cd Shopper && npm run dev",
-    "vendor": "cd WebApp && npm run dev"
+    "vendor": "cd Vendor && npm run dev"
   },
   "devDependencies": {
     "concurrently": "*"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
   }
 }
