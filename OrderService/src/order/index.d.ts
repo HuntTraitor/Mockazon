@@ -1,11 +1,11 @@
-import { UUID } from "../../../AuthService/src/types";
+import { UUID } from "../types/index";
 
 /**
- * @pattern ^[2-9][0-9]*
+ * orders from 1-999
+ * @pattern ^([1-9][0-9]{0,2})$
  * @example 1
  */
-
-export type Quantity = number;
+export type Quantity = string;
 
 export interface NewOrder {
   purchaseDate: Date;
