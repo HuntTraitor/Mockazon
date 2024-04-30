@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Micro Service responsible for all things authentication",
   "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, Evan Metcalf <evmetcal@ucsc.edu>, Eesha Krishnamagaru <elkrishn@ucsc.edu>, Hunter Tratar <htratar@ucsc.edu>, Trevor Ryles <tryles@ucsc.edu>",
-  "license": "TBD (FIXME: MIT maybe)",
+  "license": "none",
   "repository": "https://github.com/ekrishnamagaru/Mockazon",
   "devDependencies": {
     "@types/bcrypt": "*",
@@ -87,6 +87,6 @@
     "swagger": "tsoa spec-and-routes",
     "pretest": "npm run swagger",
     "test": "jest --runInBand --coverage --verbose --forceExit",
-    "lint": "eslint test/**/*.[jt]s src/**/*.[jt]s --fix"
+    "lint": "prettier --write ./**/*.{ts,tsx} && eslint test/**/*.[jt]s src/**/*.[jt]s --fix"
   }
 }

@@ -1,7 +1,7 @@
 {
   "entryFile": "src/app.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/**/*Controller.ts"],
+  "controllerPathGlobs": ["src/**/*[cC]ontroller.ts"],
   "spec": {
     "outputDirectory": "build",
     "specVersion": 3,
@@ -19,7 +19,6 @@
     }
   },
   "routes": {
-    "routesDir": "build",
-    "authenticationModule": "./src/auth/expressAuth.ts"
+    "routesDir": "build"
   }
 }

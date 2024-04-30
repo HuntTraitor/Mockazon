@@ -1,7 +1,7 @@
-import { Pool } from 'pg';
+import { Pool } from "pg";
 
 const pool = new Pool({
-  host: 'localhost',
+  host: "localhost",
   port: 5432,
   database: process.env.POSTGRES_DB,
   user: process.env.POSTGRES_USER,
@@ -9,4 +9,3 @@ const pool = new Pool({
 });
 
 export { pool };
-
