@@ -15,6 +15,7 @@
     "install-order": "cd OrderService && npm install",
     "install-helloworld": "cd HelloWorld && npm install",
     "install-shopper": "cd Shopper && npm install",
+    "install-product": "cd ProductService && npm install",
     "install-vendor-web-app": "cd Vendor/Web App && npm install",
     "install-vendor-public-api": "cd Vendor/Public API && npm install",
     "dev": "concurrently --kill-others \"npm run admin\" \"npm run helloworld\" \"npm run shopper\" \"npm run vendor\" \"npm run auth\" \"npm run order\"",
