@@ -23,7 +23,9 @@ afterAll((done) => {
 const productId = '3f2687d0-d115-421f-ae23-ac572005a791'
 const mockOrder = {
   purchaseDate: new Date().toISOString(),
-  quantity: "2"
+  quantity: "2",
+  shipped: false,
+  delivered: false,
 }
 
 test('Opens the swagger docs page 200', async() => {

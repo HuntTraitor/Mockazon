@@ -10,6 +10,8 @@ export type Quantity = string;
 export interface NewOrder {
   purchaseDate: Date;
   quantity: Quantity;
+  shipped: boolean;
+  delivered: boolean;
 }
 
 export interface Order {
@@ -18,5 +20,7 @@ export interface Order {
   data: {
     purchaseDate: Date;
     quantity: Quantity;
+    shipped: boolean;
+    delivered: boolean;
   }
 }
