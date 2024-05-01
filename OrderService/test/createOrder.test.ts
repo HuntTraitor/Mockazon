@@ -44,6 +44,8 @@ test('Creates a new order 201', async() => {
       expect(res.body.data).toBeDefined()
       expect(res.body.data.quantity).toBe(mockOrder.quantity)
       expect(res.body.data.purchaseDate).toBe(mockOrder.purchaseDate)
+      expect(res.body.data.delivered).toBeFalsy()
+      expect(res.body.data.shipped).toBeFalsy()
     })
 })
 
