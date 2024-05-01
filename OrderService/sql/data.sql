@@ -1,0 +1,1 @@
+INSERT INTO "order"(product_id, data) VALUES ('3f2687d0-d115-421f-ae23-ac572005a791', jsonb_build_object('ordered', 'date'));

@@ -9,10 +9,10 @@ let server: http.Server<
   typeof http.ServerResponse
 >;
 
-beforeAll(async () => {
+beforeEach(async () => {
   server = http.createServer(app);
   server.listen();
-  return db.reset();
+  await db.reset();
 });
 
 afterAll((done) => {
@@ -73,10 +73,10 @@ test('Creates a new order quantity 0 400', async() => {
 
 test('Creates a new order quantity 1000 400', async() => {
   await supertest(server)
-  .post(`/api/v0/order/${productId}`)
-  .send({
-    purchaseDate: new Date().toISOString(),
-    quantity: "1000"
-  })
-  .expect(400)
+    .post(`/api/v0/order/${productId}`)
+    .send({
+      purchaseDate: new Date().toISOString(),
+      quantity: "1000"
+    })
+    .expect(400)
 })
