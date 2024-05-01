@@ -22,3 +22,9 @@ export interface Order {
     delivered: boolean;
   }
 }
+
+export interface UpdateOrder {
+  quantity?: Quantity;
+  shipped?: boolean;
+  delivered?: boolean;
+}

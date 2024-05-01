@@ -1,4 +1,4 @@
-import { NewOrder, Order } from ".";
+import { NewOrder, Order, UpdateOrder } from ".";
 import { pool } from '../db';
 
 export class OrderService {
@@ -46,6 +46,20 @@ export class OrderService {
     const query = {
       text: deleteQuery,
       values: [`${orderId}`]
+    }
+    const {rows} = await pool.query(query)
+    return rows[0]
+  }
+
+  public async updateOrder(orderId: string, updates: UpdateOrder): Promise<Order> {
+    const update = `UPDATE "order"
+    SET data = data || $1::jsonb
+    WHERE id = $2
+    RETURNING *`
+
+    const query = {
+      text: update,
+      values: [updates, orderId]
     }
     const {rows} = await pool.query(query)
     return rows[0]

@@ -9,9 +9,10 @@ import {
   Query,
   Get,
   Delete,
+  Put,
 } from 'tsoa'
 
-import {Order, NewOrder} from '.'
+import {Order, NewOrder, Quantity} from '.'
 import { OrderService } from './orderService';
 import { UUID } from '../types';
 
@@ -50,6 +51,24 @@ export class OrderController extends Controller {
     @Path() orderId: UUID
   ): Promise<Order|undefined> {
     const order = await new OrderService().deleteOrder(orderId)
+    return order ?? this.setStatus(404)
+  }
+
+  @Put('{orderId}')
+  @Response('404', 'Not Found')
+  @SuccessResponse('201', 'Updated')
+  public async updateOrder(
+    @Path() orderId: UUID,
+    @Query('quantity') quantity?: Quantity,
+    @Query('shipped') shipped?: boolean,
+    @Query('delivered') delivered?: boolean
+  ): Promise<Order|undefined> {
+    const updates = {
+      quantity: quantity,
+      shipped: shipped,
+      delivered: delivered,
+    }
+    const order = await new OrderService().updateOrder(orderId, updates)
     return order ?? this.setStatus(404)
   }
 }
