@@ -17,15 +17,12 @@ export type Email = string;
 
 export type SessionUser = {
     id: UUID,
-    email: string,
-    name: string
-    role: string,
   }
   
 declare global {
-namespace Express {
+  namespace Express {
     export interface Request {
-    user?: SessionUser;
+      user?: SessionUser;
     }
-}
+  }
 }
