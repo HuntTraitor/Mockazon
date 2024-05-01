@@ -38,6 +38,16 @@ const postOrders = async (amount: number) => {
   }
 }
 
+test('Gets all orders 200', async() => {
+  await postOrders(10)
+  await supertest(server)
+    .get(`/api/v0/order`)
+    .expect(200)
+    .then((res) => {
+      expect(res.body.length).toEqual(10)
+    })
+})
+
 test('Gets one order by productId 200', async() => {
   await postOrders(1)
   await supertest(server)
