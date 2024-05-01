@@ -20,18 +20,33 @@ afterAll((done) => {
   server.close(done);
 });
 
-test('test', async () => {
-  expect(1).toBe(1);
-});
+// const vendorId = '81c689b1-b7a7-4100-8b2d-309908b444f5';
+// let productId = '';
 
 // test('Anna Create Product', async () => {
 //   const newProduct = {
 //     name: 'Basketball',
 //     price: '20.00'
 //   }
-//   const vendor_id = '81c689b1-b7a7-4100-8b2d-309908b444f5';
 //   await supertest(server)
 //     .post('/api/v0/product')
 //     .send(newProduct)
 //     .expect(201)
+//     .then((response) => {
+//       console.log(response.body);
+//       expect(response.body.vendor_id).toBe(vendorId);
+//       productId = response.body.id;
+//     });
+// });
+
+// test('Anna Disables Product', async () => {
+//   await supertest(server)
+//     .put(`/api/v0/product/${productId}`)
+//     .expect(200)
+//     .then((response) => {
+//       expect(response.body.id).toBe(productId);
+//       expect(response.body.vendor_id).toBe(vendorId);
+//       expect(response.body.data.name).toBe('The Great Gatsby');
+//       expect(response.body.active).toBe(false);
+//     });
 // });
