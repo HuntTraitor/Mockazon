@@ -4,7 +4,7 @@ import Index from '../../src/pages/index';
 
 it('Renders', async () => {
   render(<Index />);
-  await screen.findByText('Hello World this is Lukas Teixeira Döpcke', {
+  await screen.findByText('Settings', {
     exact: false,
   });
 });
