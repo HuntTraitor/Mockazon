@@ -8,6 +8,7 @@ import {
   Path,
   Query,
   Get,
+  Delete,
 } from 'tsoa'
 
 import {Order, NewOrder} from '.'
@@ -40,6 +41,15 @@ export class OrderController extends Controller {
     @Path() orderId: UUID
   ): Promise<Order|undefined> {
     const order = await new OrderService().getOrder(orderId)
+    return order ?? this.setStatus(404)
+  }
+
+  @Delete('{orderId}')
+  @Response('404', 'Not Found')
+  public async deleteOrder(
+    @Path() orderId: UUID
+  ): Promise<Order|undefined> {
+    const order = await new OrderService().deleteOrder(orderId)
     return order ?? this.setStatus(404)
   }
 }

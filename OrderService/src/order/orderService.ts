@@ -40,4 +40,14 @@ export class OrderService {
     const {rows} = await pool.query(query)
     return rows[0]
   }
+
+  public async deleteOrder(orderId: string): Promise<Order> {
+    const deleteQuery = `DELETE FROM "order" WHERE id = $1 RETURNING *`
+    const query = {
+      text: deleteQuery,
+      values: [`${orderId}`]
+    }
+    const {rows} = await pool.query(query)
+    return rows[0]
+  }
 }
