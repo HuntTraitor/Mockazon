@@ -24,8 +24,6 @@ const productId = '3f2687d0-d115-421f-ae23-ac572005a791'
 const mockOrder = {
   purchaseDate: new Date().toISOString(),
   quantity: "2",
-  shipped: false,
-  delivered: false,
 }
 
 test('Opens the swagger docs page 200', async() => {
@@ -68,8 +66,7 @@ test('Creates a new order quantity 0 400', async() => {
     .post(`/api/v0/order/${productId}`)
     .send({
       purchaseDate: new Date().toISOString(),
-      quantity: "0"
-    })
+      quantity: "0"})
     .expect(400)
 })
 
@@ -78,7 +75,17 @@ test('Creates a new order quantity 1000 400', async() => {
     .post(`/api/v0/order/${productId}`)
     .send({
       purchaseDate: new Date().toISOString(),
-      quantity: "1000"
+      quantity: "1000"})
+    .expect(400)
+})
+
+test('Creates a new order unknown field 400', async() => {
+  await supertest(server)
+    .post(`/api/v0/order/${productId}`)
+    .send({
+      purchaseDate: new Date().toISOString(),
+      quantity: "2",
+      uknown: "123",
     })
     .expect(400)
 })

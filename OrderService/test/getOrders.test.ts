@@ -24,8 +24,6 @@ const productId = '3f2687d0-d115-421f-ae23-ac572005a791'
 const mockOrder = {
   purchaseDate: new Date().toISOString(),
   quantity: "2",
-  shipped: false,
-  delivered: false,
 }
 
 const postOrders = async (amount: number) => {
@@ -49,6 +47,8 @@ test('Gets one order 200', async() => {
       expect(res.body[0].data).toBeDefined()
       expect(res.body[0].data.quantity).toBe("2")
       expect(res.body[0].data.purchaseDate).toBeDefined()
+      expect(res.body[0].data.delivered).toBeFalsy()
+      expect(res.body[0].data.received).toBeFalsy()
     })
 })
 

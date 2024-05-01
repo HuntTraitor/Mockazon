@@ -5,10 +5,17 @@ export class OrderService {
   public async create( productId: string, NewOrder: NewOrder,): Promise<Order> {
     const insert = `INSERT INTO "order"(product_id, data) VALUES 
     ($1, $2) RETURNING *`
+  
+    const orderData = {
+      purchaseDate: NewOrder.purchaseDate,
+      quantity: NewOrder.quantity,
+      shipped: false,
+      delivered: false
+    }
 
     const query = {
       text: insert,
-      values: [productId, NewOrder]
+      values: [productId, orderData]
     }
     const {rows} = await pool.query(query)
     return rows[0]
