@@ -22,11 +22,22 @@ export class OrderService {
     return rows[0]
   }
 
-  public async getOrdersByProductId(productId: UUID): Promise<Order[]> {
-    const select = `SELECT * FROM "order" WHERE product_id = $1`
+  public async getAllOrders(productId: UUID|undefined, accountId: UUID|undefined): Promise<Order[]> {
+    let select = `SELECT * FROM "order" WHERE 1=1`
+    const values = []
+
+    if (productId) {
+      select += ` AND product_id = $${values.length + 1}`
+      values.push(productId)
+    }
+
+    if (accountId) {
+      select += ` AND account_id = $${values.length + 1}`
+      values.push(accountId)
+    }
     const query = {
       text: select,
-      values: [`${productId}`]
+      values: values
     }
     const {rows} = await pool.query(query)
     return rows
