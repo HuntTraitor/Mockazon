@@ -33,4 +33,13 @@ export class OrderController extends Controller {
   ): Promise<Order|undefined> {
     return await new OrderService().create(productId, order)
   }
+
+  @Get('{orderId}')
+  @Response('404', 'Not Found')
+  public async getOrder(
+    @Path() orderId: UUID
+  ): Promise<Order|undefined> {
+    const order = await new OrderService().getOrder(orderId)
+    return order ?? this.setStatus(404)
+  }
 }

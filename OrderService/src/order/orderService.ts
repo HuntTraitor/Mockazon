@@ -30,4 +30,14 @@ export class OrderService {
     const {rows} = await pool.query(query)
     return rows
   }
+
+  public async getOrder(orderId: string): Promise<Order> {
+    const select = `SELECT * FROM "order" WHERE id = $1`
+    const query = {
+      text: select,
+      values: [`${orderId}`]
+    }
+    const {rows} = await pool.query(query)
+    return rows[0]
+  }
 }
