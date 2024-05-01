@@ -54,18 +54,24 @@ test('Creates a new order 201', async() => {
 })
 
 test('Creates a new order no order number 400', async() => {
-  const { product_id, ...mockOrderWithoutProductId } = mockOrder
   await supertest(server)
     .post(`/api/v0/order`)
-    .send(mockOrderWithoutProductId)
+    .send({
+      account_id: accountId,
+      purchaseDate: new Date().toISOString(),
+      quantity: "2",
+    })
     .expect(400)
 })
 
 test('Creates a new order no purchase date 400', async() => {
-  const {purchaseDate, ...mockOrderWithoutPurchaseDate} = mockOrder
   await supertest(server)
     .post(`/api/v0/order`)
-    .send(mockOrderWithoutPurchaseDate)
+    .send({
+      product_id: productId,
+      account_id: accountId, 
+      quantity: "2",
+    })
     .expect(400)
 })
 
@@ -101,10 +107,13 @@ test('Creates a new order unknown field 400', async() => {
 })
 
 test('Create a new order no account id 400', async() => {
-  const { account_id, ...mockOrderWithoutAccountId } = mockOrder
   await supertest(server)
     .post(`/api/v0/order`)
-    .send(mockOrderWithoutAccountId)
+    .send({
+      product_id: productId,
+      purchaseDate: new Date().toISOString(),
+      quantity: "2",
+    })
     .expect(400)
 })
 
