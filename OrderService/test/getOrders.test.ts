@@ -29,7 +29,7 @@ const mockOrder = {
 const postOrders = async (amount: number) => {
   for (let i = 0; i < amount; i++) {
     await supertest(server)
-      .post(`/api/v0/order/${productId}`)
+      .post(`/api/v0/order?productId=${productId}`)
       .send(mockOrder)
       .expect(201)
   }
@@ -38,7 +38,7 @@ const postOrders = async (amount: number) => {
 test('Gets one order 200', async() => {
   await postOrders(1)
   await supertest(server)
-    .get(`/api/v0/order/${productId}`)
+    .get(`/api/v0/order?productId=${productId}`)
     .expect(200)
     .then((res) => {
       expect(res.body).toBeDefined()
@@ -55,7 +55,7 @@ test('Gets one order 200', async() => {
 test('Gets multiple orders 200', async() => {
   await postOrders(4)
   await supertest(server)
-    .get(`/api/v0/order/${productId}`)
+    .get(`/api/v0/order?productId=${productId}`)
     .expect(200)
     .then((res) => {
       expect(res.body).toBeDefined()
@@ -65,10 +65,22 @@ test('Gets multiple orders 200', async() => {
 
 test('Gets no orders 200', async() => {
   await supertest(server)
-    .get(`/api/v0/order/${productId}`)
+    .get(`/api/v0/order?productId=${productId}`)
     .expect(200)
     .then((res) => {
       expect(res.body).toBeDefined()
       expect(res.body.length).toBe(0)
     })
+})
+
+test('Gets all orders no product id 400', async() => {
+  await supertest(server)
+    .get(`/api/v0/order`)
+    .expect(400)
+})
+
+test('Gets all order bad product id 400', async() => {
+  await supertest(server)
+    .get(`/api/v0/order?productId=123123`)
+    .expect(400)
 })

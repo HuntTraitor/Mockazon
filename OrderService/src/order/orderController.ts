@@ -6,27 +6,29 @@ import {
   Route,
   SuccessResponse,
   Path,
+  Query,
   Get,
 } from 'tsoa'
 
 import {Order, NewOrder} from '.'
 import { OrderService } from './orderService';
+import { UUID } from '../types';
 
 @Route('order')
 export class OrderController extends Controller {
 
-  @Get('{productId}')
+  @Get('')
   @Response('404', 'Not Found')
   public async getOrders(
-    @Path() productId: string
+    @Query() productId: UUID
   ): Promise<Order[]|undefined> {
     return await new OrderService().getOrdersByProductId(productId)
   }
 
-  @Post('{productId}')
+  @Post('')
   @SuccessResponse('201', 'Order Created')
   public async createOrder(
-    @Path() productId: string,
+    @Query() productId: UUID,
     @Body() order: NewOrder,
   ): Promise<Order|undefined> {
     return await new OrderService().create(productId, order)
