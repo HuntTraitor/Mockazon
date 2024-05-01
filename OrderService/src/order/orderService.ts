@@ -1,10 +1,11 @@
+import { UUID } from "src/types";
 import { NewOrder, Order, UpdateOrder } from ".";
 import { pool } from '../db';
 
 export class OrderService {
-  public async create( productId: string, NewOrder: NewOrder,): Promise<Order> {
-    const insert = `INSERT INTO "order"(product_id, data) VALUES 
-    ($1, $2) RETURNING *`
+  public async create(NewOrder: NewOrder): Promise<Order> {
+    const insert = `INSERT INTO "order"(product_id, account_id, data) VALUES 
+    ($1, $2, $3) RETURNING *`
   
     const orderData = {
       purchaseDate: NewOrder.purchaseDate,
@@ -15,13 +16,13 @@ export class OrderService {
 
     const query = {
       text: insert,
-      values: [productId, orderData]
+      values: [`${NewOrder.product_id}`, `${NewOrder.account_id}`, orderData]
     }
     const {rows} = await pool.query(query)
     return rows[0]
   }
 
-  public async getOrdersByProductId(productId: string): Promise<Order[]> {
+  public async getOrdersByProductId(productId: UUID): Promise<Order[]> {
     const select = `SELECT * FROM "order" WHERE product_id = $1`
     const query = {
       text: select,
@@ -31,7 +32,7 @@ export class OrderService {
     return rows
   }
 
-  public async getOrder(orderId: string): Promise<Order> {
+  public async getOrder(orderId: UUID): Promise<Order> {
     const select = `SELECT * FROM "order" WHERE id = $1`
     const query = {
       text: select,
@@ -41,7 +42,7 @@ export class OrderService {
     return rows[0]
   }
 
-  public async deleteOrder(orderId: string): Promise<Order> {
+  public async deleteOrder(orderId: UUID): Promise<Order> {
     const deleteQuery = `DELETE FROM "order" WHERE id = $1 RETURNING *`
     const query = {
       text: deleteQuery,
@@ -51,7 +52,7 @@ export class OrderService {
     return rows[0]
   }
 
-  public async updateOrder(orderId: string, updates: UpdateOrder): Promise<Order> {
+  public async updateOrder(orderId: UUID, updates: UpdateOrder): Promise<Order> {
     const update = `UPDATE "order"
     SET data = data || $1::jsonb
     WHERE id = $2

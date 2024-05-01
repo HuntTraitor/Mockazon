@@ -21,7 +21,10 @@ afterAll((done) => {
 });
 
 const productId = '3f2687d0-d115-421f-ae23-ac572005a791'
+const accountId = '1ed8ca72-2027-4d19-ba6b-e6be75ab7d8b'
 const mockOrder = {
+  product_id: productId,
+  account_id: accountId,
   purchaseDate: new Date().toISOString(),
   quantity: "2",
 }
@@ -41,6 +44,7 @@ test('Creates a new order 201', async() => {
       expect(res.body).toBeDefined()
       expect(res.body.id).toBeDefined()
       expect(res.body.product_id).toBe(productId)
+      expect(res.body.account_id).toBe(accountId)
       expect(res.body.data).toBeDefined()
       expect(res.body.data.quantity).toBe(mockOrder.quantity)
       expect(res.body.data.purchaseDate).toBe(mockOrder.purchaseDate)
@@ -50,41 +54,45 @@ test('Creates a new order 201', async() => {
 })
 
 test('Creates a new order no order number 400', async() => {
+  const { product_id, ...mockOrderWithoutProductId } = mockOrder
   await supertest(server)
-    .post(`/api/v0/order?productId=${productId}`)
-    .send({purchaseDate: new Date().toISOString()})
+    .post(`/api/v0/order`)
+    .send(mockOrderWithoutProductId)
     .expect(400)
 })
 
 test('Creates a new order no purchase date 400', async() => {
+  const {purchaseDate, ...mockOrderWithoutPurchaseDate} = mockOrder
   await supertest(server)
-    .post(`/api/v0/order?productId=${productId}`)
-    .send({quantity: "2"})
+    .post(`/api/v0/order`)
+    .send(mockOrderWithoutPurchaseDate)
     .expect(400)
 })
 
 test('Creates a new order quantity 0 400', async() => {
+  const badQuantity = mockOrder
+  badQuantity.quantity = "0"
   await supertest(server)
-    .post(`/api/v0/order?productId=${productId}`)
-    .send({
-      purchaseDate: new Date().toISOString(),
-      quantity: "0"})
+    .post(`/api/v0/order`)
+    .send(badQuantity)
     .expect(400)
 })
 
 test('Creates a new order quantity 1000 400', async() => {
+  const badQuantity = mockOrder
+  badQuantity.quantity = "1000"
   await supertest(server)
-    .post(`/api/v0/order?productId=${productId}`)
-    .send({
-      purchaseDate: new Date().toISOString(),
-      quantity: "1000"})
+    .post(`/api/v0/order`)
+    .send(badQuantity)
     .expect(400)
 })
 
 test('Creates a new order unknown field 400', async() => {
   await supertest(server)
-    .post(`/api/v0/order?productId=${productId}`)
+    .post(`/api/v0/order`)
     .send({
+      product_id: productId,
+      account_id: accountId,
       purchaseDate: new Date().toISOString(),
       quantity: "2",
       uknown: "123",
@@ -92,16 +100,19 @@ test('Creates a new order unknown field 400', async() => {
     .expect(400)
 })
 
-test('Create a new order no product id 400', async() => {
+test('Create a new order no account id 400', async() => {
+  const { account_id, ...mockOrderWithoutAccountId } = mockOrder
   await supertest(server)
     .post(`/api/v0/order`)
-    .send(mockOrder)
+    .send(mockOrderWithoutAccountId)
     .expect(400)
 })
 
 test('Create a new order bad product id 400', async() => {
+  const badProductId = mockOrder
+  badProductId.product_id = "123"
   await supertest(server)
-    .post(`/api/v0/order?productId=123123`)
-    .send(mockOrder)
+    .post(`/api/v0/order`)
+    .send(badProductId)
     .expect(400)
 })

@@ -30,10 +30,9 @@ export class OrderController extends Controller {
   @Post('')
   @SuccessResponse('201', 'Order Created')
   public async createOrder(
-    @Query() productId: UUID,
     @Body() order: NewOrder,
   ): Promise<Order|undefined> {
-    return await new OrderService().create(productId, order)
+    return await new OrderService().create(order)
   }
 
   @Get('{orderId}')
