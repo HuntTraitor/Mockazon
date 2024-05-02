@@ -3,6 +3,8 @@ import * as http from 'http';
 
 import * as db from './db';
 import app from '../src/app';
+import { randomUUID } from 'crypto';
+import { Product } from '../src/product';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -12,7 +14,7 @@ let server: http.Server<
 beforeAll(async () => {
   server = http.createServer(app);
   server.listen();
-  return db.reset();
+  return await db.reset();
 });
 
 afterAll((done) => {
@@ -20,33 +22,85 @@ afterAll((done) => {
   server.close(done);
 });
 
-// const vendorId = '81c689b1-b7a7-4100-8b2d-309908b444f5';
-// let productId = '';
+const validateProduct = (product: Product) => {
+  expect(product.id).toBeDefined();
+  expect(product.data.name).toBeDefined();
+  expect(product.data.price).toBeDefined();
+  /* FIXME: Implement extra fields
+  expect(product.data.active).toBeDefined();
+  expect(product.data.vendorId).toBeDefined();
+  expect(product.data.createdAt).toBeDefined();
+  expect(product.data.postedAt).toBeDefined();
+  */
+};
 
-// test('Anna Create Product', async () => {
-//   const newProduct = {
-//     name: 'Basketball',
-//     price: '20.00'
-//   }
-//   await supertest(server)
-//     .post('/api/v0/product')
-//     .send(newProduct)
-//     .expect(201)
-//     .then((response) => {
-//       console.log(response.body);
-//       expect(response.body.vendor_id).toBe(vendorId);
-//       productId = response.body.id;
-//     });
-// });
+describe('General', () => {
+  test('Rejects invalid URLs', async () => {
+    await supertest(server)
+      .get('/api/v0/invalid')
+      .expect(404)
+  });
+  
+  test('Renders Swagger UI', async () => {
+    await supertest(server)
+      .get('/api/v0/docs/')
+      .expect(200)
+      // FIXME: Expect something here?
+  });
+});
 
-// test('Anna Disables Product', async () => {
-//   await supertest(server)
-//     .put(`/api/v0/product/${productId}`)
-//     .expect(200)
-//     .then((response) => {
-//       expect(response.body.id).toBe(productId);
-//       expect(response.body.vendor_id).toBe(vendorId);
-//       expect(response.body.data.name).toBe('The Great Gatsby');
-//       expect(response.body.active).toBe(false);
-//     });
-// });
+
+describe('Listing new products', () => {
+  const newProduct = {
+    name: 'Test Product',
+    price: '100.00',
+  };
+
+  const vendorId = randomUUID();
+
+  test('Rejects new product with missing fields', async () => {
+    await supertest(server)
+      .post('/api/v0/product')
+      .query({vendorId})
+      .send({})
+      .expect(400)
+      .then((response) => {
+        expect(response.body.status).toBe(400);
+        expect(response.body.message).toBeDefined();
+      });
+  });
+
+  test('Should create a new product', async () => {
+    await supertest(server)
+      .get('/api/v0/product')
+      .query({vendorId})
+      .expect(200)
+      .then((response) => response.body)
+      .then((products) => {
+        expect(products).toHaveLength(0);
+        for (const product of products) {
+          validateProduct(product);
+        }
+      });
+
+    const newProductResponse = await supertest(server)
+      .post('/api/v0/product')
+      .query({vendorId})
+      .send(newProduct)
+      .expect(201);
+    
+    validateProduct(newProductResponse.body);
+    expect(newProductResponse.body.data.name).toBe(newProduct.name);
+    expect(newProductResponse.body.data.price).toBe(newProduct.price);
+
+    const products = await supertest(server)
+      .get('/api/v0/product')
+      .query({vendorId})
+      .expect(200);
+    
+    expect(products.body).toHaveLength(1);
+    validateProduct(products.body[0]);
+    expect(products.body[0].data.name).toBe(newProduct.name);
+    expect(products.body[0].data.price).toBe(newProduct.price);
+  });
+});
