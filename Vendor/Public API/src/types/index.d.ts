@@ -16,9 +16,9 @@ export type UUID = string;
 export type Email = string;
 
 export type SessionUser = {
-    id: UUID,
-  }
-  
+  id: UUID;
+};
+
 declare global {
   namespace Express {
     export interface Request {

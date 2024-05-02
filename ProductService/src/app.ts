@@ -29,7 +29,7 @@ const router = Router();
 RegisterRoutes(router);
 app.use('/api/v0', router);
 
-const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+const errorHandler: ErrorRequestHandler = (err, _req, res) => {
   res.status(err.status).json({
     message: err.message,
     errors: err.errors,

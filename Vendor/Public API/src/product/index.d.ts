@@ -16,9 +16,9 @@ export interface NewProduct {
 }
 export interface Product {
   id: UUID;
-  vendor_id: UUID
+  vendor_id: UUID;
   data: {
     name: string;
     price: Price;
-  }
+  };
 }

@@ -9,6 +9,7 @@ type Price = string;
 export interface NewProduct {
   name: string;
   price: Price;
+  // FIXME: Add more product properties
 }
 export interface Product {
   id: UUID;
@@ -17,4 +18,5 @@ export interface Product {
     name: string;
     price: Price;
   }
+  // FIXME: Add more product properties
 }

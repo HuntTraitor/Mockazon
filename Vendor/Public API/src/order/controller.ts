@@ -4,5 +4,4 @@ import { Route, Controller } from "tsoa";
 // import { OrderService } from "./service";
 
 @Route("order")
-export class OrderController extends Controller {
-}
+export class OrderController extends Controller {}

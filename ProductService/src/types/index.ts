@@ -12,3 +12,5 @@ export type UUID = string;
  */
 export type Email = string;
 
+// FIXME: The above types are global for our whole application, and need to be factored accordingly.
+// Either by making a package of them, or by creating a global types folder at the root of the project.

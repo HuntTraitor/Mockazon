@@ -38,7 +38,8 @@ export class AuthController extends Controller {
         ): Promise<SessionUser | undefined> => {
           return account;
         },
-      ).catch(() => {
+      )
+      .catch(() => {
         this.setStatus(401);
         return undefined;
       });

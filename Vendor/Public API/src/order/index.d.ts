@@ -15,5 +15,5 @@ export interface Order {
     quantity: Quantity;
     shipped: boolean;
     delivered: boolean;
-  }
+  };
 }
