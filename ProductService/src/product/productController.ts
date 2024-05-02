@@ -15,7 +15,6 @@ import { ProductService } from './productService';
 @Route('product')
 export class ProductController extends Controller {
   @Post()
-  @Response('401', 'Unauthorised')
   @SuccessResponse('201', 'Product Created')
   public async createProduct(
     @Body() product: NewProduct,
@@ -25,7 +24,6 @@ export class ProductController extends Controller {
   }
 
   @Put('{id}')
-  @Response('401', 'Unauthorised')
   @SuccessResponse('200', 'Product Disabled')
   public async disableProduct(
     @Path() id: string,
