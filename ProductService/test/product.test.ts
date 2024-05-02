@@ -45,7 +45,9 @@ describe('General', () => {
     await supertest(server)
       .get('/api/v0/docs/')
       .expect(200)
-      // FIXME: Expect something here?
+      .then((response) => {
+        expect(response.text).toContain('Swagger UI');
+      });
   });
 });
 
