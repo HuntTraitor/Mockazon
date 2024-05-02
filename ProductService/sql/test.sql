@@ -1,1 +1,2 @@
-INSERT INTO vendor(id, data) VALUES ('81c689b1-b7a7-4100-8b2d-309908b444f5', jsonb_build_object('email','anna@books.com','name','Anna Admin','pwhash',crypt('annaadmin','cs'),'roles','["admin"]'));
+INSERT INTO product (id, vendor_id, data, active) VALUES ('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '{"name": "Active Product"}', TRUE);
+INSERT INTO product (id, vendor_id, data, active) VALUES ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001', '{"name": "Inactive Product"}', FALSE);
