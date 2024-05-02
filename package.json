@@ -24,7 +24,14 @@
     "order": "cd OrderService && npm run dev",
     "helloworld": "cd HelloWorld && npm run dev",
     "shopper": "cd Shopper && npm run dev",
-    "vendor": "cd Vendor && npm run dev"
+    "vendor": "cd Vendor && npm run dev",
+    "lint-admin": "cd Admin && npm run lint",
+    "lint-auth": "cd AuthService && npm run lint",
+    "lint-order": "cd OrderService && npm run lint",
+    "lint-helloworld": "cd HelloWorld && npm run lint",
+    "lint-shopper": "cd Shopper && npm run lint",
+    "lint-vendor": "cd \"Vendor/Public API\" && npm run lint & cd \"Vendor/Web App\" && npm run lint",
+    "lint": "npm run lint-admin & npm run lint-auth & npm run lint-order & npm run lint-helloworld & npm run lint-shopper & npm run lint-vendor"
   },
   "devDependencies": {
     "concurrently": "*"
