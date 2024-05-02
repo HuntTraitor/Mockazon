@@ -2,58 +2,27 @@ import {UUID} from 'src/types';
 import {NewProduct, Product} from '.';
 import {pool} from '../db';
 export class ProductService {
-  public async exists(productId: UUID, vendorId?: UUID) {
-    let select = `SELECT * FROM product WHERE id = $1::UUID`;
-    const values = [productId];
-
-    if (vendorId) {
-      select += ` AND vendor_id = $${values.length + 1}::UUID`;
-      values.push(vendorId);
-    }
-
+  public async create(
+    product: NewProduct,
+    vendor_id: UUID
+  ): Promise<Product | undefined> {
+    const insert = `INSERT INTO product(vendor_id, data) VALUES ($1::UUID, jsonb_build_object('name', $2::TEXT, 'price', $3::TEXT)) RETURNING *`;
     const query = {
-      text: select,
-      values,
+      text: insert,
+      values: [`${vendor_id}`, `${product.name}`, `${product.price}`],
     };
-
     const {rows} = await pool.query(query);
     return rows[0];
   }
 
-  public async isActive(productId: UUID): Promise<boolean> {
-    const select = `SELECT active FROM product WHERE id = $1::UUID`;
-    const query = {
-      text: select,
-      values: [productId],
-    };
-    const {rows} = await pool.query(query);
-    return rows[0].active;
-  }
-
-  public async create(
-    product: NewProduct,
-    vendor_id?: UUID
-  ): Promise<Product | undefined> {
-    if (vendor_id) {
-      const insert = `INSERT INTO product(vendor_id, data) VALUES ($1::UUID, jsonb_build_object('name', $2::TEXT, 'price', $3::TEXT)) RETURNING *`;
-      const query = {
-        text: insert,
-        values: [`${vendor_id}`, `${product.name}`, `${product.price}`],
-      };
-      const {rows} = await pool.query(query);
-      return rows[0];
-    }
-    return undefined;
-  }
-
   public async edit(
     productId: UUID,
-    product: Product
+    product: NewProduct
   ): Promise<Product | undefined> {
     const update = `UPDATE product SET data = jsonb_build_object('name', $1::TEXT, 'price', $2::TEXT) WHERE id = $3::UUID RETURNING *`;
     const query = {
       text: update,
-      values: [`${product.data.name}`, `${product.data.price}`, `${productId}`],
+      values: [`${product.name}`, `${product.price}`, `${productId}`],
     };
     const {rows} = await pool.query(query);
     return rows[0];
@@ -102,7 +71,7 @@ export class ProductService {
       conditions.push(`vendor_id = $${values.length + 1}`);
       values.push(vendorId);
     }
-    if (active) {
+    if (active !== undefined) {
       conditions.push(`active = $${values.length + 1}`);
       values.push(active);
     }
@@ -117,9 +86,14 @@ export class ProductService {
     }
 
     // Order by valid columns
-    const validColumns = ['name', 'price', 'postedAt'];
+    const validColumns = ['price', 'postedAt'];
     if (orderBy && validColumns.includes(orderBy)) {
-      select += ` ORDER BY data->>'${orderBy}' ${descending ? 'DESC' : 'ASC'}`;
+      console.log('orderBy', orderBy);
+      if (orderBy === 'price') {
+        select += ` ORDER BY (data->>'${orderBy}')::numeric ${descending ? 'DESC' : 'ASC'}`;
+      } else {
+        select += ` ORDER BY ${orderBy} ${descending ? 'DESC' : 'ASC'}`;
+      }
     }
 
     // Add limit and offset for pagination

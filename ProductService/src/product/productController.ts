@@ -58,7 +58,7 @@ export class ProductController extends Controller {
   @SuccessResponse('200', 'Product Updated')
   @Response('404', 'Product Not Found')
   public async editProduct(
-    @Body() product: Product,
+    @Body() product: NewProduct,
     @Path() productId: UUID
   ): Promise<Product | undefined> {
     // FIXME: Should ownership be checked in the microservice?
@@ -76,6 +76,10 @@ export class ProductController extends Controller {
     @Path() productId: UUID,
     @Query() active: boolean
   ): Promise<Product | undefined> {
+    if (!await new ProductService().getOne(productId)) {
+      this.setStatus(404);
+      return undefined;
+    }
     if (active) {
       return await new ProductService().activate(productId);
     } else {

@@ -1,2 +1,2 @@
 DROP TABLE IF EXISTS product CASCADE;
-CREATE TABLE product(id UUID DEFAULT gen_random_uuid(), vendor_id UUID, active BOOLEAN DEFAULT TRUE, data jsonb, PRIMARY KEY(id, vendor_id));
+CREATE TABLE product(id UUID DEFAULT gen_random_uuid(), vendor_id UUID, active BOOLEAN DEFAULT TRUE, createdAt TIMESTAMP WITH TIME ZONE DEFAULT (now() AT TIME ZONE 'UTC'), postedAt TIMESTAMP WITH TIME ZONE DEFAULT (now() AT TIME ZONE 'UTC'), data jsonb, PRIMARY KEY(id, vendor_id));
