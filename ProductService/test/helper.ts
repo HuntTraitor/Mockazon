@@ -1,0 +1,36 @@
+import { Product } from '../src/product';
+
+import * as http from 'http';
+
+import * as db from './db';
+import app from '../src/app';
+
+let server: http.Server<
+  typeof http.IncomingMessage,
+  typeof http.ServerResponse
+>;
+
+beforeAll(async () => {
+  server = http.createServer(app);
+  server.listen();
+  return await db.reset();
+});
+
+afterAll((done) => {
+  db.shutdown();
+  server.close(done);
+});
+
+export { server };
+
+export const validateProduct = (product: Product) => {
+  expect(product.id).toBeDefined();
+  expect(product.data.name).toBeDefined();
+  expect(product.data.price).toBeDefined();
+  /* FIXME: Implement extra fields
+  expect(product.data.active).toBeDefined();
+  expect(product.data.vendorId).toBeDefined();
+  expect(product.data.createdAt).toBeDefined();
+  expect(product.data.postedAt).toBeDefined();
+  */
+};
