@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, CssBaseline, Divider } from '@mui/material';
 
-import { MyDrawer as Drawer } from './Drawer';
+import { MyDrawer } from './Drawer';
 import { Users } from './Users';
-import { MyToolBar as Toolbar } from './ToolBar';
+import { MyAppBar } from './AppBar';
 
 /**
  * defines the Home page
@@ -13,9 +13,9 @@ export function Home() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <Drawer />
+      <MyDrawer />
       <Box component="main" width={'100%'}>
-        <Toolbar />
+        <MyAppBar />
         <Divider />
         <Users />
       </Box>
