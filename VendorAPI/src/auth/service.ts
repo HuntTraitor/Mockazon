@@ -4,7 +4,7 @@ import { SessionUser } from "src/types";
 export class AuthService {
   public async login(credentials: Credentials): Promise<Authenticated> {
     return new Promise((resolve, reject) => {
-      fetch("http://auth_service:3010/api/v0/authenticate", {
+      fetch(`http://${process.env.MICROSERVICE_URL||'localhost'}:3010/api/v0/authenticate`, {
         method: "POST",
         body: JSON.stringify(credentials),
         headers: {
@@ -23,7 +23,7 @@ export class AuthService {
         })
         .catch((err) => {
           console.log(err);
-          reject(new Error("Unauthoriuzed"));
+          reject(new Error("Unauthorized"));
         });
     });
   }
@@ -41,7 +41,7 @@ export class AuthService {
           reject(new Error("Unauthorized"));
         } else {
           fetch(
-            "http://auth_service:3010/api/v0/authenticate?accessToken=" +
+            `http://${process.env.MICROSERVICE_URL||'localhost'}:3010/api/v0/authenticate?accessToken=` +
               tokens[1],
             {
               method: "GET",
