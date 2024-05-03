@@ -51,6 +51,7 @@ export class ProductController extends Controller {
   ): Promise<Product | undefined> {
     // FIXME: Do we want to stop duplicate products from being created? As in same vendor ID same name?
     // Could address this in the Vendor API.
+    console.log("Not even hitting this");
     return await new ProductService().create(product, vendorId);
   }
 
