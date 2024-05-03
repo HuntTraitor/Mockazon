@@ -1,0 +1,56 @@
+version: '3.7'
+services:
+
+  helloworld:
+    container_name: helloworld
+    env_file: .env
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+
+
+  # shopper:
+  #   container_name: shopper
+  #   env_file: .env
+  #   build: .
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "3000:3000"
+
+  # vendor:
+  #   container_name: vendor
+  #   env_file: .env
+  #   build: .
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "30001:3001"
+
+  # admin:
+  #   container_name: admin
+  #   env_file: .env
+  #   build: .
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "3002:3002"
+  
+  postgres:
+    container_name: database
+    image: postgres:alpine
+    environment:
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./sql/databases.sql:/docker-entrypoint-initdb.d/1.databases.sql
+      - ./AuthService/sql/schema.sql:/docker-entrypoint-initdb.d/2.schema.sql
+      - ./AuthService/sql/data.sql:/docker-entrypoint-initdb.d/3.data.sql
+      # - ./ProductService/sql/schema.sql:/docker-entrypoint-initdb.d/4.schema.sql
+      # - ./ProductService/sql/data.sql:/docker-entrypoint-initdb.d/5.data.sql
+      # - ./OrderService/sql/schema.sql:/docker-entrypoint-initdb.d/6.schema.sql
+      # - ./OrderService/sql/data.sql:/docker-entrypoint-initdb.d/7.data.sql
