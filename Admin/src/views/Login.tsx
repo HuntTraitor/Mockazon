@@ -17,7 +17,7 @@ const defaultTheme = createTheme();
 const Login = () => {
   const loginContext = React.useContext(LoginContext);
   const [user, setUser] = React.useState({ email: '', password: '' });
-  const [checked, setChecked] = React.useState(false);
+  // const [checked, setChecked] = React.useState(false);
 
   const handleInputChange = (event: React.SyntheticEvent) => {
     if (event && event.target) {
