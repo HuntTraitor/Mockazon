@@ -1,25 +1,19 @@
-import { Fragment } from 'react';
+import { LoggedInUserProvider } from '@/contexts/LoggedInUserContext';
+import Content from '@/views/Content';
+import Login from '@/views/Login';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 export const App = () => {
+  // ok to hardcode as it's publicly accessible
+  const OAUTH_CLIENT_ID =
+    '655989276717-5viil57sbom25s2804kadpdt3kiaa4on.apps.googleusercontent.com';
+
   return (
-    <Fragment>
-      <h1>Mockazon Shopper App</h1>
-      <img
-        src="/mockazon_logo_white.png"
-        alt="Mockazon Logo"
-        style={{
-          width: '400px',
-          height: 'auto',
-          boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
-          margin: '20px',
-        }}
-      />
-      <p>Hello World this is Evan Metcalf</p>
-      <p>Hello World this is Lukas Teixeira Döpcke</p>
-      <p>Hello, salute. It&apos;s me... your duke - Trevor Ryles</p>
-      <p>Hello World im Hunter!</p>
-      <p>Hello World this is Alfonso Del Rosario... I think...</p>
-      <p>Hello World, this is Eesha Krishnamagaru</p>
-    </Fragment>
+    <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
+      <LoggedInUserProvider>
+        <Content />
+        <Login />
+      </LoggedInUserProvider>
+    </GoogleOAuthProvider>
   );
 };

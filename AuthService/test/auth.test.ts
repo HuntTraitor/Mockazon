@@ -110,3 +110,10 @@ test("Rejects invalid access token", async () => {
 test("Rejects on no access token", async () => {
   await supertest(server).get("/api/v0/authenticate").expect(400);
 });
+
+test("Wrong Credentials", async () => {
+  const result = await supertest(server).get(
+    "/api/v0/authenticate/user?sub=123",
+  );
+  expect(result.status).toBe(404);
+});
