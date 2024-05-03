@@ -99,6 +99,7 @@ export function Users() {
                     <Button
                       variant="outlined"
                       color="error"
+                      data-testid={`delete-user-${user.id}`}
                       onClick={() => handleDeleteUser(user.id)}
                     >
                       Delete
