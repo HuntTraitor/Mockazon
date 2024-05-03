@@ -44,4 +44,13 @@ export class AuthController extends Controller {
         return undefined;
       });
   }
+  // sub stands for subject and is the unique google identifier
+  @Get("user")
+  public async getUserWithSub(@Query() sub: string) {
+    const user = await new AuthService().getUserWithSub(sub);
+    if (!user) {
+      this.setStatus(404);
+    }
+    return user;
+  }
 }

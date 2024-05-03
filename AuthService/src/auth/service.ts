@@ -54,4 +54,36 @@ export class AuthService {
       );
     });
   }
+
+  // sub stands for subject and is the unique google identifier
+  public async getUserWithSub(sub: string) {
+    const select = `SELECT * FROM account` + ` WHERE data->>'sub' = $1`;
+    const query = {
+      text: select,
+      values: [sub],
+    };
+    const { rows } = await pool.query(query);
+    if (rows[0]) {
+      const user = rows[0];
+      const accessToken = jwt.sign(
+        {
+          id: user.id,
+          role: user.data.role,
+        },
+        `${process.env.MASTER_SECRET}`,
+        {
+          expiresIn: "30m",
+          algorithm: "HS256",
+        },
+      );
+      return {
+        id: user.id,
+        name: user.data.name,
+        accessToken: accessToken,
+        role: user.data.role,
+      };
+    } else {
+      return undefined;
+    }
+  }
 }

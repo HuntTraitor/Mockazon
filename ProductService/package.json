@@ -77,7 +77,7 @@
     }
   },
   "scripts": {
-    "prestart": "npm run build",
+    "not-prestart": "npm run build",
     "start": "node build/src/server.js",
     "prebuild": "npm run swagger",
     "build": "tsc",

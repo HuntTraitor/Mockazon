@@ -5,7 +5,7 @@ describe('Next.js App', () => {
   let page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: true }); // Set headless mode to true
+    browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
   });
 
@@ -20,5 +20,4 @@ describe('Next.js App', () => {
   test('Interact with elements', async () => {
     await page.goto('http://localhost:3000');
   });
-
 });
