@@ -15,6 +15,8 @@ export type UUID = string;
  */
 export type Email = string;
 
+export type ApiKey = UUID;
+
 export type SessionUser = {
   id: UUID;
 };

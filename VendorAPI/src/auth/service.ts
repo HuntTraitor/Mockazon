@@ -2,7 +2,7 @@ import { Credentials, Authenticated } from ".";
 import { SessionUser } from "src/types";
 
 export class AuthService {
-  public async login(credentials: Credentials): Promise<Authenticated> {
+  public async request(credentials: Credentials): Promise<Authenticated> {
     return new Promise((resolve, reject) => {
       fetch(`http://${process.env.MICROSERVICE_URL||'localhost'}:3010/api/v0/authenticate`, {
         method: "POST",
