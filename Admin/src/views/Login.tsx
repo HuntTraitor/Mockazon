@@ -36,7 +36,7 @@ const Login = () => {
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget as HTMLFormElement);
-    fetch('http://localhost:3010/v0/authenticate', {
+    fetch('http://localhost:3010/api/v0/authenticate', {
       method: 'POST',
       body: JSON.stringify({
         email: data.get('email'),
@@ -54,8 +54,8 @@ const Login = () => {
           alert(`Failed to sign in.`);
         } else {
           // Set context
-          loginContext.setUserName(json.data.login.name);
-          loginContext.setAccessToken(json.data.login.accessToken);
+          loginContext.setId(json.id);
+          loginContext.setAccessToken(json.accessToken);
           localStorage.setItem('user', JSON.stringify(json));
         }
       })
