@@ -9,7 +9,7 @@ type Price = string;
 export interface NewProduct {
   name: string;
   price: Price;
-  props: {
+  properties: {
     [key: string]: string;
   }
   // FIXME: Add more product properties
@@ -20,7 +20,7 @@ export interface Product {
   data: {
     name: string;
     price: Price;
-    props: {
+    properties: {
       [key: string]: string;
     }
   }
