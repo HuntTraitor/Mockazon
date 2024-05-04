@@ -4,7 +4,7 @@ import Index from '../../src/pages/index';
 
 it('Renders', async () => {
   render(<Index />);
-  await screen.findByText('Settings', {
+  await screen.findByText('Sign In', {
     exact: false,
   });
 });

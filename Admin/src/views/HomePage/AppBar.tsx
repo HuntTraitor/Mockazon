@@ -1,11 +1,12 @@
 import React from 'react';
 import { Box, AppBar, Toolbar, Button, Avatar } from '@mui/material';
-
+import { LoginContext } from '@/contexts/Login';
 /**
  * defines the AppBar
  * @return {JSX.Element} AppBar
  */
 export function MyAppBar() {
+  const loginContext = React.useContext(LoginContext);
   return (
     <AppBar
       elevation={0}
@@ -20,7 +21,12 @@ export function MyAppBar() {
           <Button
             variant="outlined"
             color="primary"
-            onClick={() => console.log('Sign Out')}
+            onClick={event => {
+              event.preventDefault();
+              console.log('Sign Out');
+              loginContext.setAccessToken('');
+              loginContext.setId('');
+            }}
             sx={{ color: 'black', borderColor: 'black' }}
           >
             Sign Out

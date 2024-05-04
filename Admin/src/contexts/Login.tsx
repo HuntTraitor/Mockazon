@@ -6,9 +6,9 @@
 import { PropsWithChildren, useState, createContext } from 'react';
 
 export const LoginContext = createContext({
-  userName: '',
+  id: '',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setUserName: (userName: string) => {},
+  setId: (id: string) => {},
   accessToken: '',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setAccessToken: (accessToken: string) => {},
@@ -16,12 +16,10 @@ export const LoginContext = createContext({
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const LoginProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [userName, setUserName] = useState('');
+  const [id, setId] = useState('');
   const [accessToken, setAccessToken] = useState('');
   return (
-    <LoginContext.Provider
-      value={{ userName, setUserName, accessToken, setAccessToken }}
-    >
+    <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
       {children}
     </LoginContext.Provider>
   );
