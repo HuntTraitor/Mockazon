@@ -13,6 +13,9 @@ type Price = string;
 export interface NewProduct {
   name: string;
   price: Price;
+  props: {
+    [key: string]: string;
+  }
 }
 export interface Product {
   id: UUID;
@@ -20,5 +23,8 @@ export interface Product {
   data: {
     name: string;
     price: Price;
+    props: {
+      [key: string]: string;
+    }
   };
 }
