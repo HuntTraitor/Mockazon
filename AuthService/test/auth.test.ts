@@ -17,6 +17,10 @@ beforeAll(async () => {
   return await db.reset();
 });
 
+beforeEach(async () => {
+  await db.reset();
+});
+
 afterAll((done) => {
   db.shutdown();
   server.close(done);
@@ -116,4 +120,31 @@ test("Wrong Credentials", async () => {
     "/api/v0/authenticate/user?sub=123",
   );
   expect(result.status).toBe(404);
+});
+
+test("Signing up successfully", async () => {
+  const result = await supertest(server)
+    .post("/api/v0/authenticate/signup")
+    .send({ sub: "123", email: "abc@email.com", name: "john" });
+  expect(result.status).toBe(200);
+});
+
+test("Login successfully", async () => {
+  const result = await supertest(server)
+    .post("/api/v0/authenticate/signup")
+    .send({ sub: "123", email: "abc@email.com", name: "john" });
+  const result2 = await supertest(server).get(
+    "/api/v0/authenticate/user?sub=" + result.body.sub,
+  );
+  expect(result2.status).toBe(200);
+});
+
+test("Signing up with duplicate credentials", async () => {
+  await supertest(server)
+    .post("/api/v0/authenticate/signup")
+    .send({ sub: "123", email: "abc@email.com", name: "john" });
+  const result2 = await supertest(server)
+    .post("/api/v0/authenticate/signup")
+    .send({ sub: "123", email: "abc@email.com", name: "john" });
+  expect(result2.status).toBe(400);
 });

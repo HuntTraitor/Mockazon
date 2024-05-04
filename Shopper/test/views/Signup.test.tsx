@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import Login from '@/views/Login';
+import Signup from '@/views/Signup';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 // https://chat.openai.com/share/b8c1fae9-15f0-4305-8344-73501d3b59ef
@@ -19,83 +18,65 @@ jest.mock('@react-oauth/google', () => ({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   GoogleLogin: ({ onSuccess }) => (
-    <button onClick={() => onSuccess(onSuccessSpy)}>Google Login Button</button>
+    <button onClick={() => onSuccess(onSuccessSpy)}>
+      Google Signup Button
+    </button>
   ),
 }));
 
 const loggedInContextProps = {
   accessToken: '',
   setAccessToken: jest.fn(),
-  location: 'login',
+  location: 'signup',
   setLocation: jest.fn(),
 };
 
-describe('Login component', () => {
-  it('Handles successful login', async () => {
+describe('Signup component', () => {
+  it('Handles successful signup', async () => {
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
-        <Login />
+        <Signup />
       </LoggedInContext.Provider>
     );
-    fireEvent.click(screen.getByText('Google Login Button'));
+    fireEvent.click(screen.getByText('Google Signup Button'));
     // expect(onSuccessSpy).toHaveBeenCalled();
   });
 
-  it('Clicks signup successfully', async () => {
+  it('Clicks login successfully', async () => {
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
-        <Login />
+        <Signup />
       </LoggedInContext.Provider>
     );
-    fireEvent.click(screen.getByText('Signup Page'));
-    // expect(onSuccessSpy).toHaveBeenCalled();
+    fireEvent.click(screen.getByText('Login Page'));
   });
 
-  it('Handles unsuccessful login', async () => {
+  it('Handles unsuccessful signup', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
       json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
-        <Login />
+        <Signup />
       </LoggedInContext.Provider>
     );
 
-    fireEvent.click(screen.getByText('Google Login Button'));
+    fireEvent.click(screen.getByText('Google Signup Button'));
   });
 
-  it('Handles unsuccessful login with error', async () => {
+  it('Handles unsuccessful signup with error', async () => {
     global.fetch = jest.fn().mockRejectedValueOnce({
       ok: false,
       json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
-        <Login />
+        <Signup />
       </LoggedInContext.Provider>
     );
 
-    fireEvent.click(screen.getByText('Google Login Button'));
-  });
-
-  // cover test
-  it('Covers setAccessToken in LoggedInProvider', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
-      json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
-    });
-    const TestComponent = () => {
-      const { accessToken, setAccessToken, setLocation, location } =
-        useContext(LoggedInContext);
-      useEffect(() => {
-        setAccessToken('mockToken');
-        setLocation('mockToken');
-      }, [accessToken, setAccessToken, location, setLocation]);
-
-      return null;
-    };
-    render(<TestComponent />);
+    fireEvent.click(screen.getByText('Google Signup Button'));
   });
 
   it('Renders nothing when access token present', async () => {
@@ -105,7 +86,7 @@ describe('Login component', () => {
     };
     render(
       <LoggedInContext.Provider value={newLoggedInContextProps}>
-        <Login />
+        <Signup />
       </LoggedInContext.Provider>
     );
   });

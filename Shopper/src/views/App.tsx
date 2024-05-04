@@ -2,6 +2,7 @@ import { LoggedInUserProvider } from '@/contexts/LoggedInUserContext';
 import Content from '@/views/Content';
 import Login from '@/views/Login';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import Signup from '@/views/Signup';
 
 export const App = () => {
   // ok to hardcode as it's publicly accessible
@@ -13,6 +14,7 @@ export const App = () => {
       <LoggedInUserProvider>
         <Content />
         <Login />
+        <Signup />
       </LoggedInUserProvider>
     </GoogleOAuthProvider>
   );

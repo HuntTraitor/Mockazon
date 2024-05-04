@@ -86,4 +86,28 @@ export class AuthService {
       return undefined;
     }
   }
+
+  public async createUserWithSub(data: {
+    sub: string;
+    email: string;
+    name: string;
+  }) {
+    const insert = `INSERT INTO account(data) VALUES (jsonb_build_object('sub', $1::text, 'email', $2::text, 'name', $3::text, 'role', $4::text)) RETURNING *`;
+    const query = {
+      text: insert,
+      values: [data.sub, data.email, data.name, "Shopper"],
+    };
+    let rows;
+    try {
+      const result = await pool.query(query);
+      rows = result.rows;
+    } catch (exception) {
+      console.log(exception);
+    }
+    if (rows && rows[0]) {
+      return rows[0];
+    } else {
+      return undefined;
+    }
+  }
 }

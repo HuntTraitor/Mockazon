@@ -53,4 +53,23 @@ export class AuthController extends Controller {
     }
     return user;
   }
+
+  // sub stands for subject and is the unique google identifier
+  @Post("signup")
+  public async createUserWithSub(
+    @Body() data: { sub: string; email: string; name: string },
+  ) {
+    const user = await new AuthService().createUserWithSub(data);
+    if (!user) {
+      this.setStatus(400);
+      return;
+    }
+    return {
+      id: user.id,
+      name: user.data.name,
+      email: user.data.email,
+      role: user.data.role,
+      sub: user.data.sub,
+    };
+  }
 }
