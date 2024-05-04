@@ -6,10 +6,16 @@ export class ProductService {
     product: NewProduct,
     vendor_id: UUID
   ): Promise<Product | undefined> {
-    const insert = `INSERT INTO product(vendor_id, data) VALUES ($1::UUID, jsonb_build_object('name', $2::TEXT, 'price', $3::TEXT)) RETURNING *`;
+    const insert = `INSERT INTO product(vendor_id, data) VALUES (
+      $1::UUID, jsonb_build_object(
+        'name', $2::TEXT, 
+        'price', $3::TEXT,
+        'properties', $4::JSONB
+      )
+    ) RETURNING *`;
     const query = {
       text: insert,
-      values: [`${vendor_id}`, `${product.name}`, `${product.price}`],
+      values: [`${vendor_id}`, `${product.name}`, `${product.price}`, JSON.stringify(product.props)],
     };
     const {rows} = await pool.query(query);
     return rows[0];
@@ -19,10 +25,18 @@ export class ProductService {
     productId: UUID,
     product: NewProduct
   ): Promise<Product | undefined> {
-    const update = `UPDATE product SET data = jsonb_build_object('name', $1::TEXT, 'price', $2::TEXT) WHERE id = $3::UUID RETURNING *`;
+    const update = `
+      UPDATE product 
+      SET data = jsonb_build_object(
+        'name', $1::TEXT, 
+        'price', $2::TEXT,
+        'properties', $3::JSONB
+      ) WHERE id = $3::UUID 
+      RETURNING *
+    `;
     const query = {
       text: update,
-      values: [`${product.name}`, `${product.price}`, `${productId}`],
+      values: [`${product.name}`, `${product.price}`, `${productId}`, JSON.stringify(product.props)],
     };
     const {rows} = await pool.query(query);
     return rows[0];
