@@ -29,6 +29,30 @@ export class ProductService {
           console.log(err)
           reject(err)
         })
+    })
+  }
+
+  async setActiveStatus(productId: UUID, active: boolean): Promise<Product> {
+    return new Promise((resolve, reject) => {
+      fetch(`http://${process.env.MICROSERVICE_URL||'localhost'}:3011/api/v0/product/${productId}/setActiveStatus?active=${active}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        }
       })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json()
+        })
+        .then((authenticated) => {
+          resolve(authenticated)
+        })
+        .catch((err) => {
+          console.log(err)
+          reject(err)
+        })
+    })
   }
 }
