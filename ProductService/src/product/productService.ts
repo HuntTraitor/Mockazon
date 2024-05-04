@@ -15,7 +15,7 @@ export class ProductService {
     ) RETURNING *`;
     const query = {
       text: insert,
-      values: [`${vendor_id}`, `${product.name}`, `${product.price}`, JSON.stringify(product.props)],
+      values: [`${vendor_id}`, `${product.name}`, `${product.price}`, JSON.stringify(product.properties)],
     };
     const {rows} = await pool.query(query);
     return rows[0];
@@ -36,7 +36,7 @@ export class ProductService {
     `;
     const query = {
       text: update,
-      values: [`${product.name}`, `${product.price}`, `${productId}`, JSON.stringify(product.props)],
+      values: [`${product.name}`, `${product.price}`, `${productId}`, JSON.stringify(product.properties)],
     };
     const {rows} = await pool.query(query);
     return rows[0];
