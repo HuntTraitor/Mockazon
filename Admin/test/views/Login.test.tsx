@@ -2,8 +2,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Login from '@/views/Login';
 import { LoginContext } from '@/contexts/Login';
-import {http, HttpResponse} from 'msw';
-import {setupServer} from 'msw/node';
+import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
 
 const server = setupServer();
 const URL: string = 'http://localhost:3010/api/v0/authenticate';
@@ -37,9 +37,7 @@ it('Does Not Render with accessToken (already logged in)', async () => {
   const id = '';
   const setId = () => {};
   render(
-    <LoginContext.Provider
-      value={{id, setId, accessToken, setAccessToken }}
-    >
+    <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
       <Login />
     </LoginContext.Provider>
   );
@@ -49,18 +47,21 @@ it('Does Not Render with accessToken (already logged in)', async () => {
 it('Signs Eesha In', async () => {
   server.use(
     http.post(URL, async () => {
-      return HttpResponse.json({email: email, password: passwd}, {status: 200});
-    }),
+      return HttpResponse.json(
+        { email: email, password: passwd },
+        { status: 200 }
+      );
+    })
   );
-  render(<Login />)
+  render(<Login />);
   let alerted = false;
-  const email = screen.getByLabelText('Email Address *')
-  await userEvent.type(email, 'elkrishn@ucsc.edu')
-  const passwd = screen.getByLabelText('Password *')
-  await userEvent.type(passwd, 'elk')
-  await fireEvent.click(screen.getByText('Sign In'))
+  const email = screen.getByLabelText('Email Address *');
+  await userEvent.type(email, 'elkrishn@ucsc.edu');
+  const passwd = screen.getByLabelText('Password *');
+  await userEvent.type(passwd, 'elk');
+  await fireEvent.click(screen.getByText('Sign In'));
   window.alert = () => {
     alerted = true;
-  }
-  await waitFor(() => expect(alerted).toBe(false))
+  };
+  await waitFor(() => expect(alerted).toBe(false));
 });
