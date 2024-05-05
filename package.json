@@ -71,7 +71,15 @@
     "start-vendorapi": "cd VendorAPI && npm start",
     "start-vendorapp": "cd VendorApp && npm start",
     "starts": "concurrently --kill-others \"npm run start-admin\" \"npm run start-auth\" \"npm run start-key\" \"npm run start-order\" \"npm run start-product\" \"npm run start-shopper\" \"npm run start-vendorapi\" \"npm run start-vendorapp\"",
-    "ms-starts": "concurrently --kill-others \"npm run start-auth\" \"npm run start-order\" \"npm run start-product\" \"npm run start-key\""
+    "ms-starts": "concurrently --kill-others \"npm run start-auth\" \"npm run start-order\" \"npm run start-product\" \"npm run start-key\"",
+    "test-admin": "cd Admin && npm test",
+    "test-auth": "cd AuthService && npm test",
+    "test-key": "cd KeyService && npm test",
+    "test-order": "cd OrderService && npm test",
+    "test-product": "cd ProductService && npm test",
+    "test-shopper": "cd Shopper && npm test",
+    "test-vendor": "cd VendorAPI && npm test && cd VendorApp && npm test",
+    "tests" : "npm run test-admin && npm run test-auth && npm run test-key && npm run test-order && npm run test-product && npm run test-shopper && npm run test-vendor"
   },
   "devDependencies": {
     "concurrently": "*",
