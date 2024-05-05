@@ -1,12 +1,12 @@
 import { Controller, Get, Route } from "tsoa";
 
 import { User } from ".";
-import { UserService } from "./service";
+import { AccountService } from "./service";
 
 @Route("account")
-export class UserController extends Controller {
+export class AccountController extends Controller {
   @Get("")
   public async getAll(): Promise<User[]> {
-    return new UserService().getAll();
+    return new AccountService().getAll();
   }
 }
