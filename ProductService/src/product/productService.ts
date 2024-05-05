@@ -15,7 +15,7 @@ export class ProductService {
     ) RETURNING *`;
     const query = {
       text: insert,
-      values: [`${vendor_id}`, `${product.name}`, `${product.price}`, JSON.stringify(product.props)],
+      values: [`${vendor_id}`, `${product.name}`, `${product.price}`, JSON.stringify(product.properties)],
     };
     const {rows} = await pool.query(query);
     return rows[0];
@@ -30,17 +30,18 @@ export class ProductService {
       SET data = jsonb_build_object(
         'name', $1::TEXT, 
         'price', $2::TEXT,
-        'properties', $3::JSONB
+        'properties', $4::JSONB
       ) WHERE id = $3::UUID 
       RETURNING *
     `;
     const query = {
       text: update,
-      values: [`${product.name}`, `${product.price}`, `${productId}`, JSON.stringify(product.props)],
+      values: [`${product.name}`, `${product.price}`, `${productId}`, JSON.stringify(product.properties)],
     };
     const {rows} = await pool.query(query);
     return rows[0];
   }
+  
 
   public async activate(
     productId: UUID
@@ -100,9 +101,8 @@ export class ProductService {
     }
 
     // Order by valid columns
-    const validColumns = ['price', 'postedAt'];
+    const validColumns = ['price', 'posted'];
     if (orderBy && validColumns.includes(orderBy)) {
-      console.log('orderBy', orderBy);
       if (orderBy === 'price') {
         select += ` ORDER BY (data->>'${orderBy}')::numeric ${descending ? 'DESC' : 'ASC'}`;
       } else {
