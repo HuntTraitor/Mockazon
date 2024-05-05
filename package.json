@@ -74,7 +74,8 @@
     "ms-starts": "concurrently --kill-others \"npm run start-auth\" \"npm run start-order\" \"npm run start-product\" \"npm run start-key\""
   },
   "devDependencies": {
-    "concurrently": "*"
+    "concurrently": "*",
+    "prettier": "*"
   },
   "dependencies": {
     "dotenv": "^16.4.5"
