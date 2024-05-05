@@ -1,6 +1,6 @@
-import { UUID } from "src/types";
-import { NewOrder, Order, UpdateOrder } from ".";
-import { pool } from "../db";
+import { UUID } from 'src/types';
+import { NewOrder, Order, UpdateOrder } from '.';
+import { pool } from '../db';
 
 export class OrderService {
   public async create(NewOrder: NewOrder): Promise<Order> {
@@ -24,7 +24,7 @@ export class OrderService {
 
   public async getAllOrders(
     productId: UUID | undefined,
-    accountId: UUID | undefined,
+    accountId: UUID | undefined
   ): Promise<Order[]> {
     let select = `SELECT * FROM "order" WHERE 1=1`;
     const values = [];
@@ -68,7 +68,7 @@ export class OrderService {
 
   public async updateOrder(
     orderId: UUID,
-    updates: UpdateOrder,
+    updates: UpdateOrder
   ): Promise<Order> {
     const update = `UPDATE "order"
     SET data = data || $1::jsonb

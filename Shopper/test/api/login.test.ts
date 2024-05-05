@@ -15,16 +15,19 @@ let server: http.Server<
 let rightCreds = true;
 
 const handlers = [
-  rest.get('http://localhost:3010/api/v0/authenticate/user', async () => {
-    if (rightCreds) {
-      return HttpResponse.json(
-        { id: '123', name: 'user name', accessToken: '456', role: 'shopper' },
-        { status: 200 }
-      );
-    } else {
-      return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+  rest.get(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate/user`,
+    async () => {
+      if (rightCreds) {
+        return HttpResponse.json(
+          { id: '123', name: 'user name', accessToken: '456', role: 'shopper' },
+          { status: 200 }
+        );
+      } else {
+        return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+      }
     }
-  }),
+  ),
 ];
 
 const microServices = setupServer(...handlers);

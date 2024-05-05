@@ -4,6 +4,8 @@ dotenv.config();
 import app from './app';
 
 app.listen(3011, () => {
-  console.log(`Server Running on port 3011`);
-  console.log('API Testing UI: http://localhost:3011/api/v0/docs/');
+  console.log(`Product Service Server Running on port 3011`);
+  console.log(
+    `Product Service API Testing UI: http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/docs/`
+  );
 });

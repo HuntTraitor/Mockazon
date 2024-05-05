@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup .env file
       run: |
@@ -30,6 +30,9 @@ jobs:
         echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
         echo MASTER_SECRET=${{ secrets.MASTER_SECRET }} >> .env
         echo MICROSERVICE_URL=${{ vars.MICROSERVICE_URL }} >> .env
+      
+    - name: Login to DockerHub
+      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
     - name: Install dependencies
       run: npm run installs
@@ -37,33 +40,37 @@ jobs:
     - name: Build apps
       run: npm run builds
 
-    - name: Build Docker image
-      run: docker-compose build
-
-    - name: Save Docker image as tar file
-      run: docker save mockazon:latest > image.tar
-
-    - name: Copy Docker image to the remote host
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.DROPLET_IP }}
-        username: root
-        password: ${{ secrets.SSH_PASSWORD }}
-        source: "image.tar"
-        target: "/remote/directory/path"
+    - name: Build and push Docker image
+      run: |
+        docker-compose build
+        docker-compose push
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-    - name: Load and run Docker image on the remote host
+    - uses: actions/checkout@v4
+    - name: Copy docker compose
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.DROPLET_IP }}
+        username: root
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
+        source: "docker-compose-production.yml"
+        target: "/root"
+
+    - name: Pull and run Docker image on the remote host
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.DROPLET_IP }}
         username: root
         password: ${{ secrets.SSH_PASSWORD }}
         script: |
-          cd /remote/directory/path
-          docker load < image.tar
-          docker-compose up -d
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker-compose -f /root/docker-compose-production.yml pull
+          docker-compose -f /root/docker-compose-production.yml down
+          docker-compose -f /root/docker-compose-production.yml up -d
+    - name: Wait for 20 seconds
+      run: sleep 20

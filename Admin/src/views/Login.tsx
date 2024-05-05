@@ -36,31 +36,33 @@ const Login = () => {
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget as HTMLFormElement);
-    fetch('http://localhost:3010/api/v0/authenticate', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: data.get('email'),
-        password: data.get('password'),
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    fetch(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          email: data.get('email'),
+          password: data.get('password'),
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
       .then(res => {
+        if (!res.ok) {
+          throw res;
+        }
         return res.json();
       })
       .then(json => {
-        if (json.errors) {
-          alert(`Failed to sign in.`);
-        } else {
-          // Set context
-          loginContext.setId(json.id);
-          loginContext.setAccessToken(json.accessToken);
-          localStorage.setItem('user', JSON.stringify(json));
-        }
+        // Set context
+        loginContext.setId(json.id);
+        loginContext.setAccessToken(json.accessToken);
+        localStorage.setItem('user', JSON.stringify(json));
       })
-      .catch(err => {
-        alert(err);
+      .catch(() => {
+        alert('Error logging in. Please try again.');
       });
   };
   if (loginContext.accessToken.length < 1) {

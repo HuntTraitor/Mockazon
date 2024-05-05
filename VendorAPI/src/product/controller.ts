@@ -10,16 +10,16 @@ import {
   Route,
   SuccessResponse,
   Path,
-} from "tsoa";
-import { NewProduct, Product } from ".";
-import { UUID } from "../types";
-import { ProductService } from "./service";
-import * as express from "express";
+} from 'tsoa';
+import { NewProduct, Product } from '.';
+import { UUID } from '../types';
+import { ProductService } from './service';
+import * as express from 'express';
 
-@Route("product")
+@Route('product')
 export class ProductController extends Controller {
   @Get()
-  @SuccessResponse("200", "Products Retrieved")
+  @SuccessResponse('200', 'Products Retrieved')
   public async getProducts(
     @Query() vendorId?: UUID,
     @Query() active?: boolean,
@@ -27,7 +27,7 @@ export class ProductController extends Controller {
     @Query() pageSize?: number,
     @Query() search?: string,
     @Query() orderBy?: string,
-    @Query() descending?: boolean,
+    @Query() descending?: boolean
   ): Promise<Product[] | undefined> {
     return await new ProductService().getProducts(
       vendorId,
@@ -36,26 +36,26 @@ export class ProductController extends Controller {
       pageSize,
       search,
       orderBy,
-      descending,
+      descending
     );
   }
 
   @Post()
-  @Response("401", "Unauthorised")
-  @SuccessResponse("201", "Product Created")
+  @Response('401', 'Unauthorised')
+  @SuccessResponse('201', 'Product Created')
   public async createProduct(
     @Body() product: NewProduct,
-    @Request() request: express.Request,
+    @Request() request: express.Request
   ): Promise<Product | undefined> {
     return await new ProductService().create(product, request.user?.id);
   }
 
-  @Put("{productId}")
-  @SuccessResponse("200", "Product Updated")
-  @Response("404", "Product Not Found")
+  @Put('{productId}')
+  @SuccessResponse('200', 'Product Updated')
+  @Response('404', 'Product Not Found')
   public async editProduct(
     @Path() productId: UUID,
-    @Body() product: NewProduct,
+    @Body() product: NewProduct
   ): Promise<Product | undefined> {
     return await new ProductService().edit(productId, product);
   }

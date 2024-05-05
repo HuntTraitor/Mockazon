@@ -1,4 +1,4 @@
-import { UUID } from "../types";
+import { UUID } from '../types';
 /**
  * Price of a Product
  * https://www.regextester.com/93999
@@ -11,18 +11,18 @@ export interface NewProduct {
   price: Price;
   properties: {
     [key: string]: string;
-  }
+  };
   // FIXME: Add more product properties
 }
 export interface Product {
   id: UUID;
-  vendor_id: UUID
+  vendor_id: UUID;
   data: {
     name: string;
     price: Price;
     properties: {
       [key: string]: string;
-    }
-  }
+    };
+  };
   // FIXME: Add more product properties
 }

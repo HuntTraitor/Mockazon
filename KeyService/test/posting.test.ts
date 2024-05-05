@@ -1,22 +1,20 @@
-import supertest from 'supertest'
-import {server} from './helper'
+import supertest from 'supertest';
+import { server } from './helper';
 
 describe('Requesting a new Key', () => {
-  const vendorId = crypto.randomUUID()
+  const vendorId = crypto.randomUUID();
 
-  test('Successfully accepts a key 201', async() => {
+  test('Successfully accepts a key 201', async () => {
     await supertest(server)
       .post(`/api/v0/key/${vendorId}/request`)
       .expect(201)
-      .then((res) => {
-        expect(res.body).toBeDefined()
-        expect(res.body.key).toBeDefined()
-      })
-  })
+      .then(res => {
+        expect(res.body).toBeDefined();
+        expect(res.body.key).toBeDefined();
+      });
+  });
 
-  test('Attempts to create a key bad vendorId', async() => {
-    await supertest(server)
-      .post(`/api/v0/key/helpme/request`)
-      .expect(400)
-  })
-})
+  test('Attempts to create a key bad vendorId', async () => {
+    await supertest(server).post(`/api/v0/key/helpme/request`).expect(400);
+  });
+});

@@ -8,11 +8,11 @@ import {
   Put,
   Response,
   Get,
-  Path
+  Path,
 } from 'tsoa';
-import {NewProduct, Product} from '.';
-import {UUID} from '../types';
-import {ProductService} from './productService';
+import { NewProduct, Product } from '.';
+import { UUID } from '../types';
+import { ProductService } from './productService';
 
 @Route('product')
 export class ProductController extends Controller {
@@ -25,9 +25,17 @@ export class ProductController extends Controller {
     @Query() pageSize?: number,
     @Query() search?: string,
     @Query() orderBy?: string,
-    @Query() descending?: boolean,
+    @Query() descending?: boolean
   ): Promise<Product[] | undefined> {
-    return await new ProductService().getAll(vendorId, active, page, pageSize, search, orderBy, descending);
+    return await new ProductService().getAll(
+      vendorId,
+      active,
+      page,
+      pageSize,
+      search,
+      orderBy,
+      descending
+    );
   }
 
   @Get('{productId}')
@@ -51,7 +59,7 @@ export class ProductController extends Controller {
   ): Promise<Product | undefined> {
     // FIXME: Do we want to stop duplicate products from being created? As in same vendor ID same name?
     // Could address this in the Vendor API.
-    console.log("Not even hitting this");
+    console.log('Not even hitting this');
     return await new ProductService().create(product, vendorId);
   }
 
@@ -77,7 +85,7 @@ export class ProductController extends Controller {
     @Path() productId: UUID,
     @Query() active: boolean
   ): Promise<Product | undefined> {
-    if (!await new ProductService().getOne(productId)) {
+    if (!(await new ProductService().getOne(productId))) {
       this.setStatus(404);
       return undefined;
     }

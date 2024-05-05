@@ -1,4 +1,4 @@
-import { UUID } from "../types/index";
+import { UUID } from '../types/index';
 
 /**
  * orders from 1-999

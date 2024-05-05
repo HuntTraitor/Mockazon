@@ -7,22 +7,22 @@ import {
   Get,
   Security,
   Request,
-} from "tsoa";
-import { Credentials, Authenticated, Buisness } from ".";
-import { AuthService } from "./service";
-import * as express from "express";
-import { ApiKey } from "../types";
-import { VendorInfo } from ".";
+} from 'tsoa';
+import { Credentials, Authenticated, Buisness } from '.';
+import { AuthService } from './service';
+import * as express from 'express';
+import { ApiKey } from '../types';
+import { VendorInfo } from '.';
 
-@Route("request")
+@Route('request')
 export class AuthController extends Controller {
   @Post()
-  @Response("401", "Unauthorized")
+  @Response('401', 'Unauthorized')
   public async request(
-    @Body() vendor: VendorInfo,
+    @Body() vendor: VendorInfo
   ): Promise<{ message: string }> {
     return {
-      message: "Request sent sucessfully!",
+      message: 'Request sent sucessfully!',
     };
   }
 }
