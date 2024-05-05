@@ -3,6 +3,7 @@ name: Mockazon CI
 on:
   push:
     branches: ["main"]
+  workflow_dispatch:
 
 env:
   POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
