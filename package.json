@@ -24,7 +24,7 @@
     "install-vendor-app": "cd VendorApp && npm install",
     "install-vendor-api": "cd VendorAPI && npm install",
     "install-key": "cd KeyService && npm install",
-    "installs": "npm run install-admin && npm run install-auth && npm run install-order && npm run install-shopper && npm run install-product && npm run install-vendor-app && npm run install-vendor-api && npm run install-key",
+    "installs": "npm install && npm run install-admin && npm run install-auth && npm run install-order && npm run install-shopper && npm run install-product && npm run install-vendor-app && npm run install-vendor-api && npm run install-key",
     "dev-admin": "cd Admin && npm run dev",
     "dev-auth": "cd AuthService && npm run dev",
     "dev-order": "cd OrderService && npm run dev",
