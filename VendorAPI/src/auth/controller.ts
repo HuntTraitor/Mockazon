@@ -20,10 +20,9 @@ export class AuthController extends Controller {
   @Response("401", "Unauthorized")
   public async request(
     @Body() vendor: VendorInfo,
-    @Body() buisness: Buisness,
-  ): Promise<{"message": string}> {
+  ): Promise<{ message: string }> {
     return {
-      "message": "Request sent sucessfully!"
+      message: "Request sent sucessfully!",
     };
   }
 }

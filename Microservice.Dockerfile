@@ -18,6 +18,10 @@ COPY OrderService/build/ /home/app/OrderService/build/
 COPY OrderService/package.json /home/app/OrderService/
 COPY OrderService/package-lock.json /home/app/OrderService
 
-RUN npm run cis
+COPY KeyService/build/ /home/app/KeyService/build/
+COPY KeyService/package.json /home/app/KeyService/
+COPY KeyService/package-lock.json /home/app/KeyService
 
-CMD npm run start
+RUN npm run ms-cis
+
+CMD npm run ms-starts

@@ -1,15 +1,29 @@
 import { Fragment, useContext } from 'react';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import Link from 'next/link';
+import { Typography } from '@mui/material';
 
 /**
  * Content
  * @constructor
  */
 export default function Content() {
-  const { accessToken } = useContext(LoggedInContext);
+  const { accessToken, setAccessToken, setLocation } =
+    useContext(LoggedInContext);
   return accessToken ? (
     <Fragment>
       <h1>Mockazon Shopper App</h1>
+      <Link
+        href={'#'}
+        onClick={() => {
+          setAccessToken('');
+          setLocation('login');
+        }}
+      >
+        <Typography variant="h6" component="h6" gutterBottom>
+          Login Page
+        </Typography>
+      </Link>
       <img
         src="/mockazon_logo_white.png"
         alt="Mockazon Logo"

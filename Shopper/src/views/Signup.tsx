@@ -6,21 +6,25 @@ import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import Link from 'next/link';
 
 // based this login screen off of lukas's cse 115 project
-const Login = () => {
+const Signup = () => {
   const [error, setError] = useState('');
   const { accessToken, setAccessToken, location, setLocation } =
     useContext(LoggedInContext);
 
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     try {
-      const decoded = jwtDecode(credentialResponse?.credential as string);
-      const response = await fetch(`${window.location.origin}/api/login`, {
+      const decoded: { sub: string; email: string; name: string } = jwtDecode(
+        credentialResponse?.credential as string
+      );
+      const response = await fetch(`${window.location.origin}/api/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           sub: decoded.sub,
+          email: decoded.email,
+          name: decoded.name,
         }),
       });
 
@@ -39,8 +43,7 @@ const Login = () => {
     }
   };
 
-  // UI partly referenced from: https://chat.openai.com/share/ee28fc31-d9b8-4193-8cb5-1bb793b8c66d
-  return !accessToken && location === 'login' ? (
+  return location === 'signup' && !accessToken ? (
     <Container maxWidth="sm">
       <Grid
         container
@@ -53,9 +56,9 @@ const Login = () => {
           <Typography variant="h4" component="h1" gutterBottom>
             Welcome to Mockazon
           </Typography>
-          <Link href={'#'} onClick={() => setLocation('signup')}>
+          <Link href={'#'} onClick={() => setLocation('login')}>
             <Typography variant="h6" component="h6" gutterBottom>
-              Signup Page
+              Login Page
             </Typography>
           </Link>
         </Grid>
@@ -74,7 +77,7 @@ const Login = () => {
               }}
             >
               <Typography variant="h4" gutterBottom>
-                Login with Google
+                Sign up with Google
               </Typography>
               {error && (
                 <Typography variant="body1" color="error">
@@ -90,6 +93,7 @@ const Login = () => {
   ) : (
     <></>
   );
+  // UI partly referenced from: https://chat.openai.com/share/ee28fc31-d9b8-4193-8cb5-1bb793b8c66d
 };
 
-export default Login;
+export default Signup;
