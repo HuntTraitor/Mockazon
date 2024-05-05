@@ -5,6 +5,15 @@ on:
     - cron: '0 12 * * *'
   workflow_dispatch:
 
+env:
+  POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
+  POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
+  POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+  POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  MASTER_SECRET: ${{ secrets.MASTER_SECRET }}
+  MICROSERVICE_URL: ${{ vars.MICROSERVICE_URL }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
