@@ -73,7 +73,7 @@ export class ProductService {
     page: number = 1,
     pageSize: number = 25,
     search?: string,
-    orderBy: string = 'posted_at',
+    orderBy: string = 'posted',
     descending?: boolean
   ): Promise<Product[]> {
     // Base query
