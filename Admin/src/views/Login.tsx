@@ -36,16 +36,19 @@ const Login = () => {
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget as HTMLFormElement);
-    fetch('http://localhost:3010/api/v0/authenticate', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: data.get('email'),
-        password: data.get('password'),
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    fetch(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          email: data.get('email'),
+          password: data.get('password'),
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
       .then(res => {
         if (!res.ok) {
           throw res;

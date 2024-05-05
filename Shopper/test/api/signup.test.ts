@@ -15,16 +15,19 @@ let server: http.Server<
 let noError = true;
 
 const handlers = [
-  rest.post('http://localhost:3010/api/v0/authenticate/signup', async () => {
-    if (noError) {
-      return HttpResponse.json(
-        { id: '123', sub: '123', email: 'abc@email.com', name: 'john' },
-        { status: 200 }
-      );
-    } else {
-      return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+  rest.post(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate/signup`,
+    async () => {
+      if (noError) {
+        return HttpResponse.json(
+          { id: '123', sub: '123', email: 'abc@email.com', name: 'john' },
+          { status: 200 }
+        );
+      } else {
+        return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+      }
     }
-  }),
+  ),
 ];
 
 const microServices = setupServer(...handlers);

@@ -6,7 +6,7 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 const server = setupServer();
-const URL: string = 'http://localhost:3010/api/v0/authenticate';
+const URL: string = `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate`;
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
@@ -44,9 +44,9 @@ it('Unsuccessful Log In', async () => {
   };
 
   localStorage.removeItem('user');
-  let accessToken = '';
+  const accessToken = '';
   const setAccessToken = () => {};
-  let id = '';
+  const id = '';
   const setId = () => {};
 
   await waitFor(() =>

@@ -5,13 +5,16 @@ import type { NextApiRequest, NextApiResponse } from 'next';
  * @param {NextApiResponse} res
  */
 export default function signup(req: NextApiRequest, res: NextApiResponse) {
-  fetch(`http://localhost:3010/api/v0/authenticate/signup`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(req.body),
-  })
+  fetch(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate/signup`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(req.body),
+    }
+  )
     .then(response => {
       if (!response.ok) {
         throw response;
