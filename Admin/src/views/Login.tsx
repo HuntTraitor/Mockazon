@@ -47,20 +47,19 @@ const Login = () => {
       },
     })
       .then(res => {
+        if (!res.ok) {
+          throw res;
+        }
         return res.json();
       })
       .then(json => {
-        if (json.errors) {
-          alert(`Failed to sign in.`);
-        } else {
-          // Set context
-          loginContext.setId(json.id);
-          loginContext.setAccessToken(json.accessToken);
-          localStorage.setItem('user', JSON.stringify(json));
-        }
+        // Set context
+        loginContext.setId(json.id);
+        loginContext.setAccessToken(json.accessToken);
+        localStorage.setItem('user', JSON.stringify(json));
       })
-      .catch(err => {
-        alert(err);
+      .catch(() => {
+        alert('Error logging in. Please try again.');
       });
   };
   if (loginContext.accessToken.length < 1) {

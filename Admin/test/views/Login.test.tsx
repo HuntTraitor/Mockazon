@@ -8,26 +8,14 @@ import { setupServer } from 'msw/node';
 const server = setupServer();
 const URL: string = 'http://localhost:3010/api/v0/authenticate';
 
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
 it('Renders', async () => {
   render(<Login />);
   await screen.findByText('Sign In', {
     exact: false,
-  });
-});
-
-it('Rejects Bad Credentials', async () => {
-  let alerted = false;
-  window.alert = () => {
-    alerted = true;
-  };
-  render(<Login />);
-  const email = screen.getByLabelText('Email Address *');
-  await userEvent.type(email, 'anna@books.com');
-  const passwd = screen.getByLabelText('Password *');
-  await userEvent.type(passwd, 'not-annas-password');
-  fireEvent.click(screen.getByText('Sign In'));
-  await waitFor(() => {
-    expect(alerted).toBeTruthy();
   });
 });
 
@@ -44,24 +32,80 @@ it('Does Not Render with accessToken (already logged in)', async () => {
   expect(screen.queryAllByText('Sign In').length).toBe(0);
 });
 
-it('Signs Eesha In', async () => {
+it('Unsuccessful Log In', async () => {
+  let alerted = false;
+  server.use(
+    http.post(URL, async () => {
+      return HttpResponse.json({}, { status: 401 });
+    })
+  );
+  window.alert = () => {
+    alerted = true;
+  };
+
+  localStorage.removeItem('user');
+  let accessToken = '';
+  const setAccessToken = () => {};
+  let id = '';
+  const setId = () => {};
+
+  await waitFor(() =>
+    render(
+      <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
+        <Login />
+      </LoginContext.Provider>
+    )
+  );
+  expect(screen.queryAllByText('Sign In').length).toBe(1);
+  const email = screen.getByLabelText('Email Address *');
+  await userEvent.type(email, 'molly@books.com');
+  const passwd = screen.getByLabelText('Password *');
+  await userEvent.type(passwd, 'afjlksdjf');
+  fireEvent.click(screen.getByText('Sign In'));
+
+  await waitFor(() => {
+    expect(alerted).toBe(true);
+  });
+});
+
+it('Successful Log In', async () => {
+  let alerted = false;
   server.use(
     http.post(URL, async () => {
       return HttpResponse.json(
-        { email: email, password: passwd },
+        JSON.stringify({ id: 'some id', accessToken: 'some token' }),
         { status: 200 }
       );
     })
   );
-  render(<Login />);
-  let alerted = false;
-  const email = screen.getByLabelText('Email Address *');
-  await userEvent.type(email, 'elkrishn@ucsc.edu');
-  const passwd = screen.getByLabelText('Password *');
-  await userEvent.type(passwd, 'elk');
-  await fireEvent.click(screen.getByText('Sign In'));
+
   window.alert = () => {
     alerted = true;
   };
-  await waitFor(() => expect(alerted).toBe(false));
+
+  let accessToken = '';
+  const setAccessToken = (str: string) => {
+    accessToken = str;
+  };
+  let id = '';
+  const setId = (str: string) => {
+    id = str;
+  };
+
+  await waitFor(() =>
+    render(
+      <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
+        <Login />
+      </LoginContext.Provider>
+    )
+  );
+  expect(screen.queryAllByText('Sign In').length).toBe(1);
+  const email = screen.getByLabelText('Email Address *');
+  await userEvent.type(email, 'molly@books.com');
+  const passwd = screen.getByLabelText('Password *');
+  await userEvent.type(passwd, 'afjlksdjf');
+  fireEvent.click(screen.getByLabelText('login-button'));
+  await waitFor(() => {
+    expect(alerted).toBe(false);
+  });
 });
