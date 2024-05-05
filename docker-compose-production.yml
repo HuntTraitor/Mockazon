@@ -5,9 +5,6 @@ services:
     container_name: shopper
     image: luke121/mockazon:shopper
     env_file: .env
-    build:
-      context: ./Shopper
-      dockerfile: Dockerfile
     depends_on:
       - postgres
     ports:
@@ -17,9 +14,6 @@ services:
     container_name: admin
     image: luke121/mockazon:admin
     env_file: .env
-    build:
-      context: ./Admin
-      dockerfile: Dockerfile
     depends_on:
       - postgres
     ports:
@@ -29,9 +23,6 @@ services:
     container_name: vendor_api
     image: luke121/mockazon:vendor_api
     env_file: .env
-    build:
-      context: ./VendorAPI
-      dockerfile: Dockerfile
     depends_on:
       - postgres
     ports:
@@ -41,9 +32,6 @@ services:
     container_name: vendor_app
     image: luke121/mockazon:vendor_app
     env_file: .env
-    build:
-      context: ./VendorApp
-      dockerfile: Dockerfile
     depends_on:
       - postgres
     ports:
@@ -53,9 +41,6 @@ services:
     container_name: microservice
     image: luke121/mockazon:microservice
     env_file: .env
-    build:
-      context: .
-      dockerfile: Microservice.Dockerfile
     depends_on:
       - postgres
   
