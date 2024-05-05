@@ -6,6 +6,11 @@ describe('Listing new products', () => {
   const newProduct = {
     name: 'Test Product',
     price: '100.00',
+    properties: {
+      color: 'red',
+      size: 'small',
+      material: 'cotton'
+    }
   };
 
   const vendorId = randomUUID();
@@ -44,6 +49,7 @@ describe('Listing new products', () => {
     validateProduct(newProductResponse.body);
     expect(newProductResponse.body.data.name).toBe(newProduct.name);
     expect(newProductResponse.body.data.price).toBe(newProduct.price);
+    expect(newProductResponse.body.data.properties).toEqual(newProduct.properties);
 
     const products = await supertest(server)
       .get('/api/v0/product')
@@ -54,5 +60,6 @@ describe('Listing new products', () => {
     validateProduct(products.body[0]);
     expect(products.body[0].data.name).toBe(newProduct.name);
     expect(products.body[0].data.price).toBe(newProduct.price);
+    expect(products.body[0].data.properties).toEqual(newProduct.properties);
   });
 });

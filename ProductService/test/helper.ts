@@ -27,10 +27,11 @@ export const validateProduct = (product: Product) => {
   expect(product.id).toBeDefined();
   expect(product.data.name).toBeDefined();
   expect(product.data.price).toBeDefined();
+  expect(product.data.properties).toBeDefined();
   /* FIXME: Implement extra fields
   expect(product.data.active).toBeDefined();
   expect(product.data.vendorId).toBeDefined();
-  expect(product.data.createdAt).toBeDefined();
-  expect(product.data.postedAt).toBeDefined();
+  expect(product.data.created).toBeDefined();
+  expect(product.data.posted).toBeDefined();
   */
 };

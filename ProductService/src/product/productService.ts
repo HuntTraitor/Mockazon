@@ -30,7 +30,7 @@ export class ProductService {
       SET data = jsonb_build_object(
         'name', $1::TEXT, 
         'price', $2::TEXT,
-        'properties', $3::JSONB
+        'properties', $4::JSONB
       ) WHERE id = $3::UUID 
       RETURNING *
     `;
@@ -41,6 +41,7 @@ export class ProductService {
     const {rows} = await pool.query(query);
     return rows[0];
   }
+  
 
   public async activate(
     productId: UUID
@@ -72,7 +73,7 @@ export class ProductService {
     page: number = 1,
     pageSize: number = 25,
     search?: string,
-    orderBy: string = 'posted_at',
+    orderBy: string = 'posted',
     descending?: boolean
   ): Promise<Product[]> {
     // Base query
@@ -100,9 +101,8 @@ export class ProductService {
     }
 
     // Order by valid columns
-    const validColumns = ['price', 'postedAt'];
+    const validColumns = ['price', 'posted'];
     if (orderBy && validColumns.includes(orderBy)) {
-      console.log('orderBy', orderBy);
       if (orderBy === 'price') {
         select += ` ORDER BY (data->>'${orderBy}')::numeric ${descending ? 'DESC' : 'ASC'}`;
       } else {

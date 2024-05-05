@@ -109,13 +109,13 @@ describe('Retrieving products', () => {
   test('Should retrieve products sorted by posted date', async () => {
     const products = await supertest(server)
       .get('/api/v0/product')
-      .query({orderBy: 'postedAt'})
+      .query({orderBy: 'posted'})
       .expect(200);
 
-    let currDate = new Date(products.body[0].data.postedAt);
+    let currDate = new Date(products.body[0].posted);
     for (const product of products.body) {
       validateProduct(product);
-      const productDate = new Date(product.data.postedAt);
+      const productDate = new Date(product.posted);
       expect(productDate.getTime()).toBeGreaterThanOrEqual(currDate.getTime());
       currDate = productDate;
     }
@@ -124,13 +124,13 @@ describe('Retrieving products', () => {
   test('Should retrieve products sorted by posted date in descending order', async () => {
     const products = await supertest(server)
       .get('/api/v0/product')
-      .query({orderBy: 'postedAt', descending: 'true'},)
+      .query({orderBy: 'posted', descending: 'true'},)
       .expect(200);
 
-    let currDate = new Date(products.body[0].data.postedAt);
+    let currDate = new Date(products.body[0].posted);
     for (const product of products.body) {
       validateProduct(product);
-      const productDate = new Date(product.data.postedAt);
+      const productDate = new Date(product.posted);
       expect(productDate.getTime()).toBeLessThanOrEqual(currDate.getTime());
       currDate = productDate;
     }

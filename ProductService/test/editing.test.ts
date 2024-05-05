@@ -7,6 +7,11 @@ describe('Editing products', () => {
   const updatedProduct = {
     name: 'Updated Product',
     price: '200.00',
+    properties: {
+      color: 'blue',
+      size: 'large',
+      material: 'cotton'
+    }
   };
 
   test('Should update a product', async () => {
@@ -15,18 +20,17 @@ describe('Editing products', () => {
       .expect(200);
     
     const product = products.body[0];
-
+    console.log('product', product);
     const updatedProductResponse = await supertest(server)
       .put(`/api/v0/product/${product.id}`)
       .send(updatedProduct)
       .then((response) => {
-        console.log(response);
         return response;
       })
-    
     validateProduct(updatedProductResponse.body);
     expect(updatedProductResponse.body.data.name).toBe(updatedProduct.name);
     expect(updatedProductResponse.body.data.price).toBe(updatedProduct.price);
+    expect(updatedProductResponse.body.data.properties).toEqual(updatedProduct.properties);
   });
 
   test('Should return 404 for a non-existent product', async () => {

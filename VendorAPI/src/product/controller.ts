@@ -18,6 +18,28 @@ import * as express from "express";
 
 @Route("product")
 export class ProductController extends Controller {
+  @Get()
+  @SuccessResponse("200", "Products Retrieved")
+  public async getProducts(
+    @Query() vendorId?: UUID,
+    @Query() active?: boolean,
+    @Query() page?: number,
+    @Query() pageSize?: number,
+    @Query() search?: string,
+    @Query() orderBy?: string,
+    @Query() descending?: boolean,
+  ): Promise<Product[] | undefined> {
+    return await new ProductService().getProducts(
+      vendorId,
+      active,
+      page,
+      pageSize,
+      search,
+      orderBy,
+      descending,
+    );
+  }
+
   @Post()
   @Response("401", "Unauthorised")
   @SuccessResponse("201", "Product Created")
