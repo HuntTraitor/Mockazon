@@ -1,7 +1,7 @@
 /**
  * Define any types for products
  */
-import { UUID } from "../types";
+import { UUID } from '../types';
 
 /**
  * Price of a Product
@@ -15,7 +15,7 @@ export interface NewProduct {
   price: Price;
   properties: {
     [key: string]: string;
-  }
+  };
 }
 export interface Product {
   id: UUID;
@@ -25,6 +25,6 @@ export interface Product {
     price: Price;
     properties: {
       [key: string]: string;
-    }
+    };
   };
 }

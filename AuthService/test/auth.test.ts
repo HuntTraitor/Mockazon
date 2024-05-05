@@ -1,10 +1,10 @@
 /* Assignment 3 */ // FIXME: Credit better
-import * as http from "http";
-import supertest from "supertest";
+import * as http from 'http';
+import supertest from 'supertest';
 
-import * as db from "./db";
-import app from "../src/app";
-import { randomUUID } from "crypto";
+import * as db from './db';
+import app from '../src/app';
+import { randomUUID } from 'crypto';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -21,7 +21,7 @@ beforeEach(async () => {
   await db.reset();
 });
 
-afterAll((done) => {
+afterAll(done => {
   db.shutdown();
   server.close(done);
 });
@@ -33,29 +33,29 @@ export interface Member {
 }
 
 const anna: Member = {
-  email: "anna@mockazon.com",
-  password: "annaadmin",
-  name: "Anna Admin",
+  email: 'anna@mockazon.com',
+  password: 'annaadmin',
+  name: 'Anna Admin',
 };
 
 const bob: Member = {
-  email: "bob@mockazon.com",
-  password: "bobshopper",
-  name: "Bob Shopper",
+  email: 'bob@mockazon.com',
+  password: 'bobshopper',
+  name: 'Bob Shopper',
 };
 
 const molly: Member = {
-  email: "molly@mockazon.com",
-  password: "mollyvendor",
-  name: "Molly Vendor",
+  email: 'molly@mockazon.com',
+  password: 'mollyvendor',
+  name: 'Molly Vendor',
 };
 
 async function loginAs(member: Member): Promise<string | undefined> {
   let accessToken;
   await supertest(server)
-    .post("/api/v0/authenticate")
+    .post('/api/v0/authenticate')
     .send({ email: member.email, password: member.password })
-    .then((res) => {
+    .then(res => {
       expect(res.status).toBe(200);
       expect(res.body.accessToken).toBeDefined();
       expect(res.body.name).toBe(member.name);
@@ -64,87 +64,87 @@ async function loginAs(member: Member): Promise<string | undefined> {
   return accessToken;
 }
 
-test("Renders the Swagger UI", async () => {
+test('Renders the Swagger UI', async () => {
   await supertest(server)
-    .get("/api/v0/docs/")
-    .then((res) => {
+    .get('/api/v0/docs/')
+    .then(res => {
       expect(res.status).toBe(200);
     });
 });
 
-test("Handles non-existent routes", async () => {
-  await supertest(server).get("/api/v0/doesnotexist").expect(500);
+test('Handles non-existent routes', async () => {
+  await supertest(server).get('/api/v0/doesnotexist').expect(500);
 });
 
-test("Cannot login with invalid credentials", async () => {
+test('Cannot login with invalid credentials', async () => {
   await supertest(server)
-    .post("/api/v0/authenticate")
-    .send({ email: anna.email, password: "wrongpassword" })
+    .post('/api/v0/authenticate')
+    .send({ email: anna.email, password: 'wrongpassword' })
     .expect(401);
 });
 
-test("Can login as all roles", async () => {
+test('Can login as all roles', async () => {
   await loginAs(anna);
   await loginAs(bob);
   await loginAs(molly);
 });
 
-test("Can check access token", async () => {
+test('Can check access token', async () => {
   const accessToken = await loginAs(anna);
   await supertest(server)
-    .get("/api/v0/authenticate")
+    .get('/api/v0/authenticate')
     .query({ accessToken })
     .expect(200)
-    .then((res) => {
+    .then(res => {
       expect(res.body.id).toBeDefined();
-      expect(res.body.role).toBe("admin");
+      expect(res.body.role).toBe('admin');
     });
 });
 
-test("Rejects invalid access token", async () => {
+test('Rejects invalid access token', async () => {
   const accessToken = randomUUID();
   await supertest(server)
-    .get("/api/v0/authenticate")
+    .get('/api/v0/authenticate')
     .query({ accessToken })
-    .then((res) => {
+    .then(res => {
       expect(res.status).toBe(401);
     });
 });
 
-test("Rejects on no access token", async () => {
-  await supertest(server).get("/api/v0/authenticate").expect(400);
+test('Rejects on no access token', async () => {
+  await supertest(server).get('/api/v0/authenticate').expect(400);
 });
 
-test("Wrong Credentials", async () => {
+test('Wrong Credentials', async () => {
   const result = await supertest(server).get(
-    "/api/v0/authenticate/user?sub=123",
+    '/api/v0/authenticate/user?sub=123'
   );
   expect(result.status).toBe(404);
 });
 
-test("Signing up successfully", async () => {
+test('Signing up successfully', async () => {
   const result = await supertest(server)
-    .post("/api/v0/authenticate/signup")
-    .send({ sub: "123", email: "abc@email.com", name: "john" });
+    .post('/api/v0/authenticate/signup')
+    .send({ sub: '123', email: 'abc@email.com', name: 'john' });
   expect(result.status).toBe(200);
 });
 
-test("Login successfully", async () => {
+test('Login successfully', async () => {
   const result = await supertest(server)
-    .post("/api/v0/authenticate/signup")
-    .send({ sub: "123", email: "abc@email.com", name: "john" });
+    .post('/api/v0/authenticate/signup')
+    .send({ sub: '123', email: 'abc@email.com', name: 'john' });
   const result2 = await supertest(server).get(
-    "/api/v0/authenticate/user?sub=" + result.body.sub,
+    '/api/v0/authenticate/user?sub=' + result.body.sub
   );
   expect(result2.status).toBe(200);
 });
 
-test("Signing up with duplicate credentials", async () => {
+test('Signing up with duplicate credentials', async () => {
   await supertest(server)
-    .post("/api/v0/authenticate/signup")
-    .send({ sub: "123", email: "abc@email.com", name: "john" });
+    .post('/api/v0/authenticate/signup')
+    .send({ sub: '123', email: 'abc@email.com', name: 'john' });
   const result2 = await supertest(server)
-    .post("/api/v0/authenticate/signup")
-    .send({ sub: "123", email: "abc@email.com", name: "john" });
+    .post('/api/v0/authenticate/signup')
+    .send({ sub: '123', email: 'abc@email.com', name: 'john' });
   expect(result2.status).toBe(400);
 });

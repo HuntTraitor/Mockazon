@@ -1,4 +1,4 @@
-import { Email, UUID } from "../types";
+import { Email, UUID } from '../types';
 
 export interface User {
   id: UUID;

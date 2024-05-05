@@ -1,6 +1,6 @@
-import {UUID} from 'src/types';
-import {NewProduct, Product} from '.';
-import {pool} from '../db';
+import { UUID } from 'src/types';
+import { NewProduct, Product } from '.';
+import { pool } from '../db';
 export class ProductService {
   public async create(
     product: NewProduct,
@@ -15,9 +15,14 @@ export class ProductService {
     ) RETURNING *`;
     const query = {
       text: insert,
-      values: [`${vendor_id}`, `${product.name}`, `${product.price}`, JSON.stringify(product.properties)],
+      values: [
+        `${vendor_id}`,
+        `${product.name}`,
+        `${product.price}`,
+        JSON.stringify(product.properties),
+      ],
     };
-    const {rows} = await pool.query(query);
+    const { rows } = await pool.query(query);
     return rows[0];
   }
 
@@ -36,34 +41,34 @@ export class ProductService {
     `;
     const query = {
       text: update,
-      values: [`${product.name}`, `${product.price}`, `${productId}`, JSON.stringify(product.properties)],
+      values: [
+        `${product.name}`,
+        `${product.price}`,
+        `${productId}`,
+        JSON.stringify(product.properties),
+      ],
     };
-    const {rows} = await pool.query(query);
+    const { rows } = await pool.query(query);
     return rows[0];
   }
-  
 
-  public async activate(
-    productId: UUID
-  ): Promise<Product | undefined> {
+  public async activate(productId: UUID): Promise<Product | undefined> {
     const update = `UPDATE product SET active = true WHERE id = $1::UUID RETURNING *`;
     const query = {
       text: update,
       values: [`${productId}`],
     };
-    const {rows} = await pool.query(query);
+    const { rows } = await pool.query(query);
     return rows[0];
   }
 
-  public async deactivate(
-    productId: UUID
-  ): Promise<Product | undefined> {
+  public async deactivate(productId: UUID): Promise<Product | undefined> {
     const update = `UPDATE product SET active = false WHERE id = $1::UUID RETURNING *`;
     const query = {
       text: update,
       values: [`${productId}`],
     };
-    const {rows} = await pool.query(query);
+    const { rows } = await pool.query(query);
     return rows[0];
   }
 
@@ -119,8 +124,8 @@ export class ProductService {
       values,
     };
 
-    const {rows} = await pool.query(query);
-    const products = rows.map((row) => row);
+    const { rows } = await pool.query(query);
+    const products = rows.map(row => row);
     return products;
   }
 
@@ -130,7 +135,7 @@ export class ProductService {
       text: select,
       values: [`${productId}`],
     };
-    const {rows} = await pool.query(query);
+    const { rows } = await pool.query(query);
     return rows[0];
   }
 }

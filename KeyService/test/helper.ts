@@ -14,7 +14,7 @@ beforeAll(async () => {
   return await db.reset();
 });
 
-afterAll((done) => {
+afterAll(done => {
   db.shutdown();
   server.close(done);
 });
