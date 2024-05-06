@@ -1,8 +1,8 @@
 {
-  "name": "vendor-public-api",
+  "name": "mockazon-account-microservice",
   "version": "1.0.0",
-  "description": "Public API Gateway for Vendors",
-  "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, Evan Metcalf <evmetcal@ucsc.edu>, Eesha Krishnamagaru <elkrishn@ucsc.edu>, Hunter Tratar <htratar@ucsc.edu>, Trevor Ryles <tryles@ucsc.edu>",
+  "description": "Micro Service responsible for all things accounts",
+  "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, Evan Metcalf <evmetcal@ucsc.edu>, Eesha Krishnamagaru <elkrishn@ucsc.edu>, Hunter Tratar <htratar@ucsc.edu>, Trevor Ryles <tryles@ucsc.edu>, Alfonso Del Rosario <addelros@ucsc.edu>", 
   "license": "none",
   "repository": "https://github.com/ekrishnamagaru/Mockazon",
   "devDependencies": {
@@ -16,6 +16,7 @@
     "@types/supertest": "*",
     "@types/swagger-ui-express": "*",
     "bestzip": "*",
+    "concurrently": "*",
     "eslint": "*",
     "eslint-config-typescript": "*",
     "jest": "*",
@@ -24,10 +25,8 @@
     "supertest": "*",
     "ts-jest": "*",
     "ts-node": "*",
-    "typescript": "*",
-    "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3"
+    "ts-postgres": "*",
+    "typescript": "*"
   },
   "dependencies": {
     "cors": "*",
@@ -70,6 +69,7 @@
     "parserOptions": {
       "ecmaVersion": 14
     },
+    "noInlineConfig": true,
     "rules": {
       "indent": [
         "warn",

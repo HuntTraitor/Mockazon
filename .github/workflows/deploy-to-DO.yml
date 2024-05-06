@@ -1,8 +1,6 @@
 name: Deploy to DigitalOcean Droplet
 
 on:
-  schedule:
-    - cron: '0 12 * * *'
   workflow_dispatch:
 
 env:
@@ -51,9 +49,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: List files in current directory
-      run: ls -l
-    - name: Copy docker-compose.yml to the remote host
+    - name: Copy docker compose
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.DROPLET_IP }}
@@ -74,3 +70,5 @@ jobs:
           docker-compose -f /root/docker-compose-production.yml pull
           docker-compose -f /root/docker-compose-production.yml down
           docker-compose -f /root/docker-compose-production.yml up -d
+    - name: Wait for 20 seconds
+      run: sleep 20
