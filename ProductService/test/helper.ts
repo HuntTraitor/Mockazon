@@ -43,4 +43,4 @@ export const validateReview = (review: Review) => {
   expect(review.created).toBeDefined();
   expect(review.data.rating).toBeDefined();
   expect(review.data.comment).toBeDefined();
-}
+};

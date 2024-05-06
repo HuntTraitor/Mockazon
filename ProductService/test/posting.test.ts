@@ -72,7 +72,7 @@ describe('Creating Reviews', () => {
     comment: 'Great product!',
   };
 
-  const productId = 'd1c689b1-b7a7-4100-8b2d-309908b444f5'
+  const productId = 'd1c689b1-b7a7-4100-8b2d-309908b444f5';
   const userId = randomUUID();
 
   test('Should create a new review', async () => {

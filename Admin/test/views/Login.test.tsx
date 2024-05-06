@@ -72,7 +72,12 @@ it('Successful Log In', async () => {
   server.use(
     http.post(URL, async () => {
       return HttpResponse.json(
-        JSON.stringify({authenticated: { id: '81c689b1-b7a7-4100-8b2d-309908b444f6', accessToken: 'some token' }}),
+        JSON.stringify({
+          authenticated: {
+            id: '81c689b1-b7a7-4100-8b2d-309908b444f6',
+            accessToken: 'some token',
+          },
+        }),
         { status: 200 }
       );
     })

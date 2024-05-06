@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
  * @param {NextApiResponse} res
  */
 export default function login(req: NextApiRequest, res: NextApiResponse) {
-  const {email, password} = req.body
+  const { email, password } = req.body;
   fetch(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate`,
     {
@@ -13,7 +13,7 @@ export default function login(req: NextApiRequest, res: NextApiResponse) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({"email": email, "password": password})
+      body: JSON.stringify({ email: email, password: password }),
     }
   )
     .then(response => {
@@ -23,12 +23,12 @@ export default function login(req: NextApiRequest, res: NextApiResponse) {
       return response.json();
     })
     .then(authenticated => {
-      console.log('200')
-      res.status(200).json({authenticated});
+      console.log('200');
+      res.status(200).json({ authenticated });
       return;
     })
     .catch(err => {
-      console.log('401')
+      console.log('401', err);
       res.status(401).json({ message: 'Invalid login' });
-    });    
+    });
 }

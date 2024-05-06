@@ -37,28 +37,28 @@ const Login = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget as HTMLFormElement);
     fetch(`${window.location.origin}/api/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: data.get('email'),
-          password: data.get('password')
-        }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: data.get('email'),
+        password: data.get('password'),
+      }),
     })
-    .then((response) => {
-      if (response.status == 200) {
-        return response.json();
-      }
-    })
-    .then((json) => {
-      const obj = JSON.parse(json)
-      loginContext.setAccessToken(obj.authenticated.accessToken);
-      loginContext.setId(obj.authenticated.id);
-    })
-    .catch(() => {
-      alert('Error logging in. Please try again.')
-    });
+      .then(response => {
+        if (response.status == 200) {
+          return response.json();
+        }
+      })
+      .then(json => {
+        const obj = JSON.parse(json);
+        loginContext.setAccessToken(obj.authenticated.accessToken);
+        loginContext.setId(obj.authenticated.id);
+      })
+      .catch(() => {
+        alert('Error logging in. Please try again.');
+      });
   };
   if (loginContext.accessToken.length < 1) {
     return (

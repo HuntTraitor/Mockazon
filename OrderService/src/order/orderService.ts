@@ -16,7 +16,12 @@ export class OrderService {
 
     const query = {
       text: insert,
-      values: [`${NewOrder.product_id}`, `${NewOrder.shopper_id}`, `${NewOrder.vendor_id}`, orderData],
+      values: [
+        `${NewOrder.product_id}`,
+        `${NewOrder.shopper_id}`,
+        `${NewOrder.vendor_id}`,
+        orderData,
+      ],
     };
     const { rows } = await pool.query(query);
     return rows[0];
@@ -25,7 +30,7 @@ export class OrderService {
   public async getAllOrders(
     productId: UUID | undefined,
     shopperId: UUID | undefined,
-    vendorId: UUID | undefined,
+    vendorId: UUID | undefined
   ): Promise<Order[]> {
     let select = `SELECT * FROM "order" WHERE 1=1`;
     const values = [];
@@ -41,8 +46,8 @@ export class OrderService {
     }
 
     if (vendorId) {
-      select += ` AND vendor_id = $${values.length + 1}`
-      values.push(vendorId)
+      select += ` AND vendor_id = $${values.length + 1}`;
+      values.push(vendorId);
     }
     const query = {
       text: select,
