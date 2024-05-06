@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import supertest from 'supertest';
-import { server, validateProduct } from './helper';
+import { server, validateProduct, validateReview } from './helper';
 
 describe('Retrieving products', () => {
   const vendorOne = '78b9467a-8029-4c1f-afd9-ea56932c3f46';
@@ -45,7 +45,6 @@ describe('Retrieving products', () => {
 
     expect(products.body).toHaveLength(1);
     for (const product of products.body) {
-      console.log(product);
       validateProduct(product);
       expect(product.data.name).toContain('Gatsby');
     }
@@ -58,7 +57,6 @@ describe('Retrieving products', () => {
       .expect(200);
 
     let currPrice = products.body[0].data.price;
-    console.log(products.body);
     for (const product of products.body) {
       validateProduct(product);
       expect(product.data.price).toBeGreaterThanOrEqual(currPrice);
@@ -147,5 +145,24 @@ describe('Retrieving products', () => {
   test('Should return 404 for a non-existent product', async () => {
     const productId = randomUUID();
     await supertest(server).get(`/api/v0/product/${productId}`).expect(404);
+  });
+});
+
+describe('Getting reviews', () => {
+  test('Should retrieve all reviews for a product', async () => {
+    const productId = 'd1c689b1-b7a7-4100-8b2d-309908b444f5';
+    const reviews = await supertest(server)
+      .get(`/api/v0/product/${productId}/review`)
+      .expect(200);
+
+    expect(reviews.body).toHaveLength(2);
+    for (const review of reviews.body) {
+      validateReview(review);
+    }
+  });
+
+  test('Should return 404 for a non-existent product', async () => {
+    const productId = randomUUID();
+    await supertest(server).get(`/api/v0/product/${productId}/review`).expect(404);
   });
 });

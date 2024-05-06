@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import supertest from 'supertest';
-import { server, validateProduct } from './helper';
+import { server, validateProduct, validateReview } from './helper';
 
 describe('Listing new products', () => {
   const newProduct = {
@@ -63,5 +63,42 @@ describe('Listing new products', () => {
     expect(products.body[0].data.name).toBe(newProduct.name);
     expect(products.body[0].data.price).toBe(newProduct.price);
     expect(products.body[0].data.properties).toEqual(newProduct.properties);
+  });
+});
+
+describe('Creating Reviews', () => {
+  const newReview = {
+    rating: 5,
+    comment: 'Great product!',
+  };
+
+  const productId = 'd1c689b1-b7a7-4100-8b2d-309908b444f5'
+  const userId = randomUUID();
+
+  test('Should create a new review', async () => {
+    const reviewResponse = await supertest(server)
+      .post(`/api/v0/product/${productId}/review`)
+      .send(newReview)
+      .query({ userId })
+      .expect(201);
+    validateReview(reviewResponse.body);
+    expect(reviewResponse.body.data.rating).toBe(newReview.rating);
+    expect(reviewResponse.body.data.comment).toBe(newReview.comment);
+  });
+
+  test('review non-existent product', async () => {
+    await supertest(server)
+      .post(`/api/v0/product/${randomUUID()}/review`)
+      .send(newReview)
+      .query({ userId })
+      .expect(404);
+  });
+
+  test('double review', async () => {
+    await supertest(server)
+      .post(`/api/v0/product/${productId}/review`)
+      .send(newReview)
+      .query({ userId })
+      .expect(500);
   });
 });

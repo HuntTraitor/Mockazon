@@ -1,4 +1,4 @@
-import { Product } from '../src/product';
+import { Product, Review } from '../src/product';
 
 import * as http from 'http';
 
@@ -28,10 +28,19 @@ export const validateProduct = (product: Product) => {
   expect(product.data.name).toBeDefined();
   expect(product.data.price).toBeDefined();
   expect(product.data.properties).toBeDefined();
-  /* FIXME: Implement extra fields
-  expect(product.data.active).toBeDefined();
-  expect(product.data.vendorId).toBeDefined();
-  expect(product.data.created).toBeDefined();
-  expect(product.data.posted).toBeDefined();
+  /*
+  expect(product.active).toBeDefined();
+  expect(product.vendorId).toBeDefined();
+  expect(product.created).toBeDefined();
+  expect(product.posted).toBeDefined();
   */
 };
+
+export const validateReview = (review: Review) => {
+  expect(review.id).toBeDefined();
+  expect(review.product_id).toBeDefined();
+  expect(review.reviewer_id).toBeDefined();
+  expect(review.created).toBeDefined();
+  expect(review.data.rating).toBeDefined();
+  expect(review.data.comment).toBeDefined();
+}

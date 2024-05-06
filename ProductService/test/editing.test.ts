@@ -18,7 +18,6 @@ describe('Editing products', () => {
     const products = await supertest(server).get('/api/v0/product').expect(200);
 
     const product = products.body[0];
-    console.log('product', product);
     const updatedProductResponse = await supertest(server)
       .put(`/api/v0/product/${product.id}`)
       .send(updatedProduct)
