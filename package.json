@@ -79,7 +79,8 @@
     "test-product": "cd ProductService && npm test",
     "test-shopper": "cd Shopper && npm test",
     "test-vendor": "cd VendorAPI && npm test && cd VendorApp && npm test",
-    "tests" : "npm run test-admin && npm run test-auth && npm run test-key && npm run test-order && npm run test-product && npm run test-shopper && npm run test-vendor"
+    "tests" : "npm run test-admin && npm run test-auth && npm run test-key && npm run test-order && npm run test-product && npm run test-shopper && npm run test-vendor",
+    "test-e2es": "cd VendorApp && npm run test-e2e && cd .. && cd Shopper && npm run test-e2e && cd .. && cd Admin && npm run test-e2e"
   },
   "devDependencies": {
     "concurrently": "*",
