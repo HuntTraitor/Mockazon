@@ -70,7 +70,6 @@
     "parserOptions": {
       "ecmaVersion": 14
     },
-    "noInlineConfig": true,
     "rules": {
       "indent": [
         "warn",
