@@ -29,6 +29,8 @@ const loggedInContextProps = {
   setAccessToken: jest.fn(),
   location: 'signup',
   setLocation: jest.fn(),
+  locale: 'en',
+  setLocale: jest.fn(),
 };
 
 describe('Signup component', () => {
@@ -48,7 +50,7 @@ describe('Signup component', () => {
         <Signup />
       </LoggedInContext.Provider>
     );
-    fireEvent.click(screen.getByText('Login Page'));
+    fireEvent.click(screen.getByLabelText('sub-title'));
   });
 
   it('Handles unsuccessful signup', async () => {

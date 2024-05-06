@@ -3,6 +3,7 @@ import Content from '@/views/Content';
 import Login from '@/views/Login';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Signup from '@/views/Signup';
+import Switcher from '@/views/Switcher';
 
 export const App = () => {
   // ok to hardcode as it's publicly accessible
@@ -12,6 +13,7 @@ export const App = () => {
   return (
     <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
       <LoggedInUserProvider>
+        <Switcher />
         <Content />
         <Login />
         <Signup />

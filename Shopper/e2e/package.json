@@ -6,38 +6,18 @@
   "license": "TBD (FIXME: MIT maybe)",
   "repository": "https://github.com/ekrishnamagaru/Mockazon",
   "devDependencies": {
+    "@types/node": "*",
     "dotenv": "*",
     "eslint": "*",
-    "eslint-config-google": "*",
     "express": "*",
     "jest": "*",
+    "@types/jest": "*",
     "puppeteer": "*",
-    "puppeteer-core": "*",
+    "@types/puppeteer": "*",
     "supertest": "*"
   },
-  "jest": {
-    "testMatch": [
-      "**/?(*.)+(spec|test).[jt]s?(x)"
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "google"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 14
-    },
-    "rules": {
-      "indent": [
-        "warn",
-        2
-      ]
-    }
-  },
   "scripts": {
-    "build": "cd .. && npm run build",
-    "e2e": "jest --testTimeout=10000 --runInBand --verbose --forceExit --detectOpenHandles",
-    "test": "(npm run build) && (npm run e2e)",
-    "lint": "eslint tests --no-inline-config --max-warnings 0 --ext .js"
+    "test": "jest --testTimeout=10000 --runInBand --verbose --forceExit --detectOpenHandles",
+    "lint": "prettier --write ./**/*.{ts,tsx}"
   }
 }

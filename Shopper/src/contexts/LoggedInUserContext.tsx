@@ -7,6 +7,9 @@ export const LoggedInContext = createContext({
   location: 'login',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setLocation: (loc: string) => {},
+  locale: 'en',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setLocale: (locale: string) => {},
 });
 
 export const LoggedInUserProvider = ({
@@ -14,6 +17,7 @@ export const LoggedInUserProvider = ({
 }: PropsWithChildren<NonNullable<unknown>>) => {
   const [accessToken, setAccessToken] = useState('');
   const [location, setLocation] = useState('login');
+  const [locale, setLocale] = useState('en');
   return (
     <LoggedInContext.Provider
       value={{
@@ -21,6 +25,8 @@ export const LoggedInUserProvider = ({
         setAccessToken,
         location,
         setLocation,
+        locale,
+        setLocale,
       }}
     >
       {children}
