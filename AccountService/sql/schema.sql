@@ -1,2 +1,4 @@
+DROP TABLE IF EXISTS request;
 DROP TABLE IF EXISTS account;
 CREATE TABLE account(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), data jsonb);
+CREATE TABLE request(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), account_id UUID, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
