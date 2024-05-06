@@ -33,37 +33,32 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget as HTMLFormElement);
-    fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate`,
-      {
+    fetch(`${window.location.origin}/api/login`, {
         method: 'POST',
-        body: JSON.stringify({
-          email: data.get('email'),
-          password: data.get('password'),
-        }),
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          email: data.get('email'),
+          password: data.get('password')
+        }),
+    })
+    .then((response) => {
+      if (response.status == 200) {
+        return response.json();
       }
-    )
-      .then(res => {
-        if (!res.ok) {
-          throw res;
-        }
-        return res.json();
-      })
-      .then(json => {
-        // Set context
-        loginContext.setId(json.id);
-        loginContext.setAccessToken(json.accessToken);
-        localStorage.setItem('user', JSON.stringify(json));
-      })
-      .catch(() => {
-        alert('Error logging in. Please try again.');
-      });
+    })
+    .then((json) => {
+      const obj = JSON.parse(json)
+      loginContext.setAccessToken(obj.authenticated.accessToken);
+      loginContext.setId(obj.authenticated.id);
+    })
+    .catch(() => {
+      alert('Error logging in. Please try again.')
+    });
   };
   if (loginContext.accessToken.length < 1) {
     return (

@@ -20,7 +20,8 @@
     "@emotion/styled": "*",
     "@mui/icons-material": "*",
     "@mui/material": "*",
-    "class-validator": "*",
+    "@types/puppeteer": "^7.0.4",
+    "class-validator": "^0.14.1",
     "cors": "^2.8.5",
     "graphql": "*",
     "graphql-request": "*",
@@ -67,7 +68,7 @@
     "ts-jest": "^29.1.2",
     "ts-node": "*",
     "ts-postgres": "*",
-    "typescript": "*"
+    "typescript": "^5.4.5"
   },
   "eslintConfig": {
     "extends": [
