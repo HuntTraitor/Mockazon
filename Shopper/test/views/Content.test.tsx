@@ -8,6 +8,8 @@ const loggedInContextProps = {
   setAccessToken: jest.fn(),
   location: 'content',
   setLocation: jest.fn(),
+  locale: 'en',
+  setLocale: jest.fn(),
 };
 
 it('Renders successfully', async () => {

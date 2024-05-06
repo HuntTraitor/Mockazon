@@ -9,7 +9,8 @@ export type Quantity = string;
 
 export interface NewOrder {
   product_id: UUID;
-  account_id: UUID;
+  shopper_id: UUID;
+  vendor_id: UUID;
   purchaseDate: Date;
   quantity: Quantity;
 }
@@ -17,7 +18,8 @@ export interface NewOrder {
 export interface Order {
   id: UUID;
   product_id: UUID;
-  account_id: UUID;
+  shopper_id: UUID;
+  vendor_id: UUID;
   data: {
     purchaseDate: Date;
     quantity: Quantity;

@@ -22,9 +22,10 @@ export class OrderController extends Controller {
   @Response('404', 'Not Found')
   public async getOrders(
     @Query('productId') productId?: UUID,
-    @Query('accountId') accountId?: UUID
+    @Query('shopperId') shopperId?: UUID,
+    @Query('vendorId') vendorId?: UUID,
   ): Promise<Order[] | undefined> {
-    return await new OrderService().getAllOrders(productId, accountId);
+    return await new OrderService().getAllOrders(productId, shopperId, vendorId);
   }
 
   @Post('')

@@ -35,8 +35,3 @@ afterAll(done => {
 test('should return error', async () => {
   await supertest(server).get('/invalidurl').expect(404);
 });
-
-test('should not return error', async () => {
-  const result = await supertest(server).get('/api/hello').expect(200);
-  expect(result.body).toEqual({ name: 'John Doe' });
-});

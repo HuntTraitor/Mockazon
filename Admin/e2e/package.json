@@ -1,5 +1,5 @@
 {
-  "name": "mockazon-shopper-app-e2e-testing",
+  "name": "mockazon-admin-app-e2e-testing",
   "version": "1.0.0",
   "description": "End-to-end tests for the Mockazon Shopper App",
   "author": "Lukas Teixeira Doepcke <lteixeir@ucsc.edu>, Evan Metcalf <evmetcal@ucsc.edu>, Eesha Krishnamagaru <elkrishn@ucsc.edu>, Hunter Tratar <htratar@ucsc.edu>, Trevor Ryles <tryles@ucsc.edu>",

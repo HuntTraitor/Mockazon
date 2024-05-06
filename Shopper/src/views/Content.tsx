@@ -2,6 +2,7 @@ import { Fragment, useContext } from 'react';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import Link from 'next/link';
 import { Typography } from '@mui/material';
+import Image from 'next/image';
 
 /**
  * Content
@@ -24,12 +25,12 @@ export default function Content() {
           Login Page
         </Typography>
       </Link>
-      <img
+      <Image
         src="/mockazon_logo_white.png"
         alt="Mockazon Logo"
+        width={400}
+        height={400}
         style={{
-          width: '400px',
-          height: 'auto',
           boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
           margin: '20px',
         }}

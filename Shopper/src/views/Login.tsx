@@ -4,12 +4,14 @@ import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
 // based this login screen off of lukas's cse 115 project
 const Login = () => {
   const [error, setError] = useState('');
   const { accessToken, setAccessToken, location, setLocation } =
     useContext(LoggedInContext);
+  const { t } = useTranslation('login');
 
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     try {
@@ -50,12 +52,21 @@ const Login = () => {
         style={{ minHeight: '70vh' }}
       >
         <Grid item xs={12} textAlign="center">
-          <Typography variant="h4" component="h1" gutterBottom>
-            Welcome to Mockazon
+          <Typography
+            aria-label={'title'}
+            variant="h4"
+            component="h1"
+            gutterBottom
+          >
+            {t('title')}
           </Typography>
-          <Link href={'#'} onClick={() => setLocation('signup')}>
+          <Link
+            aria-label={'sub-title'}
+            href={'#'}
+            onClick={() => setLocation('signup')}
+          >
             <Typography variant="h6" component="h6" gutterBottom>
-              Signup Page
+              {t('sub-title')}
             </Typography>
           </Link>
         </Grid>
@@ -74,7 +85,7 @@ const Login = () => {
               }}
             >
               <Typography variant="h4" gutterBottom>
-                Login with Google
+                {t('prompt')}
               </Typography>
               {error && (
                 <Typography variant="body1" color="error">

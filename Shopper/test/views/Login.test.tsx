@@ -28,6 +28,8 @@ const loggedInContextProps = {
   setAccessToken: jest.fn(),
   location: 'login',
   setLocation: jest.fn(),
+  locale: 'en',
+  setLocale: jest.fn(),
 };
 
 describe('Login component', () => {
@@ -47,7 +49,7 @@ describe('Login component', () => {
         <Login />
       </LoggedInContext.Provider>
     );
-    fireEvent.click(screen.getByText('Signup Page'));
+    fireEvent.click(screen.getByLabelText('sub-title'));
     // expect(onSuccessSpy).toHaveBeenCalled();
   });
 
@@ -79,19 +81,20 @@ describe('Login component', () => {
     fireEvent.click(screen.getByText('Google Login Button'));
   });
 
-  // cover test
+  // pass code coverage for loggedinprovider
   it('Covers setAccessToken in LoggedInProvider', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
       json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
     });
     const TestComponent = () => {
-      const { accessToken, setAccessToken, setLocation, location } =
+      const { accessToken, setAccessToken, setLocation, location, setLocale } =
         useContext(LoggedInContext);
       useEffect(() => {
         setAccessToken('mockToken');
         setLocation('mockToken');
-      }, [accessToken, setAccessToken, location, setLocation]);
+        setLocale('mockToken');
+      }, [setLocale, accessToken, setAccessToken, location, setLocation]);
 
       return null;
     };

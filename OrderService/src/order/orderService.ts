@@ -4,8 +4,8 @@ import { pool } from '../db';
 
 export class OrderService {
   public async create(NewOrder: NewOrder): Promise<Order> {
-    const insert = `INSERT INTO "order"(product_id, account_id, data) VALUES 
-    ($1, $2, $3) RETURNING *`;
+    const insert = `INSERT INTO "order"(product_id, shopper_id, vendor_id, data) VALUES 
+    ($1, $2, $3, $4) RETURNING *`;
 
     const orderData = {
       purchaseDate: NewOrder.purchaseDate,
@@ -16,7 +16,7 @@ export class OrderService {
 
     const query = {
       text: insert,
-      values: [`${NewOrder.product_id}`, `${NewOrder.account_id}`, orderData],
+      values: [`${NewOrder.product_id}`, `${NewOrder.shopper_id}`, `${NewOrder.vendor_id}`, orderData],
     };
     const { rows } = await pool.query(query);
     return rows[0];
@@ -24,7 +24,8 @@ export class OrderService {
 
   public async getAllOrders(
     productId: UUID | undefined,
-    accountId: UUID | undefined
+    shopperId: UUID | undefined,
+    vendorId: UUID | undefined,
   ): Promise<Order[]> {
     let select = `SELECT * FROM "order" WHERE 1=1`;
     const values = [];
@@ -34,9 +35,14 @@ export class OrderService {
       values.push(productId);
     }
 
-    if (accountId) {
-      select += ` AND account_id = $${values.length + 1}`;
-      values.push(accountId);
+    if (shopperId) {
+      select += ` AND shopper_id = $${values.length + 1}`;
+      values.push(shopperId);
+    }
+
+    if (vendorId) {
+      select += ` AND vendor_id = $${values.length + 1}`
+      values.push(vendorId)
     }
     const query = {
       text: select,

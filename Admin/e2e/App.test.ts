@@ -1,8 +1,8 @@
-const puppeteer = require('puppeteer');
+import puppeteer, { Browser, Page } from 'puppeteer';
 
 describe('Next.js App', () => {
-  let browser;
-  let page;
+  let browser: Browser;
+  let page: Page;
 
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: true });
@@ -14,10 +14,6 @@ describe('Next.js App', () => {
   });
 
   test('Navigate to home page', async () => {
-    await page.goto('http://localhost:3000');
-  });
-
-  test('Interact with elements', async () => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
   });
 });

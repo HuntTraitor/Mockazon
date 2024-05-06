@@ -5,6 +5,10 @@ test('Logged in user context', () => {
   const newLoggedInContextProps = {
     accessToken: 'mockToken',
     setAccessToken: jest.fn(),
+    location: 'login',
+    setLocation: jest.fn(),
+    locale: 'en',
+    setLocale: jest.fn(),
   };
   const { getByText } = render(
     <LoggedInContext.Provider value={newLoggedInContextProps}>
