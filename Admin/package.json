@@ -10,7 +10,7 @@
     "test": "jest --runInBand --detectOpenHandles --forceExit",
     "test-frontend": "jest test/views --runInBand --detectOpenHandles --forceExit",
     "test-backend": "jest test/api --runInBand --detectOpenHandles --forceExit",
-    "test-e2e": "cd test/e2e && jest --testTimeout=10000 --runInBand --verbose --forceExit --detectOpenHandles",
+    "test-e2e": "cd e2e && jest --testTimeout=10000 --runInBand --verbose --forceExit --detectOpenHandles",
     "test:silent": "npm test -- --silent",
     "test:watch": "npm test -- --watchAll"
   },
