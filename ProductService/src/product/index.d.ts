@@ -26,3 +26,19 @@ export interface Product {
   };
   // FIXME: Add more product properties
 }
+
+export interface NewReview {
+  rating: number;
+  comment: string;
+}
+
+export interface Review {
+  id: UUID;
+  product_id: UUID;
+  reviewer_id: UUID;
+  created: Date;
+  data: {
+    rating: number;
+    comment: string;
+  };
+}
