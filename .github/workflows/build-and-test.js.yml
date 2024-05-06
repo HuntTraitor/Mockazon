@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
+  POSTGRES_HOST: localhost
   POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
   POSTGRES_DB: ${{ vars.POSTGRES_DB }}
   POSTGRES_USER: ${{ vars.POSTGRES_USER }}
