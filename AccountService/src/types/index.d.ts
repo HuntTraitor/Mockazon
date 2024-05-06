@@ -12,3 +12,11 @@ export type UUID = string;
  */
 export type Email = string;
 
+export interface User {
+    id: UUID;
+    email: Email;
+    name: string;
+    username: string;
+    role: string;
+    suspended: boolean;
+  }
