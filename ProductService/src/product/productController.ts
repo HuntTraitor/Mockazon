@@ -10,7 +10,7 @@ import {
   Get,
   Path,
 } from 'tsoa';
-import { NewProduct, Product } from '.';
+import { NewProduct, Product, NewReview, Review } from '.';
 import { UUID } from '../types';
 import { ProductService } from './productService';
 
@@ -59,7 +59,6 @@ export class ProductController extends Controller {
   ): Promise<Product | undefined> {
     // FIXME: Do we want to stop duplicate products from being created? As in same vendor ID same name?
     // Could address this in the Vendor API.
-    console.log('Not even hitting this');
     return await new ProductService().create(product, vendorId);
   }
 
@@ -94,5 +93,34 @@ export class ProductController extends Controller {
     } else {
       return await new ProductService().deactivate(productId);
     }
+  }
+
+  @Post('{productId}/review')
+  @SuccessResponse('201', 'Review Created')
+  @Response('404', 'Product Not Found')
+  public async createReview(
+    @Path() productId: UUID,
+    @Body() review: NewReview,
+    @Query() userId: UUID
+  ): Promise<Review | undefined> {
+    if (!(await new ProductService().getOne(productId))) {
+      this.setStatus(404);
+      return undefined;
+    }
+    return await new ProductService().createReview(productId, review, userId);
+  }
+
+  @Get('{productId}/review')
+  @SuccessResponse('200', 'Reviews Retrieved')
+  @Response('404', 'Product Not Found')
+
+  public async getReviews(
+    @Path() productId: UUID
+  ): Promise<Review[] | undefined> {
+    if (!(await new ProductService().getOne(productId))) {
+      this.setStatus(404);
+      return undefined;
+    }
+    return await new ProductService().getReviews(productId);
   }
 }

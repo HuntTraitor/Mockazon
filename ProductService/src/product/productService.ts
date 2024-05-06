@@ -1,6 +1,7 @@
 import { UUID } from 'src/types';
-import { NewProduct, Product } from '.';
+import { NewProduct, Product, NewReview, Review } from '.';
 import { pool } from '../db';
+
 export class ProductService {
   public async create(
     product: NewProduct,
@@ -137,5 +138,67 @@ export class ProductService {
     };
     const { rows } = await pool.query(query);
     return rows[0];
+  }
+
+  public async createReview(
+    productId: UUID,
+    review: NewReview,
+    userId: UUID
+  ): Promise<Review | undefined> {
+    const insert = `
+    WITH new_review AS (
+      INSERT INTO review(reviewer_id, data)
+      VALUES ($1::UUID, jsonb_build_object(
+          'rating', $2::INT,
+          'comment', $3::TEXT
+      ))
+      RETURNING *
+    ), inserted_review AS (
+      INSERT INTO product_review(reviewer_id, product_id)
+      VALUES ($1::UUID, $4::UUID)
+      RETURNING *
+    )
+    SELECT 
+      r.id,
+      pr.product_id,
+      pr.reviewer_id,
+      r.created,
+      r.data
+    FROM
+      new_review r
+    JOIN
+      inserted_review pr ON r.reviewer_id = pr.reviewer_id
+    `;
+
+    const query = {
+      text: insert,
+      values: [`${userId}`, review.rating, review.comment, `${productId}`],
+    };
+    const { rows } = await pool.query(query);
+    return rows[0];
+  }
+
+  public async getReviews(productId: UUID): Promise<Review[] | undefined> {
+    const select = `
+    SELECT
+      r.id,
+      pr.product_id,
+      pr.reviewer_id,
+      r.created,
+      r.data
+    FROM
+        product_review pr
+    JOIN
+        review r ON pr.reviewer_id = r.reviewer_id
+    WHERE
+        pr.product_id = $1::UUID
+    `;
+    const query = {
+      text: select,
+      values: [`${productId}`],
+    };
+    const { rows } = await pool.query(query);
+    console.log(rows);
+    return rows.map(row => row);
   }
 }
