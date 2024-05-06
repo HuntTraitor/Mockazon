@@ -6,7 +6,7 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 const server = setupServer();
-const URL: string = `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate`;
+const URL: string = `${window.location.origin}/api/login`;
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
@@ -62,7 +62,6 @@ it('Unsuccessful Log In', async () => {
   const passwd = screen.getByLabelText('Password *');
   await userEvent.type(passwd, 'afjlksdjf');
   fireEvent.click(screen.getByText('Sign In'));
-
   await waitFor(() => {
     expect(alerted).toBe(true);
   });
@@ -73,7 +72,12 @@ it('Successful Log In', async () => {
   server.use(
     http.post(URL, async () => {
       return HttpResponse.json(
-        JSON.stringify({ id: 'some id', accessToken: 'some token' }),
+        JSON.stringify({
+          authenticated: {
+            id: '81c689b1-b7a7-4100-8b2d-309908b444f6',
+            accessToken: 'some token',
+          },
+        }),
         { status: 200 }
       );
     })

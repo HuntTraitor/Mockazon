@@ -163,6 +163,8 @@ describe('Getting reviews', () => {
 
   test('Should return 404 for a non-existent product', async () => {
     const productId = randomUUID();
-    await supertest(server).get(`/api/v0/product/${productId}/review`).expect(404);
+    await supertest(server)
+      .get(`/api/v0/product/${productId}/review`)
+      .expect(404);
   });
 });
