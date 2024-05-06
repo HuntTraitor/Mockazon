@@ -149,4 +149,31 @@ export class ProductService {
         });
     });
   }
+
+  async getProductReviews(productId: UUID): Promise<Product> {
+    return new Promise((resolve, reject) => {
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${productId}/review`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+        .then(res => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then(authenticated => {
+          resolve(authenticated);
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
 }

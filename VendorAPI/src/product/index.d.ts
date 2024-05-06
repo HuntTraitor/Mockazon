@@ -28,3 +28,14 @@ export interface Product {
     };
   };
 }
+
+export interface Review {
+  id: UUID;
+  product_id: UUID;
+  reviewer_id: UUID;
+  created: Date;
+  data: {
+    rating: number;
+    comment: string;
+  };
+}

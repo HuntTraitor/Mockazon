@@ -69,4 +69,13 @@ export class ProductController extends Controller {
   ): Promise<Product | undefined> {
     return await new ProductService().setActiveStatus(productId, active);
   }
+
+  @Get('{productId}/review')
+  @SuccessResponse('200', 'Product Reviews Retrieved')
+  @Response('404', 'Product Not Found')
+  public async getProductReviews(
+    @Path() productId: UUID
+  ): Promise<Product | undefined> {
+    return await new ProductService().getProductReviews(productId);
+  }
 }
