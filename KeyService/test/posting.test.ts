@@ -1,8 +1,9 @@
 import supertest from 'supertest';
+import { randomUUID } from 'crypto';
 import { server } from './helper';
 
 describe('Requesting a new Key', () => {
-  const vendorId = crypto.randomUUID();
+  const vendorId = randomUUID();
 
   test('Successfully accepts a key 201', async () => {
     await supertest(server)
