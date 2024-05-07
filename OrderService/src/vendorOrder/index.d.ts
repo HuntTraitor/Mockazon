@@ -7,22 +7,22 @@ import { UUID } from '../types/index';
  */
 export type Quantity = string;
 
-export interface NewVendorOrder {
+export interface NewOrder {
   product_id: UUID;
   shopper_id: UUID;
   quantity: Quantity;
 }
 
-export interface VendorOrder {
+export interface Order {
   id: UUID;
-  vendor_id: UUID;
   product_id: UUID;
   shopper_id: UUID;
+  vendor_id: UUID;
   data: {
-    purchaseDate: Date;
-    quantity: Quantity;
     shipped: boolean;
+    quantity: Quantity;
     delivered: boolean;
+    purchaseDate: Date;
   };
 }
 
