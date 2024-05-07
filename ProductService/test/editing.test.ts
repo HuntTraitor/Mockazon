@@ -59,7 +59,9 @@ describe('Setting product status', () => {
 
     validateProduct(updatedProduct.body);
     expect(updatedProduct.body.active).toBe(true);
-    expect(new Date(updatedProduct.body.posted).getTime()).toBeGreaterThan(oldDate.getTime());
+    expect(new Date(updatedProduct.body.posted).getTime()).toBeGreaterThan(
+      oldDate.getTime()
+    );
   });
 
   test('Should deactivate a product', async () => {

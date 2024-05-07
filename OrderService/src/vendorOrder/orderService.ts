@@ -1,12 +1,9 @@
 import { UUID } from 'src/types';
-import { NewVendorOrder, VendorOrder } from '.';
+import { NewOrder, Order } from '.';
 import { pool } from '../db';
 
 export class OrderService {
-  public async create(
-    NewOrder: NewVendorOrder,
-    vendorId: UUID
-  ): Promise<VendorOrder> {
+  public async create(NewOrder: NewOrder, vendorId: UUID): Promise<Order> {
     const insert = `INSERT INTO vendor_order(product_id, shopper_id, vendor_id, data) VALUES 
     ($1, $2, $3, $4) RETURNING *`;
 
@@ -30,35 +27,43 @@ export class OrderService {
     return rows[0];
   }
 
-  // public async getAllOrders(
-  //   productId?: UUID,
-  //   shopperId?: UUID,
-  //   vendorId?: UUID,
-  // ): Promise<Order[]> {
-  //   let select = `SELECT * FROM "order" WHERE 1=1`;
-  //   const values = [];
+  public async getAllOrders(
+    productId?: UUID,
+    shopperId?: UUID,
+    vendorId?: UUID
+  ): Promise<Order[]> {
+    let select = `SELECT * FROM vendor_order`;
+    const values = [];
+    const conditions = [];
 
-  //   if (productId) {
-  //     select += ` AND product_id = $${values.length + 1}`;
-  //     values.push(productId);
-  //   }
+    if (productId) {
+      conditions.push(`product_id = $${values.length + 1}`);
+      values.push(productId);
+    }
 
-  //   if (shopperId) {
-  //     select += ` AND shopper_id = $${values.length + 1}`;
-  //     values.push(shopperId);
-  //   }
+    if (shopperId) {
+      conditions.push(`shopper_id = $${values.length + 1}`);
+      values.push(shopperId);
+    }
 
-  //   if (vendorId) {
-  //     select += ` AND vendor_id = $${values.length + 1}`
-  //     values.push(vendorId)
-  //   }
-  //   const query = {
-  //     text: select,
-  //     values: values,
-  //   };
-  //   const { rows } = await pool.query(query);
-  //   return rows;
-  // }
+    if (vendorId) {
+      conditions.push(`vendor_id = $${values.length + 1}`);
+      values.push(vendorId);
+    }
+
+    if (conditions.length > 0) {
+      select += ' WHERE ';
+    }
+
+    select += conditions.join(' AND ');
+
+    const query = {
+      text: select,
+      values: values,
+    };
+    const { rows } = await pool.query(query);
+    return rows;
+  }
 
   // public async getOrder(orderId: UUID): Promise<Order> {
   //   const select = `SELECT * FROM "order" WHERE id = $1`;

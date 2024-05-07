@@ -1,27 +1,40 @@
-import { Body, Controller, Post, Route, SuccessResponse, Query } from 'tsoa';
+import {
+  Body,
+  Controller,
+  Route,
+  SuccessResponse,
+  Query,
+  Get,
+  Post,
+  Response,
+} from 'tsoa';
 
-import { VendorOrder, NewVendorOrder } from '.';
+import { Order, NewOrder } from '.';
 import { OrderService } from './orderService';
 import { UUID } from '../types';
 
-@Route('vendororder')
+@Route('order')
 export class OrderController extends Controller {
-  // @Get('')
-  // @Response('404', 'Not Found')
-  // public async getOrders(
-  //   @Query('productId') productId?: UUID,
-  //   @Query('shopperId') shopperId?: UUID,
-  //   @Query('vendorId') vendorId?: UUID,
-  // ): Promise<Order[] | undefined> {
-  //   return await new OrderService().getAllOrders(productId, shopperId, vendorId);
-  // }
+  @Get('')
+  @Response('404', 'Not Found')
+  public async getOrders(
+    @Query('productId') productId?: UUID,
+    @Query('shopperId') shopperId?: UUID,
+    @Query('vendorId') vendorId?: UUID
+  ): Promise<Order[] | undefined> {
+    return await new OrderService().getAllOrders(
+      productId,
+      shopperId,
+      vendorId
+    );
+  }
 
   @Post('')
   @SuccessResponse('201', 'Order Created')
   public async createOrder(
-    @Body() order: NewVendorOrder,
+    @Body() order: NewOrder,
     @Query() vendorId: UUID
-  ): Promise<VendorOrder | undefined> {
+  ): Promise<Order | undefined> {
     return await new OrderService().create(order, vendorId);
   }
 
