@@ -11,7 +11,6 @@ env:
   POSTGRES_DB: ${{ vars.POSTGRES_DB }}
   POSTGRES_USER: ${{ vars.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
   MASTER_SECRET: ${{ secrets.MASTER_SECRET }}
 
 concurrency:
