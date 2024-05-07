@@ -64,8 +64,7 @@ const Login = () => {
   if (loginContext.accessToken.length > 0) {
     return null;
   }
-  
- 
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -85,7 +84,7 @@ const Login = () => {
             height={30}
           />
           <Typography component="h1" variant="h5">
-              Mockazon
+            Mockazon
           </Typography>
           <Box
             component="form"
@@ -133,7 +132,7 @@ const Login = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-                Sign In
+              Sign In
             </Button>
           </Box>
         </Box>
