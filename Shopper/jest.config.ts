@@ -22,8 +22,6 @@ const customJestConfig = {
   collectCoverage: true,
   coveragePathIgnorePatterns: ['src/pages/_app.tsx', 'src/pages/_document.tsx'],
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
-  // e2e should be run separately
-  testPathIgnorePatterns: ['<rootDir>/e2e/'], // Ignore tests in the e2e folder
 };
 
 export default createJestConfig(customJestConfig);
