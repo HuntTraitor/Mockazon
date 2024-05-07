@@ -50,6 +50,8 @@ describe('Setting product status', () => {
     const products = await supertest(server).get('/api/v0/product').expect(200);
 
     const product = products.body[0];
+    const oldDate = new Date(product.posted);
+
     const updatedProduct = await supertest(server)
       .put(`/api/v0/product/${product.id}/setActiveStatus`)
       .query({ active: true })
@@ -57,6 +59,7 @@ describe('Setting product status', () => {
 
     validateProduct(updatedProduct.body);
     expect(updatedProduct.body.active).toBe(true);
+    expect(new Date(updatedProduct.body.posted).getTime()).toBeGreaterThan(oldDate.getTime());
   });
 
   test('Should deactivate a product', async () => {
