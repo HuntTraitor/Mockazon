@@ -29,15 +29,16 @@ const mockOrder = {
   quantity: '2',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const postOrders = async (amount: number) => {
   for (let i = 0; i < amount; i++) {
     await supertest(server).post(`/api/v0/order`).send(mockOrder).expect(201);
   }
 };
 
-test('temp', async() => {
-  expect(true).toBe(true)
-})
+test('temp', async () => {
+  expect(true).toBe(true);
+});
 
 // test('Gets all orders 200', async () => {
 //   await postOrders(10);

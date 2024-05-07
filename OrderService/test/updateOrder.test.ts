@@ -29,6 +29,7 @@ const mockOrder = {
   quantity: '2',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const postOrder = async (): Promise<string | undefined> => {
   let orderId;
   await supertest(server)
@@ -41,9 +42,9 @@ const postOrder = async (): Promise<string | undefined> => {
   return orderId;
 };
 
-test('temp', async() => {
-  expect(true).toBe(true)
-})
+test('temp', async () => {
+  expect(true).toBe(true);
+});
 
 // test('Successfully updates quantity an order 201', async () => {
 //   const orderId = await postOrder();

@@ -1,18 +1,6 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Response,
-  Route,
-  SuccessResponse,
-  Path,
-  Query,
-  Get,
-  Delete,
-  Put,
-} from 'tsoa';
+import { Body, Controller, Post, Route, SuccessResponse, Query } from 'tsoa';
 
-import { VendorOrder, NewVendorOrder, Quantity } from '.';
+import { VendorOrder, NewVendorOrder } from '.';
 import { OrderService } from './orderService';
 import { UUID } from '../types';
 
@@ -32,7 +20,7 @@ export class OrderController extends Controller {
   @SuccessResponse('201', 'Order Created')
   public async createOrder(
     @Body() order: NewVendorOrder,
-    @Query() vendorId: UUID,
+    @Query() vendorId: UUID
   ): Promise<VendorOrder | undefined> {
     return await new OrderService().create(order, vendorId);
   }

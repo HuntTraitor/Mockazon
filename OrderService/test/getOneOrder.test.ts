@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import supertest from 'supertest';
 import * as http from 'http';
 
@@ -22,6 +23,7 @@ afterAll(done => {
 
 const productId = '3f2687d0-d115-421f-ae23-ac572005a791';
 const accountId = '1ed8ca72-2027-4d19-ba6b-e6be75ab7d8b';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const mockOrder = {
   product_id: productId,
   account_id: accountId,
@@ -29,9 +31,9 @@ const mockOrder = {
   quantity: '2',
 };
 
-test('temp', async() => {
-  expect(true).toBe(true)
-})
+test('temp', async () => {
+  expect(true).toBe(true);
+});
 
 // const postOrder = async (): Promise<string | undefined> => {
 //   let orderId;

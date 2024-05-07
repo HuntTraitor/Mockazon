@@ -3,7 +3,10 @@ import { NewVendorOrder, VendorOrder } from '.';
 import { pool } from '../db';
 
 export class OrderService {
-  public async create(NewOrder: NewVendorOrder, vendorId: UUID): Promise<VendorOrder> {
+  public async create(
+    NewOrder: NewVendorOrder,
+    vendorId: UUID
+  ): Promise<VendorOrder> {
     const insert = `INSERT INTO vendor_order(product_id, shopper_id, vendor_id, data) VALUES 
     ($1, $2, $3, $4) RETURNING *`;
 
@@ -16,7 +19,12 @@ export class OrderService {
 
     const query = {
       text: insert,
-      values: [`${NewOrder.product_id}`, `${NewOrder.shopper_id}`, `${vendorId}`, orderData],
+      values: [
+        `${NewOrder.product_id}`,
+        `${NewOrder.shopper_id}`,
+        `${vendorId}`,
+        orderData,
+      ],
     };
     const { rows } = await pool.query(query);
     return rows[0];
