@@ -9,8 +9,12 @@ export class KeyService {
       values: [`${vendorId}`],
     };
 
+    try {
+      const { rows } = await pool.query(query);
+    } catch (e) {
+      console.log(e)
+    }
     const { rows } = await pool.query(query);
-    console.log(rows);
     return rows[0];
   }
 }

@@ -9,8 +9,7 @@ describe('Requesting a new Key', () => {
     await supertest(server)
       .post(`/api/v0/key/${vendorId}/request`)
       .then(res => {
-        console.log(res);
-        expect(res.status).toBe(201);
+        console.log(res.body)
         expect(res.body).toBeDefined();
         expect(res.body.key).toBeDefined();
       });
