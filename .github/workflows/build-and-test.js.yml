@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
+  POSTGRES_HOST: localhost
   POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
   POSTGRES_DB: ${{ vars.POSTGRES_DB }}
   POSTGRES_USER: ${{ vars.POSTGRES_USER }}
@@ -25,6 +25,7 @@ jobs:
       matrix:
         node-version: [20.x]
     steps:
+      # Lints and FE & BE tests
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -41,3 +42,17 @@ jobs:
         shell: bash
       - run: npm run tests
       - run: npm run docker-down
+
+      # E2E tests with containerized version 
+      - name: Sleep for 20 seconds
+        run: sleep 20s
+        shell: bash
+      - name: Build files for container
+        run: npm run builds
+      - name: Spin up container
+        run: docker-compose up -d --build
+      - name: Sleep for 20 seconds
+        run: sleep 20s
+        shell: bash
+      - name: Run e2e tests
+        run: npm run test-e2es

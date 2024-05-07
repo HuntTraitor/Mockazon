@@ -113,7 +113,6 @@ export class ProductController extends Controller {
   @Get('{productId}/review')
   @SuccessResponse('200', 'Reviews Retrieved')
   @Response('404', 'Product Not Found')
-
   public async getReviews(
     @Path() productId: UUID
   ): Promise<Review[] | undefined> {
