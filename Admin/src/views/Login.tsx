@@ -60,83 +60,85 @@ const Login = () => {
         alert('Error logging in. Please try again.');
       });
   };
-  if (loginContext.accessToken.length < 1) {
-    return (
-      <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Image
-              src="/mini_mockazon_logo.png"
-              alt="Mockazon Logo"
-              width={40}
-              height={30}
-            />
-            <Typography component="h1" variant="h5">
-              Mockazon
-            </Typography>
-            <Box
-              component="form"
-              onSubmit={event => {
-                handleSubmit(event);
-              }}
-              noValidate
-              sx={{ mt: 1 }}
-            >
-              <TextField
-                margin="normal"
-                // required
-                fullWidth
-                type="email"
-                name="email"
-                label="Email Address"
-                aria-label="Email Address"
-                placeholder="Email Address"
-                autoFocus
-                required
-                onChange={event => {
-                  handleInputChange(event);
-                }}
-              />
-              <TextField
-                margin="normal"
-                // required
-                fullWidth
-                type="password"
-                name="password"
-                label="Password"
-                placeholder="Password"
-                aria-label="Password"
-                required
-                onChange={event => {
-                  handleInputChange(event);
-                }}
-              />
-              <Button
-                aria-label="login-button"
-                type="submit"
-                role="button"
-                name="login-button"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-            </Box>
-          </Box>
-        </Container>
-      </ThemeProvider>
-    );
-  } else {
-    return undefined;
+
+  if (loginContext.accessToken.length > 0) {
+    return null;
   }
+  
+ 
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Image
+            src="/mini_mockazon_logo.png"
+            alt="Mockazon Logo"
+            width={40}
+            height={30}
+          />
+          <Typography component="h1" variant="h5">
+              Mockazon
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={event => {
+              handleSubmit(event);
+            }}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              margin="normal"
+              // required
+              fullWidth
+              type="email"
+              name="email"
+              label="Email Address"
+              aria-label="Email Address"
+              placeholder="Email Address"
+              autoFocus
+              required
+              onChange={event => {
+                handleInputChange(event);
+              }}
+            />
+            <TextField
+              margin="normal"
+              // required
+              fullWidth
+              type="password"
+              name="password"
+              label="Password"
+              placeholder="Password"
+              aria-label="Password"
+              required
+              onChange={event => {
+                handleInputChange(event);
+              }}
+            />
+            <Button
+              aria-label="login-button"
+              type="submit"
+              role="button"
+              name="login-button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+                Sign In
+            </Button>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
 };
 export default Login;

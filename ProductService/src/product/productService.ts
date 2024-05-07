@@ -54,7 +54,7 @@ export class ProductService {
   }
 
   public async activate(productId: UUID): Promise<Product | undefined> {
-    const update = `UPDATE product SET active = true WHERE id = $1::UUID RETURNING *`;
+    const update = `UPDATE product SET active = true, posted = NOW() AT TIME ZONE 'UTC' WHERE id = $1::UUID RETURNING *`;
     const query = {
       text: update,
       values: [`${productId}`],
