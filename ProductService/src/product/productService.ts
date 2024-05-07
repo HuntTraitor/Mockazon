@@ -198,7 +198,6 @@ export class ProductService {
       values: [`${productId}`],
     };
     const { rows } = await pool.query(query);
-    console.log(rows);
     return rows.map(row => row);
   }
 }
