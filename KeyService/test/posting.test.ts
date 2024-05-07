@@ -9,6 +9,7 @@ describe('Requesting a new Key', () => {
       .post(`/api/v0/key/${vendorId}/request`)
       .expect(201)
       .then(res => {
+        console.log(res.body)
         expect(res.body).toBeDefined();
         expect(res.body.key).toBeDefined();
       });
