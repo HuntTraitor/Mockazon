@@ -1,4 +1,4 @@
-import { Order, NewOrder, UpdateOrder } from '../src/vendorOrder';
+import { Order, NewOrder, UpdateOrder } from '../src/order';
 
 import * as http from 'http';
 
