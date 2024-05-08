@@ -1,5 +1,5 @@
 import { Credentials, Authenticated } from '.';
-import { SessionUser } from 'src/types';
+import { SessionUser, UUID } from '../types';
 
 export class AuthService {
   public async request(credentials: Credentials): Promise<Authenticated> {
@@ -34,48 +34,31 @@ export class AuthService {
   }
 
   public async check(
-    authHeader?: string,
-    roles?: string[]
+    apiKey?: UUID
   ): Promise<SessionUser> {
     return new Promise((resolve, reject) => {
-      if (!authHeader) {
-        reject(new Error('Unauthorized'));
+      if (!apiKey) {
+        reject(new Error ('Unauthorized'))
       } else {
-        const tokens = authHeader.split(' ');
-        if (tokens.length != 2 || tokens[0] !== 'Bearer') {
-          reject(new Error('Unauthorized'));
-        } else {
-          fetch(
-            `http://${
-              process.env.MICROSERVICE_URL || 'localhost'
-            }:3010/api/v0/authenticate?accessToken=` + tokens[1],
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+        fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/validate?apiKey=` + apiKey, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then(res => {
+            if (!res.ok) {
+              throw res;
             }
-          )
-            .then(res => {
-              if (!res.ok) {
-                throw res;
-              }
-              return res.json();
-            })
-            .then(sessionUser => {
-              if (roles) {
-                console.log(roles);
-                if (!roles.includes(sessionUser.role)) {
-                  reject(new Error('Unauthorised'));
-                }
-              }
-              resolve({ id: sessionUser.id });
-            })
-            .catch(() => {
-              reject(new Error('Unauthorized'));
-            });
-        }
+            return res.json()
+          })
+          .then(sessionUser => {
+            resolve({id: sessionUser.vendor_id})
+          })
+          .catch(() => {
+            reject(new Error('Unauthorized'))
+          })
       }
-    });
+    })
   }
 }

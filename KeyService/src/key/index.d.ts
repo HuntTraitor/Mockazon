@@ -13,3 +13,7 @@ export type UUID = string;
 export type Email = string;
 
 export type Key = UUID;
+
+export type SessionUser = {
+  id: UUID;
+};

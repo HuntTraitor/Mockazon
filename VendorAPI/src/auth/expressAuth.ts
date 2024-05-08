@@ -7,5 +7,11 @@ export function expressAuthentication(
   securityName: string,
   scopes?: string[]
 ): Promise<SessionUser> {
-  return new AuthService().check(request.headers.authorization, scopes);
+  let apiKey;
+  if (Array.isArray(request.headers['x-api-key'])) {
+    apiKey = request.headers['x-api-key'][0];
+  } else {
+    apiKey = request.headers['x-api-key'];
+  }
+  return new AuthService().check(apiKey);
 }

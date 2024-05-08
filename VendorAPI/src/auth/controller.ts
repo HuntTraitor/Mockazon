@@ -8,21 +8,17 @@ import {
   Security,
   Request,
 } from 'tsoa';
-import { Credentials, Authenticated, Buisness } from '.';
-import { AuthService } from './service';
-import * as express from 'express';
-import { ApiKey } from '../types';
 import { VendorInfo } from '.';
+import { SessionUser } from '../types';
 
-@Route('request')
+@Route('authtest')
 export class AuthController extends Controller {
   @Post()
+  @Security("ApiKeyAuth")
   @Response('401', 'Unauthorized')
-  public async request(
-    @Body() vendor: VendorInfo
-  ): Promise<{ message: string }> {
-    return {
-      message: 'Request sent sucessfully!',
-    };
+  public async authtest(
+    @Request() request: Express.Request
+  ): Promise<SessionUser|undefined> {
+    return request.user
   }
 }
