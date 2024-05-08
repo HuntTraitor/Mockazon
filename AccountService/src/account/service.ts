@@ -4,7 +4,7 @@ import { pool } from "../db";
 export class AccountService {
   public async getAll(): Promise<User[]> {
     const query = {
-      text: "SELECT id, data->>'email' AS email, data->>'name' AS name, data->>'username' AS username, data->>'role' AS role, data->>'suspended' AS suspended FROM account",
+      text: "SELECT id, data->>'email' AS email, data->>'name' AS name, data->>'username' AS username, data->>'role' AS role, (data->>'suspended')::boolean AS suspended FROM account",
     };
     const { rows } = await pool.query(query);
 
