@@ -52,11 +52,10 @@ const Login = () => {
         }
       })
       .then(json => {
-        const obj = JSON.parse(json);
-        loginContext.setAccessToken(obj.authenticated.accessToken);
-        loginContext.setId(obj.authenticated.id);
+        loginContext.setId(json.authenticated.id);
+        loginContext.setAccessToken(json.authenticated.accessToken);
       })
-      .catch(() => {
+      .catch((res) => {
         alert('Error logging in. Please try again.');
       });
   };
