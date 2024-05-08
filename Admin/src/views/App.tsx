@@ -1,4 +1,5 @@
 import { LoginProvider } from '@/contexts/Login';
+import { PageProvider } from '@/contexts/PageContext';
 import { Home } from './HomePage/Home';
 import Login from './Login';
 
@@ -7,7 +8,9 @@ export const App = () => {
     <>
       <LoginProvider>
         <Login />
-        <Home />
+        <PageProvider>
+          <Home />
+        </PageProvider>
       </LoginProvider>
     </>
   );
