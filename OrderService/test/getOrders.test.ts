@@ -1,15 +1,8 @@
 import supertest from 'supertest';
 import { server } from './helper';
-import { Order } from '../src/vendorOrder';
+import { Order } from '../src/order';
 import { randomUUID } from 'crypto';
-import {
-  validateOrder,
-  validateNewOrder,
-  // validateUpdateOrder,
-  compareOrders,
-  // compareNewOrders,
-  // compareUpdateOrders,
-} from './helper';
+import { validateOrder, validateNewOrder, compareOrders } from './helper';
 
 let orders: Order[] = [];
 beforeAll(async () => {
