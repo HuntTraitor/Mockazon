@@ -29,7 +29,6 @@ describe('Next.js App', () => {
     await browser.close();
   });
 
-
   test('Successful Login', async () => {
     await page.goto('http://localhost:3001');
     const email = await page.$('aria/Email Address[role="textbox"]');
@@ -41,9 +40,11 @@ describe('Next.js App', () => {
 
       await waitFor(() => {
         const element = document.querySelector('body');
-        return (element &&
-        element.textContent &&
-        element.textContent.includes('Settings'));
+        return (
+          element &&
+          element.textContent &&
+          element.textContent.includes('Settings')
+        );
       });
     }
   });
@@ -58,8 +59,8 @@ describe('Next.js App', () => {
       await page.click('aria/login-button[role="button"]');
       let alertMessage = '';
       /* */
-      const dialogPromise = new Promise<void>((resolve) => {
-        page.on('dialog', async (dialog) => {
+      const dialogPromise = new Promise<void>(resolve => {
+        page.on('dialog', async dialog => {
           alertMessage = dialog.message();
           await dialog.accept();
           resolve();
@@ -71,4 +72,3 @@ describe('Next.js App', () => {
     }
   });
 });
-

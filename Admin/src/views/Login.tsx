@@ -55,7 +55,7 @@ const Login = () => {
         loginContext.setAccessToken(json.authenticated.accessToken);
         loginContext.setId(json.authenticated.id);
       })
-      .catch((res) => {
+      .catch(() => {
         alert('Error logging in. Please try again.');
       });
   };

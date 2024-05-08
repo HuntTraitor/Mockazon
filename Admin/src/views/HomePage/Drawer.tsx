@@ -33,8 +33,16 @@ export function MyDrawer() {
   };
 
   const listItems = [
-    { text: 'Users', icon: <PeopleAltOutlinedIcon />, onClick: handleUsersClick },
-    { text: 'Requests', icon: <PersonAddAltIcon />, onClick: handleRequestsClick },
+    {
+      text: 'Users',
+      icon: <PeopleAltOutlinedIcon />,
+      onClick: handleUsersClick,
+    },
+    {
+      text: 'Requests',
+      icon: <PersonAddAltIcon />,
+      onClick: handleRequestsClick,
+    },
   ];
 
   return (
@@ -58,7 +66,12 @@ export function MyDrawer() {
           gap: '8px',
         }}
       >
-        <Image src="/mini_mockazon_logo.png" alt="Mockazon Logo" width={40} height={30} />
+        <Image
+          src="/mini_mockazon_logo.png"
+          alt="Mockazon Logo"
+          width={40}
+          height={30}
+        />
         <Typography variant="h6">Mockazon</Typography>
       </Box>
       <Divider />

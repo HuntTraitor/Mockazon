@@ -21,7 +21,9 @@ interface User {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const fetchAccounts = async (setAccounts: Function) => {
-  const query = {query: `query GetAccounts {account {id, name, email, username}}`};
+  const query = {
+    query: `query GetAccounts {account {id, name, email, username}}`,
+  };
 
   fetch('/api/graphql', {
     method: 'POST',

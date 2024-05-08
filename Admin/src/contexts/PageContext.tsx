@@ -4,7 +4,6 @@ export const PageContext = createContext({
   page: '',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setPage: (page: string) => {},
-
 });
 
 // eslint-disable-next-line @typescript-eslint/ban-types
