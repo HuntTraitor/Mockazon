@@ -11,9 +11,9 @@ export class KeyService {
 
     try {
       const { rows } = await pool.query(query);
-      console.log(rows)
+      console.log(rows);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
     const { rows } = await pool.query(query);
     return rows[0];
