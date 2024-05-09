@@ -14,7 +14,7 @@ it('Renders tabs', async () => {
   await screen.findByText('Users', {
     exact: false,
   });
-  await screen.findByText('Settings', {
+  await screen.findByText('Requests', {
     exact: false,
   });
 });

@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 
 /* Microservice book example */
-import { Authenticated, Credentials } from '.';
+import { Authenticated, CreateVendor, Credentials } from '.';
 import { pool } from '../db';
 import { SessionUser } from '../types';
 
@@ -19,6 +19,8 @@ export class AuthService {
       values: [credentials.email, credentials.password],
     };
     const { rows } = await pool.query(query);
+
+    console.log(credentials)
 
     if (rows[0]) {
       const user = rows[0];
@@ -106,6 +108,36 @@ export class AuthService {
     }
     if (rows && rows[0]) {
       return rows[0];
+    } else {
+      return undefined;
+    }
+  }
+
+  public async createVendorAccount(
+    vendor: CreateVendor
+  ) {
+    const insert = `INSERT INTO account(data) VALUES (
+      jsonb_build_object(
+        'name', $1::text, 
+        'email', $2::text, 
+        'pwhash', crypt($3::text, '87'),
+        'role', 'pending_vendor'
+      )) 
+    RETURNING *`
+      
+    const query = {
+      text: insert,
+      values: [vendor.name, vendor.email, vendor.password]
+    }
+    let rows;
+    try {
+      const result = await pool.query(query);
+      rows = result.rows;
+    } catch (e) {
+      console.log(e)
+    }
+    if (rows && rows[0]) {
+      return rows[0]
     } else {
       return undefined;
     }

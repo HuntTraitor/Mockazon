@@ -68,7 +68,6 @@
     "next-router-mock": "*",
     "prettier": "^3.2.5",
     "puppeteer": "^22.7.1",
-    "@types/puppeteer": "*",
     "supertest": "*",
     "ts-jest": "^29.1.2",
     "ts-node": "*",

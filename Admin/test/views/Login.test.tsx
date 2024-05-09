@@ -68,16 +68,20 @@ it('Unsuccessful Log In', async () => {
 });
 
 it('Successful Log In', async () => {
+  const accessToken = '';
+  const setAccessToken = () => {};
+  const id = '';
+  const setId = () => {};
   let alerted = false;
   server.use(
     http.post(URL, async () => {
       return HttpResponse.json(
-        JSON.stringify({
+        {
           authenticated: {
             id: '81c689b1-b7a7-4100-8b2d-309908b444f6',
             accessToken: 'some token',
           },
-        }),
+        },
         { status: 200 }
       );
     })
@@ -85,15 +89,6 @@ it('Successful Log In', async () => {
 
   window.alert = () => {
     alerted = true;
-  };
-
-  let accessToken = '';
-  const setAccessToken = (str: string) => {
-    accessToken = str;
-  };
-  let id = '';
-  const setId = (str: string) => {
-    id = str;
   };
 
   await waitFor(() =>

@@ -8,14 +8,10 @@
     "schemes": [ "http" ],
     "basePath": "/api/v0",
     "securityDefinitions": {
-      "jwt": {
-        "type": "http",
-        "scheme": "bearer",
-        "scopes": {
-          "member": "member",
-          "admin": "admin",
-          "vendor": "vendor"
-        }
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "name": "X-API-KEY",
+        "in": "header"
       }
     }
   },

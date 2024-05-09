@@ -36,6 +36,11 @@ const Signup = () => {
         setAccessToken(data.authenticated);
         setLocation('content');
       } else {
+        if (response.status === 400) {
+          console.error('Duplicate account:', error);
+          setError('Duplicate account');
+          return;
+        }
         console.error('Error logging in:', error);
         setError('Login failed');
       }

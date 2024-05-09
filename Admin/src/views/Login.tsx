@@ -17,7 +17,6 @@ const defaultTheme = createTheme();
 const Login = () => {
   const loginContext = React.useContext(LoginContext);
   const [user, setUser] = React.useState({ email: '', password: '' });
-  // const [checked, setChecked] = React.useState(false);
 
   const handleInputChange = (event: React.SyntheticEvent) => {
     if (event && event.target) {
@@ -52,20 +51,16 @@ const Login = () => {
         }
       })
       .then(json => {
-        const obj = JSON.parse(json);
-        loginContext.setAccessToken(obj.authenticated.accessToken);
-        loginContext.setId(obj.authenticated.id);
+        loginContext.setAccessToken(`${json.authenticated.accessToken}`);
+        loginContext.setId(`${json.authenticated.id}`);
+        localStorage.setItem('user', JSON.stringify(json));
       })
       .catch(() => {
         alert('Error logging in. Please try again.');
       });
   };
 
-  if (loginContext.accessToken.length > 0) {
-    return null;
-  }
-
-  return (
+  return loginContext.accessToken.length < 1 ? (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -138,6 +133,6 @@ const Login = () => {
         </Box>
       </Container>
     </ThemeProvider>
-  );
+  ) : null;
 };
 export default Login;

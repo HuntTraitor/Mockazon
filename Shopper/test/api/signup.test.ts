@@ -13,6 +13,7 @@ let server: http.Server<
 >;
 
 let noError = true;
+let duplicateError = false;
 
 const handlers = [
   rest.post(
@@ -24,7 +25,14 @@ const handlers = [
           { status: 200 }
         );
       } else {
-        return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+        if (duplicateError) {
+          return HttpResponse.json(
+            { message: 'Duplicate error' },
+            { status: 400 }
+          );
+        } else {
+          return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+        }
       }
     }
   ),
@@ -38,7 +46,6 @@ beforeAll(async () => {
   server.listen();
 });
 
-// TODO fix open handle here
 beforeEach(async () => {
   await db.reset();
 });
@@ -68,4 +75,11 @@ test('Wrong Credentials', async () => {
   noError = false;
   const result = await supertest(server).post('/api/signup');
   expect(result.status).toBe(500);
+});
+
+test('Duplicate Account', async () => {
+  noError = false;
+  duplicateError = true;
+  const result = await supertest(server).post('/api/signup');
+  expect(result.status).toBe(400);
 });

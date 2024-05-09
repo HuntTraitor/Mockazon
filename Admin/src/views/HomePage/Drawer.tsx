@@ -11,8 +11,9 @@ import {
   Box,
 } from '@mui/material';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import Image from 'next/image';
+import { PageContext } from '@/contexts/PageContext';
 
 const drawerWidth = 300;
 
@@ -21,10 +22,28 @@ const drawerWidth = 300;
  * @return {JSX.Element} AppBar
  */
 export function MyDrawer() {
-  const listItems = {
-    Users: <PeopleAltOutlinedIcon />,
-    Settings: <SettingsOutlinedIcon />,
+  const pageContext = React.useContext(PageContext);
+
+  const handleUsersClick = () => {
+    pageContext.setPage('Users');
   };
+
+  const handleRequestsClick = () => {
+    pageContext.setPage('Requests');
+  };
+
+  const listItems = [
+    {
+      text: 'Users',
+      icon: <PeopleAltOutlinedIcon />,
+      onClick: handleUsersClick,
+    },
+    {
+      text: 'Requests',
+      icon: <PersonAddAltIcon />,
+      onClick: handleRequestsClick,
+    },
+  ];
 
   return (
     <Drawer
@@ -57,9 +76,9 @@ export function MyDrawer() {
       </Box>
       <Divider />
       <List>
-        {Object.entries(listItems).map(([text, icon]) => (
+        {listItems.map(({ text, icon, onClick }) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={onClick}>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>

@@ -67,6 +67,21 @@ describe('Signup component', () => {
     fireEvent.click(screen.getByText('Google Signup Button'));
   });
 
+  it('Handles unsuccessful signup with duplicate account error', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      status: 400,
+      json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
+    });
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Signup />
+      </LoggedInContext.Provider>
+    );
+
+    fireEvent.click(screen.getByText('Google Signup Button'));
+  });
+
   it('Handles unsuccessful signup with error', async () => {
     global.fetch = jest.fn().mockRejectedValueOnce({
       ok: false,

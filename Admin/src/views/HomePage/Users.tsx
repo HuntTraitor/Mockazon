@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Typography,
   Box,
@@ -19,49 +19,38 @@ interface User {
   username: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+const fetchAccounts = async (setAccounts: Function) => {
+  const query = {
+    query: `query GetAccounts {account {id, name, email, username}}`,
+  };
+
+  fetch('/api/graphql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(query),
+  })
+    .then(res => {
+      return res.json();
+    })
+    .then(json => {
+      setAccounts(json.data.account);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
 /**
  * Defines the Users component
  * @return {JSX.Element} Users
  */
 export function Users() {
-  const users: User[] = [
-    {
-      id: 1,
-      name: 'Evan Metcalf',
-      email: 'evmetcal@ucsc.edu',
-      username: 'evmetcal',
-    },
-    {
-      id: 2,
-      name: 'Lukas Teixeira Döpcke',
-      email: 'lteixeir@ucsc.edu',
-      username: 'lteixeir',
-    },
-    {
-      id: 3,
-      name: 'Trevor Ryles',
-      email: 'tryles@ucsc.edu',
-      username: 'tryles',
-    },
-    {
-      id: 4,
-      name: 'Hunter Risatratar',
-      email: 'htratar@ucsc.edu',
-      username: 'htratar',
-    },
-    {
-      id: 5,
-      name: 'Alfonso Del Rosario',
-      email: 'addelros@ucsc.edu',
-      username: 'addelros',
-    },
-    {
-      id: 6,
-      name: 'Eesha Krishnamagaru',
-      email: 'elkrishn@ucsc.edu',
-      username: 'elkrishn',
-    },
-  ];
+  const [accounts, setAccounts] = useState<User[]>([]);
+
+  React.useEffect(() => {
+    fetchAccounts(setAccounts);
+  }, []);
 
   const handleDeleteUser = (userId: number) => {
     console.log(`Deleting user with ID: ${userId}`);
@@ -90,17 +79,17 @@ export function Users() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.map(user => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.username}</TableCell>
+              {accounts.map(account => (
+                <TableRow key={account.id}>
+                  <TableCell>{account.name}</TableCell>
+                  <TableCell>{account.email}</TableCell>
+                  <TableCell>{account.username}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
                       color="error"
-                      data-testid={`delete-user-${user.id}`}
-                      onClick={() => handleDeleteUser(user.id)}
+                      data-testid={`delete-account-${account.id}`}
+                      onClick={() => handleDeleteUser(account.id)}
                     >
                       Delete
                     </Button>
