@@ -24,3 +24,9 @@ export interface NewOrder {
   shopper_id: UUID;
   quantity: Quantity;
 }
+
+export interface UpdateOrder {
+  quantity?: Quantity;
+  shipped?: boolean;
+  delivered?: boolean;
+}
