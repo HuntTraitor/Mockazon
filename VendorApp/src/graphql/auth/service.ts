@@ -16,8 +16,6 @@ export class AuthService {
         content: "Signup Request sent!!"
       })
     })
-
-
   }
   // public async login(credentials: Credentials): Promise<Authenticated>  {
   //   return new Promise((resolve, reject) => {

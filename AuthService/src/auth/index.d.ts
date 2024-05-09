@@ -17,3 +17,16 @@ export interface Authenticated {
   name: string;
   accessToken: string;
 }
+
+export interface Vendor {
+  id: string;
+  name: string;
+  email: Email;
+  role: string;
+}
+
+export interface CreateVendor {
+  name: string;
+  email: Email;
+  password: string;
+}

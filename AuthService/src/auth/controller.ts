@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post, Query, Response, Route } from 'tsoa';
+import { Body, Controller, Get, Post, Query, Response, Route, SuccessResponse } from 'tsoa';
 
-import { Authenticated, Credentials } from '.';
+import { Authenticated, CreateVendor, Credentials } from '.';
 import { SessionUser } from '../types';
 import { AuthService } from './service';
 
@@ -71,5 +71,24 @@ export class AuthController extends Controller {
       role: user.data.role,
       sub: user.data.sub,
     };
+  }
+
+  @Post('/vendor/signup')
+  @SuccessResponse('201', 'Account Created')
+  public async createVendor(
+    @Body() credentials: CreateVendor
+  ) {
+    const user = await new AuthService().createVendorAccount(credentials);
+    if (!user) {
+      this.setStatus(400)
+      return;
+    }
+    return {
+      id: user.id,
+      name: user.data.name,
+      email: user.data.email,
+      role: user.data.role,
+      sub: user.data.sub,
+    }
   }
 }
