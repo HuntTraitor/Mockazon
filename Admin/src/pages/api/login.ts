@@ -23,7 +23,7 @@ export default function login(req: NextApiRequest, res: NextApiResponse) {
       return response.json();
     })
     .then(authenticated => {
-      console.log(authenticated)
+      console.log(authenticated);
       res.status(200).json({ authenticated });
       return;
     })

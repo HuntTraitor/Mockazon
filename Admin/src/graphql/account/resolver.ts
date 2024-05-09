@@ -1,4 +1,4 @@
-import { Query, Resolver} from 'type-graphql'; //Authorized
+import { Query, Resolver } from 'type-graphql'; //Authorized
 
 import { Account } from './schema';
 import { AccountService } from './service';

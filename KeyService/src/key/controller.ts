@@ -1,4 +1,13 @@
-import { Controller, Get, Path, Post, Route, SuccessResponse, Response, Query} from 'tsoa';
+import {
+  Controller,
+  Get,
+  Path,
+  Post,
+  Route,
+  SuccessResponse,
+  Response,
+  Query,
+} from 'tsoa';
 
 import { Key, SessionUser, UUID } from '.';
 import { KeyService } from './service';
@@ -15,10 +24,10 @@ export class KeyController extends Controller {
   @Get('validate')
   @Response('404', 'Not Found')
   public async get(@Query() apiKey: UUID): Promise<SessionUser | undefined> {
-    const user = await new KeyService().get(apiKey)
+    const user = await new KeyService().get(apiKey);
     if (!user) {
       this.setStatus(401);
     }
-    return user
+    return user;
   }
 }

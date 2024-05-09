@@ -20,12 +20,12 @@ export class KeyService {
   }
 
   public async get(apiKey: UUID): Promise<SessionUser> {
-    const select = `SELECT vendor_id FROM api_key WHERE key = $1`
+    const select = `SELECT vendor_id FROM api_key WHERE key = $1`;
     const query = {
       text: select,
-      values: [`${apiKey}`]
-    }
-    const {rows} = await pool.query(query)
-    return rows[0]
+      values: [`${apiKey}`],
+    };
+    const { rows } = await pool.query(query);
+    return rows[0];
   }
 }

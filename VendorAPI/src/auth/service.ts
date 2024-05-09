@@ -33,32 +33,34 @@ export class AuthService {
     });
   }
 
-  public async check(
-    apiKey?: UUID
-  ): Promise<SessionUser> {
+  public async check(apiKey?: UUID): Promise<SessionUser> {
     return new Promise((resolve, reject) => {
       if (!apiKey) {
-        reject(new Error ('Unauthorized'))
+        reject(new Error('Unauthorized'));
       } else {
-        fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/validate?apiKey=` + apiKey, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+        fetch(
+          `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/validate?apiKey=` +
+            apiKey,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
           .then(res => {
             if (!res.ok) {
               throw res;
             }
-            return res.json()
+            return res.json();
           })
           .then(sessionUser => {
-            resolve({id: sessionUser.vendor_id})
+            resolve({ id: sessionUser.vendor_id });
           })
           .catch(() => {
-            reject(new Error('Unauthorized'))
-          })
+            reject(new Error('Unauthorized'));
+          });
       }
-    })
+    });
   }
 }

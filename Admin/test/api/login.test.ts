@@ -22,11 +22,14 @@ const handlers = [
     async () => {
       if (rightCreds) {
         return HttpResponse.json(
-          { id: 'some id', accessToken: 'some token'},
+          { id: 'some id', accessToken: 'some token' },
           { status: 200 }
         );
       } else {
-        return HttpResponse.json({ message: 'Error logging in' }, { status: 401 });
+        return HttpResponse.json(
+          { message: 'Error logging in' },
+          { status: 401 }
+        );
       }
     }
   ),

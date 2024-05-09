@@ -9,7 +9,9 @@ export class AccountService {
    * @return {Promise<Account[]>} A promise that resolves to an array of books.
    */
   async all(): Promise<Account[]> {
-    const res = await fetch(`http://${process.env.MICROSERVICE_URL||'localhost'}:3014/api/v0/account`);
+    const res = await fetch(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/account`
+    );
     return res.json();
   }
 }

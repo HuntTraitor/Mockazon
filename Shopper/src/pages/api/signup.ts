@@ -17,6 +17,9 @@ export default function signup(req: NextApiRequest, res: NextApiResponse) {
   )
     .then(response => {
       if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error('Duplicate account');
+        }
         throw response;
       }
       return response.json();
@@ -26,6 +29,10 @@ export default function signup(req: NextApiRequest, res: NextApiResponse) {
       return;
     })
     .catch(err => {
+      if (err.message === 'Duplicate account') {
+        res.status(400).json({ message: 'Duplicate account' });
+        return;
+      }
       console.log(err);
       res.status(500).json({ message: 'Internal server error' });
     });
