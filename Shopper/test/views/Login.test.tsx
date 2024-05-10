@@ -1,7 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import Login from '@/views/Login';
-import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import Login from '@/pages/login';
+import {
+  LoggedInContext,
+  LoggedInUserProvider,
+} from '@/contexts/LoggedInUserContext';
+import { getServerSideProps } from '@/pages/login';
 
 // https://chat.openai.com/share/b8c1fae9-15f0-4305-8344-73501d3b59ef
 jest.mock('jwt-decode', () => ({
@@ -13,6 +17,24 @@ global.fetch = jest.fn().mockResolvedValue({
   json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
 });
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    basePath: '',
+    pathname: '/',
+    query: {},
+    asPath: '/',
+    locale: 'en',
+    locales: ['en', 'es'],
+    defaultLocale: 'en',
+    push: jest.fn(),
+    replace: jest.fn(),
+    reload: jest.fn(),
+    back: jest.fn(),
+    prefetch: jest.fn(),
+    beforePopState: jest.fn(),
+  }),
+}));
+
 const onSuccessSpy = jest.fn();
 
 jest.mock('@react-oauth/google', () => ({
@@ -20,6 +42,11 @@ jest.mock('@react-oauth/google', () => ({
   // @ts-expect-error
   GoogleLogin: ({ onSuccess }) => (
     <button onClick={() => onSuccess(onSuccessSpy)}>Google Login Button</button>
+  ),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  GoogleOAuthProvider: ({ children }) => (
+    <div>{children}</div> // Replace with a mock of GoogleOAuthProvider if necessary
   ),
 }));
 
@@ -88,13 +115,29 @@ describe('Login component', () => {
       json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
     });
     const TestComponent = () => {
-      const { accessToken, setAccessToken, setLocation, location, setLocale } =
-        useContext(LoggedInContext);
+      const {
+        accessToken,
+        locale,
+        setAccessToken,
+        setLocation,
+        location,
+        setLocale,
+      } = useContext(LoggedInContext);
       useEffect(() => {
+        console.log(accessToken);
+        console.log(locale);
+        console.log(location);
         setAccessToken('mockToken');
         setLocation('mockToken');
         setLocale('mockToken');
-      }, [setLocale, accessToken, setAccessToken, location, setLocation]);
+      }, [
+        setLocale,
+        accessToken,
+        setAccessToken,
+        location,
+        setLocation,
+        locale,
+      ]);
 
       return null;
     };
@@ -110,6 +153,35 @@ describe('Login component', () => {
       <LoggedInContext.Provider value={newLoggedInContextProps}>
         <Login />
       </LoggedInContext.Provider>
+    );
+  });
+
+  it('should fetch server side props with translations', async () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    await getServerSideProps({ locale: 'en' });
+  });
+
+  it('should fetch server side props with translations without locale', async () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    await getServerSideProps({});
+  });
+});
+
+describe('LoggedInUserProvider', () => {
+  it('renders children within LoggedInContext.Provider', () => {
+    const TestComponent = () => (
+      <LoggedInContext.Consumer>
+        {value => (
+          <div data-testid="provider-value">{JSON.stringify(value)}</div>
+        )}
+      </LoggedInContext.Consumer>
+    );
+    render(
+      <LoggedInUserProvider>
+        <TestComponent />
+      </LoggedInUserProvider>
     );
   });
 });

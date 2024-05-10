@@ -3,7 +3,6 @@
 import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ProductsHeaderBar from '@/views/ProductsHeaderBar';
-import { LoggedInUserProvider } from '@/contexts/LoggedInUserContext';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
@@ -63,62 +62,60 @@ const Products = () => {
   return (
     <>
       {error && <p>{error}</p>}
-      <LoggedInUserProvider>
-        <ProductsHeaderBar />
-        <Container style={{ marginTop: '50px' }}>
-          <Grid container spacing={3}>
-            {products.map(product => (
-              <Grid item key={product.id} xs={12}>
-                <Card style={{ display: 'flex' }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={product.data.image}
-                    alt={product.data.name}
-                    style={{
-                      width: '150px',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
-                  />
-                  <CardContent style={{ flex: 1 }}>
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      style={{ fontWeight: 'bold' }}
-                    >
-                      {product.data.brand}
-                    </Typography>
-                    <Typography variant="h6" component="h2">
-                      {product.data.name}
-                    </Typography>
-                    <Typography
-                      aria-label={`rating is ${product.data.rating}`}
-                      variant="subtitle1"
-                      component="p"
-                    >
-                      {t('rating')}: {product.data.rating}
-                    </Typography>
-                    <Typography
-                      aria-label={`price is ${product.data.price}`}
-                      variant="subtitle1"
-                      component="p"
-                    >
-                      {t('price')}: ${product.data.price}
-                    </Typography>
-                    <Typography
-                      aria-label={`deliveryDate is ${product.data.deliveryDate}`}
-                      variant="subtitle1"
-                      component="p"
-                    >
-                      {t('deliveryDate')}: {product.data.deliveryDate}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </LoggedInUserProvider>
+      <ProductsHeaderBar />
+      <Container style={{ marginTop: '50px' }}>
+        <Grid container spacing={3}>
+          {products.map(product => (
+            <Grid item key={product.id} xs={12}>
+              <Card style={{ display: 'flex' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={product.data.image}
+                  alt={product.data.name}
+                  style={{
+                    width: '150px',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+                <CardContent style={{ flex: 1 }}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    style={{ fontWeight: 'bold' }}
+                  >
+                    {product.data.brand}
+                  </Typography>
+                  <Typography variant="h6" component="h2">
+                    {product.data.name}
+                  </Typography>
+                  <Typography
+                    aria-label={`rating is ${product.data.rating}`}
+                    variant="subtitle1"
+                    component="p"
+                  >
+                    {t('rating')}: {product.data.rating}
+                  </Typography>
+                  <Typography
+                    aria-label={`price is ${product.data.price}`}
+                    variant="subtitle1"
+                    component="p"
+                  >
+                    {t('price')}: ${product.data.price}
+                  </Typography>
+                  <Typography
+                    aria-label={`deliveryDate is ${product.data.deliveryDate}`}
+                    variant="subtitle1"
+                    component="p"
+                  >
+                    {t('deliveryDate')}: {product.data.deliveryDate}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </>
   );
 };

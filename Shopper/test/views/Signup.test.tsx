@@ -1,6 +1,8 @@
 import { render, fireEvent, screen } from '@testing-library/react';
-import Signup from '@/views/Signup';
+import Signup from '@/pages/signup';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import React from 'react';
+import { getServerSideProps } from '@/pages/signup';
 
 // https://chat.openai.com/share/b8c1fae9-15f0-4305-8344-73501d3b59ef
 jest.mock('jwt-decode', () => ({
@@ -12,6 +14,24 @@ global.fetch = jest.fn().mockResolvedValue({
   json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
 });
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    basePath: '',
+    pathname: '/',
+    query: {},
+    asPath: '/',
+    locale: 'en',
+    locales: ['en', 'es'],
+    defaultLocale: 'en',
+    push: jest.fn(),
+    replace: jest.fn(),
+    reload: jest.fn(),
+    back: jest.fn(),
+    prefetch: jest.fn(),
+    beforePopState: jest.fn(),
+  }),
+}));
+
 const onSuccessSpy = jest.fn();
 
 jest.mock('@react-oauth/google', () => ({
@@ -21,6 +41,11 @@ jest.mock('@react-oauth/google', () => ({
     <button onClick={() => onSuccess(onSuccessSpy)}>
       Google Signup Button
     </button>
+  ),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  GoogleOAuthProvider: ({ children }) => (
+    <div>{children}</div> // Replace with a mock of GoogleOAuthProvider if necessary
   ),
 }));
 
@@ -106,5 +131,17 @@ describe('Signup component', () => {
         <Signup />
       </LoggedInContext.Provider>
     );
+  });
+
+  it('should fetch server side props with translations', async () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    await getServerSideProps({ locale: 'en' });
+  });
+
+  it('should fetch server side props with translations without locale', async () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    await getServerSideProps({});
   });
 });

@@ -1,9 +1,11 @@
-import Head from 'next/head';
 import { Fragment } from 'react';
-import { App } from '@/views/App';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
+// import { useTranslation } from 'next-i18next';
+// import { GoogleOAuthProvider } from '@react-oauth/google';
+// import Switcher from '@/views/Switcher';
+// import Content from '@/views/Content';
+import Login from '@/pages/login';
 
 const namespaces = ['common', 'login', 'signup', 'products'];
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -19,15 +21,16 @@ export const getServerSideProps: GetServerSideProps = async context => {
  * @constructor
  */
 export default function Index() {
-  const { t } = useTranslation('common');
+  // const { t } = useTranslation('common');
+  // ok to hardcode as it's publicly accessible
+  // const OAUTH_CLIENT_ID =
+  //   '655989276717-5viil57sbom25s2804kadpdt3kiaa4on.apps.googleusercontent.com';
+
   return (
     <Fragment>
-      <Head>
-        <title>{t('title')}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <App />
+      <Login />
+      {/*<Switcher />*/}
+      {/*<Content />*/}
     </Fragment>
   );
 }
