@@ -1,16 +1,38 @@
-import { PropsWithChildren, useState, createContext } from 'react';
+import {
+  PropsWithChildren,
+  useState,
+  createContext,
+  SetStateAction,
+  Dispatch,
+} from 'react';
 
-export const LoggedInContext = createContext({
+export const LoggedInContext = createContext<{
+  accessToken: string;
+  setAccessToken: Dispatch<SetStateAction<string>>;
+  location: string;
+  setLocation: Dispatch<SetStateAction<string>>;
+  locale: string;
+  setLocale: Dispatch<SetStateAction<string>>;
+  user: User;
+  setUser: Dispatch<SetStateAction<User>>;
+}>({
   accessToken: '',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setAccessToken: (accessToken: string) => {},
+  setAccessToken: () => {},
   location: 'login',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setLocation: (loc: string) => {},
+  setLocation: () => {},
   locale: 'en',
+  setLocale: () => {},
+  user: { accessToken: '', id: '', name: '', role: '' },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setLocale: (locale: string) => {},
+  setUser: () => {},
 });
+
+interface User {
+  accessToken: string;
+  id: string;
+  name: string;
+  role: string;
+}
 
 export const LoggedInUserProvider = ({
   children,
@@ -18,6 +40,7 @@ export const LoggedInUserProvider = ({
   const [accessToken, setAccessToken] = useState('');
   const [location, setLocation] = useState('login');
   const [locale, setLocale] = useState('en');
+  const [user, setUser] = useState({} as User);
   return (
     <LoggedInContext.Provider
       value={{
@@ -27,6 +50,8 @@ export const LoggedInUserProvider = ({
         setLocation,
         locale,
         setLocale,
+        user,
+        setUser,
       }}
     >
       {children}

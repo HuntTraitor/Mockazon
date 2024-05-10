@@ -50,6 +50,13 @@ jest.mock('@react-oauth/google', () => ({
   ),
 }));
 
+interface User {
+  accessToken: string;
+  id: string;
+  name: string;
+  role: string;
+}
+
 const loggedInContextProps = {
   accessToken: '',
   setAccessToken: jest.fn(),
@@ -57,6 +64,8 @@ const loggedInContextProps = {
   setLocation: jest.fn(),
   locale: 'en',
   setLocale: jest.fn(),
+  user: {} as User,
+  setUser: jest.fn(),
 };
 
 describe('Login component', () => {

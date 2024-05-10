@@ -3,6 +3,13 @@ import Content from '@/views/Content';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import React from 'react';
 
+interface User {
+  accessToken: string;
+  id: string;
+  name: string;
+  role: string;
+}
+
 const loggedInContextProps = {
   accessToken: 'abc',
   setAccessToken: jest.fn(),
@@ -10,6 +17,8 @@ const loggedInContextProps = {
   setLocation: jest.fn(),
   locale: 'en',
   setLocale: jest.fn(),
+  user: {} as User,
+  setUser: jest.fn(),
 };
 
 it('Renders successfully', async () => {

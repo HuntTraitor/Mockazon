@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Box, Container, Grid, Paper, Typography } from '@mui/material';
 import {
   CredentialResponse,
@@ -30,6 +30,10 @@ const Signup = () => {
   const { t } = useTranslation('signup');
   const router = useRouter();
 
+  useEffect(() => {
+    localStorage.removeItem('user');
+  }, []);
+
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     try {
       const decoded: { sub: string; email: string; name: string } = jwtDecode(
@@ -49,7 +53,7 @@ const Signup = () => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', JSON.stringify(data.authenticated));
+        localStorage.setItem('user', JSON.stringify(data.authenticated));
         setAccessToken(data.authenticated);
         await router.push('/products');
       } else {
@@ -90,6 +94,7 @@ const Signup = () => {
               {t('title')}
             </Typography>
             <Link
+              style={{ color: 'blue' }}
               aria-label={'sub-title'}
               href={'#'}
               onClick={() => router.push('/login')}
