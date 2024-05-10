@@ -28,7 +28,7 @@ export class OrderController extends Controller {
   @SuccessResponse('201', 'Order Updated')
   public async updateOrder(
     orderId: string,
-    @Body() order: UpdateOrder,
+    @Body() order: UpdateOrder
   ): Promise<Order | undefined> {
     return await new OrderService().update(orderId, order);
   }

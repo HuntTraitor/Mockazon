@@ -1,10 +1,5 @@
 import { Args, Query, Resolver } from 'type-graphql';
-import {
-  Authenticated,
-  Credentials,
-  Message,
-  SignupCredentials,
-} from './schema';
+import { Message, SignupCredentials } from './schema';
 import { AuthService } from './service';
 
 @Resolver()

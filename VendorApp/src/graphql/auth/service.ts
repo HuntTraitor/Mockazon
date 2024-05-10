@@ -1,17 +1,17 @@
 import { SessionUser } from '../../types/next';
-import { Credentials, Authenticated, Message } from './schema';
-import { GraphQLError } from 'graphql';
+import { Credentials, Message } from './schema';
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  roles: string[];
-}
+// interface User {
+//   id: string;
+//   email: string;
+//   name: string;
+//   roles: string[];
+// }
 
 export class AuthService {
   public async signup(credentials: Credentials): Promise<Message> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
+      console.log(credentials);
       resolve({
         content: 'Signup Request sent!!',
       });
@@ -46,7 +46,9 @@ export class AuthService {
     authHeader?: string,
     scopes?: string[]
   ): Promise<SessionUser> {
-    return new Promise((resolve, reject) => {
+    console.log(authHeader);
+    console.log(scopes);
+    return new Promise(resolve => {
       resolve({ id: '123' });
     });
   }
