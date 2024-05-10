@@ -24,6 +24,7 @@ export function MyAppBar() {
             onClick={event => {
               event.preventDefault();
               console.log('Sign Out');
+              localStorage.removeItem('user');
               loginContext.setAccessToken('');
               loginContext.setId('');
             }}
