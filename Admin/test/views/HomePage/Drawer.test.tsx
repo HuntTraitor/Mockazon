@@ -28,4 +28,12 @@ it('Tabs are clickable', async () => {
   await screen.findByText('Users', {
     exact: false,
   });
+
+  const requests = await screen.findByText('Requests', {
+    exact: false,
+  });
+  requests.click();
+  await screen.findByText('Requests', {
+    exact: false,
+  });
 });
