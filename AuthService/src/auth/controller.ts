@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query, Response, Route, SuccessResponse } from 'tsoa';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Response,
+  Route,
+  SuccessResponse,
+} from 'tsoa';
 
 import { Authenticated, CreateVendor, Credentials } from '.';
 import { SessionUser } from '../types';
@@ -75,12 +84,10 @@ export class AuthController extends Controller {
 
   @Post('/vendor/signup')
   @SuccessResponse('201', 'Account Created')
-  public async createVendor(
-    @Body() credentials: CreateVendor
-  ) {
+  public async createVendor(@Body() credentials: CreateVendor) {
     const user = await new AuthService().createVendorAccount(credentials);
     if (!user) {
-      this.setStatus(400)
+      this.setStatus(400);
       return;
     }
     return {
@@ -89,6 +96,6 @@ export class AuthController extends Controller {
       email: user.data.email,
       role: user.data.role,
       sub: user.data.sub,
-    }
+    };
   }
 }

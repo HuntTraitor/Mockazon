@@ -20,7 +20,7 @@ export class AuthService {
     };
     const { rows } = await pool.query(query);
 
-    console.log(credentials)
+    console.log(credentials);
 
     if (rows[0]) {
       const user = rows[0];
@@ -113,9 +113,7 @@ export class AuthService {
     }
   }
 
-  public async createVendorAccount(
-    vendor: CreateVendor
-  ) {
+  public async createVendorAccount(vendor: CreateVendor) {
     const insert = `INSERT INTO account(data) VALUES (
       jsonb_build_object(
         'name', $1::text, 
@@ -123,21 +121,21 @@ export class AuthService {
         'pwhash', crypt($3::text, '87'),
         'role', 'pending_vendor'
       )) 
-    RETURNING *`
-      
+    RETURNING *`;
+
     const query = {
       text: insert,
-      values: [vendor.name, vendor.email, vendor.password]
-    }
+      values: [vendor.name, vendor.email, vendor.password],
+    };
     let rows;
     try {
       const result = await pool.query(query);
       rows = result.rows;
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
     if (rows && rows[0]) {
-      return rows[0]
+      return rows[0];
     } else {
       return undefined;
     }

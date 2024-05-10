@@ -2,15 +2,34 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import Index, { getServerSideProps } from '../../src/pages/index';
 
+// https://chat.openai.com/share/0c95f9af-f8b8-49a7-b104-efd929b218e7
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    basePath: '',
+    pathname: '/',
+    query: {},
+    asPath: '/',
+    locale: 'en',
+    locales: ['en', 'es'],
+    defaultLocale: 'en',
+    push: jest.fn(),
+    replace: jest.fn(),
+    reload: jest.fn(),
+    back: jest.fn(),
+    prefetch: jest.fn(),
+    beforePopState: jest.fn(),
+  }),
+}));
+
 it('Renders', async () => {
   render(<Index />);
 });
 
 it('Clicks translate', async () => {
   render(<Index />);
-  await waitFor(() => fireEvent.click(screen.getByText('Cambiar a Español')));
+  await waitFor(() => fireEvent.click(screen.getByText('Español')));
   // wait for
-  await waitFor(() => fireEvent.click(screen.getByText('Change to English')));
+  await waitFor(() => fireEvent.click(screen.getByText('English')));
 });
 
 jest.mock('next-i18next/serverSideTranslations', () => ({
@@ -29,7 +48,7 @@ it('should fetch server side props with translations', async () => {
   await getServerSideProps({ locale: 'en' });
 });
 
-it('should fetch server side props with translations', async () => {
+it('should fetch server side props with translations and null locale', async () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   await getServerSideProps({ locale: null });

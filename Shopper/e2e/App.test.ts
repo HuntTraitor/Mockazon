@@ -1,4 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import { findByTextAndSelector } from './helpers';
 
 describe('Next.js App', () => {
   let browser: Browser;
@@ -20,41 +21,15 @@ describe('Next.js App', () => {
   test('Clicking translate button', async () => {
     await page.goto('http://localhost:3000');
 
-    await page.click('a[aria-label="translate"]');
+    await page.click('a[aria-label="translate-spanish"]');
 
     const selector = '[aria-label="title"]';
     const expectedText = 'Bienvenido a mockazon';
+    await findByTextAndSelector(page, selector, expectedText);
 
-    await page.waitForSelector(selector);
-    await page.waitForFunction(
-      (selector, expectedText) => {
-        const element = document.querySelector(selector);
-        if (element && element.textContent) {
-          return element.textContent.includes(expectedText);
-        }
-        return false;
-      },
-      {},
-      selector,
-      expectedText
-    );
-
-    await page.click('a[aria-label="translate"]');
+    await page.click('a[aria-label="translate-english"]');
 
     const expectedTextEnglish = 'Welcome to Mockazon';
-
-    await page.waitForSelector(selector);
-    await page.waitForFunction(
-      (selector, expectedTextEnglish) => {
-        const element = document.querySelector(selector);
-        if (element && element.textContent) {
-          return element.textContent.includes(expectedTextEnglish);
-        }
-        return false;
-      },
-      {},
-      selector,
-      expectedTextEnglish
-    );
+    await findByTextAndSelector(page, selector, expectedTextEnglish);
   });
 });

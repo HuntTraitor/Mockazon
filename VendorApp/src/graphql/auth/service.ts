@@ -1,21 +1,21 @@
 import { SessionUser } from '../../types/next';
-import {Credentials, Authenticated, Message} from './schema';
-import { GraphQLError } from "graphql";
+import { Credentials, Authenticated, Message } from './schema';
+import { GraphQLError } from 'graphql';
 
 interface User {
-  id: string,
-  email: string,
-  name: string,
-  roles: string[]
+  id: string;
+  email: string;
+  name: string;
+  roles: string[];
 }
 
 export class AuthService {
   public async signup(credentials: Credentials): Promise<Message> {
     return new Promise((resolve, reject) => {
       resolve({
-        content: "Signup Request sent!!"
-      })
-    })
+        content: 'Signup Request sent!!',
+      });
+    });
   }
   // public async login(credentials: Credentials): Promise<Authenticated>  {
   //   return new Promise((resolve, reject) => {
@@ -42,10 +42,12 @@ export class AuthService {
   //   });
   // }
 
-
-  public async check(authHeader?: string, scopes?: string[]): Promise<SessionUser> {
+  public async check(
+    authHeader?: string,
+    scopes?: string[]
+  ): Promise<SessionUser> {
     return new Promise((resolve, reject) => {
-      resolve({id: "123"})
-    })
+      resolve({ id: '123' });
+    });
   }
 }

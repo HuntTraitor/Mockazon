@@ -1,23 +1,19 @@
+import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useContext } from 'react';
-import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 const Switcher = () => {
-  const { locale, setLocale } = useContext(LoggedInContext);
-  // const { t } = useTranslation('common');
+  const router = useRouter();
 
   return (
-    <>
-      <Link
-        aria-label={'translate'}
-        href="/"
-        locale={locale === 'en' ? 'es' : 'en'}
-      >
-        <button onClick={() => setLocale(locale === 'en' ? 'es' : 'en')}>
-          {locale === 'en' ? 'Cambiar a Español' : 'Change to English'}
-        </button>
+    <div>
+      <Link aria-label={'translate-english'} href={router.asPath} locale="en">
+        <span className={'link'}>English</span>
       </Link>
-    </>
+      {' | '}
+      <Link aria-label={'translate-spanish'} href={router.asPath} locale="es">
+        <span>Español</span>
+      </Link>
+    </div>
   );
 };
 

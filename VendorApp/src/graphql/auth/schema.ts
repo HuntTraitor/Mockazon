@@ -1,36 +1,36 @@
-import {Field, ObjectType, ArgsType} from "type-graphql"
-import {Matches} from "class-validator"
+import { Field, ObjectType, ArgsType } from 'type-graphql';
+import { Matches } from 'class-validator';
 
 @ArgsType()
 export class Credentials {
   @Field()
   @Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
-    email!: string
+    email!: string;
   @Field()
-    password!: string
+    password!: string;
 }
 
 @ArgsType()
 export class SignupCredentials {
   @Field()
-    name!: string
+    name!: string;
   @Field()
   @Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
-    email!: string
+    email!: string;
   @Field()
-    password!: string
+    password!: string;
 }
 
 @ObjectType()
 export class Authenticated {
   @Field()
-    name!: string
+    name!: string;
   @Field()
-    accessToken!: string
+    accessToken!: string;
 }
 
 @ObjectType()
 export class Message {
   @Field()
-    content!: string
+    content!: string;
 }

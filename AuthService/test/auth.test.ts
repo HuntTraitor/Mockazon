@@ -151,64 +151,64 @@ test('Signing up with duplicate credentials', async () => {
 
 const mockVendor = {
   name: 'test vendor',
-  'email': 'vendor@gmail.com',
-  'password': 'password123'
-}
+  email: 'vendor@gmail.com',
+  password: 'password123',
+};
 
-test('Sign up with a vendor account successful 201', async() => {
+test('Sign up with a vendor account successful 201', async () => {
   await supertest(server)
     .post('/api/v0/authenticate/vendor/signup')
     .send(mockVendor)
     .expect(201)
-    .then((res) => {
-      expect(res.body).toBeDefined()
-      expect(res.body.id).toBeDefined()
-      expect(res.body.name).toBe(mockVendor.name)
-      expect(res.body.email).toBe(mockVendor.email)
-      expect(res.body.role).toBe('pending_vendor')
-    })
-})
+    .then(res => {
+      expect(res.body).toBeDefined();
+      expect(res.body.id).toBeDefined();
+      expect(res.body.name).toBe(mockVendor.name);
+      expect(res.body.email).toBe(mockVendor.email);
+      expect(res.body.role).toBe('pending_vendor');
+    });
+});
 
-test('Sign up with a vendor account missing parameter 400', async() => {
+test('Sign up with a vendor account missing parameter 400', async () => {
   await supertest(server)
     .post('/api/v0/authenticate/vendor/signup')
     .send({
-      'email': 'vendor@gmail.com',
-      'password': 'password123'
+      email: 'vendor@gmail.com',
+      password: 'password123',
     })
-    .expect(400)
-})
+    .expect(400);
+});
 
-test('Sign up with a vendor account extra parameter 400', async() => {
-  await supertest(server)
-    .post('/api/v0/authenticate/vendor/signup')
-    .send({
-      name: 'test vendor',
-      'email': 'vendor@gmail.com',
-      'password': 'password123',
-      'extra': 'password123'
-    })
-    .expect(400)
-})
-
-test('Sign up with duplicate email 400', async() => {
-  await supertest(server)
-    .post('/api/v0/authenticate/vendor/signup')
-    .send(mockVendor)
-    .expect(201)
-  await supertest(server)
-    .post('/api/v0/authenticate/vendor/signup')
-    .send(mockVendor)
-    .expect(400)
-})
-
-test('Sign up with bad email 400', async() => {
+test('Sign up with a vendor account extra parameter 400', async () => {
   await supertest(server)
     .post('/api/v0/authenticate/vendor/signup')
     .send({
       name: 'test vendor',
-      'email': 'vendornotemail',
-      'password': 'password123'
+      email: 'vendor@gmail.com',
+      password: 'password123',
+      extra: 'password123',
     })
-    .expect(400)
-})
+    .expect(400);
+});
+
+test('Sign up with duplicate email 400', async () => {
+  await supertest(server)
+    .post('/api/v0/authenticate/vendor/signup')
+    .send(mockVendor)
+    .expect(201);
+  await supertest(server)
+    .post('/api/v0/authenticate/vendor/signup')
+    .send(mockVendor)
+    .expect(400);
+});
+
+test('Sign up with bad email 400', async () => {
+  await supertest(server)
+    .post('/api/v0/authenticate/vendor/signup')
+    .send({
+      name: 'test vendor',
+      email: 'vendornotemail',
+      password: 'password123',
+    })
+    .expect(400);
+});

@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 
-const namespaces = ['common', 'login', 'signup'];
+const namespaces = ['common', 'login', 'signup', 'products'];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {
