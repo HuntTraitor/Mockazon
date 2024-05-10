@@ -8,6 +8,7 @@ import {
 import { ShoppingCart } from '@mui/icons-material';
 import Switcher from '@/views/Switcher';
 import { useTranslation } from 'next-i18next';
+import Link from 'next/link';
 
 const ProductsHeaderBar = () => {
   const { t } = useTranslation('products');
@@ -22,7 +23,7 @@ const ProductsHeaderBar = () => {
           component="div"
           sx={{ flexGrow: 1 }}
         >
-          Mockazon Prime
+          <Link href={'/products'}>Mockazon Prime</Link>
         </Typography>
 
         {/* "Delivery" text on the left */}

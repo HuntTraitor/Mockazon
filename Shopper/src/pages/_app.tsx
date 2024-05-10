@@ -1,6 +1,6 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
-import { appWithTranslation, useTranslation } from 'next-i18next';
+import { appWithTranslation } from 'next-i18next';
 import { LoggedInUserProvider } from '@/contexts/LoggedInUserContext';
 import Head from 'next/head';
 
@@ -11,11 +11,10 @@ import Head from 'next/head';
  * @constructor
  */
 function App({ Component, pageProps }: AppProps) {
-  const { t } = useTranslation('common');
   return (
     <LoggedInUserProvider>
       <Head>
-        <title>{t('title')}</title>
+        <title>Mockazon</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
