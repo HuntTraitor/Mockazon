@@ -1,11 +1,7 @@
 import { Fragment } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-// import { useTranslation } from 'next-i18next';
-// import { GoogleOAuthProvider } from '@react-oauth/google';
-// import Switcher from '@/views/Switcher';
-// import Content from '@/views/Content';
-import Login from '@/pages/login';
+import Products from '@/pages/products';
 
 const namespaces = ['common', 'login', 'signup', 'products'];
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -28,7 +24,7 @@ export default function Index() {
 
   return (
     <Fragment>
-      <Login />
+      <Products />
       {/*<Switcher />*/}
       {/*<Content />*/}
     </Fragment>

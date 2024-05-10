@@ -9,9 +9,14 @@ import { ShoppingCart } from '@mui/icons-material';
 import Switcher from '@/views/Switcher';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
+import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
+import { useContext } from 'react';
+import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 const ProductsHeaderBar = () => {
   const { t } = useTranslation('products');
+  const { user, setUser, setAccessToken } = useContext(LoggedInContext);
+  useLoadLocalStorageUser(setUser, setAccessToken); // Call the custom hook
 
   // https://chat.openai.com/share/86f158f1-110e-4905-ac4a-85ae8282f2c2
   return (
@@ -28,7 +33,7 @@ const ProductsHeaderBar = () => {
 
         {/* "Delivery" text on the left */}
         <Typography aria-label={'delivery'} variant="subtitle1" component="div">
-          {t('deliver')} &lt;Username&gt;
+          {`${t('deliver')} ${user.name || 'Sign In'}`}
         </Typography>
 
         <InputBase
@@ -45,7 +50,7 @@ const ProductsHeaderBar = () => {
           variant="subtitle1"
           component="div"
         >
-          {t('greeting')} &lt;Username&gt;
+          {`${t('greeting')} ${user.name || 'Sign In'}`}
           <br />
           {t('accountsAndLists')}
         </Typography>

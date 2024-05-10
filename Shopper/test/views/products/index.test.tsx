@@ -108,6 +108,15 @@ jest.mock('next/router', () => ({
 }));
 
 it('Renders successfully', async () => {
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'Trevor',
+      role: 'Shopper',
+    })
+  );
   render(<Products />);
   await waitFor(() => expect(screen.getByText('test name')));
 });
