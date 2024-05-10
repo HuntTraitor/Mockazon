@@ -1,8 +1,9 @@
 import { Fragment } from 'react';
+import { Home } from './HomePage/Home';
 export const App = () => {
   return (
     <Fragment>
-      <h1>Mockazon Vendor App</h1>
+      <Home />
     </Fragment>
   );
 };
