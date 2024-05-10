@@ -1,6 +1,33 @@
 import { render, screen } from '@testing-library/react';
-
+import { graphql, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
 import { Users } from '../../../src/views/HomePage/Users';
+
+const handlers = [
+  graphql.query('GetAccounts', ({ query /*variables*/ }) => {
+    console.log(query);
+    return HttpResponse.json({
+      data: {
+        account: [
+          {
+            id: '81c689b1-b7a7-4100-8b2d-309908b444f5',
+            email: 'test1@email.com',
+            name: 'test account 1',
+            username: 'testaccount1',
+            role: 'test',
+            suspended: false,
+          },
+        ],
+      },
+    });
+  }),
+];
+
+const server = setupServer(...handlers);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 it('Renders', async () => {
   render(<Users />);
@@ -20,7 +47,9 @@ it('Renders table', async () => {
 // Needs to be changed when context provider is implemented for Users
 it('Delete button for user with ID 1 is clickable', async () => {
   render(<Users />);
-  const deleteButtonForUser1 = await screen.findByTestId('delete-user-1');
+  const deleteButtonForUser1 = await screen.findByTestId(
+    'delete-account-81c689b1-b7a7-4100-8b2d-309908b444f5'
+  );
 
   expect(deleteButtonForUser1).not.toBeNull();
   deleteButtonForUser1.click();
