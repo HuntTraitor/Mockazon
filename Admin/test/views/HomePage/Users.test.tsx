@@ -3,9 +3,16 @@ import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { Users } from '../../../src/views/HomePage/Users';
 
+let returnError = false;
+
 const handlers = [
   graphql.query('GetAccounts', ({ query /*variables*/ }) => {
     console.log(query);
+    if (returnError) {
+      return HttpResponse.json({
+        errors: [{ message: 'Some Error' }],
+      });
+    }
     return HttpResponse.json({
       data: {
         account: [
@@ -53,4 +60,9 @@ it('Delete button for user with ID 1 is clickable', async () => {
 
   expect(deleteButtonForUser1).not.toBeNull();
   deleteButtonForUser1.click();
+});
+
+it('Handles error', async () => {
+  returnError = true;
+  render(<Users />);
 });
