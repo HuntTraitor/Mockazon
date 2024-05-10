@@ -24,6 +24,7 @@
     "graphql-request": "*",
     "graphql-yoga": "*",
     "jsonwebtoken": "*",
+    "mui-image": "^1.0.7",
     "next": "*",
     "pg": "*",
     "react": "*",
