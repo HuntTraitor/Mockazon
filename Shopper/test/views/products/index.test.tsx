@@ -10,7 +10,7 @@ import http from 'http';
 import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
-import requestHandler from '../api/requestHandler';
+import requestHandler from '../../api/requestHandler';
 
 let server: http.Server<
   typeof http.IncomingMessage,

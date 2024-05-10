@@ -1,0 +1,11 @@
+{
+  "rating": "Clasificación",
+  "price": "Precio",
+  "outOfStock": "Sin stock",
+  "inStock": "En stock",
+  "buyNew": "Comprar nuevo",
+  "primeShipping": "Envío Prime",
+  "freeDelivery": "Entrega gratuita",
+  "deliveryDate": "Fecha de entrega",
+  "deliverTo": "Entregar a"
+}

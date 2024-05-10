@@ -1,0 +1,11 @@
+{
+  "rating": "Rating",
+  "price": "Price",
+  "outOfStock": "Out of Stock",
+  "inStock": "In Stock",
+  "buyNew": "Buy new",
+  "primeShipping": "Prime Shipping",
+  "freeDelivery": "Free Delivery",
+  "deliveryDate": "Delivery Date",
+  "deliverTo": "Deliver to"
+}

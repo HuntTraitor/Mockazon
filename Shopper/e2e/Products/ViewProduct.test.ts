@@ -1,32 +1,36 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { findByTextAndSelector } from './helpers';
+import { findByTextAndSelector } from '../helpers';
 
 describe('Next.js App', () => {
   let browser: Browser;
   let page: Page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: true });
+    browser = await puppeteer.launch({ headless: false });
     page = await browser.newPage();
   });
 
   afterAll(async () => {
-    await browser.close();
+    // await browser.close();
   });
 
   test('Clicking translate button', async () => {
     await page.goto('http://localhost:3000/products');
 
-    await page.click('a[aria-label*="translate-spanish"]');
+    await page.waitForSelector('a[aria-label^="product-link"]');
+    await page.click('a[aria-label*="product-link"]');
+    await page.waitForNavigation();
 
-    const selector = '[aria-label*="delivery"]';
+    await page.waitForSelector('a[aria-label*="translate-spanish"]');
+    await page.click('a[aria-label*="translate-spanish"]');
+    const selector = '[aria-label*="buy new"]';
     await page.waitForSelector(selector);
-    const expectedTextEnglish = 'Entregar a';
+    const expectedTextEnglish = 'Comprar nuevo';
     await findByTextAndSelector(page, selector, expectedTextEnglish);
 
     await page.click('a[aria-label*="translate"]');
 
-    const expectedText = 'Deliver to';
+    const expectedText = 'Buy new';
     await findByTextAndSelector(page, selector, expectedText);
   });
 });

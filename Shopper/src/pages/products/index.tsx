@@ -1,11 +1,10 @@
-// pages/products.tsx
-
 import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ProductsHeaderBar from '@/views/ProductsHeaderBar';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import Link from 'next/link';
 
 interface Product {
   id: number;
@@ -28,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-const Products = () => {
+const Index = () => {
   const [products, setProducts] = useState([] as Product[]);
   const { t } = useTranslation('products');
   const [error, setError] = useState('');
@@ -79,13 +78,19 @@ const Products = () => {
                   }}
                 />
                 <CardContent style={{ flex: 1 }}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    style={{ fontWeight: 'bold' }}
+                  <Link
+                    aria-label={`product-link-${product.id}`}
+                    style={{ color: 'blue' }}
+                    href={`/products/${product.id}`}
                   >
-                    {product.data.brand}
-                  </Typography>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      {product.data.brand}
+                    </Typography>
+                  </Link>
                   <Typography variant="h6" component="h2">
                     {product.data.name}
                   </Typography>
@@ -120,4 +125,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Index;
