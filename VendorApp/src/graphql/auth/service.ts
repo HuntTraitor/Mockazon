@@ -10,11 +10,27 @@ import { Credentials, Message } from './schema';
 
 export class AuthService {
   public async signup(credentials: Credentials): Promise<Message> {
-    return new Promise(resolve => {
-      console.log(credentials);
-      resolve({
-        content: 'Signup Request sent!!',
-      });
+    return new Promise((resolve, reject) => {
+      fetch('http://localhost:3010/api/v0/authenticate/vendor/signup', {
+        method: 'POST',
+        body: JSON.stringify(credentials),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw res
+          }
+          return res.json()
+        })
+        .then(() => {
+          resolve({content: 'Account successfully requested'})
+        })
+        .catch(err => {
+          console.log(err)
+          reject(new Error ("Request failed, please try again"))
+        }) 
     });
   }
   // public async login(credentials: Credentials): Promise<Authenticated>  {
