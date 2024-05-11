@@ -14,7 +14,7 @@ it('Renders tabs', async () => {
   await screen.findByText('Products', {
     exact: false,
   });
-  await screen.findByText('Orders', {
+  await screen.findByText('API Keys', {
     exact: false,
   });
 });
@@ -25,8 +25,8 @@ it('Tabs are clickable', async () => {
     exact: false,
   });
   prods.click();
-  const orders = await screen.findByText('Orders', {
+  const keys = await screen.findByText('API Keys', {
     exact: false,
   });
-  orders.click();
+  keys.click();
 });

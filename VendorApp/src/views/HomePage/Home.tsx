@@ -5,8 +5,9 @@ import { MyDrawer } from './Drawer';
 //import { Users } from './Users';
 import { MyAppBar } from './AppBar';
 // import { LoginContext } from '@/contexts/Login';
-// import { PageContext } from '@/contexts/PageContext';
+import { PageContext } from '../../contexts/PageContext';
 // import { AdminRequests } from './AdminRequests';
+import Products from '../HomePage/Products';
 
 /**
  * defines the Home page
@@ -14,7 +15,7 @@ import { MyAppBar } from './AppBar';
  */
 export function Home() {
   // const loginContext = React.useContext(LoginContext);
-  // const pageContext = React.useContext(PageContext);
+  const pageContext = React.useContext(PageContext);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -23,8 +24,7 @@ export function Home() {
       <Box component="main" width={'100%'}>
         <MyAppBar />
         <Divider />
-        {/* {pageContext.page === 'Users' ? <Users /> : undefined}
-        {pageContext.page === 'Requests' ? <AdminRequests /> : undefined} */}
+        {pageContext.page === 'Products' ? <Products /> : undefined}
       </Box>
     </Box>
   );

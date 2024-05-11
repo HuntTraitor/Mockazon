@@ -10,8 +10,8 @@ import {
   ListItemText,
   Box,
 } from '@mui/material';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import KeyIcon from '@mui/icons-material/Key';
 import Image from 'next/image';
 //import { PageContext } from '@/contexts/PageContext';
 
@@ -29,21 +29,21 @@ export function MyDrawer() {
     //pageContext.setPage('Users');
   };
 
-  const handleOrdersClick = () => {
-    console.log('Orders');
+  const handleKeysClick = () => {
+    console.log('API Keys');
     // pageContext.setPage('Requests');
   };
 
   const listItems = [
     {
       text: 'Products',
-      icon: <PeopleAltOutlinedIcon />,
+      icon: <StorefrontIcon />,
       onClick: handleProductsClick,
     },
     {
-      text: 'Orders',
-      icon: <PersonAddAltIcon />,
-      onClick: handleOrdersClick,
+      text: 'API Keys',
+      icon: <KeyIcon />,
+      onClick: handleKeysClick,
     },
   ];
 
