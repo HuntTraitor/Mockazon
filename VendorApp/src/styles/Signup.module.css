@@ -1,0 +1,23 @@
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title img {
+  width: 100%;
+  height: auto;
+  max-width: 150px;
+  margin-top: 4px;
+
+}
+
+.formLabel {
+  font-weight: bold;
+}
+
+.passwordAlert {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
