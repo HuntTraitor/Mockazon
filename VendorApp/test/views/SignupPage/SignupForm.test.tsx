@@ -1,18 +1,40 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { SignupForm } from '@/views/Signup/SignupForm';
 import userEvent from '@testing-library/user-event';
+import { graphql, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
 
-it('Renders SignupForm successfully', async () => {
-  render(<SignupForm />);
-  expect(screen.getByText('Create account', { exact: false })).toBeDefined();
-  expect(screen.getByText('Your Name', { exact: false })).toBeDefined();
-  expect(screen.getByText('Email', { exact: false })).toBeDefined();
-  expect(screen.getAllByText('Password', { exact: false })).toBeDefined();
-  expect(screen.getByText('Re-enter password', { exact: false })).toBeDefined();
+let returnError = false;
+
+const handlers = [
+  graphql.query('signup', () => {
+    if (returnError) {
+      return HttpResponse.json({
+        errors: [
+          {
+            message: 'Some Error',
+          },
+        ],
+      });
+    }
+    return HttpResponse.json({
+      data: {
+        signup: { content: { message: 'Request Sent Successfully' } },
+      },
+    });
+  }),
+];
+
+const server = setupServer(...handlers);
+
+beforeAll(() => server.listen());
+beforeEach(() => {
+  returnError = false;
 });
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
-it('Fills out form and clicks on request', async () => {
-  render(<SignupForm />);
+const fillOutForm = async () => {
   const nameInput = screen.getByLabelText('name-input')?.querySelector('input');
   if (nameInput) {
     await userEvent.type(nameInput, 'Test Name');
@@ -39,6 +61,33 @@ it('Fills out form and clicks on request', async () => {
     await userEvent.type(repeatPasswordInput, 'password1234');
     expect(repeatPasswordInput.value).toBeDefined();
   }
+};
 
+it('Renders SignupForm successfully', async () => {
+  render(<SignupForm />);
+  expect(screen.getByText('Create account', { exact: false })).toBeDefined();
+  expect(screen.getByText('Your Name', { exact: false })).toBeDefined();
+  expect(screen.getByText('Email', { exact: false })).toBeDefined();
+  expect(screen.getAllByText('Password', { exact: false })).toBeDefined();
+  expect(screen.getByText('Re-enter password', { exact: false })).toBeDefined();
+});
+
+it('Fills out form and clicks on request', async () => {
+  render(<SignupForm />);
+  await fillOutForm();
+  fireEvent.click(screen.getByText('Request'));
+});
+
+it('Fills out form and errors on a request', async () => {
+  render(<SignupForm />);
+  await fillOutForm();
+  returnError = true;
+  fireEvent.click(screen.getByText('Request'));
+});
+
+it('Fills out form and catches server error', async () => {
+  render(<SignupForm />);
+  await fillOutForm();
+  server.close();
   fireEvent.click(screen.getByText('Request'));
 });

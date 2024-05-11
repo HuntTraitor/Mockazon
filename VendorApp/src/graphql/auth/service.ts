@@ -1,3 +1,4 @@
+import { GraphQLError } from 'graphql';
 import { SessionUser } from '../../types/next';
 import { Credentials, Message } from './schema';
 
@@ -11,14 +12,18 @@ import { Credentials, Message } from './schema';
 export class AuthService {
   public async signup(credentials: Credentials): Promise<Message> {
     return new Promise((resolve, reject) => {
-      fetch('http://localhost:3010/api/v0/authenticate/vendor/signup', {
-        method: 'POST',
-        body: JSON.stringify(credentials),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate/vendor/signup`,
+        {
+          method: 'POST',
+          body: JSON.stringify(credentials),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
         .then(res => {
+          console.log(res);
           if (!res.ok) {
             throw res;
           }
@@ -29,7 +34,7 @@ export class AuthService {
         })
         .catch(err => {
           console.log(err);
-          reject(new Error('Request failed, please try again'));
+          reject(new GraphQLError('Request failed, please try again'));
         });
     });
   }

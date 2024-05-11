@@ -1,5 +1,5 @@
 import { Field, ObjectType, ArgsType } from 'type-graphql';
-import { Matches } from 'class-validator';
+import { Matches, MinLength } from 'class-validator';
 
 @ArgsType()
 export class Credentials {
@@ -18,6 +18,7 @@ export class SignupCredentials {
   @Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
     email!: string;
   @Field()
+  @MinLength(6)
     password!: string;
 }
 
