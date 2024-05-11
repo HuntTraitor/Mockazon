@@ -15,22 +15,22 @@ export class AuthService {
         method: 'POST',
         body: JSON.stringify(credentials),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
       })
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
-            throw res
+            throw res;
           }
-          return res.json()
+          return res.json();
         })
         .then(() => {
-          resolve({content: 'Account successfully requested'})
+          resolve({ content: 'Account successfully requested' });
         })
         .catch(err => {
-          console.log(err)
-          reject(new Error ("Request failed, please try again"))
-        }) 
+          console.log(err);
+          reject(new Error('Request failed, please try again'));
+        });
     });
   }
   // public async login(credentials: Credentials): Promise<Authenticated>  {

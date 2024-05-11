@@ -6,32 +6,34 @@ export function SignupForm() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const query = {query: `query signup{signup(
+    const query = {
+      query: `query signup{signup(
       name: "${data.get('firstName')}"
       email: "${data.get('email')}"
       password: "${data.get('password')}"
-    ) {content}}`};
+    ) {content}}`,
+    };
 
     fetch('/api/graphql', {
       method: 'POST',
       body: JSON.stringify(query),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     })
-      .then((res) => {
-        return res.json()
+      .then(res => {
+        return res.json();
       })
-      .then((json) => {
+      .then(json => {
         if (json.errors) {
-          alert(`${json.errors[0].message}`)
+          alert(`${json.errors[0].message}`);
         } else {
-          alert('Request send successfully!')
+          alert('Request send successfully!');
         }
       })
       .catch(e => {
-        alert(e)
-      })
+        alert(e);
+      });
   };
 
   return (
