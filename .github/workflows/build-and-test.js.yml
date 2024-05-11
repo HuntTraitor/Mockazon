@@ -45,8 +45,8 @@ jobs:
       - name: Sleep for 20 seconds
         run: sleep 20s
         shell: bash
-      - name: Build files for container
-        run: npm run builds
+      - name: Add Port to environment
+        run: export POSTGRES_PORT=5432
       - name: Spin up container
         run: docker-compose up -d --build
       - name: Sleep for 20 seconds
