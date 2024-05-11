@@ -1,6 +1,6 @@
-import { Box, Typography, Grid, TextField, Button, Link } from "@mui/material"
+import { Box, Typography, Grid, TextField, Button, Link } from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
-import styles from '@/styles/Signup.module.css'
+import styles from '@/styles/Signup.module.css';
 
 export function SignupForm() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -11,16 +11,25 @@ export function SignupForm() {
       password: data.get('password'),
     });
   };
-  
+
   return (
-    <Box sx={{border: 1,  borderRadius: '16px', borderColor: 'grey.500', padding: '20px'}}>
+    <Box
+      sx={{
+        border: 1,
+        borderRadius: '16px',
+        borderColor: 'grey.500',
+        padding: '20px',
+      }}
+    >
       <Typography component="h1" variant="h5">
         Create account
       </Typography>
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <label htmlFor="firstName" className={styles.formLabel}>Your Name</label>
+            <label htmlFor="firstName" className={styles.formLabel}>
+              Your Name
+            </label>
             <TextField
               autoComplete="given-name"
               name="firstName"
@@ -32,7 +41,9 @@ export function SignupForm() {
             />
           </Grid>
           <Grid item xs={12}>
-            <label htmlFor="email" className={styles.formLabel}>Email</label>
+            <label htmlFor="email" className={styles.formLabel}>
+              Email
+            </label>
             <TextField
               required
               fullWidth
@@ -43,7 +54,9 @@ export function SignupForm() {
             />
           </Grid>
           <Grid item xs={12}>
-            <label htmlFor="firstName" className={styles.formLabel}>Password</label>
+            <label htmlFor="firstName" className={styles.formLabel}>
+              Password
+            </label>
             <TextField
               required
               fullWidth
@@ -56,11 +69,15 @@ export function SignupForm() {
             />
             <div className={styles.passwordAlert}>
               <PriorityHighIcon />
-              <Typography sx={{fontStyle: 'italic'}}>Passwords must be at least 6 characters.</Typography>
+              <Typography sx={{ fontStyle: 'italic' }}>
+                Passwords must be at least 6 characters.
+              </Typography>
             </div>
           </Grid>
           <Grid item xs={12}>
-            <label htmlFor="firstName" className={styles.formLabel}>Re-enter password</label>
+            <label htmlFor="firstName" className={styles.formLabel}>
+              Re-enter password
+            </label>
             <TextField
               required
               fullWidth
@@ -90,5 +107,5 @@ export function SignupForm() {
         </Grid>
       </Box>
     </Box>
-  )
+  );
 }

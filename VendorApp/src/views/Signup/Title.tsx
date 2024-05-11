@@ -1,13 +1,20 @@
-import styles from '@/styles/Signup.module.css'
-import { Typography } from '@mui/material'
+import styles from '@/styles/Signup.module.css';
+import { Typography } from '@mui/material';
+import Image from 'next/image';
 
 export function Title() {
-  return(
+  return (
     <div className={styles.title}>
-      <img src="/mockazon_logo.png" aria-label='mockazon-logo'/>
+      <Image
+        src="/mockazon_logo.png"
+        alt="mockazon logo"
+        aria-label="mockazon-logo"
+        width={150}
+        height={100}
+      />
       <Typography component="h1" variant="h5">
         seller central
       </Typography>
     </div>
-  )
+  );
 }
