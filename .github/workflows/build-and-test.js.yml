@@ -7,7 +7,6 @@ on:
 
 env:
   POSTGRES_HOST: localhost
-  POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
   POSTGRES_DB: ${{ vars.POSTGRES_DB }}
   POSTGRES_USER: ${{ vars.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
