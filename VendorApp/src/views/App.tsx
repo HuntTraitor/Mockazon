@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Home } from './HomePage/Home';
 import { LoginProvider } from '@/context/Login';
-import {SignupForm} from './Signup/SignupForm'
+import {Signup} from './Signup/Index'
 import { ThemeProvider, createTheme } from '@mui/material';
 
 const theme = createTheme({
@@ -20,7 +20,7 @@ export function App() {
   return (
     <ThemeProvider theme={theme}>
       <LoginProvider>
-        <SignupForm />
+        <Signup />
         {/* <Home /> */}
       </LoginProvider>
     </ThemeProvider>
