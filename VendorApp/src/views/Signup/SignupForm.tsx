@@ -28,6 +28,7 @@ export function SignupForm() {
               fullWidth
               id="firstName"
               autoFocus
+              aria-label="name-input"
             />
           </Grid>
           <Grid item xs={12}>
@@ -38,6 +39,7 @@ export function SignupForm() {
               id="email"
               name="email"
               autoComplete="email"
+              aria-label="email-input"
             />
           </Grid>
           <Grid item xs={12}>
@@ -50,6 +52,7 @@ export function SignupForm() {
               id="password"
               label="At least 6 characters"
               autoComplete="new-password"
+              aria-label="password-input"
             />
             <div className={styles.passwordAlert}>
               <PriorityHighIcon />
@@ -65,6 +68,7 @@ export function SignupForm() {
               type="password"
               id="repeatpassword"
               autoComplete="new-password"
+              aria-label="repeatpassword-input"
             />
           </Grid>
         </Grid>
@@ -73,6 +77,7 @@ export function SignupForm() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          aria-label="submit-request"
         >
           Request
         </Button>
