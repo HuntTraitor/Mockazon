@@ -6,7 +6,7 @@ import {
   Dispatch,
 } from 'react';
 
-export const LoggedInContext = createContext<{
+interface ContextType {
   accessToken: string;
   setAccessToken: Dispatch<SetStateAction<string>>;
   location: string;
@@ -15,15 +15,16 @@ export const LoggedInContext = createContext<{
   setLocale: Dispatch<SetStateAction<string>>;
   user: User;
   setUser: Dispatch<SetStateAction<User>>;
-}>({
+}
+
+export const LoggedInContext = createContext<ContextType>({
   accessToken: '',
   setAccessToken: () => {},
-  location: 'login',
+  location: '',
   setLocation: () => {},
-  locale: 'en',
+  locale: '',
   setLocale: () => {},
   user: { accessToken: '', id: '', name: '', role: '' },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setUser: () => {},
 });
 

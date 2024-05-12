@@ -56,6 +56,13 @@ const loggedInContextProps = {
   setLocation: jest.fn(),
   locale: 'en',
   setLocale: jest.fn(),
+  user: {
+    accessToken: 'abc',
+    id: 'abc',
+    name: 'Trevor',
+    role: 'Shopper',
+  },
+  setUser: jest.fn(),
 };
 
 describe('Signup component', () => {

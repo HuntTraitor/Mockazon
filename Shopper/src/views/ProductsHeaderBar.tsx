@@ -33,7 +33,13 @@ const ProductsHeaderBar = () => {
 
         {/* "Delivery" text on the left */}
         <Typography aria-label={'delivery'} variant="subtitle1" component="div">
-          {`${t('deliver')} ${user.name || 'Sign In'}`}
+          {user.name ? (
+            `${t('deliver')} ${user.name}`
+          ) : (
+            <>
+              {t('deliver')} <Link href="/login">Sign In</Link>
+            </>
+          )}
         </Typography>
 
         <InputBase
@@ -50,7 +56,13 @@ const ProductsHeaderBar = () => {
           variant="subtitle1"
           component="div"
         >
-          {`${t('greeting')} ${user.name || 'Sign In'}`}
+          {user.name ? (
+            `${t('greeting')} ${user.name}`
+          ) : (
+            <>
+              {t('greeting')} <Link href="/login">Sign In</Link>
+            </>
+          )}
           <br />
           {t('accountsAndLists')}
         </Typography>
@@ -70,6 +82,7 @@ const ProductsHeaderBar = () => {
           aria-label="cart"
           color="inherit"
           sx={{ ml: 2 }}
+          href="/shoppingCart"
         >
           <ShoppingCart />
         </IconButton>

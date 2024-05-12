@@ -1,7 +1,7 @@
 // test products component
 
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import Products from '@/pages/products';
 import { getServerSideProps } from '@/pages/products';
@@ -18,6 +18,7 @@ let server: http.Server<
 >;
 
 let error = false;
+let errorInShoppingCart = false;
 
 const handlers = [
   rest.get(
@@ -57,6 +58,16 @@ const handlers = [
           ],
           { status: 200 }
         );
+      }
+    }
+  ),
+  rest.post(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
+    async () => {
+      if (errorInShoppingCart) {
+        return HttpResponse.json({}, { status: 400 });
+      } else {
+        return HttpResponse.json({}, { status: 200 });
       }
     }
   ),
@@ -119,6 +130,40 @@ it('Renders successfully', async () => {
   );
   render(<Products />);
   await waitFor(() => expect(screen.getByText('test name')));
+});
+
+it('Adds to shopping cart', async () => {
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'Trevor',
+      role: 'Shopper',
+    })
+  );
+  render(<Products />);
+  await waitFor(() => expect(screen.getByText('test name')));
+  const button = screen.getByText('Add to Shopping Cart');
+  fireEvent.click(button);
+});
+
+it("Doesn't add to shopping cart because error", async () => {
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'Trevor',
+      role: 'Shopper',
+    })
+  );
+  errorInShoppingCart = true;
+  render(<Products />);
+  await waitFor(() => expect(screen.getByText('test name')));
+  const button = screen.getByText('Add to Shopping Cart');
+  fireEvent.click(button);
+  await waitFor(() => expect(screen.getByText('Could not fetch products')));
 });
 
 it('should fetch server side props with translations', async () => {

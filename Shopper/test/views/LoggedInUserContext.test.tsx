@@ -9,6 +9,13 @@ test('Logged in user context', () => {
     setLocation: jest.fn(),
     locale: 'en',
     setLocale: jest.fn(),
+    user: {
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'Trevor',
+      role: 'Shopper',
+    },
+    setUser: jest.fn(),
   };
   const { getByText } = render(
     <LoggedInContext.Provider value={newLoggedInContextProps}>

@@ -20,6 +20,16 @@ interface Product {
   };
 }
 
+interface ProductFromFetch {
+  id: string;
+  product_id: string;
+  shopper_id: string;
+  vendor_id: string;
+  data: {
+    quantity: string;
+  };
+}
+
 const namespaces = ['products'];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
@@ -36,9 +46,13 @@ const Index = () => {
   const { user, setUser, setAccessToken } = useContext(LoggedInContext);
   useLoadLocalStorageUser(setUser, setAccessToken);
 
+  // https://chat.openai.com/share/66cd884d-cc95-4e82-8b4f-a4d035f844af
   useEffect(() => {
+    if (JSON.stringify(user) === '{}') {
+      return;
+    }
     fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product`,
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?shopperId=${user.id}`,
       {
         method: 'GET',
         headers: {
@@ -53,55 +67,51 @@ const Index = () => {
         return response.json();
       })
       .then(products => {
-        setProducts(products);
-        console.log(products);
+        const fetchPromises = products.map((product: ProductFromFetch) => {
+          return fetch(
+            `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${product.product_id}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          ).then(response => {
+            if (!response.ok) {
+              throw response;
+            }
+            return response.json();
+          });
+        });
+        Promise.all(fetchPromises)
+          .then(productsWithContent => {
+            setProducts(productsWithContent);
+            console.log(productsWithContent);
+          })
+          .catch(err => {
+            console.log('Error fetching products:', err);
+            setError('Could not fetch products');
+          });
       })
       .catch(err => {
-        console.log('401', err);
-        setError('Could not fetch products');
+        console.log('Error fetching shopping cart:', err);
+        setError('Could not fetch shopping cart');
       });
-  }, []);
-
-  const addToShoppingCart = (productId: string) => {
-    fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?vendorId=${user.id}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          product_id: productId,
-          shopper_id: user.id,
-          quantity: '3',
-        }),
-      }
-    )
-      .then(response => {
-        if (!response.ok) {
-          throw response;
-        }
-        return response.json();
-      })
-      .then(shoppingCart => {
-        alert('Added to shopping cart');
-        console.log(shoppingCart);
-      })
-      .catch(err => {
-        console.log('401', err);
-        setError('Could not fetch products');
-      });
-  };
+  }, [user]);
 
   // https://chat.openai.com/share/86f158f1-110e-4905-ac4a-85ae8282f2c2
   return (
     <>
       {error && <p>{error}</p>}
       <ProductsHeaderBar />
+      <Typography
+        style={{ marginTop: '50px', color: 'blue' }}
+        variant="h4"
+        align="center"
+      >
+        Shopping Cart
+      </Typography>
       <Container style={{ marginTop: '50px' }}>
-        <Typography style={{ color: 'blue' }} variant="h4" align="center">
-          Products
-        </Typography>
         <Grid container spacing={3}>
           {products.map(product => (
             <Grid item key={product.id} xs={12}>
@@ -157,11 +167,10 @@ const Index = () => {
                   <Link
                     aria-label={`add-shopping-cart-${product.id}`}
                     style={{ color: 'blue' }}
-                    href={`/`}
-                    onClick={() => addToShoppingCart(`${product.id}`)}
+                    href={`/shoppingCart`}
                   >
                     <Typography component="p" style={{ fontWeight: 'bold' }}>
-                      Add to Shopping Cart
+                      Remove
                     </Typography>
                   </Link>
                 </CardContent>
