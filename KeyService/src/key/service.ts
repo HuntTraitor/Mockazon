@@ -1,4 +1,4 @@
-import { Key, SessionUser, UUID, KeyObj} from '.';
+import { Key, SessionUser, UUID, KeyObj } from '.';
 import { pool } from '../db';
 
 export class KeyService {
