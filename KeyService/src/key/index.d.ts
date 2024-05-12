@@ -17,3 +17,10 @@ export type Key = UUID;
 export type SessionUser = {
   id: UUID;
 };
+
+export type KeyObj = {
+  key: UUID,
+  vendor: UUID,
+  active: boolean,
+  requested: boolean
+};

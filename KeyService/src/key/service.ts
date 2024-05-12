@@ -1,4 +1,4 @@
-import { Key, SessionUser, UUID } from '.';
+import { Key, SessionUser, UUID, KeyObj} from '.';
 import { pool } from '../db';
 
 export class KeyService {
@@ -27,5 +27,15 @@ export class KeyService {
     };
     const { rows } = await pool.query(query);
     return rows[0];
+  }
+
+  public async getAll(vendorID: UUID): Promise<KeyObj[]> {
+    const select = `SELECT * FROM api_key WHERE vendor_id = $1`;
+    const query = {
+      text: select,
+      values: [`${vendorID}`],
+    };
+    const { rows } = await pool.query(query);
+    return rows;
   }
 }
