@@ -2,15 +2,39 @@
   background-color: #232f3e;
   color: white;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 2.5px 7.5px;
+  padding: 5px 15px;
   flex-wrap: wrap;
   box-sizing: border-box;
   top: 0;
   left: 0;
   right: 0;
-  position: fixed;
+  position: relative;
   flex-direction: row;
   z-index: 1000;
   width: 100%;
+}
+
+.hoverContainer:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid white;
+  pointer-events: none;
+}
+
+.subContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  padding: 0em 5px 5px 5px;
+}
+
+.text {
+  font-weight: bold;
 }
