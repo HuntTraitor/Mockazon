@@ -6,7 +6,7 @@ export function Title() {
   return (
     <div className={styles.title}>
       <Image
-        src="/mockazon_logo.png"
+        src={`${process.env.ENVIRONMENT == 'production' ? '/vendor': ''}/mockazon_logo.png`}
         alt="mockazon logo"
         aria-label="mockazon-logo"
         width={150}

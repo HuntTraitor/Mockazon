@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
+
+const isProd = process.env.ENVIRONMENT == 'production';
+
 const nextConfig = {
-  basePath: process.env.ENVIRONMENT === 'production' ? '/vendor' : '',
-  assetPrefix: process.env.ENVIRONMENT === 'production' ? '/vendor' : '',
+  basePath: isProd ? '/vendor' : undefined,
+  assetPrefix: isProd ? '/vendor' : undefined,
   reactStrictMode: true,
 };
 

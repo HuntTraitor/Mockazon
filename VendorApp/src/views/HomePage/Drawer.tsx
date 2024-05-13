@@ -69,7 +69,7 @@ export function MyDrawer() {
         }}
       >
         <Image
-          src="/mini_mockazon_logo.png"
+          src={`${process.env.ENVIRONMENT == 'production' ? '/vendor': ''}/mini_mockazon_logo.png`}
           alt="Mockazon Logo"
           width={40}
           height={30}

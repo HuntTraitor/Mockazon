@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
+
+const isProd = process.env.ENVIRONMENT == 'production';
+
 const nextConfig = {
-  basePath: process.env.ENVIRONMENT === 'production' ? '/admin' : '',
-  assetPrefix: process.env.ENVIRONMENT === 'production' ? '/admin' : '',
+  basePath: isProd ? '/admin' : undefined,
+  assetPrefix: isProd ? '/admin' : undefined,
   reactStrictMode: true,
 };
 
