@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  assetPrefix: '/vendor',
+  basePath: process.env.NODE_ENV === 'production' ? '/vendor' : '',
   reactStrictMode: true,
 };
 
