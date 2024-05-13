@@ -20,7 +20,7 @@ interface Product {
   };
 }
 
-const namespaces = ['products'];
+const namespaces = ['products', 'topHeader', 'common', 'signInDropdown'];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {

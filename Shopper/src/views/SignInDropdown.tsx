@@ -17,7 +17,7 @@ import { useRouter } from 'next/router';
 
 const SignInDropdown = () => {
   const { t } = useTranslation('signInDropdown');
-  const { user } = useContext(LoggedInContext);
+  const { user, setUser, setAccessToken } = useContext(LoggedInContext);
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -45,6 +45,12 @@ const SignInDropdown = () => {
       }, 300)
     );
   };
+
+  const handleSignOut = () => {
+    localStorage.removeItem('user');
+    setUser({ accessToken: '', id: '', name: '', role: '' });
+    setAccessToken('');
+  }
 
   return (
     <Box
@@ -74,9 +80,7 @@ const SignInDropdown = () => {
               {user.name ? (
                 <Box>
                   <Typography>{user.name}</Typography>
-                  <Button className={styles.signInButton} onClick={() => {}}>
-                    {' '}
-                    {/* FIXME: Add sign out functionality */}
+                  <Button className={styles.signInButton} onClick={() => {handleSignOut()}}>
                     {t('signOutText')}
                   </Button>
                 </Box>
