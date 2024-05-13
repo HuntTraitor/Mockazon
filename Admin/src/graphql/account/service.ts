@@ -10,7 +10,7 @@ export class AccountService {
    */
   async all(): Promise<Account[]> {
     const res = await fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/account`
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/accounts`
     );
     return res.json();
   }

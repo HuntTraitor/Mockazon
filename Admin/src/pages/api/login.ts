@@ -7,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export default function login(req: NextApiRequest, res: NextApiResponse) {
   const { email, password } = req.body;
   fetch(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate`,
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/login`,
     {
       method: 'POST',
       headers: {
