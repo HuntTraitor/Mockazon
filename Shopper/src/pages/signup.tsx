@@ -9,9 +9,9 @@ import { jwtDecode } from 'jwt-decode';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
-import Switcher from '@/views/Switcher';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import LanguageSwitcher from '@/views/LanguageSwitcher';
 import { useRouter } from 'next/router';
 
 const namespaces = ['common', 'login', 'signup', 'products'];
@@ -75,7 +75,7 @@ const Signup = () => {
 
   return !accessToken ? (
     <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
-      <Switcher />
+      <LanguageSwitcher />
       <Container maxWidth="sm">
         <Grid
           container

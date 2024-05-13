@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Switcher from '@/views/Switcher';
+import LanguageSwitcher from '@/views/LanguageSwitcher';
 import { useRouter } from 'next/router';
 
 const namespaces = ['common', 'login', 'signup', 'products'];
@@ -68,7 +68,7 @@ const Login = () => {
     '655989276717-5viil57sbom25s2804kadpdt3kiaa4on.apps.googleusercontent.com';
   return !accessToken ? (
     <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
-      <Switcher />
+      <LanguageSwitcher />
       <Container maxWidth="sm">
         <Grid
           container
