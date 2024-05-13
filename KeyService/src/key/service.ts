@@ -38,4 +38,14 @@ export class KeyService {
     const { rows } = await pool.query(query);
     return rows;
   }
+
+  // public async setActiveStatus(apiKey: UUID): Promise<Key> {
+  //   const select = `UPDATE key SET active = CASE WHEN active THEN FALSE ELSE TRUE END WHERE key = $1`;
+  //   const query = {
+  //     text: select,
+  //     values: [`${apiKey}`],
+  //   };
+  //   const { rows } = await pool.query(query);
+  //   return rows[0];
+  // }
 }
