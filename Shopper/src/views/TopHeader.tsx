@@ -1,13 +1,6 @@
 import { useTranslation } from 'next-i18next';
 import React from 'react';
-import {
-  Box,
-  Button,
-  Input,
-  Typography,
-  Autocomplete,
-  AppBar,
-} from '@mui/material';
+import { Box, Button, Input, Typography, Autocomplete } from '@mui/material';
 import Image from 'next/image';
 import styles from '@/styles/TopHeader.module.css';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -24,7 +17,7 @@ const TopHeader = () => {
   const router = useRouter();
 
   return (
-    <AppBar className={styles.container} position="static">
+    <Box className={styles.container}>
       <Box className={`${styles.logo} ${styles.hoverContainer}`}>
         <Link href="/">
           <Image
@@ -112,7 +105,7 @@ const TopHeader = () => {
           {t('cart')}
         </Typography>
       </Box>
-    </AppBar>
+    </Box>
   );
 };
 
