@@ -1,0 +1,38 @@
+.languageIcon {
+  margin-right: 5px;
+}
+
+.languageText {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.languageContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: sticky;
+  padding: 1em 5px 5px 5px;
+  margin-left: 1em;
+}
+
+.hoverContainer:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid white;
+  pointer-events: none;
+}
+
+.localePopover {
+  background-color: white;
+  padding: 8px;
+}
+
+.switcherLink {
+  cursor: pointer;
+  margin: 4px 0;
+}
