@@ -52,6 +52,11 @@
   outline: none;
 }
 
+.searchInputContainer {
+  display: flex;
+  flex-grow: 1;
+}
+
 .searchButton {
   border-radius: 0 5px 5px 0;
   height: 40px;

@@ -7,7 +7,9 @@ import type { NewOrder, Order, UpdateOrder } from './index';
 export class OrderService {
   async getOrders(vendorId?: UUID): Promise<Order[]> {
     return new Promise((resolve, reject) => {
-      fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order?vendorId=${vendorId}`)
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order?vendorId=${vendorId}`
+      )
         .then(res => {
           if (!res.ok) {
             throw res;
