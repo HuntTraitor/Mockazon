@@ -75,6 +75,8 @@ const SignInDropdown = () => {
                 <Box>
                   <Typography>{user.name}</Typography>
                   <Button className={styles.signInButton} onClick={() => {}}>
+                    {' '}
+                    {/* FIXME: Add sign out functionality */}
                     {t('signOutText')}
                   </Button>
                 </Box>
@@ -82,6 +84,7 @@ const SignInDropdown = () => {
                 <Box>
                   <Button
                     className={styles.signInButton}
+                    aria-label="Sign In Button"
                     onClick={() => {
                       router.push('/login');
                     }}
@@ -90,7 +93,9 @@ const SignInDropdown = () => {
                   </Button>
                   <Typography className={styles.caption}>
                     {t('newCustomer')}{' '}
-                    <Link href="/signup">{t('startHere')}</Link>
+                    <Link aria-label="Sign Up Button" href="/signup">
+                      {t('startHere')}
+                    </Link>
                   </Typography>
                 </Box>
               )}
