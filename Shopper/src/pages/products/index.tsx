@@ -104,9 +104,9 @@ const Index = () => {
     <>
       {error && <p>{error}</p>}
       <TopNav />
-      <Container style={{ marginTop: '50px' }}>
+      <Container style={{ marginTop: '20px' }}>
         <Typography
-          style={{ color: 'blue', marginTop: '2em' }}
+          style={{ color: 'blue'}}
           variant="h4"
           align="center"
         >
