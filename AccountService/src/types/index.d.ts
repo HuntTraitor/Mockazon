@@ -20,3 +20,9 @@ export interface User {
     role: string;
     suspended: boolean;
   }
+
+export type SessionUser = {
+    id: string,
+    role: string
+  }
+  

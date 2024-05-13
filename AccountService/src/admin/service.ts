@@ -1,7 +1,61 @@
 import { User, UUID } from "../types";
 import { pool } from "../db";
+import { Credentials, Authenticated } from "./index";
+import { SessionUser } from "../types";
+import * as jwt from "jsonwebtoken";
 
 export class AdminService {
+  public async login(
+    credentials: Credentials
+  ): Promise<Authenticated | undefined> {
+    const select =
+      `SELECT * FROM account` +
+      ` WHERE data->>'email' = $1` +
+      ` AND crypt($2, data->>'pwhash') = data->>'pwhash'`;
+
+    const query = {
+      text: select,
+      values: [credentials.email, credentials.password],
+    };
+    const { rows } = await pool.query(query);
+
+    console.log(credentials);
+
+    if (rows[0]) {
+      const user = rows[0];
+      const accessToken = jwt.sign(
+        {
+          id: user.id,
+          role: user.data.role,
+        },
+        `${process.env.MASTER_SECRET}`,
+        {
+          expiresIn: "30m",
+          algorithm: "HS256",
+        }
+      );
+      return { id: user.id, name: user.data.name, accessToken: accessToken };
+    } else {
+      return undefined;
+    }
+  }
+
+  public async check(accessToken: string): Promise<SessionUser | undefined> {
+    return new Promise((resolve, reject) => {
+      jwt.verify(
+        accessToken,
+        `${process.env.MASTER_SECRET}`,
+        (err: jwt.VerifyErrors | null, decoded?: object | string) => {
+          if (err) {
+            reject(err);
+          }
+          const account = decoded as SessionUser;
+          resolve({ id: account.id, role: account.role });
+        }
+      );
+    });
+  }
+
   public async accounts(): Promise<User[]> {
     const query = {
       text: "SELECT id, data->>'email' AS email, data->>'name' AS name, data->>'username' AS username, data->>'role' AS role, (data->>'suspended')::boolean AS suspended FROM account",
