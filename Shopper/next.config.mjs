@@ -1,7 +1,7 @@
 import i18n  from './next-i18next.config.js';
 
 const nextConfig = {
-  basePath: process.env.NODE_ENV === 'production' ? '/shopper' : '',
+  basePath: process.env.ENVIRONMENT === 'production' ? '/shopper' : '',
   reactStrictMode: true,
   ...i18n,
 };
