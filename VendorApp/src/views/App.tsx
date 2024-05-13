@@ -1,6 +1,4 @@
 import { Home } from './HomePage/Home';
-import { LoginProvider } from '../contexts/Login';
-import { Signup } from './Signup/Index';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { PageProvider } from '../contexts/PageContext';
 
@@ -20,9 +18,9 @@ export function App() {
     <ThemeProvider theme={theme}>
       {/* <LoginProvider>
         <Signup /> */}
-        <PageProvider>
-          <Home />
-        </PageProvider>
+      <PageProvider>
+        <Home />
+      </PageProvider>
       {/* </LoginProvider> */}
     </ThemeProvider>
   );
