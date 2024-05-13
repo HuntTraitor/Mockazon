@@ -13,16 +13,26 @@ export type UUID = string;
 export type Email = string;
 
 export interface User {
-    id: UUID;
-    email: Email;
-    name: string;
-    username: string;
-    role: string;
-    suspended: boolean;
-  }
+  id: UUID;
+  email: Email;
+  name: string;
+  username: string;
+  role: string;
+  suspended: boolean;
+}
 
-export type SessionUser = {
-    id: string,
-    role: string
-  }
-  
+export interface Credentials {
+  email: Email;
+  password: string;
+}
+
+export interface Authenticated {
+  id: UUID;
+  name: string;
+  accessToken: string;
+}
+
+// export type SessionUser = {
+//     id: string,
+//     role: string
+//   }
