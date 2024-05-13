@@ -7,6 +7,7 @@ import Link from 'next/link';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import TopHeader from '@/views/TopHeader';
+import SubHeader from '@/views/SubHeader';
 
 interface Product {
   id: number;
@@ -104,6 +105,7 @@ const Index = () => {
     <>
       {error && <p>{error}</p>}
       <TopHeader />
+      <SubHeader />
       <Typography
         style={{ marginTop: '50px', color: 'blue' }}
         variant="h4"
