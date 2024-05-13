@@ -5,5 +5,5 @@ import app from './app';
 
 app.listen(3002, () => {
   console.log(`Server Running on port 3002`);
-  console.log('Auth API Testing UI: http://localhost:3002/api/v0/docs/');
+  console.log('Auth API Testing UI: http://localhost:3002/docs/');
 });
