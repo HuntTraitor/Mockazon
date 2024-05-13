@@ -174,3 +174,25 @@ VALUES
             'shopper'
         )
     );
+
+-- Request Data --
+INSERT INTO
+    request(id, data)
+VALUES
+    (
+        '81c689b1-b7a7-4100-8b2d-309908b444f1',
+        jsonb_build_object(
+            'email',
+            'request@ucsc.edu',
+            'pwhash',
+            crypt('pass', '87'),
+            'name',
+            'request',
+            'username',
+            'request',
+            'role',
+            'vendor',
+            'suspended',
+            false
+        )
+    );
