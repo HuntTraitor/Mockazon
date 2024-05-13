@@ -58,7 +58,7 @@ export class AuthController extends Controller {
   public async getUserWithSub(@Query() sub: string) {
     const user = await new AuthService().getUserWithSub(sub);
     if (!user) {
-      this.setStatus(404);
+      this.setStatus(400);
     }
     return user;
   }
@@ -70,7 +70,7 @@ export class AuthController extends Controller {
   ) {
     const user = await new AuthService().createUserWithSub(data);
     if (!user) {
-      this.setStatus(400);
+      this.setStatus(409);
       return;
     }
     return {
