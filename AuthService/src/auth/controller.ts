@@ -75,6 +75,7 @@ export class AuthController extends Controller {
     }
     return {
       id: user.id,
+      accessToken: user.accessToken,
       name: user.data.name,
       email: user.data.email,
       role: user.data.role,

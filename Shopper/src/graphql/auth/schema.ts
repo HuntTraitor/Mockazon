@@ -54,6 +54,8 @@ export class SignUpResponse {
     role!: string;
   @Field()
     sub!: string;
+  @Field()
+    accessToken!: string;
 }
 
 export type SignUpResponseOrError = SignUpResponse | Message | null;

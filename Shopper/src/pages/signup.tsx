@@ -39,31 +39,44 @@ const Signup = () => {
       const decoded: { sub: string; email: string; name: string } = jwtDecode(
         credentialResponse?.credential as string
       );
-      const response = await fetch(`${window.location.origin}/api/signup`, {
+      const query = {
+        query: `mutation SignUp {
+    signUp(sub: "${decoded.sub}",
+    email: "${decoded.email}",
+    name: "${decoded.name}") {
+      id
+      name
+      email
+      role
+      sub
+      accessToken
+    }
+  }`,
+      };
+      const response = await fetch('/api/graphql', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sub: decoded.sub,
-          email: decoded.email,
-          name: decoded.name,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query),
       });
-
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('user', JSON.stringify(data.authenticated));
-        setAccessToken(data.authenticated);
+        if (data.errors && data.errors.length > 0) {
+          if (data.errors[0].message === 'Duplicate account') {
+            console.error('Duplicate account:', error);
+            setError('Duplicate account');
+            return;
+          }
+        } else {
+          console.error('Error logging in:', error);
+          setError('Login failed');
+        }
+        localStorage.setItem('user', JSON.stringify(data.data.signUp));
+        setAccessToken(data.data.signUp.accessToken);
         await router.push('/products');
       } else {
-        if (response.status === 400) {
-          console.error('Duplicate account:', error);
-          setError('Duplicate account');
-          return;
-        }
         console.error('Error logging in:', error);
         setError('Login failed');
+        return;
       }
     } catch (error) {
       console.error('Error logging in:', error);

@@ -107,7 +107,22 @@ export class AuthService {
       console.log(exception);
     }
     if (rows && rows[0]) {
-      return rows[0];
+      const user = rows[0];
+      const accessToken = jwt.sign(
+        {
+          id: user.id,
+          role: user.data.role,
+        },
+        `${process.env.MASTER_SECRET}`,
+        {
+          expiresIn: '30m',
+          algorithm: 'HS256',
+        }
+      );
+      return {
+        ...user,
+        accessToken: accessToken,
+      };
     } else {
       return undefined;
     }
