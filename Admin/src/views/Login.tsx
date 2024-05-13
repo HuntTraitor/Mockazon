@@ -35,7 +35,7 @@ const Login = () => {
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget as HTMLFormElement);
-    fetch(`${window.location.origin}/api/login`, {
+    fetch('/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

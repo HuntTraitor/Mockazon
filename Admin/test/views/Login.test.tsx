@@ -6,7 +6,7 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 const server = setupServer();
-const URL: string = `${window.location.origin}/api/login`;
+const URL: string = '/api/login';
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
