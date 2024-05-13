@@ -1,4 +1,4 @@
-import { OrderCard } from './ordercard';
+import  OrderCard  from './ordercard';
 
 export default function Index() {
   return (

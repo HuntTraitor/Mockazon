@@ -114,7 +114,7 @@ const card = (
   </React.Fragment>
 );
 
-export function OrderCard() {
+export default function OrderCard() {
   return (
     <Box sx={{ minWidth: 275 }}>
       <Card variant="outlined">{card}</Card>
