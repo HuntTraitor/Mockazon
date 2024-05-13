@@ -1,0 +1,16 @@
+.container {
+  background-color: #232f3e;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 2.5px 7.5px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  flex-direction: row;
+  z-index: 1000;
+  width: 100%;
+}

@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Path,
+  Put,
   Post,
   Route,
   SuccessResponse,
@@ -35,5 +36,14 @@ export class KeyController extends Controller {
       this.setStatus(401);
     }
     return user;
+  }
+  @Put('{apiKey}/active')
+  @Response('409', 'Error Setting Status')
+  public async setActiveStatus(@Path() apiKey: UUID): Promise<Key | undefined> {
+    const key = await new KeyService().setActiveStatus(apiKey);
+    if (!key) {
+      this.setStatus(409);
+    }
+    return key;
   }
 }

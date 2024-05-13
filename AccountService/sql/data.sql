@@ -99,6 +99,24 @@ VALUES
         )
     );
 
+INSERT INTO
+    account (data)
+VALUES
+    (
+        jsonb_build_object(
+            'email',
+            'elkrishn@ucsc.edu',
+            'name',
+            'Eesha',
+            'username',
+            'elkrishn',
+            'role',
+            'admin',
+            'suspended',
+            false
+        )
+    );
+
 -- Vendor Data --
 INSERT INTO
     vendor (data)
@@ -140,7 +158,7 @@ VALUES
         )
     );
 
--- Shopper Data Created Through Sign up --
+-- Shopper Data --
 INSERT INTO
     shopper(data)
 VALUES
