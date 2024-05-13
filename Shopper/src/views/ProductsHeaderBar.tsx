@@ -133,7 +133,8 @@ const ProductsHeaderBar = () => {
             position: 'relative',
             flexGrow: 1,
             backgroundColor: 'white',
-            mx: 2,
+            marginLeft: 2,
+            marginRight: 2,
           }}
         >
           <InputBase
