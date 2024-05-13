@@ -9,12 +9,6 @@ export class KeyService {
       values: [`${vendorId}`],
     };
 
-    try {
-      const { rows } = await pool.query(query);
-      console.log(rows);
-    } catch (e) {
-      console.log(e);
-    }
     const { rows } = await pool.query(query);
     return rows[0];
   }
@@ -39,13 +33,15 @@ export class KeyService {
     return rows;
   }
 
-  // public async setActiveStatus(apiKey: UUID): Promise<Key> {
-  //   const select = `UPDATE key SET active = CASE WHEN active THEN FALSE ELSE TRUE END WHERE key = $1`;
-  //   const query = {
-  //     text: select,
-  //     values: [`${apiKey}`],
-  //   };
-  //   const { rows } = await pool.query(query);
-  //   return rows[0];
-  // }
+  public async setActiveStatus(apiKey: UUID): Promise<Key|undefined> {
+    let select = `UPDATE api_key SET active = CASE WHEN active IS TRUE THEN FALSE ELSE TRUE END WHERE key = $1`;
+    select += ` RETURNING *`;
+    const query = {
+      text: select,
+      values: [`${apiKey}`],
+    };
+    const { rows } = await pool.query(query);
+    console.log(rows);
+    return (rows.length > 0) ? rows[0]: undefined;
+  }
 }

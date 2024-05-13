@@ -9,7 +9,7 @@
   top: 0;
   left: 0;
   right: 0;
-  position: fixed;
+  position: relative;
   flex-direction: row;
   z-index: 1000;
   width: 100%;
@@ -50,6 +50,11 @@
 
 .searchInput:focus {
   outline: none;
+}
+
+.searchInputContainer {
+  display: flex;
+  flex-grow: 1;
 }
 
 .searchButton {

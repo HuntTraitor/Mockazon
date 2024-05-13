@@ -5,10 +5,31 @@ import { UUID } from '../types';
 import type { NewOrder, Order, UpdateOrder } from './index';
 
 export class OrderService {
+  async getOrders(vendorId?: UUID): Promise<Order[]> {
+    return new Promise((resolve, reject) => {
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order?vendorId=${vendorId}`
+      )
+        .then(res => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then(authenticated => {
+          resolve(authenticated);
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+
   async create(order: NewOrder, vendorId?: UUID): Promise<Order> {
     return new Promise((resolve, reject) => {
       fetch(
-        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/vendororder?vendorId=${vendorId}`,
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order?vendorId=${vendorId}`,
         {
           method: 'POST',
           body: JSON.stringify(order),
@@ -35,7 +56,7 @@ export class OrderService {
 
   async update(orderId: UUID, order: UpdateOrder): Promise<Order> {
     return new Promise((resolve, reject) => {
-      let link = `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/vendororder/${orderId}`;
+      let link = `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/${orderId}`;
       if (order.quantity) {
         link += `?quantity=${order.quantity}`;
       }
