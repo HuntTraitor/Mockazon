@@ -3,11 +3,11 @@ import { Field, ObjectType } from 'type-graphql';
 @ObjectType()
 export class Key {
   @Field()
-    key!: string
+    key!: string;
   @Field()
-    vendor_id!: string
+    vendor_id!: string;
   @Field()
-    active!: boolean
+    active!: boolean;
   @Field()
-    requested!: boolean
+    requested!: boolean;
 }

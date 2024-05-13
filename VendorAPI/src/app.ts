@@ -15,11 +15,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/v0/docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
-  return res.send(
-    swaggerUi.generateHTML(await import('../build/swagger.json'))
-  );
-});
+app.use(
+  '/v0/docs',
+  swaggerUi.serve,
+  async (_req: ExRequest, res: ExResponse) => {
+    return res.send(
+      swaggerUi.generateHTML(await import('../build/swagger.json'))
+    );
+  }
+);
 
 const router = Router();
 RegisterRoutes(router);
