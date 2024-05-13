@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import Products from '@/views/HomePage/Products';
-
+// import Products from '@/views/HomePage/Products';
+import APIKeys from '@/views/HomePage/APIKeys';
 let returnError = false;
 
 const handlers = [
@@ -37,15 +37,15 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 it('Renders', async () => {
-  render(<Products />);
-  await screen.findByText('Products', {
+  render(<APIKeys />);
+  await screen.findByText('API Keys', {
     exact: false,
   });
 });
 
 it('Renders table', async () => {
-  render(<Products />);
-  await screen.findByText('Name');
-  await screen.findByText('Price');
-  // await screen.findByText('Action');
+  render(<APIKeys />);
+  await screen.findByText('API Key ID');
+  await screen.findByText('Status');
+  await screen.findByText('Actions');
 });

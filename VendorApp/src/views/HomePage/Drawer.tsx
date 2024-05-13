@@ -10,10 +10,10 @@ import {
   ListItemText,
   Box,
 } from '@mui/material';
-import StorefrontIcon from '@mui/icons-material/Storefront';
+// import StorefrontIcon from '@mui/icons-material/Storefront';
 import KeyIcon from '@mui/icons-material/Key';
 import Image from 'next/image';
-//import { PageContext } from '@/contexts/PageContext';
+import { PageContext } from '../../contexts/PageContext';
 
 const drawerWidth = 300;
 
@@ -22,24 +22,22 @@ const drawerWidth = 300;
  * @return {JSX.Element} AppBar
  */
 export function MyDrawer() {
-  // const pageContext = React.useContext(PageContext);
+  const pageContext = React.useContext(PageContext);
 
-  const handleProductsClick = () => {
-    console.log('Products');
-    //pageContext.setPage('Users');
-  };
+  // const handleProductsClick = () => {
+  //   pageContext.setPage('Products');
+  // };
 
   const handleKeysClick = () => {
-    console.log('API Keys');
-    // pageContext.setPage('Requests');
+    pageContext.setPage('API Keys');
   };
 
   const listItems = [
-    {
-      text: 'Products',
-      icon: <StorefrontIcon />,
-      onClick: handleProductsClick,
-    },
+    // {
+    //   // text: 'Products',
+    //   // icon: <StorefrontIcon />,
+    //   // onClick: handleProductsClick,
+    // },
     {
       text: 'API Keys',
       icon: <KeyIcon />,
@@ -69,7 +67,7 @@ export function MyDrawer() {
         }}
       >
         <Image
-          src={`${process.env.ENVIRONMENT == 'production' ? '/vendor': ''}/mini_mockazon_logo.png`}
+          src={`${process.env.ENVIRONMENT == 'production' ? '/vendor' : ''}/mini_mockazon_logo.png`}
           alt="Mockazon Logo"
           width={40}
           height={30}
