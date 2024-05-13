@@ -50,7 +50,7 @@ const SignInDropdown = () => {
     localStorage.removeItem('user');
     setUser({ accessToken: '', id: '', name: '', role: '' });
     setAccessToken('');
-  }
+  };
 
   return (
     <Box
@@ -80,7 +80,12 @@ const SignInDropdown = () => {
               {user.name ? (
                 <Box>
                   <Typography>{user.name}</Typography>
-                  <Button className={styles.signInButton} onClick={() => {handleSignOut()}}>
+                  <Button
+                    className={styles.signInButton}
+                    onClick={() => {
+                      handleSignOut();
+                    }}
+                  >
                     {t('signOutText')}
                   </Button>
                 </Box>
