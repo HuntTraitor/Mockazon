@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import { randomUUID } from 'crypto';
 import { server } from './helper';
 
-let keys = [];
+const keys = [];
 
 describe('Vendor Operations', () => {
   const vendorId = randomUUID();

@@ -38,7 +38,7 @@ export class AuthService {
         });
     });
   }
-  
+
   // public async login(credentials: Credentials): Promise<Authenticated>  {
   //   return new Promise((resolve, reject) => {
   //     fetch('http://localhost:3011/api/v0/authenticate', {
