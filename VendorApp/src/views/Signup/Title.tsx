@@ -13,7 +13,7 @@ export function Title() {
         height={100}
       />
       <Typography component="h1" variant="h5">
-        seller central
+        Seller Central
       </Typography>
     </div>
   );

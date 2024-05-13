@@ -4,11 +4,11 @@ import { Box, CssBaseline, Divider } from '@mui/material';
 import { MyDrawer } from './Drawer';
 //import { Users } from './Users';
 import { MyAppBar } from './AppBar';
-// import { LoginContext } from '@/contexts/Login';
-import { PageContext } from '@/context/PageContext';
+import { LoginContext } from '../../contexts/Login';
+import { PageContext } from '../../contexts/PageContext';
 // import { AdminRequests } from './AdminRequests';
-import Products from '../HomePage/Products';
-
+// import Products from './Products';
+import APIKeys from './APIKeys';
 /**
  * defines the Home page
  * @return {JSX.Element} Home page
@@ -24,7 +24,8 @@ export function Home() {
       <Box component="main" width={'100%'}>
         <MyAppBar />
         <Divider />
-        {pageContext.page === 'Products' ? <Products /> : undefined}
+        {/* {pageContext.page === 'Products' ? <Products /> : undefined} */}
+        {pageContext.page === 'API Keys' ? <APIKeys /> : undefined}
       </Box>
     </Box>
   );

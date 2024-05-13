@@ -1,8 +1,8 @@
-// import { Fragment } from 'react';
-// import { Home } from './HomePage/Home';
-import { LoginProvider } from '@/context/Login';
+import { Home } from './HomePage/Home';
+import { LoginProvider } from '../contexts/Login';
 import { Signup } from './Signup/Index';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { PageProvider } from '../contexts/PageContext';
 
 const theme = createTheme({
   palette: {
@@ -18,10 +18,12 @@ const theme = createTheme({
 export function App() {
   return (
     <ThemeProvider theme={theme}>
-      <LoginProvider>
-        <Signup />
-        {/* <Home /> */}
-      </LoginProvider>
+      {/* <LoginProvider>
+        <Signup /> */}
+        <PageProvider>
+          <Home />
+        </PageProvider>
+      {/* </LoginProvider> */}
     </ThemeProvider>
   );
 }
