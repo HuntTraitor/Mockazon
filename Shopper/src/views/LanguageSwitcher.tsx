@@ -11,7 +11,7 @@ import {
   Fade,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import styles from '@/styles/Switcher.module.css';
+import styles from '@/styles/LanguageSwitcher.module.css';
 
 const LanguageSwitcher = () => {
   const router = useRouter();
