@@ -10,7 +10,7 @@ import {
   ListItemText,
   Box,
 } from '@mui/material';
-import StorefrontIcon from '@mui/icons-material/Storefront';
+// import StorefrontIcon from '@mui/icons-material/Storefront';
 import KeyIcon from '@mui/icons-material/Key';
 import Image from 'next/image';
 import { PageContext } from '../../contexts/PageContext';
@@ -67,7 +67,7 @@ export function MyDrawer() {
         }}
       >
         <Image
-          src={`${process.env.ENVIRONMENT == 'production' ? '/vendor': ''}/mini_mockazon_logo.png`}
+          src={`${process.env.ENVIRONMENT == 'production' ? '/vendor' : ''}/mini_mockazon_logo.png`}
           alt="Mockazon Logo"
           width={40}
           height={30}
