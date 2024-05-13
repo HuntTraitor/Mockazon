@@ -1,10 +1,9 @@
 // Referenced from Dr. Harrison's CSE 187 examples
 import http from 'http';
 import supertest from 'supertest';
-import * as db from './db';
 import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-
+import { AuthService } from '../../src/graphql/auth/service';
 import requestHandler from './requestHandler';
 
 let server: http.Server<
@@ -52,19 +51,13 @@ beforeAll(async () => {
   server.listen();
 });
 
-beforeEach(async () => {
-  await db.reset();
-});
-
 afterEach(() => {
   microServices.resetHandlers();
 });
 
 afterAll(done => {
   microServices.close();
-  db.shutdown(() => {
-    server.close(done);
-  });
+  server.close(done);
 });
 
 test('Correct Credentials', async () => {
@@ -115,4 +108,8 @@ test('Duplicate Account', async () => {
   expect(result.body.errors[0].message).toBeDefined();
   expect(result.body.errors.data).toBeUndefined();
   expect(result.status).toBe(200);
+});
+
+test('Check test', async () => {
+  await new AuthService().check();
 });
