@@ -1,9 +1,19 @@
-import { Controller, Get, Put, Route, Post, Response, Body, Query } from "tsoa";
+import {
+  Controller,
+  Get,
+  Put,
+  Route,
+  Post,
+  Response,
+  Body,
+  /*Query*/
+} from "tsoa";
 
-import { User, UUID } from "../types";
+import { UUID } from "../types";
 import { AdminService } from "./service";
-import { Authenticated, Credentials } from "./index";
-import { SessionUser } from "../types";
+import { Authenticated, Credentials } from "../types";
+import { Account } from "./index";
+// import { SessionUser } from "../types";
 
 @Route("admin")
 export class AdminController extends Controller {
@@ -26,35 +36,37 @@ export class AdminController extends Controller {
       );
   }
 
-  @Get('check')
-  @Response("401", "Unauthorized")
-  public async check(
-    @Query() accessToken: string
-  ): Promise<SessionUser | undefined> {
-    return new AdminService()
-      .check(accessToken)
-      .then(
-        async (
-          account: SessionUser | undefined
-        ): Promise<SessionUser | undefined> => {
-          return account;
-        }
-      )
-      .catch(() => {
-        this.setStatus(401);
-        return undefined;
-      });
-  }
+  // Not sure if this is necessary for now 
+
+  // @Get('check')
+  // @Response("401", "Unauthorized")
+  // public async check(
+  //   @Query() accessToken: string
+  // ): Promise<SessionUser | undefined> {
+  //   return new AdminService()
+  //     .check(accessToken)
+  //     .then(
+  //       async (
+  //         account: SessionUser | undefined
+  //       ): Promise<SessionUser | undefined> => {
+  //         return account;
+  //       }
+  //     )
+  //     .catch(() => {
+  //       this.setStatus(401);
+  //       return undefined;
+  //     });
+  // }
 
   // fetch all exsiting user accounts
   @Get("accounts")
-  public async accounts(): Promise<User[]> {
+  public async accounts(): Promise<Account[]> {
     return new AdminService().accounts();
   }
 
   // fetch all existing vendor requests
   @Get("requests")
-  public async requests(): Promise<User[]> {
+  public async requests(): Promise<Account[]> {
     return new AdminService().requests();
   }
 
