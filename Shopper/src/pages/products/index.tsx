@@ -2,7 +2,7 @@ import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import TopHeader from '@/views/TopHeader';
+import TopNav from '@/views/TopNav';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
@@ -20,7 +20,13 @@ interface Product {
   };
 }
 
-const namespaces = ['products', 'topHeader', 'common', 'signInDropdown'];
+const namespaces = [
+  'products',
+  'topHeader',
+  'subHeader',
+  'common',
+  'signInDropdown',
+];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {
@@ -97,10 +103,10 @@ const Index = () => {
   return (
     <>
       {error && <p>{error}</p>}
-      <TopHeader />
-      <Container style={{ marginTop: '50px' }}>
+      <TopNav />
+      <Container style={{ marginTop: '20px' }}>
         <Typography
-          style={{ color: 'blue', marginTop: '2em' }}
+          style={{ color: 'blue'}}
           variant="h4"
           align="center"
         >

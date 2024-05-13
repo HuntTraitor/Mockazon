@@ -27,25 +27,28 @@ export class KeyService {
     });
   }
 
-  public async setActiveStatus(key: string): Promise<Key>  {
+  public async setActiveStatus(key: string): Promise<Key> {
     return new Promise((resolve, reject) => {
-      fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/${key}/active`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/${key}/active`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+        .then(res => {
           if (!res.ok) {
-            throw res
+            throw res;
           }
-          return res.json()
+          return res.json();
         })
-        .then((product) => {
-          resolve(product)
+        .then(product => {
+          resolve(product);
         })
         .catch(() => {
-          reject(new Error("Error setting active status"))
+          reject(new Error('Error setting active status'));
         });
     });
   }

@@ -9,7 +9,6 @@
   top: 0;
   left: 0;
   right: 0;
-  position: fixed;
   flex-direction: row;
   z-index: 1000;
   width: 100%;
@@ -39,10 +38,12 @@
 }
 
 .searchInputRoot {
-  padding: 4px;
+  padding-left: 4px;
   height: 40px;
   flex-grow: 1;
   border: none;
+  display: flex;
+  align-items: center;
   border-radius: 5px 0 0 5px;
   background-color: white;
   font-size: 14px;

@@ -4,7 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import TopHeader from '@/views/TopHeader';
+import TopNav from '@/views/TopNav';
 
 interface Product {
   id: string;
@@ -54,7 +54,7 @@ const ProductPage = () => {
   if (product && product.data) {
     return (
       <>
-        <TopHeader />
+        <TopNav />
         <Container style={{ marginTop: '50px' }}>
           <Card style={{ display: 'flex' }}>
             <div style={{ flex: '2', paddingRight: '10px' }}>
