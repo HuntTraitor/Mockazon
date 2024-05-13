@@ -1,0 +1,74 @@
+.accountContainer {
+  margin-right: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 5px;
+}
+
+.accountDropdown {
+  margin-left: 5px;
+}
+
+.hoverContainer:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid white;
+  pointer-events: none;
+}
+
+.caption {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.boldBody2 {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.caption,
+.boldBody2 {
+  line-height: 1.2;
+}
+
+.signInButton {
+  text-transform: capitalize;
+  background-color: #ffd700;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  height: 30px;
+  width: 150px;
+  cursor: pointer;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.signInButton:hover {
+  background-color: #ffcc00;
+}
+
+.signInPopper {
+  width: 160px;
+  text-align: center;
+  z-index: 10000;
+}
+
+.createAccountButton {
+  text-decoration: underline;
+}
+
+.dropDownPaper {
+  padding-bottom: 0.5em;
+}
+
+/* FIXME: Some styles are duplicated */

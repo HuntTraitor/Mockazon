@@ -1,12 +1,12 @@
 import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import ProductsHeaderBar from '@/views/ProductsHeaderBar';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import TopHeader from '@/views/TopHeader';
 
 interface Product {
   id: number;
@@ -103,7 +103,7 @@ const Index = () => {
   return (
     <>
       {error && <p>{error}</p>}
-      <ProductsHeaderBar />
+      <TopHeader />
       <Typography
         style={{ marginTop: '50px', color: 'blue' }}
         variant="h4"
