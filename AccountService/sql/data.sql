@@ -1,6 +1,6 @@
 -- General Data --
 INSERT INTO
-    account (data)
+    administrator (data)
 VALUES
     (
         jsonb_build_object(
@@ -20,7 +20,7 @@ VALUES
     );
 
 INSERT INTO
-    account (data)
+    administrator (data)
 VALUES
     (
         jsonb_build_object(
@@ -40,7 +40,7 @@ VALUES
     );
 
 INSERT INTO
-    account (data)
+    administrator (data)
 VALUES
     (
         jsonb_build_object(
@@ -60,7 +60,7 @@ VALUES
     );
 
 INSERT INTO
-    account (data)
+    administrator (data)
 VALUES
     (
         jsonb_build_object(
@@ -80,7 +80,7 @@ VALUES
     );
 
 INSERT INTO
-    account (data)
+    administrator (data)
 VALUES
     (
         jsonb_build_object(
@@ -101,7 +101,7 @@ VALUES
 
 -- Approve / Reject Test Data --
 INSERT INTO
-    account (id, data)
+    administrator (id, data)
 VALUES
     (
         'ce1186e7-a1f2-4bff-bbfc-b33641fe5ecd',
