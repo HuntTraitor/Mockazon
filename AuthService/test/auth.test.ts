@@ -119,7 +119,7 @@ test('Wrong Credentials', async () => {
   const result = await supertest(server).get(
     '/api/v0/authenticate/user?sub=123'
   );
-  expect(result.status).toBe(404);
+  expect(result.status).toBe(400);
 });
 
 test('Signing up successfully', async () => {
@@ -146,7 +146,7 @@ test('Signing up with duplicate credentials', async () => {
   const result2 = await supertest(server)
     .post('/api/v0/authenticate/signup')
     .send({ sub: '123', email: 'abc@email.com', name: 'john' });
-  expect(result2.status).toBe(400);
+  expect(result2.status).toBe(409);
 });
 
 const mockVendor = {

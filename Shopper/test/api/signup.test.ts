@@ -21,14 +21,20 @@ const handlers = [
     async () => {
       if (noError) {
         return HttpResponse.json(
-          { id: '123', sub: '123', email: 'abc@email.com', name: 'john' },
+          {
+            id: '123',
+            sub: '123',
+            email: 'abc@email.com',
+            name: 'john',
+            role: 'Shopper',
+          },
           { status: 200 }
         );
       } else {
         if (duplicateError) {
           return HttpResponse.json(
             { message: 'Duplicate error' },
-            { status: 400 }
+            { status: 409 }
           );
         } else {
           return HttpResponse.json({ message: 'Login error' }, { status: 500 });
@@ -63,23 +69,50 @@ afterAll(done => {
 
 test('Correct Credentials', async () => {
   const result = await supertest(server)
-    .post('/api/signup')
-    .send({ sub: '123', email: 'abc@email.com', name: 'john' });
-  expect(result.body.authenticated.id).toBeDefined();
-  expect(result.body.authenticated.name).toBe('john');
-  expect(result.body.authenticated.email).toBe('abc@email.com');
-  expect(result.body.authenticated.sub).toBe('123');
+    .post('/api/graphql')
+    .send({
+      query: `mutation { signUp(
+      email: "abcd@email.com",
+      name: "john",
+      sub: "125")
+    { id, name, email, role, sub }}`,
+    });
+
+  expect(result.body.data.signUp.id).toBeDefined();
+  expect(result.body.data.signUp.name).toBe('john');
+  expect(result.body.data.signUp.email).toBe('abc@email.com');
+  expect(result.body.data.signUp.role).toBe('Shopper');
+  expect(result.body.data.signUp.sub).toBe('123');
 });
 
 test('Wrong Credentials', async () => {
   noError = false;
-  const result = await supertest(server).post('/api/signup');
-  expect(result.status).toBe(500);
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query: `mutation { signUp(
+      email: "abcd@email.com",
+      name: "john",
+      sub: "125")
+    { id, name, email, role, sub }}`,
+    });
+  expect(result.body.errors[0].message).toBeDefined();
+  expect(result.body.errors.data).toBeUndefined();
 });
 
 test('Duplicate Account', async () => {
   noError = false;
   duplicateError = true;
-  const result = await supertest(server).post('/api/signup');
-  expect(result.status).toBe(400);
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query: `mutation { signUp(
+      email: "abcd@email.com",
+      name: "john",
+      sub: "125")
+    { id, name, email, role, sub }}`,
+    });
+  expect(result.body.errors[0].message).toBeDefined();
+  expect(result.body.errors.data).toBeUndefined();
+  expect(result.status).toBe(200);
 });

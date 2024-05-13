@@ -48,16 +48,29 @@ afterAll(done => {
 });
 
 test('Correct Credentials', async () => {
-  const result = await supertest(server).post('/api/login');
-  expect(result.body.authenticated.id).toBe('123');
-  expect(result.body.authenticated.name).toBe('user name');
-  expect(result.body.authenticated.accessToken).toBe('456');
-  expect(result.body.authenticated.role).toBe('shopper');
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query: `{login(
+      sub: "123"
+    ) {id, name, accessToken, role}}`,
+    });
+  expect(result.body.data.login.id).toBe('123');
+  expect(result.body.data.login.name).toBe('user name');
+  expect(result.body.data.login.accessToken).toBe('456');
+  expect(result.body.data.login.role).toBe('shopper');
 });
 
 // TODO add the rest of tests like for the auth service and valid credentials when signup is created
 test('Wrong Credentials', async () => {
   rightCreds = false;
-  const result = await supertest(server).post('/api/login');
-  expect(result.status).toBe(500);
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query: `{login(
+      sub: "123"
+    ) {id, name, accessToken, role}}`,
+    });
+  expect(result.body.errors[0].message).toBeDefined();
+  expect(result.body.errors.data).toBeUndefined();
 });
