@@ -1,0 +1,51 @@
+.cardHeader {
+  padding: 15px;
+  background-color: #E8E8E8;
+}
+
+.contentWrapper {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.purchaseButtons {
+  display: flex;
+  gap: 5px;
+  margin: 5px;
+}
+
+.buttonStyle {
+  background-color: white;
+  color: black;
+  text-transform: capitalize;
+}
+
+.buttonStyle:hover {
+  background-color: #E8E8E8;
+}
+
+.buyAgainIcon {
+  background-color: #ffDA00;
+  color: black;
+  text-transform: capitalize;
+}
+
+.buyAgainIcon:hover {
+  background-color: #f3cf05;
+}
+
+.buttonList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.archive {
+  text-transform: capitalize;
+}
