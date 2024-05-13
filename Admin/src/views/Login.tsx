@@ -73,7 +73,7 @@ const Login = () => {
           }}
         >
           <Image
-            src="/mini_mockazon_logo.png"
+            src={`${process.env.ENVIRONMENT == 'production' ? '/admin' : ''}/mini_mockazon_logo.png`}
             alt="Mockazon Logo"
             width={40}
             height={30}

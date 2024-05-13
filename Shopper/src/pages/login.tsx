@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Switcher from '@/views/Switcher';
+import LanguageSwitcher from '@/views/LanguageSwitcher';
 import { useRouter } from 'next/router';
 
 const namespaces = ['common', 'login', 'signup', 'products'];
@@ -37,20 +37,29 @@ const Login = () => {
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse?.credential as string);
-      const response = await fetch(`${window.location.origin}/api/login`, {
+      const query = {
+        query: `query LogIn {
+    login(sub: "${decoded.sub}") {
+      id
+      name
+      accessToken
+      role
+    }
+  }`,
+      };
+      const response = await fetch('/api/graphql', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sub: decoded.sub,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query),
       });
-
+      const data = await response.json();
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('user', JSON.stringify(data.authenticated));
-        setAccessToken(data.authenticated);
+        if (data.errors && data.errors.length > 0) {
+          console.error('Error logging in:', error);
+          setError('Login failed');
+        }
+        localStorage.setItem('user', JSON.stringify(data.data.login));
+        setAccessToken(data.data.login.accessToken);
         await router.push('/products');
       } else {
         console.error('Error logging in:', error);
@@ -68,7 +77,7 @@ const Login = () => {
     '655989276717-5viil57sbom25s2804kadpdt3kiaa4on.apps.googleusercontent.com';
   return !accessToken ? (
     <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
-      <Switcher />
+      <LanguageSwitcher />
       <Container maxWidth="sm">
         <Grid
           container

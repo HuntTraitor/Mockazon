@@ -11,7 +11,7 @@ export class ProductInfo {
 @ObjectType()
 export class Product {
   @Field()
-    id!: string
+    id!: string;
   @Field()
     data!: ProductInfo;
 }

@@ -1,0 +1,144 @@
+.container {
+  background-color: #131921;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 5px 15px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  flex-direction: row;
+  z-index: 1000;
+  width: 100%;
+}
+
+.logo {
+  margin-right: 20px;
+  padding: 5px;
+  cursor: pointer;
+  position: sticky;
+}
+
+.addressContainer {
+  margin-right: 20px;
+  cursor: pointer;
+  position: relative;
+  padding: 5px;
+}
+
+.deliveryText {
+  color: #ccc;
+}
+
+.searchContainer {
+  flex-grow: 1;
+  display: flex;
+}
+
+.searchInputRoot {
+  padding: 4px;
+  height: 40px;
+  flex-grow: 1;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  background-color: white;
+  font-size: 14px;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.searchInputContainer {
+  display: flex;
+  flex-grow: 1;
+}
+
+.searchButton {
+  border-radius: 0 5px 5px 0;
+  height: 40px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.searchButton:hover {
+  box-shadow: 0 0 5px white;
+}
+
+.hoverContainer:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid white;
+  pointer-events: none;
+}
+
+.ordersContainer {
+  margin-right: 20px;
+  cursor: pointer;
+  position: relative;
+  padding: 5px;
+}
+
+.cartContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  padding: 1em 5px 5px 5px;
+}
+
+.cartIcon {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.cartCount {
+  margin-right: 5px;
+}
+
+.cartText {
+  font-weight: bold;
+}
+
+.caption {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.boldBody2 {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.caption,
+.boldBody2 {
+  line-height: 1.2;
+}
+
+.categoriesButton {
+  background-color: #e6e6e6;
+  color: #666666;
+  border: none;
+  cursor: pointer;
+  margin-right: -7px;
+  text-transform: capitalize;
+  font-size: 12px;
+}
+
+.categoriesButton:hover {
+  background-color: #d4d4d4;
+  color: #000000;
+}
+
+.addressText {
+  font-weight: bold;
+  line-height: 1.2;
+}

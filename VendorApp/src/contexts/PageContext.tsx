@@ -9,7 +9,7 @@ export const PageContext = createContext({
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const PageProvider = ({ children }: PropsWithChildren<{}>) => {
   // Pages: Products, API Keys
-  const [page, setPage] = useState('Products');
+  const [page, setPage] = useState('API Keys');
   return (
     <PageContext.Provider value={{ page, setPage }}>
       {children}

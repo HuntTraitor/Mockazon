@@ -14,7 +14,9 @@ jest.mock('jwt-decode', () => ({
 
 global.fetch = jest.fn().mockResolvedValue({
   ok: true,
-  json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
+  json: jest
+    .fn()
+    .mockResolvedValue({ data: { login: { accessToken: 'mockToken' } } }),
 });
 
 jest.mock('next/router', () => ({
@@ -92,7 +94,23 @@ describe('Login component', () => {
   it('Handles unsuccessful login', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
-      json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
+      json: jest
+        .fn()
+        .mockResolvedValue({ data: { login: { accessToken: 'mockToken' } } }),
+    });
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Login />
+      </LoggedInContext.Provider>
+    );
+
+    fireEvent.click(screen.getByText('Google Login Button'));
+  });
+
+  it('Handles unsuccessful login with errors', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({ errors: [{ message: 'mockError' }] }),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
@@ -106,7 +124,9 @@ describe('Login component', () => {
   it('Handles unsuccessful login with error', async () => {
     global.fetch = jest.fn().mockRejectedValueOnce({
       ok: false,
-      json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
+      json: jest
+        .fn()
+        .mockResolvedValue({ data: { login: { accessToken: 'mockToken' } } }),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
@@ -121,7 +141,9 @@ describe('Login component', () => {
   it('Covers setAccessToken in LoggedInProvider', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
-      json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
+      json: jest
+        .fn()
+        .mockResolvedValue({ data: { login: { accessToken: 'mockToken' } } }),
     });
     const TestComponent = () => {
       const {

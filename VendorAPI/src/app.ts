@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(
-  '/api/v0/docs',
+  '/v0/docs/',
   swaggerUi.serve,
   async (_req: ExRequest, res: ExResponse) => {
     return res.send(
@@ -25,9 +25,13 @@ app.use(
   }
 );
 
+app.use('/v0/docs', (_req: ExRequest, res: ExResponse) => {
+  return res.redirect('/v0/docs/');
+});
+
 const router = Router();
 RegisterRoutes(router);
-app.use('/api/v0', router);
+app.use('/v0', router);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {

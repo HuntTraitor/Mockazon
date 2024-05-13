@@ -2,9 +2,9 @@ import { Container, Card, CardContent, Typography } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import ProductsHeaderBar from '@/views/ProductsHeaderBar';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import TopHeader from '@/views/TopHeader';
 
 interface Product {
   id: string;
@@ -54,7 +54,7 @@ const ProductPage = () => {
   if (product && product.data) {
     return (
       <>
-        <ProductsHeaderBar />
+        <TopHeader />
         <Container style={{ marginTop: '50px' }}>
           <Card style={{ display: 'flex' }}>
             <div style={{ flex: '2', paddingRight: '10px' }}>

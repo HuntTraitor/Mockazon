@@ -11,7 +11,9 @@ jest.mock('jwt-decode', () => ({
 
 global.fetch = jest.fn().mockResolvedValue({
   ok: true,
-  json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
+  json: jest
+    .fn()
+    .mockResolvedValue({ data: { signUp: { accessToken: 'mockToken' } } }),
 });
 
 jest.mock('next/router', () => ({
@@ -56,6 +58,13 @@ const loggedInContextProps = {
   setLocation: jest.fn(),
   locale: 'en',
   setLocale: jest.fn(),
+  user: {
+    accessToken: 'abc',
+    id: 'abc',
+    name: 'Trevor',
+    role: 'Shopper',
+  },
+  setUser: jest.fn(),
 };
 
 describe('Signup component', () => {
@@ -81,7 +90,9 @@ describe('Signup component', () => {
   it('Handles unsuccessful signup', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
-      json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
+      json: jest
+        .fn()
+        .mockResolvedValue({ data: { signUp: { accessToken: 'mockToken' } } }),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
@@ -94,9 +105,26 @@ describe('Signup component', () => {
 
   it('Handles unsuccessful signup with duplicate account error', async () => {
     global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
+      ok: true,
+      status: 200,
+      json: jest
+        .fn()
+        .mockResolvedValue({ errors: [{ message: 'Duplicate account' }] }),
+    });
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Signup />
+      </LoggedInContext.Provider>
+    );
+
+    fireEvent.click(screen.getByText('Google Signup Button'));
+  });
+
+  it('Handles unsuccessful signup with error messages', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       status: 400,
-      json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
+      json: jest.fn().mockResolvedValue({ errors: { message: 'mockError' } }),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
@@ -110,7 +138,9 @@ describe('Signup component', () => {
   it('Handles unsuccessful signup with error', async () => {
     global.fetch = jest.fn().mockRejectedValueOnce({
       ok: false,
-      json: jest.fn().mockResolvedValue({ authenticated: 'mockToken' }),
+      json: jest
+        .fn()
+        .mockResolvedValue({ data: { signUp: { accessToken: 'mockToken' } } }),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>

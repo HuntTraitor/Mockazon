@@ -1,10 +1,12 @@
 import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import ProductsHeaderBar from '@/views/ProductsHeaderBar';
+import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import TopHeader from '@/views/TopHeader';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
+import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
+import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 interface Product {
   id: number;
@@ -18,7 +20,7 @@ interface Product {
   };
 }
 
-const namespaces = ['products'];
+const namespaces = ['products', 'topHeader', 'common', 'signInDropdown'];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {
@@ -31,6 +33,9 @@ const Index = () => {
   const [products, setProducts] = useState([] as Product[]);
   const { t } = useTranslation('products');
   const [error, setError] = useState('');
+  const { user, setUser, setAccessToken } = useContext(LoggedInContext);
+  useLoadLocalStorageUser(setUser, setAccessToken);
+
   useEffect(() => {
     fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product`,
@@ -57,12 +62,50 @@ const Index = () => {
       });
   }, []);
 
+  const addToShoppingCart = (productId: string) => {
+    fetch(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?vendorId=${user.id}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          product_id: productId,
+          shopper_id: user.id,
+          quantity: '3',
+        }),
+      }
+    )
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(shoppingCart => {
+        alert('Added to shopping cart');
+        console.log(shoppingCart);
+      })
+      .catch(err => {
+        console.log('401', err);
+        setError('Could not fetch products');
+      });
+  };
+
   // https://chat.openai.com/share/86f158f1-110e-4905-ac4a-85ae8282f2c2
   return (
     <>
       {error && <p>{error}</p>}
-      <ProductsHeaderBar />
+      <TopHeader />
       <Container style={{ marginTop: '50px' }}>
+        <Typography
+          style={{ color: 'blue', marginTop: '2em' }}
+          variant="h4"
+          align="center"
+        >
+          Products
+        </Typography>
         <Grid container spacing={3}>
           {products.map(product => (
             <Grid item key={product.id} xs={12}>
@@ -115,6 +158,16 @@ const Index = () => {
                   >
                     {t('deliveryDate')}: {product.data.deliveryDate}
                   </Typography>
+                  <Link
+                    aria-label={`add-shopping-cart-${product.id}`}
+                    style={{ color: 'blue' }}
+                    href={`/`}
+                    onClick={() => addToShoppingCart(`${product.id}`)}
+                  >
+                    <Typography component="p" style={{ fontWeight: 'bold' }}>
+                      Add to Shopping Cart
+                    </Typography>
+                  </Link>
                 </CardContent>
               </Card>
             </Grid>
