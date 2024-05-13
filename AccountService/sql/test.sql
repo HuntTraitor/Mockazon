@@ -42,3 +42,23 @@ VALUES
             false
         )
     );
+
+INSERT INTO
+    account (data)
+VALUES
+    (
+        jsonb_build_object(
+            'email',
+            'vendor@ucsc.edu',
+            'pwhash',
+            crypt('pass', '87'),
+            'name',
+            'vendor',
+            'username',
+            'vendor',
+            'role',
+            'vendor',
+            'suspended',
+            false
+        )
+    );
