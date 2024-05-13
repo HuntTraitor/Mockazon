@@ -1,8 +1,8 @@
 import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import ProductsHeaderBar from '@/views/ProductsHeaderBar';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import TopHeader from '@/views/TopHeader';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
@@ -97,9 +97,13 @@ const Index = () => {
   return (
     <>
       {error && <p>{error}</p>}
-      <ProductsHeaderBar />
+      <TopHeader />
       <Container style={{ marginTop: '50px' }}>
-        <Typography style={{ color: 'blue' }} variant="h4" align="center">
+        <Typography
+          style={{ color: 'blue', marginTop: '2em' }}
+          variant="h4"
+          align="center"
+        >
           Products
         </Typography>
         <Grid container spacing={3}>
