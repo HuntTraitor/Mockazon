@@ -30,7 +30,7 @@ const TopHeader = () => {
         </Link>
       </Box>
       <Box
-        aria-label="address container"
+        aria-label="Address Container"
         className={`${styles.addressContainer} ${styles.hoverContainer}`}
       >
         <Typography variant="caption" className={styles.deliveryText}>
@@ -49,7 +49,7 @@ const TopHeader = () => {
       </Box>
       <Box className={styles.searchContainer}>
         <Button
-          aria-label="categories button"
+          aria-label="Categories Button"
           variant="text"
           className={styles.categoriesButton}
         >
@@ -57,13 +57,13 @@ const TopHeader = () => {
           <ExpandMoreIcon className={styles.dropdownIcon} />
         </Button>
         <Input
-          aria-label="search input"
+          aria-label="Search Input"
           placeholder={`${t('searchPlaceholder')}`}
           className={`${styles.searchInput} ${styles.searchInputRoot}`}
           disableUnderline
         />
         <Button
-          aria-label="search button"
+          aria-label="Search Button"
           variant="contained"
           color="warning"
           className={styles.searchButton}

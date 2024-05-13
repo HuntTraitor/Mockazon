@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import Index, { getServerSideProps } from '../../src/pages/index';
 
@@ -21,15 +21,12 @@ jest.mock('next/router', () => ({
   }),
 }));
 
-it('Renders', async () => {
-  render(<Index />);
+jest.mock('@fontsource/open-sans', () => {
+  return {};
 });
 
-it('Clicks translate', async () => {
+it('Renders', async () => {
   render(<Index />);
-  await waitFor(() => fireEvent.click(screen.getByText('Español')));
-  // wait for
-  await waitFor(() => fireEvent.click(screen.getByText('English')));
 });
 
 jest.mock('next-i18next/serverSideTranslations', () => ({

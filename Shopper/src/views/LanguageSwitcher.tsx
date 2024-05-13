@@ -56,10 +56,11 @@ const LanguageSwitcher = () => {
       onClick={handleOpen}
       onMouseEnter={handleOpen}
       onMouseLeave={handleMouseLeave}
+      aria-label="Language Container"
     >
       <Typography
         variant="body2"
-        aria-label="language"
+        aria-label="Language Text"
         className={styles.languageText}
       >
         <span aria-label="flag icon" className={flagIcon}></span> {languageText}
