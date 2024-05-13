@@ -10,7 +10,6 @@
   top: 0;
   left: 0;
   right: 0;
-  position: relative;
   flex-direction: row;
   z-index: 1000;
   width: 100%;
