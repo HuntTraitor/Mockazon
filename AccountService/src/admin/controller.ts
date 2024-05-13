@@ -20,23 +20,23 @@ export class AdminController extends Controller {
   @Post("login")
   @Response("401", "Unauthorised")
   public async login(
-    @Body() credentials: Credentials
+    @Body() credentials: Credentials,
   ): Promise<Authenticated | undefined> {
     return new AdminService()
       .login(credentials)
       .then(
         async (
-          user: Authenticated | undefined
+          user: Authenticated | undefined,
         ): Promise<Authenticated | undefined> => {
           if (!user) {
             this.setStatus(401);
           }
           return user;
-        }
+        },
       );
   }
 
-  // Not sure if this is necessary for now 
+  // Not sure if this is necessary for now
 
   // @Get('check')
   // @Response("401", "Unauthorized")

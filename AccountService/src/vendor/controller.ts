@@ -17,19 +17,19 @@ export class VendorController extends Controller {
   @Post("login")
   @Response("401", "Unauthorised")
   public async login(
-    @Body() credentials: Credentials
+    @Body() credentials: Credentials,
   ): Promise<Authenticated | undefined> {
     return new VendorService()
       .login(credentials)
       .then(
         async (
-          user: Authenticated | undefined
+          user: Authenticated | undefined,
         ): Promise<Authenticated | undefined> => {
           if (!user) {
             this.setStatus(401);
           }
           return user;
-        }
+        },
       );
   }
 

@@ -9,7 +9,7 @@ export class AccountController extends Controller {
   @Get("")
   public async getAll(): Promise<User[]> {
     return new AccountService().getAll();
-  }  
+  }
 
   // suspend an existing account
   @Put("{id}/suspend")

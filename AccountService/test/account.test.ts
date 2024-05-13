@@ -53,7 +53,7 @@ describe("API TEST (ACCOUNT)", () => {
             role: "test",
             username: "testaccount2",
             suspended: "false",
-          }
+          },
         ]);
       });
   });
@@ -87,7 +87,7 @@ describe("API TEST (ACCOUNT)", () => {
             role: "test",
             username: "testaccount2",
             suspended: "true",
-          }
+          },
         ]);
       });
   });
@@ -121,7 +121,7 @@ describe("API TEST (ACCOUNT)", () => {
             role: "test",
             username: "testaccount2",
             suspended: "false",
-          }
+          },
         ]);
       });
   });

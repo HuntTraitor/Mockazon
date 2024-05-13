@@ -21,7 +21,7 @@ export class ShopperService {
         {
           expiresIn: "30m",
           algorithm: "HS256",
-        }
+        },
       );
       return {
         id: user.id,
@@ -62,7 +62,7 @@ export class ShopperService {
         {
           expiresIn: "30m",
           algorithm: "HS256",
-        }
+        },
       );
       return {
         ...user,
