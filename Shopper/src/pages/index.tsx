@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Products from '@/pages/products';
 import { ThemeProvider } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
+import { mainTheme } from '@/styles/themes';
 import '@fontsource/open-sans';
 
 const namespaces = [
@@ -23,12 +23,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-const theme = createTheme({
-  typography: {
-    fontFamily: 'Open Sans, sans-serif',
-  },
-});
-
 /**
  * Index page
  * @constructor
@@ -40,7 +34,7 @@ export default function Index() {
   //   '655989276717-5viil57sbom25s2804kadpdt3kiaa4on.apps.googleusercontent.com';
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={mainTheme}>
       <Fragment>
         <Products />
         {/*LanguageSwitcher />*/}
