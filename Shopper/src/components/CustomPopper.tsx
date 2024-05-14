@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Popper, Backdrop, Paper, Button } from '@mui/material';
+import { Popper, Paper, Button } from '@mui/material';
+import { useAppContext } from '@/contexts/AppContext';
 
 interface CustomPopperProps {
   children: React.ReactNode;
@@ -13,6 +14,7 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { setBackDropOpen } = useAppContext();
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) {
@@ -20,11 +22,13 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
       timeoutRef.current = null;
     }
     setOpen(true);
+    setBackDropOpen(true);
   };
 
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setOpen(false);
+      setBackDropOpen(false);
     }, 200);
   };
 
@@ -63,11 +67,6 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
       >
         <Paper>{children}</Paper>
       </Popper>
-      <Backdrop
-        open={open}
-        style={{ zIndex: -1 }}
-        onClick={() => setOpen(false)}
-      />
     </div>
   );
 };
