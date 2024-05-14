@@ -1,5 +1,10 @@
 {
-  "title": "Bienvenido a mockazon",
+  "title": "Iniciar sesión",
   "sub-title": "Página de registro",
-  "prompt": "Iniciar sesión con Google"
+  "prompt": "Iniciar sesión con Google",
+  "email": "Email",
+  "password": "Contraseña",
+  "agreement": "Al continuar, aceptas las Condiciones de uso y el Aviso de privacidad de Mockazon.",
+  "createAccount": "Crea tu cuenta de Mockazon",
+  "newToMockazon": "¿Eres nuevo en Mockazon?"
 }
