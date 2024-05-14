@@ -1,5 +1,10 @@
 {
-  "title": "Welcome to Mockazon",
-  "sub-title": "Go to Login Page",
-  "prompt": "Sign up with Google"
+  "title": "Create account",
+  "name": "Name",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Re-enter password",
+  "signUpText": "Sign Up",
+  "agreement": "By creating an account, you agree to Mockazon's Conditions of Use and Privacy Notice.",
+  "alreadyHaveAccount": "Already have an account?"
 }
