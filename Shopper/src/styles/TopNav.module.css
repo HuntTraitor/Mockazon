@@ -1,6 +1,6 @@
 .container {
-  display: flex;
-  flex-direction: column;
+  display: block;
   position: relative;
-  width: 100%;
+  min-width: 1000px;
+  zoom: 1;
 }

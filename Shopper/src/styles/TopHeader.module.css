@@ -12,6 +12,7 @@
   flex-direction: row;
   z-index: 1000;
   width: 100%;
+  font-size: 14px;
 }
 
 .logo {
@@ -22,10 +23,33 @@
 }
 
 .addressContainer {
-  margin-right: 20px;
+  display: flex;
+  flex-direction: row;
   cursor: pointer;
   position: relative;
-  padding: 5px;
+  margin: 5px 2px;
+  padding: 0 8px 0 6px;
+  width: fit-content;
+  flex-flow: row nowrap;
+  -webkit-box-align: center;
+  align-items: center;
+  scroll-margin: 0;
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.addressIcon {
+  background-position: -71px -378px;
+  width: 20px;
+  height: 23px;
+  margin-top: 8px;
+}
+
+.addressTextContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
 .deliveryText {
@@ -108,8 +132,9 @@
 }
 
 .caption {
-  display: block;
-  font-size: 0.75rem;
+  font-size: 12px;
+  line-height: 14px;
+  height: 14px;
   font-weight: 400;
 }
 
@@ -140,6 +165,7 @@
 }
 
 .addressText {
-  font-weight: bold;
-  line-height: 1.2;
+  font-size: 14px;
+  line-height: 15px;
+  font-weight: 700;
 }
