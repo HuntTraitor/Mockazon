@@ -1,6 +1,7 @@
 import { Home } from './HomePage/Home';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { PageProvider } from '../contexts/PageContext';
+import { Signup } from './Signup/Index';
 
 const theme = createTheme({
   palette: {
@@ -19,7 +20,7 @@ export function App() {
       {/* <LoginProvider>
         <Signup /> */}
       <PageProvider>
-        <Home />
+        <Signup />
       </PageProvider>
       {/* </LoginProvider> */}
     </ThemeProvider>

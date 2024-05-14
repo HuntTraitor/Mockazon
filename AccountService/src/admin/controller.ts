@@ -9,7 +9,7 @@ import {
   /*Query*/
 } from "tsoa";
 
-import { UUID } from "../types";
+import { UUID, User } from "../types";
 import { AdminService } from "./service";
 import { Authenticated, Credentials } from "../types";
 import { Account } from "./index";
@@ -66,7 +66,7 @@ export class AdminController extends Controller {
 
   // fetch all existing vendor requests
   @Get("requests")
-  public async requests(): Promise<Account[]> {
+  public async requests(): Promise<User[]> {
     return new AdminService().requests();
   }
 
