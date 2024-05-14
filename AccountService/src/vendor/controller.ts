@@ -32,14 +32,17 @@ export class VendorController extends Controller {
   ): Promise<Vendor | undefined> {
     const user = await new VendorService().createVendorAccount(credentials);
     if (!user) {
+      console.log("Failed to create user");
       this.setStatus(400);
       return;
     }
     return {
       id: user.id,
       name: user.data.name,
+      username: user.data.username,
       email: user.data.email,
       role: user.data.role,
+      suspended: user.data.suspended,
     };
   }
 }

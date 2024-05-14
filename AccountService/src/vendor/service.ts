@@ -5,7 +5,7 @@ import { CreateVendor } from "./index";
 
 export class VendorService {
   public async login(
-    credentials: Credentials,
+    credentials: Credentials
   ): Promise<Authenticated | undefined> {
     const select =
       `SELECT * FROM vendor` +
@@ -31,7 +31,7 @@ export class VendorService {
         {
           expiresIn: "30m",
           algorithm: "HS256",
-        },
+        }
       );
       return { id: user.id, name: user.data.name, accessToken: accessToken };
     } else {
@@ -40,30 +40,39 @@ export class VendorService {
   }
 
   public async createVendorAccount(vendor: CreateVendor) {
-    const insert = `INSERT INTO request(data) VALUES (
-      jsonb_build_object(
-        'name', $1::text, 
-        'email', $2::text, 
-        'pwhash', crypt($3::text, '87'),
-        'role', 'vendor'
-      )) 
-    RETURNING *`;
+    const insert = `
+      INSERT INTO request(data) 
+      VALUES (
+        jsonb_build_object(
+          'email', $1::text,
+          'pwhash', crypt($2::text, gen_salt('bf')),
+          'name', $3::text,
+          'username', $4::text,
+          'role', 'vendor',
+          'suspended', false
+        )
+      )
+      RETURNING *
+    `;
 
     const query = {
       text: insert,
-      values: [vendor.name, vendor.email, vendor.password],
+      values: [vendor.email, vendor.password, vendor.name, vendor.username],
     };
+
     let rows;
     try {
       const result = await pool.query(query);
       rows = result.rows;
     } catch (e) {
-      console.log(e);
+      console.error("Error creating vendor account:", e);
+      throw e;
     }
+
     if (rows && rows[0]) {
       return rows[0];
     } else {
-      return undefined;
+      throw new Error("Failed to create vendor account");
     }
   }
 }
