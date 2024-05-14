@@ -8,6 +8,8 @@ const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
     '^@/pages/(.*)$': '<rootDir>/pages/$1',
+    '^@/components/(.*)$': '<rootDir>/src/components/$1',
+    // Add any additional module mappings here if needed
   },
   testEnvironment: 'jest-environment-jsdom',
   testEnvironmentOptions: {
@@ -21,7 +23,7 @@ const customJestConfig = {
   ],
   collectCoverage: true,
   coveragePathIgnorePatterns: ['src/pages/_app.tsx', 'src/pages/_document.tsx'],
-  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
+  testMatch: ['**/test/**/?(*.)+(spec|test).[jt]s?(x)'],
 };
 
 export default createJestConfig(customJestConfig);
