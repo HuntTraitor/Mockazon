@@ -44,7 +44,6 @@ const SignInDropdown = () => {
         <Paper elevation={5} className={styles.dropDownPaper}>
           {user.name ? (
             <Box>
-              <Typography>{user.name}</Typography>
               <Button
                 aria-label="Sign Out Button"
                 className={styles.signInButton}

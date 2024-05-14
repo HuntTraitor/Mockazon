@@ -1,6 +1,5 @@
 import { ShopperId, ShoppingCartItem } from './schema';
 import { GraphQLError } from 'graphql/error';
-import { SessionUser } from '@/graphql/types/next';
 
 export class ShoppingCartService {
   public async getShoppingCart(
@@ -30,5 +29,4 @@ export class ShoppingCartService {
       });
     return result;
   }
-
 }
