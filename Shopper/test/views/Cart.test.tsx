@@ -1,14 +1,14 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
-import { getServerSideProps } from '@/pages/shoppingCart';
+import { getServerSideProps } from '@/pages/cart';
 import http from 'http';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
-import { http as rest, HttpResponse } from 'msw';
+import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from '../api/requestHandler';
-import ShoppingCart from '@/pages/shoppingCart';
+import ShoppingCart from '@/pages/cart';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -19,52 +19,58 @@ let errorInFetchProduct = false;
 let errorInShoppingCart = false;
 
 const handlers = [
-  rest.get(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
-    async () => {
-      if (errorInShoppingCart) {
-        return HttpResponse.json({}, { status: 400 });
-      } else {
-        return HttpResponse.json(
-          [
-            {
-              id: '123',
-              product_id: '123',
-              shopper_id: '123',
-              vendor_id: '123',
+  graphql.query('GetShoppingCart', ({ query }) => {
+    console.log(query);
+    if (errorInShoppingCart) {
+      return HttpResponse.json({}, { status: 400 });
+    } else {
+      return HttpResponse.json(
+        {
+          data: {
+            getShoppingCart: [
+              {
+                id: '123',
+                product_id: '123',
+                shopper_id: '123',
+                vendor_id: '123',
+                data: {
+                  quantity: '3',
+                },
+              },
+            ],
+          },
+        },
+        { status: 200 }
+      );
+    }
+  }),
+  graphql.query('GetProduct', ({ query /*variables*/ }) => {
+    console.log(query);
+    if (errorInFetchProduct) {
+      return HttpResponse.json({}, { status: 400 });
+    } else {
+      return HttpResponse.json(
+        {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          id: '123',
+          data: {
+            getProduct: {
               data: {
-                quantity: '123',
+                brand: 'test',
+                name: 'test name',
+                rating: 'test',
+                price: 1,
+                deliveryDate: 'test',
+                image: 'test',
               },
             },
-          ],
-          { status: 200 }
-        );
-      }
-    }
-  ),
-  rest.get(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/123`,
-    async () => {
-      if (errorInFetchProduct) {
-        return HttpResponse.json({}, { status: 400 });
-      } else {
-        return HttpResponse.json(
-          {
-            id: 'some id',
-            data: {
-              brand: 'test',
-              name: 'test name',
-              rating: 'test',
-              price: 1,
-              deliveryDate: 'test',
-              image: 'test',
-            },
           },
-          { status: 200 }
-        );
-      }
+        },
+        { status: 200 }
+      );
     }
-  ),
+  }),
 ];
 
 const microServices = setupServer(...handlers);
@@ -75,7 +81,7 @@ beforeAll(async () => {
   server.listen();
 });
 
-afterEach(() => {
+beforeEach(() => {
   microServices.resetHandlers();
   errorInFetchProduct = false;
   errorInShoppingCart = false;

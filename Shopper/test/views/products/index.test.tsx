@@ -7,7 +7,7 @@ import Products from '@/pages/products';
 import { getServerSideProps } from '@/pages/products';
 import http from 'http';
 
-import { http as rest, HttpResponse } from 'msw';
+import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from '../../api/requestHandler';
@@ -21,56 +21,50 @@ let error = false;
 let errorInShoppingCart = false;
 
 const handlers = [
-  rest.get(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product`,
-    async () => {
-      if (error) {
-        return HttpResponse.json(
-          [
+  graphql.query('GetProducts', ({ query }) => {
+    console.log(query);
+    if (error) {
+      return HttpResponse.json(
+        {
+          errors: [
             {
-              id: 'some id',
-              data: {
-                brand: 'test',
-                name: 'test',
-                rating: 'test',
-                price: 1,
-                deliveryDate: 'test',
-                image: 'test',
-              },
+              message: 'test error',
             },
           ],
-          { status: 400 }
-        );
-      } else {
-        return HttpResponse.json(
-          [
-            {
-              id: 'some id',
-              data: {
-                brand: 'test',
-                name: 'test name',
-                rating: 'test',
-                price: 1,
-                deliveryDate: 'test',
-                image: 'test',
+        },
+        { status: 400 }
+      );
+    } else {
+      return HttpResponse.json(
+        {
+          data: {
+            getProducts: [
+              {
+                id: 'some id',
+                data: {
+                  brand: 'test',
+                  name: 'test name',
+                  rating: 'test',
+                  price: 1,
+                  deliveryDate: 'test',
+                  image: 'test',
+                },
               },
-            },
-          ],
-          { status: 200 }
-        );
-      }
+            ],
+          },
+        },
+        { status: 200 }
+      );
     }
-  ),
-  rest.post(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
-    async () => {
-      if (errorInShoppingCart) {
-        return HttpResponse.json({}, { status: 400 });
-      } else {
-        return HttpResponse.json({}, { status: 200 });
-      }
+  }),
+  graphql.query('AddProduct', ({ query /*variables*/ }) => {
+    console.log(query);
+    if (errorInShoppingCart) {
+      return HttpResponse.json({}, { status: 400 });
+    } else {
+      return HttpResponse.json({}, { status: 200 });
     }
-  ),
+  }),
 ];
 
 const microServices = setupServer(...handlers);
@@ -129,6 +123,7 @@ it('Renders successfully', async () => {
     })
   );
   render(<Products />);
+  // expect(screen.getByText('test name'));
   await waitFor(() => expect(screen.getByText('test name')));
 });
 
@@ -138,7 +133,7 @@ it('Adds to shopping cart', async () => {
     JSON.stringify({
       accessToken: 'abc',
       id: 'abc',
-      name: 'Trevor',
+      name: 'John',
       role: 'Shopper',
     })
   );

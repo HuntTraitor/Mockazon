@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { Users } from '../../../src/views/HomePage/Users';
+import { Users } from '@/views/HomePage/Users';
 
 let returnError = false;
 

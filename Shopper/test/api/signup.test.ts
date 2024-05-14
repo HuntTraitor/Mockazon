@@ -3,7 +3,7 @@ import http from 'http';
 import supertest from 'supertest';
 import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { AuthService } from '../../src/graphql/auth/service';
+import { AuthService } from '@/graphql/auth/service';
 import requestHandler from './requestHandler';
 
 let server: http.Server<
@@ -17,6 +17,32 @@ let duplicateError = false;
 const handlers = [
   rest.post(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate/signup`,
+    async () => {
+      if (noError) {
+        return HttpResponse.json(
+          {
+            id: '123',
+            sub: '123',
+            email: 'abc@email.com',
+            name: 'john',
+            role: 'Shopper',
+          },
+          { status: 200 }
+        );
+      } else {
+        if (duplicateError) {
+          return HttpResponse.json(
+            { message: 'Duplicate error' },
+            { status: 409 }
+          );
+        } else {
+          return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+        }
+      }
+    }
+  ),
+  rest.post(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/signup`,
     async () => {
       if (noError) {
         return HttpResponse.json(

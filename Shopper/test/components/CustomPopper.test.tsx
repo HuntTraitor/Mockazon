@@ -49,10 +49,11 @@ it('Closes popper on backdrop click', async () => {
   fireEvent.mouseEnter(screen.getByText('Button Content'));
   expect(await screen.findByText('Popper Content')).toBeInTheDocument();
   const backdrop = document.querySelector('.MuiBackdrop-root');
+
   if (backdrop) {
     fireEvent.click(backdrop);
   }
-  await waitForElementToBeRemoved(() => screen.queryByText('Popper Content'));
+  expect(screen.queryByText('Popper Content')).not.toBeInTheDocument();
 });
 
 it('Clears timeout on unmount', async () => {

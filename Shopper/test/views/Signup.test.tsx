@@ -84,7 +84,7 @@ describe('Signup component', () => {
         <Signup />
       </LoggedInContext.Provider>
     );
-    fireEvent.click(screen.getByLabelText('sub-title'));
+    fireEvent.click(screen.getByText('signup:title'));
   });
 
   it('Handles unsuccessful signup', async () => {

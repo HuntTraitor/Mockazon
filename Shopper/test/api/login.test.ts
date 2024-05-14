@@ -28,6 +28,19 @@ const handlers = [
       }
     }
   ),
+  rest.get(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/login`,
+    async () => {
+      if (rightCreds) {
+        return HttpResponse.json(
+          { id: '123', name: 'user name', accessToken: '456', role: 'shopper' },
+          { status: 200 }
+        );
+      } else {
+        return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+      }
+    }
+  ),
 ];
 
 const microServices = setupServer(...handlers);
