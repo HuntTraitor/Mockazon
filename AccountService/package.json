@@ -87,6 +87,8 @@
     "swagger": "tsoa spec-and-routes",
     "pretest": "npm run swagger",
     "test": "jest --runInBand --coverage --verbose --forceExit",
+    "test-isolate": "jest --runInBand --coverage --verbose --forceExit",
     "lint": "prettier --write ./**/*.{ts,tsx} && eslint test/**/*.[jt]s src/**/*.[jt]s --fix"
+    
   }
 }
