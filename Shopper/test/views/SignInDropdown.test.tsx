@@ -1,7 +1,9 @@
-import SignInDropdown from '@/views/SignInDropdown';
-import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import SignInDropdown from '@/views/SignInDropdown';
+import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import { AppContext } from '@/contexts/AppContext';
 
 const pushMock = jest.fn();
 const locale = 'en';
@@ -50,7 +52,6 @@ jest.mock('next/router', () => ({
   }),
 }));
 
-let mockName = '';
 const providerProps = {
   accessToken: '',
   setAccessToken: jest.fn(),
@@ -58,90 +59,108 @@ const providerProps = {
   setLocation: jest.fn(),
   locale: '',
   setLocale: jest.fn(),
-  user: { accessToken: '', id: '', name: mockName, role: '' },
+  user: { accessToken: '', id: '', name: '', role: '' },
   setUser: jest.fn(),
+};
+
+const AppContextProps = {
+  backDropOpen: false,
+  setBackDropOpen: jest.fn(),
 };
 
 describe('Sign In Dropdown', () => {
   it('Renders successfully', async () => {
     render(
-      <LoggedInContext.Provider value={{ ...providerProps }}>
-        <SignInDropdown />
-      </LoggedInContext.Provider>
+      <AppContext.Provider value={AppContextProps}>
+        <LoggedInContext.Provider value={{ ...providerProps }}>
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
     );
     await screen.findByText('Hello,', { exact: false });
   });
 
   it("Shows a user's name if they are logged in", async () => {
     render(
-      <LoggedInContext.Provider
-        value={{
-          ...providerProps,
-          user: { accessToken: '', id: '', name: 'Guest', role: '' },
-        }}
-      >
-        <SignInDropdown />
-      </LoggedInContext.Provider>
+      <AppContext.Provider value={AppContextProps}>
+        <LoggedInContext.Provider
+          value={{
+            ...providerProps,
+            user: { accessToken: '', id: '', name: 'Guest', role: '' },
+          }}
+        >
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
     );
     await screen.findByText('Hello, Guest');
   });
 
   it('Shows a sign in message if the user is not logged in', async () => {
-    mockName = '';
     render(
-      <LoggedInContext.Provider value={providerProps}>
-        <SignInDropdown />
-      </LoggedInContext.Provider>
+      <AppContext.Provider value={AppContextProps}>
+        <LoggedInContext.Provider value={providerProps}>
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
     );
     await screen.findByText('sign in', { exact: false });
   });
 
   it('Opens the sign in dropdown when hovered over', async () => {
     render(
-      <LoggedInContext.Provider value={providerProps}>
-        <SignInDropdown />
-      </LoggedInContext.Provider>
+      <AppContext.Provider value={AppContextProps}>
+        <LoggedInContext.Provider value={providerProps}>
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
     );
-    fireEvent.mouseEnter(screen.getByLabelText('Sign In Container'));
-    await screen.findByText('sign in');
+    fireEvent.mouseEnter(screen.getByLabelText('AppBar Account Button'));
     await screen.findByText('New Customer?', { exact: false });
   });
 
   it('Closes the sign in dropdown when the mouse leaves', async () => {
     render(
-      <LoggedInContext.Provider value={providerProps}>
-        <SignInDropdown />
-      </LoggedInContext.Provider>
+      <AppContext.Provider value={AppContextProps}>
+        <LoggedInContext.Provider value={providerProps}>
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
     );
-    fireEvent.mouseEnter(screen.getByLabelText('Sign In Container'));
-    fireEvent.mouseLeave(screen.getByLabelText('Sign In Container'));
+    fireEvent.mouseEnter(screen.getByLabelText('AppBar Account Button'));
+    fireEvent.mouseLeave(screen.getByLabelText('AppBar Account Button'));
     await waitFor(() => {
-      expect(screen.queryByText('sign in')).toBeNull();
+      expect(screen.queryByText('New Customer?', { exact: false })).toBeNull();
     });
   });
 
   it('Does not close if mouse re-enters before timeout', async () => {
     render(
-      <LoggedInContext.Provider value={providerProps}>
-        <SignInDropdown />
-      </LoggedInContext.Provider>
+      <AppContext.Provider value={AppContextProps}>
+        <LoggedInContext.Provider value={providerProps}>
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
     );
-    fireEvent.mouseEnter(screen.getByLabelText('Sign In Container'));
-    fireEvent.mouseLeave(screen.getByLabelText('Sign In Container'));
-    fireEvent.mouseEnter(screen.getByLabelText('Sign In Container'));
+    fireEvent.mouseEnter(screen.getByLabelText('AppBar Account Button'));
+    fireEvent.mouseLeave(screen.getByLabelText('AppBar Account Button'));
+    fireEvent.mouseEnter(screen.getByLabelText('AppBar Account Button'));
     await waitFor(() => {
-      expect(screen.queryByText('sign in')).not.toBeNull();
+      expect(screen.getByLabelText('Sign In Button')).toBeInTheDocument();
     });
   });
 
   it('Goes to login page when sign in is clicked', async () => {
     render(
-      <LoggedInContext.Provider value={providerProps}>
-        <SignInDropdown />
-      </LoggedInContext.Provider>
+      <AppContext.Provider value={AppContextProps}>
+        <LoggedInContext.Provider value={providerProps}>
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
     );
-    fireEvent.mouseEnter(screen.getByLabelText('Sign In Container'));
-    fireEvent.click(screen.getByText('sign in'));
+    fireEvent.mouseEnter(screen.getByLabelText('AppBar Account Button'));
+    const signInText = await screen.getByLabelText('Sign In Button');
+    fireEvent.click(signInText);
     await waitFor(() => {
       expect(pushMock).toHaveBeenCalledWith('/login');
     });
@@ -149,16 +168,18 @@ describe('Sign In Dropdown', () => {
 
   it('Shows sign out button when user is logged in', async () => {
     render(
-      <LoggedInContext.Provider
-        value={{
-          ...providerProps,
-          user: { accessToken: '', id: '', name: 'Guest', role: '' },
-        }}
-      >
-        <SignInDropdown />
-      </LoggedInContext.Provider>
+      <AppContext.Provider value={AppContextProps}>
+        <LoggedInContext.Provider
+          value={{
+            ...providerProps,
+            user: { accessToken: '', id: '', name: 'Guest', role: '' },
+          }}
+        >
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
     );
-    fireEvent.mouseEnter(screen.getByLabelText('Sign In Container'));
+    fireEvent.mouseEnter(screen.getByLabelText('AppBar Account Button'));
     await screen.findByText('Sign Out');
     fireEvent.click(screen.getByText('Sign Out'));
     await waitFor(() => {
