@@ -4,9 +4,11 @@ import { buildSchemaSync } from 'type-graphql';
 
 import { AuthResolver } from '@/graphql/auth/resolver';
 import { nextAuthChecker } from '@/graphql/auth/checker';
+import { ShoppingCartResolver } from '@/graphql/shoppingCart/resolver';
+import { ProductResolver } from '@/graphql/product/resolver';
 
 const schema = buildSchemaSync({
-  resolvers: [AuthResolver],
+  resolvers: [AuthResolver, ShoppingCartResolver, ProductResolver],
   validate: true,
   authChecker: nextAuthChecker,
 });

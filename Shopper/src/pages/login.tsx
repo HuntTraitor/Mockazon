@@ -88,13 +88,13 @@ const Login = () => {
       const decoded = jwtDecode(credentialResponse?.credential as string);
       const query = {
         query: `query LogIn {
-    login(sub: "${decoded.sub}") {
-      id
-      name
-      accessToken
-      role
-    }
-  }`,
+          login(sub: "${decoded.sub}") {
+            id
+            name
+            accessToken
+            role
+          }
+        }`,
       };
       const response = await fetch('/api/graphql', {
         method: 'POST',

@@ -11,12 +11,16 @@ import TopNav from '@/views/TopNav';
 interface Product {
   id: number;
   data: {
-    brand?: string;
-    name?: string;
-    rating?: string;
-    price?: number;
-    deliveryDate?: string;
-    image?: string;
+    getProduct: {
+      data: {
+        brand?: string;
+        name?: string;
+        rating?: string;
+        price?: number;
+        deliveryDate?: string;
+        image?: string;
+      };
+    };
   };
 }
 
@@ -30,7 +34,7 @@ interface ProductFromFetch {
   };
 }
 
-const namespaces = ['products'];
+const namespaces = ['products', 'topHeader', 'common', 'signInDropdown'];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {
@@ -39,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-const Index = () => {
+const Cart = () => {
   const [products, setProducts] = useState([] as Product[]);
   const { t } = useTranslation('products');
   const [error, setError] = useState('');
@@ -51,46 +55,68 @@ const Index = () => {
     if (JSON.stringify(user) === '{}') {
       return;
     }
-    fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?shopperId=${user.id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const query = {
+      query: `query GetShoppingCart {
+    getShoppingCart(shopperId: "${user.id}") {
+      id
+      product_id
+      shopper_id
+      vendor_id
+      data {
+        quantity
       }
-    )
+    }
+  }`,
+    };
+    fetch('/api/graphql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(query),
+    })
       .then(response => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(products => {
-        const fetchPromises = products.map((product: ProductFromFetch) => {
-          return fetch(
-            `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${product.product_id}`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          ).then(response => {
-            if (!response.ok) {
-              throw response;
-            }
-            return response.json();
-          });
-        });
+      .then(shoppingCartProducts => {
+        const fetchPromises = shoppingCartProducts.data.getShoppingCart.map(
+          (product: ProductFromFetch) => {
+            const query = {
+              query: `query GetProduct {
+              getProduct(productId: "${product.product_id}") {
+                id
+                data {
+                  brand
+                  name
+                  rating
+                  price
+                  deliveryDate
+                  image
+                }
+              }
+            }`,
+            };
+            return fetch('/api/graphql', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(query),
+            }).then(response => {
+              if (!response.ok) {
+                throw response;
+              }
+              return response.json();
+            });
+          }
+        );
         Promise.all(fetchPromises)
           .then(productsWithContent => {
             setProducts(productsWithContent);
             console.log(productsWithContent);
           })
           .catch(err => {
-            console.log('Error fetching products:', err);
-            setError('Could not fetch products');
+            console.log('Error fetching shoppingCartProducts:', err);
+            setError('Could not fetch shoppingCartProducts');
           });
       })
       .catch(err => {
@@ -118,8 +144,8 @@ const Index = () => {
               <Card style={{ display: 'flex' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={product.data.image}
-                  alt={product.data.name}
+                  src={product.data.getProduct.data.image}
+                  alt={product.data.getProduct.data.name}
                   style={{
                     width: '150px',
                     height: '100%',
@@ -137,32 +163,34 @@ const Index = () => {
                       component="h2"
                       style={{ fontWeight: 'bold' }}
                     >
-                      {product.data.brand}
+                      {product.data.getProduct.data.brand}
                     </Typography>
                   </Link>
                   <Typography variant="h6" component="h2">
-                    {product.data.name}
+                    {product.data.getProduct.data.name}
                   </Typography>
                   <Typography
-                    aria-label={`rating is ${product.data.rating}`}
+                    aria-label={`rating is ${product.data.getProduct.data.rating}`}
                     variant="subtitle1"
                     component="p"
                   >
-                    {t('rating')}: {product.data.rating}
+                    {t('products:rating')}:{' '}
+                    {product.data.getProduct.data.rating}
                   </Typography>
                   <Typography
-                    aria-label={`price is ${product.data.price}`}
+                    aria-label={`price is ${product.data.getProduct.data.price}`}
                     variant="subtitle1"
                     component="p"
                   >
-                    {t('price')}: ${product.data.price}
+                    {t('products:price')}: ${product.data.getProduct.data.price}
                   </Typography>
                   <Typography
-                    aria-label={`deliveryDate is ${product.data.deliveryDate}`}
+                    aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
                     variant="subtitle1"
                     component="p"
                   >
-                    {t('deliveryDate')}: {product.data.deliveryDate}
+                    {t('products:deliveryDate')}:{' '}
+                    {product.data.getProduct.data.deliveryDate}
                   </Typography>
                   <Link
                     aria-label={`add-shopping-cart-${product.id}`}
@@ -183,4 +211,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Cart;

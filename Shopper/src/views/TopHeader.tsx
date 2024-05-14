@@ -34,7 +34,7 @@ const TopHeader = () => {
         className={`${styles.addressContainer} ${styles.hoverContainer}`}
       >
         <Typography variant="caption" className={styles.deliveryText}>
-          {t('deliveryText')}
+          {t('topHeader:deliveryText')}
         </Typography>
         <Typography
           aria-label="Address"
@@ -88,8 +88,8 @@ const TopHeader = () => {
         }} // FIXME: Add Orders Page
       >
         <Typography>
-          <span className={styles.caption}>{t('returns')}</span>
-          <span className={styles.boldBody2}>{t('orders')}</span>
+          <span className={styles.caption}>{t('topHeader:returns')}</span>
+          <span className={styles.boldBody2}>{t('topHeader:orders')}</span>
         </Typography>
       </Box>
       <Box
