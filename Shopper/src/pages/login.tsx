@@ -34,7 +34,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
 // based this login screen off of lukas's cse 115 project
 const Login = () => {
-  const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { accessToken, setAccessToken } = useContext(LoggedInContext);
@@ -65,19 +64,20 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         if (data.errors && data.errors.length > 0) {
-          console.error('Error logging in:', error);
-          setError('Login failed');
+          console.error('Error logging in:', data.errors[0].message);
+          alert(data.errors[0].message);
+          return;
         }
         localStorage.setItem('user', JSON.stringify(data.data.login));
         setAccessToken(data.data.login.accessToken);
         await router.push('/');
       } else {
-        console.error('Error logging in:', error);
-        setError('Login failed');
+        console.error('Error logging in');
+        alert('Unexpected error occurred');
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      setError('Login failed');
+      alert('Unexpected error occurred: ' + error);
     }
   };
 
@@ -104,19 +104,21 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         if (data.errors && data.errors.length > 0) {
-          console.error('Error logging in:', error);
-          setError('Login failed');
+          console.error('Error logging in:', data.errors[0].message);
+          alert(data.errors[0].message);
+          return;
         }
         localStorage.setItem('user', JSON.stringify(data.data.login));
         setAccessToken(data.data.login.accessToken);
-        await router.push('/products');
+        await router.push('/');
       } else {
-        console.error('Error logging in:', error);
-        setError('Login failed');
+        console.error('Error logging in');
+        alert('Unexpected error occurred');
+        return;
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      setError('Login failed');
+      alert('Unexpected error occurred: ' + error);
     }
   };
 
@@ -196,6 +198,7 @@ const Login = () => {
           {t('login:newToMockazon')}
         </Divider>
         <Button
+          aria-label='Create Account Button'
           className={styles.createAccountButton}
           onClick={() => router.push('/signup')}
         >

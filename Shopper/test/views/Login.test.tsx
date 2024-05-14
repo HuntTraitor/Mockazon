@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import Login from '@/pages/login';
 import {
   LoggedInContext,
@@ -19,6 +19,7 @@ global.fetch = jest.fn().mockResolvedValue({
     .mockResolvedValue({ data: { login: { accessToken: 'mockToken' } } }),
 });
 
+const pushMock = jest.fn();
 jest.mock('next/router', () => ({
   useRouter: () => ({
     basePath: '',
@@ -28,7 +29,7 @@ jest.mock('next/router', () => ({
     locale: 'en',
     locales: ['en', 'es'],
     defaultLocale: 'en',
-    push: jest.fn(),
+    push: pushMock,
     replace: jest.fn(),
     reload: jest.fn(),
     back: jest.fn(),
@@ -77,26 +78,55 @@ describe('Login component', () => {
         <Login />
       </LoggedInContext.Provider>
     );
-    fireEvent.click(screen.getByText('Google Login Button'));
-    // expect(onSuccessSpy).toHaveBeenCalled();
+
+    fireEvent.change(screen.getByLabelText('login:email'), {
+      target: { value: 'mockEmail' },
+    });
+    fireEvent.change(screen.getByLabelText('login:password'), {
+      target: { value: 'mockPassword' },
+    });
+
+    fireEvent.click(screen.getByText('common:signInText'));
+    await waitFor(() => {
+      expect(loggedInContextProps.setAccessToken).toHaveBeenCalledWith(
+        'mockToken'
+      );
+    });
   });
 
-  it('Clicks signup successfully', async () => {
+  it('Handles unsuccessful login', async () => {
+    const mockError = 'Mock error message';
+    global.fetch = jest.fn().mockRejectedValue(new Error(mockError));
+
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
         <Login />
       </LoggedInContext.Provider>
     );
-    fireEvent.click(screen.getByLabelText('sub-title'));
-    // expect(onSuccessSpy).toHaveBeenCalled();
+
+    fireEvent.change(screen.getByLabelText('login:email'), {
+      target: { value: 'mockEmail' },
+    });
+    fireEvent.change(screen.getByLabelText('login:password'), {
+      target: { value: 'mockPassword' },
+    });
+
+    fireEvent.click(screen.getByText('common:signInText'));
+
+    await waitFor(() =>
+      expect(alertSpy).toHaveBeenCalledWith(
+        'Unexpected error occurred: Error: Mock error message'
+      )
+    );
   });
 
-  it('Handles unsuccessful login', async () => {
+  it('Handles unsuccessful login with errors', async () => {
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
     global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
-      json: jest
-        .fn()
-        .mockResolvedValue({ data: { login: { accessToken: 'mockToken' } } }),
+      ok: true,
+      json: jest.fn().mockResolvedValue({ errors: [{ message: 'mockError' }] }),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
@@ -104,10 +134,84 @@ describe('Login component', () => {
       </LoggedInContext.Provider>
     );
 
-    fireEvent.click(screen.getByText('Google Login Button'));
+    fireEvent.change(screen.getByLabelText('login:email'), {
+      target: { value: 'mockEmail' },
+    });
+    fireEvent.change(screen.getByLabelText('login:password'), {
+      target: { value: 'mockPassword' },
+    });
+
+    fireEvent.click(screen.getByText('common:signInText'));
+    await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('mockError'));
   });
 
-  it('Handles unsuccessful login with errors', async () => {
+  it('Handles unsuccessful login !response.ok', async () => {
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      json: jest.fn().mockResolvedValue({}),
+    });
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Login />
+      </LoggedInContext.Provider>
+    );
+
+    fireEvent.change(screen.getByLabelText('login:email'), {
+      target: { value: 'mockEmail' },
+    });
+    fireEvent.change(screen.getByLabelText('login:password'), {
+      target: { value: 'mockPassword' },
+    });
+
+    fireEvent.click(screen.getByText('common:signInText'));
+    await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('Unexpected error occurred'));
+  });
+
+  it('Handles successful google login', async () => {
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Login />
+      </LoggedInContext.Provider>
+    );
+    fireEvent.click(screen.getByText('Google Login Button'));
+    await waitFor(() => expect(localStorage.getItem('user')).toBe('{"accessToken":"mockToken"}'));
+    await waitFor(() => expect(loggedInContextProps.setAccessToken).toHaveBeenCalledWith('mockToken'));
+  });
+
+  it('Navigates to signup on click', async () => {
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Login />
+      </LoggedInContext.Provider>
+    );
+    fireEvent.click(screen.getByLabelText('Create Account Button'));
+    expect(pushMock).toHaveBeenCalledWith('/signup');
+  });
+
+  it('Handles unsuccessful google login', async () => {
+    const mockError = 'Mock error message';
+    global.fetch = jest.fn().mockRejectedValue(new Error(mockError));
+
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Login />
+      </LoggedInContext.Provider>
+    );
+
+    fireEvent.click(screen.getByText('Google Login Button'));
+
+    await waitFor(() =>
+      expect(alertSpy).toHaveBeenCalledWith(
+        'Unexpected error occurred: Error: Mock error message'
+      )
+    );
+  });
+
+  it('Handles unsuccessful google login with errors', async () => {
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: jest.fn().mockResolvedValue({ errors: [{ message: 'mockError' }] }),
@@ -119,14 +223,14 @@ describe('Login component', () => {
     );
 
     fireEvent.click(screen.getByText('Google Login Button'));
+    await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('mockError'));
   });
 
-  it('Handles unsuccessful login with error', async () => {
-    global.fetch = jest.fn().mockRejectedValueOnce({
+  it('Handles unsuccessful google login !response.ok', async () => {
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+    global.fetch = jest.fn().mockResolvedValue({
       ok: false,
-      json: jest
-        .fn()
-        .mockResolvedValue({ data: { login: { accessToken: 'mockToken' } } }),
+      json: jest.fn().mockResolvedValue({}),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
@@ -135,6 +239,7 @@ describe('Login component', () => {
     );
 
     fireEvent.click(screen.getByText('Google Login Button'));
+    await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('Unexpected error occurred'));
   });
 
   // pass code coverage for loggedinprovider
