@@ -59,7 +59,6 @@ const TopHeader = () => {
         <Autocomplete
           className={styles.searchInputContainer}
           options={[]}
-          getOptionLabel={option => option}
           renderInput={params => (
             <Input
               {...params}
