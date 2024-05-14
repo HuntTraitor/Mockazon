@@ -75,35 +75,22 @@ export class AdminService {
   }
 
   public async requests(): Promise<User[]> {
-    const requestQuery = {
-      text: "SELECT account_id, created_at FROM request ORDER BY created_at ASC",
-    };
-    const { rows: requestRows } = await pool.query(requestQuery);
-
-    const accountIds = requestRows.map((row) => row.account_id);
-
-    const accountQuery = {
-      text: "SELECT id, data->>'email' AS email, data->>'name' AS name, data->>'username' AS username, data->>'role' AS role, data->>'suspended' AS suspended FROM account WHERE id = ANY($1)",
-      values: [accountIds],
-    };
-    const { rows: accountRows } = await pool.query(accountQuery);
-
-    const userMap: Record<UUID, User> = {};
-    accountRows.forEach((row) => {
-      userMap[row.id] = {
-        id: row.id,
-        email: row.email,
-        name: row.name,
-        username: row.username,
-        role: row.role,
-        suspended: row.suspended,
-      };
-    });
-
-    const users: User[] = requestRows.map(
-      (requestRow) => userMap[requestRow.account_id],
-    );
-    return users;
+    const select = `SELECT * FROM request ORDER BY created_at DESC`
+    const query = {
+      text: select,
+      values: [],
+    }
+    const {rows} = await pool.query(query)
+    const users: User[] = rows.map((row) => ({
+      id: row.id,
+      email: row.data.email,
+      name: row.data.name,
+      username: row.data.username,
+      role: row.data.role,
+      suspended: row.data.suspended,
+    }));
+    console.log(users)
+    return users
   }
 
   public async suspend(id: UUID): Promise<void> {
@@ -126,7 +113,7 @@ export class AdminService {
 
   public async approve(id: string): Promise<void> {
     const query = {
-      text: "DELETE FROM request WHERE account_id = $1",
+      text: "DELETE FROM request WHERE id = $1",
       values: [id],
     };
     await pool.query(query);
@@ -142,7 +129,7 @@ export class AdminService {
 
   public async reject(id: string): Promise<void> {
     const query = {
-      text: "DELETE FROM request WHERE account_id = $1",
+      text: "DELETE FROM request WHERE id = $1",
       values: [id],
     };
     await pool.query(query);

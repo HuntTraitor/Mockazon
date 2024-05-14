@@ -13,7 +13,7 @@ export class AuthService {
   public async signup(credentials: Credentials): Promise<Message> {
     return new Promise((resolve, reject) => {
       fetch(
-        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/authenticate/vendor/signup`,
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/signup`,
         {
           method: 'POST',
           body: JSON.stringify(credentials),
