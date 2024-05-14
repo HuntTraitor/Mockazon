@@ -3,59 +3,59 @@ import { Field, ObjectType, ArgsType } from 'type-graphql';
 @ArgsType()
 export class Credentials {
   @Field()
-    sub!: string;
+  sub!: string;
   @Field()
-    email!: string;
+  email!: string;
   @Field()
-    name!: string;
+  name!: string;
 }
 
 @ArgsType()
 export class Sub {
   @Field()
-    sub!: string;
+  sub!: string;
 }
 
 @ObjectType()
 export class Authenticated {
   @Field()
-    name!: string;
+  name!: string;
   @Field()
-    accessToken!: string;
+  accessToken!: string;
 }
 
 @ObjectType()
 export class AuthenticatedWithId {
   @Field()
-    id!: string;
+  id!: string;
   @Field()
-    name!: string;
+  name!: string;
   @Field()
-    accessToken!: string;
+  accessToken!: string;
   @Field()
-    role!: string;
+  role!: string;
 }
 
 @ObjectType()
 export class Message {
   @Field()
-    content!: string;
+  content!: string;
 }
 
 @ObjectType()
 export class SignUpResponse {
   @Field()
-    id!: string;
+  id!: string;
   @Field()
-    name!: string;
+  name!: string;
   @Field()
-    email!: string;
+  email!: string;
   @Field()
-    role!: string;
+  role!: string;
   @Field()
-    sub!: string;
+  sub!: string;
   @Field()
-    accessToken!: string;
+  accessToken!: string;
 }
 
 export type SignUpResponseOrError = SignUpResponse | Message | null;

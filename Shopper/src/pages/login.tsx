@@ -199,7 +199,7 @@ const Login = () => {
           {t('login:newToMockazon')}
         </Divider>
         <Button
-          aria-label='Create Account Button'
+          aria-label="Create Account Button"
           className={styles.createAccountButton}
           onClick={() => router.push('/signup')}
         >

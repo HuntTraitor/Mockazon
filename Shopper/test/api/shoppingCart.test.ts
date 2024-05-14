@@ -20,7 +20,13 @@ const handlers = [
     async () => {
       if (rightCreds) {
         return HttpResponse.json(
-          { id: '123', product_id: '123', shopper_id: '123', vendor_id: '123', data: { quantity: '5' } },
+          {
+            id: '123',
+            product_id: '123',
+            shopper_id: '123',
+            vendor_id: '123',
+            data: { quantity: '5' },
+          },
           { status: 200 }
         );
       } else {
