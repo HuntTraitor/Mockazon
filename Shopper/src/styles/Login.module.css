@@ -1,0 +1,94 @@
+.loginContainer {
+  display: flex;
+  justify-content: top;
+  flex-direction: column;
+  align-items: center;
+  height: 90vh;
+  background-color: white;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #ffffff;
+  width: 350px;
+  height: 320px;
+}
+
+.logo {
+  margin-bottom: -1em;
+  margin-top: -1em;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.title {
+  font-size: 1.8rem;
+  margin-top: -0.5em;
+  text-align: left;
+}
+
+.emailInput,
+.passwordInput {
+  width: 100%;
+  margin-bottom: 0rem;
+}
+
+.passwordInput {
+  margin-bottom: 1rem;
+}
+
+.emailInput:focus,
+.passwordInput:focus {
+  background-color: #f7feff;
+}
+
+.divider {
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.googleLoginButton {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.signInButton {
+  text-transform: capitalize;
+  background-color: #ffDA00;
+  color: #0f1111;
+  width: 100%;
+}
+
+.signInButton:hover {
+  background-color: #f7ca00;
+}
+
+.agreementText {
+  font-size: 0.8rem;
+  margin-top: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.newToAmazonDivider {
+  margin: 1rem 0;
+  width: 20%;
+  font-size: 14px;
+  color: #83787a;
+}
+
+.createAccountButton {
+  text-transform: capitalize;
+  background-color: white;
+  color: #0f1111;
+  width: 20%;
+  box-shadow: 0 0 2px gray;
+}
