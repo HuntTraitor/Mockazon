@@ -27,7 +27,9 @@ export class VendorController extends Controller {
 
   @Post("signup")
   @SuccessResponse("201", "Account Created")
-  public async createVendor(@Body() credentials: CreateVendor): Promise<Vendor | undefined> {
+  public async createVendor(
+    @Body() credentials: CreateVendor,
+  ): Promise<Vendor | undefined> {
     const user = await new VendorService().createVendorAccount(credentials);
     if (!user) {
       this.setStatus(400);

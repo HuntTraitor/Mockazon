@@ -75,12 +75,12 @@ export class AdminService {
   }
 
   public async requests(): Promise<User[]> {
-    const select = `SELECT * FROM request ORDER BY created_at DESC`
+    const select = `SELECT * FROM request ORDER BY created_at DESC`;
     const query = {
       text: select,
       values: [],
-    }
-    const {rows} = await pool.query(query)
+    };
+    const { rows } = await pool.query(query);
     const users: User[] = rows.map((row) => ({
       id: row.id,
       email: row.data.email,
@@ -89,8 +89,8 @@ export class AdminService {
       role: row.data.role,
       suspended: row.data.suspended,
     }));
-    console.log(users)
-    return users
+    console.log(users);
+    return users;
   }
 
   public async suspend(id: UUID): Promise<void> {

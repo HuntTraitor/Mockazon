@@ -1,14 +1,5 @@
-import {
-  Post,
-  Route,
-  Response,
-  Body,
-  Controller,
-  Get,
-  Security,
-  Request,
-} from 'tsoa';
-import { VendorInfo } from '.';
+import { Post, Route, Response, Controller, Security, Request } from 'tsoa';
+
 import { SessionUser } from '../types';
 
 @Route('authtest')

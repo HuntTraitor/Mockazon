@@ -1,4 +1,3 @@
-import { Home } from './HomePage/Home';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { PageProvider } from '../contexts/PageContext';
 import { Signup } from './Signup/Index';
