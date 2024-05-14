@@ -1,10 +1,17 @@
-import { Container, Card, CardContent, Typography } from '@mui/material';
+import {
+  Container,
+  Card,
+  CardContent,
+  Typography,
+  Backdrop,
+} from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import TopNav from '@/views/TopNav';
+import { useAppContext } from '@/contexts/AppContext';
 
 interface Product {
   id: string;
@@ -25,6 +32,8 @@ const ProductPage = () => {
   const { t } = useTranslation(['products', 'viewProduct']);
   const [product, setProduct] = useState({} as Product);
   const [error, setError] = useState('');
+  const { backDropOpen, setBackDropOpen } = useAppContext();
+
   useEffect(() => {
     fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${id}`,
@@ -135,6 +144,11 @@ const ProductPage = () => {
             </CardContent>
           </Card>
         </Container>
+        <Backdrop
+          open={backDropOpen}
+          style={{ zIndex: 1, position: 'fixed' }}
+          onClick={() => setBackDropOpen(false)}
+        />
       </>
     );
   } else {

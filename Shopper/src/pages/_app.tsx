@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next';
 import { LoggedInUserProvider } from '@/contexts/LoggedInUserContext';
+import { AppContextProvider } from '@/contexts/AppContext';
 import Head from 'next/head';
 
 /**
@@ -12,14 +13,16 @@ import Head from 'next/head';
  */
 function App({ Component, pageProps }: AppProps) {
   return (
-    <LoggedInUserProvider>
-      <Head>
-        <title>Mockazon</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Component {...pageProps} />
-    </LoggedInUserProvider>
+    <AppContextProvider>
+      <LoggedInUserProvider>
+        <Head>
+          <title>Mockazon</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <Component {...pageProps} />
+      </LoggedInUserProvider>
+    </AppContextProvider>
   );
 }
 

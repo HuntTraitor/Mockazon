@@ -1,4 +1,11 @@
-import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Backdrop,
+} from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -7,6 +14,7 @@ import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import { useAppContext } from '@/contexts/AppContext';
 
 interface Product {
   id: number;
@@ -40,6 +48,7 @@ const Index = () => {
   const { t } = useTranslation('products');
   const [error, setError] = useState('');
   const { user, setUser, setAccessToken } = useContext(LoggedInContext);
+  const { backDropOpen, setBackDropOpen } = useAppContext();
   useLoadLocalStorageUser(setUser, setAccessToken);
 
   useEffect(() => {
@@ -200,6 +209,11 @@ const Index = () => {
           )}
         </Grid>
       </Container>
+      <Backdrop
+        open={backDropOpen}
+        style={{ zIndex: 1, position: 'fixed' }}
+        onClick={() => setBackDropOpen(false)}
+      />
     </>
   );
 };
