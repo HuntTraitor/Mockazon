@@ -6,9 +6,9 @@ COPY package.json /home/app/
 COPY package-lock.json /home/app/
 COPY .env /home/app/
 
-COPY AuthService/build/ /home/app/AuthService/build/
-COPY AuthService/package.json /home/app/AuthService/
-COPY AuthService/package-lock.json /home/app/AuthService
+COPY AccountService/build/ /home/app/AccountService/build/
+COPY AccountService/package.json /home/app/AccountService/
+COPY AccountService/package-lock.json /home/app/AccountService
 
 COPY ProductService/build/ /home/app/ProductService/build/
 COPY ProductService/package.json /home/app/ProductService/
