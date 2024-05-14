@@ -46,6 +46,11 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
         ref={anchorRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        sx={{
+          color: 'white',
+          textTransform: 'none',
+          textAlign: 'left',
+        }}
       >
         {buttonContent}
       </Button>
