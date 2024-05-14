@@ -31,14 +31,4 @@ export class ShoppingCartService {
     return result;
   }
 
-  public async check(
-    authHeader?: string,
-    scopes?: string[]
-  ): Promise<SessionUser> {
-    console.log(authHeader);
-    console.log(scopes);
-    return new Promise(resolve => {
-      resolve({ id: '123' });
-    });
-  }
 }

@@ -6,6 +6,7 @@ import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from './requestHandler';
+import { randomUUID } from 'node:crypto';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -65,7 +66,7 @@ test('Correct Credentials', async () => {
     .post('/api/graphql')
     .send({
       query: `{login(
-      sub: "123"
+      sub: "${randomUUID()}"
     ) {id, name, accessToken, role}}`,
     });
   expect(result.body.data.login.id).toBe('123');
@@ -81,7 +82,7 @@ test('Wrong Credentials', async () => {
     .post('/api/graphql')
     .send({
       query: `{login(
-      sub: "123"
+      sub: "${randomUUID()}"
     ) {id, name, accessToken, role}}`,
     });
   expect(result.body.errors[0].message).toBeDefined();
