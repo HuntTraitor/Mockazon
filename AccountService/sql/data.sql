@@ -13,7 +13,7 @@ VALUES
             'username',
             'addelros',
             'role',
-            'vendor',
+            'admin',
             'suspended',
             false
         )
@@ -33,7 +33,7 @@ VALUES
             'username',
             'evmetcal',
             'role',
-            'shopper',
+            'admin',
             'suspended',
             false
         )
@@ -53,7 +53,7 @@ VALUES
             'username',
             'tryles',
             'role',
-            'shopper',
+            'admin',
             'suspended',
             false
         )
@@ -152,7 +152,7 @@ VALUES
             'username',
             'huntertratar',
             'role',
-            'admin',
+            'vendor',
             'suspended',
             false
         )
@@ -171,7 +171,9 @@ VALUES
             'name',
             'Alfonso Del Rosario',
             'role',
-            'shopper'
+            'shopper',
+            'suspended',
+            false
         )
     );
 
