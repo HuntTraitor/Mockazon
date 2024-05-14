@@ -32,97 +32,100 @@ describe("API TEST (ACCOUNT)", () => {
   const userOne = "81c689b1-b7a7-4100-8b2d-309908b444f5";
   const userTwo = "81c689b1-b7a7-4100-8b2d-309908b444f6";
 
-  test("GET /api/v0/account", async () => {
+  test("GET /api/v0/admin/accounts", async () => {
     await supertest(server)
-      .get("/api/v0/account")
+      .get("/api/v0/admin/accounts")
       .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual([
           {
             id: userOne,
-            email: "test1@email.com",
-            name: "test account 1",
-            role: "test",
-            username: "testaccount1",
-            suspended: "false",
+            email: "shopper@email.com",
+            name: "shopper account 1",
+            role: "shopper",
+            username: "shopperaccount",
+            suspended: false,
           },
           {
             id: userTwo,
-            email: "test2@email.com",
-            name: "test account 2",
-            role: "test",
-            username: "testaccount2",
-            suspended: "false",
+            email: "vendor@email.com",
+            name: "vendor account 1",
+            role: "vendor",
+            username: "vendoraccount",
+            suspended: false,
           },
         ]);
       });
   });
 
-  test("PUT /api/v0/account/{id}/suspend", async () => {
+  test("PUT /api/v0/admin/account/{id}/suspend", async () => {
     // suspend userOne
     await supertest(server)
-      .put(`/api/v0/account/${userTwo}/suspend`)
+      .put(`/api/v0/admin/account/${userTwo}/suspend`)
       .then((res) => {
         expect(res.status).toBe(204);
       });
 
     // assert account is suspended
     await supertest(server)
-      .get("/api/v0/account")
+      .get("/api/v0/admin/accounts")
       .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual([
           {
             id: userOne,
-            email: "test1@email.com",
-            name: "test account 1",
-            role: "test",
-            username: "testaccount1",
-            suspended: "false",
+            email: "shopper@email.com",
+            name: "shopper account 1",
+            role: "shopper",
+            username: "shopperaccount",
+            suspended: false,
           },
           {
             id: userTwo,
-            email: "test2@email.com",
-            name: "test account 2",
-            role: "test",
-            username: "testaccount2",
-            suspended: "true",
+            email: "vendor@email.com",
+            name: "vendor account 1",
+            role: "vendor",
+            username: "vendoraccount",
+            suspended: true,
           },
         ]);
       });
   });
 
-  test("PUT /api/v0/account/{id}/resume", async () => {
+  test("PUT /api/v0/admin/account/{id}/resume", async () => {
     // resume userOne
     await supertest(server)
-      .put(`/api/v0/account/${userTwo}/resume`)
+      .put(`/api/v0/admin/account/${userTwo}/resume`)
       .then((res) => {
         expect(res.status).toBe(204);
       });
 
     // assert account is resumed
     await supertest(server)
-      .get("/api/v0/account")
+      .get("/api/v0/admin/accounts")
       .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual([
           {
             id: userOne,
-            email: "test1@email.com",
-            name: "test account 1",
-            role: "test",
-            username: "testaccount1",
-            suspended: "false",
+            email: "shopper@email.com",
+            name: "shopper account 1",
+            role: "shopper",
+            username: "shopperaccount",
+            suspended: false,
           },
           {
             id: userTwo,
-            email: "test2@email.com",
-            name: "test account 2",
-            role: "test",
-            username: "testaccount2",
-            suspended: "false",
+            email: "vendor@email.com",
+            name: "vendor account 1",
+            role: "vendor",
+            username: "vendoraccount",
+            suspended: false,
           },
         ]);
       });
   });
+
+  //Admin Approve
+  //Admin Reject
 });
