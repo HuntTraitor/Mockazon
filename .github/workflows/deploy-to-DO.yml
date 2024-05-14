@@ -72,5 +72,6 @@ jobs:
           docker-compose -f /root/docker-compose-production.yml pull
           docker-compose -f /root/docker-compose-production.yml down
           docker-compose -f /root/docker-compose-production.yml up -d
+          docker system prune -a -f --volumes
     - name: Wait for 20 seconds
       run: sleep 20
