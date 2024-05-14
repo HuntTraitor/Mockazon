@@ -40,12 +40,35 @@ jest.mock('next/router', () => ({
 
 const onSuccessSpy = jest.fn();
 
+const i18nMock = {
+  language: 'en',
+};
+
+jest.mock('next-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: i18nMock,
+  }),
+}));
+
 jest.mock('@react-oauth/google', () => ({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  GoogleLogin: ({ onSuccess }) => (
-    <button onClick={() => onSuccess(onSuccessSpy)}>Google Login Button</button>
-  ),
+  GoogleLogin: ({ onSuccess, locale }) => {
+    console.log(locale);
+    const [l, setLocale] = React.useState('en');
+    React.useEffect(() => {
+      setLocale(locale);
+    }, [locale]);
+    return (
+      <div>
+        <span>{l}</span>
+        <button onClick={() => onSuccess(onSuccessSpy)}>
+          Google Login Button
+        </button>
+      </div>
+    );
+  },
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   GoogleOAuthProvider: ({ children }) => (
@@ -72,6 +95,35 @@ const loggedInContextProps = {
 };
 
 describe('Login component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    loggedInContextProps.locale = 'en';
+  });
+
+  it('Can render the google login in spanish', async () => {
+    i18nMock.language = 'es';
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Login />
+      </LoggedInContext.Provider>
+    );
+    await waitFor(() => {
+      expect(screen.getByText('Google Login Button')).not.toBeNull();
+    });
+    i18nMock.language = 'en';
+  });
+
+  it('Can render the google login in english', async () => {
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Login />
+      </LoggedInContext.Provider>
+    );
+    await waitFor(() => {
+      expect(screen.getByText('Google Login Button')).not.toBeNull();
+    });
+  });
+
   it('Handles successful login', async () => {
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
@@ -165,18 +217,33 @@ describe('Login component', () => {
     });
 
     fireEvent.click(screen.getByText('common:signInText'));
-    await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('Unexpected error occurred'));
+    await waitFor(() =>
+      expect(alertSpy).toHaveBeenCalledWith('Unexpected error occurred')
+    );
   });
 
   it('Handles successful google login', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest
+        .fn()
+        .mockResolvedValue({ data: { login: { accessToken: 'mockToken' } } }),
+    });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>
         <Login />
       </LoggedInContext.Provider>
     );
+
     fireEvent.click(screen.getByText('Google Login Button'));
-    await waitFor(() => expect(localStorage.getItem('user')).toBe('{"accessToken":"mockToken"}'));
-    await waitFor(() => expect(loggedInContextProps.setAccessToken).toHaveBeenCalledWith('mockToken'));
+    await waitFor(() =>
+      expect(localStorage.getItem('user')).toBe('{"accessToken":"mockToken"}')
+    );
+    await waitFor(() =>
+      expect(loggedInContextProps.setAccessToken).toHaveBeenCalledWith(
+        'mockToken'
+      )
+    );
   });
 
   it('Navigates to signup on click', async () => {
@@ -239,7 +306,9 @@ describe('Login component', () => {
     );
 
     fireEvent.click(screen.getByText('Google Login Button'));
-    await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('Unexpected error occurred'));
+    await waitFor(() =>
+      expect(alertSpy).toHaveBeenCalledWith('Unexpected error occurred')
+    );
   });
 
   // pass code coverage for loggedinprovider

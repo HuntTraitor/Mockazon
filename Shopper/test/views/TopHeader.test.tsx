@@ -23,22 +23,22 @@ jest.mock('next/router', () => ({
   }),
 }));
 
-jest.mock('react-i18next', () => ({
+jest.mock('next-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       switch (key) {
-        case 'deliveryText':
-          return 'Delivery to';
-        case 'searchPlaceholder':
-          return 'Search Mockazon';
-        case 'returns':
-          return 'Returns';
-        case 'orders':
-          return '& Orders';
-        case 'cart':
-          return 'Cart';
-        default:
-          return key;
+      case 'deliveryText':
+        return 'Delivery to';
+      case 'searchPlaceholder':
+        return 'Search Mockazon';
+      case 'returns':
+        return 'Returns';
+      case 'orders':
+        return '& Orders';
+      case 'cart':
+        return 'Cart';
+      default:
+        return key;
       }
     },
     i18n: {

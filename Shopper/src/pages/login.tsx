@@ -182,6 +182,7 @@ const Login = () => {
               shape="rectangular"
               width="350px"
               context="signin"
+              aria-label="Google Login Button"
               locale={i18n.language == 'en' ? 'en-US' : 'es-US'}
               onSuccess={handleGoogleSuccess}
             />
