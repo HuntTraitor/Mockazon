@@ -105,11 +105,7 @@ const Index = () => {
       {error && <p>{error}</p>}
       <TopNav />
       <Container style={{ marginTop: '20px' }}>
-        <Typography
-          style={{ color: 'blue'}}
-          variant="h4"
-          align="center"
-        >
+        <Typography style={{ color: 'blue' }} variant="h4" align="center">
           Products
         </Typography>
         <Grid container spacing={3}>
