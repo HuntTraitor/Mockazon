@@ -1,6 +1,6 @@
 import { Controller, Route, Response, Post, Body, SuccessResponse } from "tsoa";
 
-import { CreateVendor } from "./index";
+import { CreateVendor, Vendor } from "./index";
 import { VendorService } from "./service";
 import { Authenticated, Credentials } from "../types";
 
@@ -27,7 +27,7 @@ export class VendorController extends Controller {
 
   @Post("signup")
   @SuccessResponse("201", "Account Created")
-  public async createVendor(@Body() credentials: CreateVendor) {
+  public async createVendor(@Body() credentials: CreateVendor): Promise<Vendor | undefined> {
     const user = await new VendorService().createVendorAccount(credentials);
     if (!user) {
       this.setStatus(400);
@@ -38,7 +38,6 @@ export class VendorController extends Controller {
       name: user.data.name,
       email: user.data.email,
       role: user.data.role,
-      sub: user.data.sub,
     };
   }
 }
