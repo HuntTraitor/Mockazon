@@ -33,7 +33,7 @@ export class KeyService {
     return rows;
   }
 
-  public async setActiveStatus(apiKey: UUID): Promise<Key|undefined> {
+  public async setActiveStatus(apiKey: UUID): Promise<Key | undefined> {
     let select = `UPDATE api_key SET active = CASE WHEN active IS TRUE THEN FALSE ELSE TRUE END WHERE key = $1`;
     select += ` RETURNING *`;
     const query = {
@@ -42,6 +42,6 @@ export class KeyService {
     };
     const { rows } = await pool.query(query);
     console.log(rows);
-    return (rows.length > 0) ? rows[0]: undefined;
+    return rows.length > 0 ? rows[0] : undefined;
   }
 }

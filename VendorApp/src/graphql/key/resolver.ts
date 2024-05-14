@@ -1,4 +1,4 @@
-import { Query, Resolver, Arg, Mutation} from 'type-graphql';
+import { Query, Resolver, Arg, Mutation } from 'type-graphql';
 import { Key } from './schema';
 import { KeyService } from './service';
 
@@ -11,9 +11,7 @@ export class KeyResolver {
   }
 
   @Mutation(() => Key)
-  async setActiveStatus(
-    @Arg('apiKey') apiKey: string,
-  ): Promise<Key> {
+  async setActiveStatus(@Arg('apiKey') apiKey: string): Promise<Key> {
     return new KeyService().setActiveStatus(apiKey);
   }
 }

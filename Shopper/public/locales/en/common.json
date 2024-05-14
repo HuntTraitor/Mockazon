@@ -1,4 +1,6 @@
 {
   "title": "Mockazon Shopper",
-  "change-locale": "Change locale to \"Spanish\""
+  "change-locale": "Change locale to \"Spanish\"",
+  "signInText": "sign in",
+  "or": "OR"
 }
