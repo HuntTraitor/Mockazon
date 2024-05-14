@@ -40,12 +40,12 @@ export class VendorService {
   }
 
   public async createVendorAccount(vendor: CreateVendor) {
-    const insert = `INSERT INTO vendor(data) VALUES (
+    const insert = `INSERT INTO request(data) VALUES (
       jsonb_build_object(
         'name', $1::text, 
         'email', $2::text, 
         'pwhash', crypt($3::text, '87'),
-        'role', 'pending_vendor'
+        'role', 'vendor'
       )) 
     RETURNING *`;
 
@@ -65,14 +65,5 @@ export class VendorService {
     } else {
       return undefined;
     }
-  }
-
-  public async request(id: string): Promise<void> {
-    const query = {
-      text: "INSERT INTO request (account_id) VALUES ($1)",
-      values: [id],
-    };
-    await pool.query(query);
-    return;
   }
 }

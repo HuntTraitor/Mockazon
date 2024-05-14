@@ -5,7 +5,6 @@ import {
   Post,
   Body,
   SuccessResponse,
-  Put,
 } from "tsoa";
 
 import { CreateVendor } from "./index";
@@ -33,7 +32,7 @@ export class VendorController extends Controller {
       );
   }
 
-  @Post("/signup")
+  @Post("signup")
   @SuccessResponse("201", "Account Created")
   public async createVendor(@Body() credentials: CreateVendor) {
     const user = await new VendorService().createVendorAccount(credentials);
@@ -48,11 +47,5 @@ export class VendorController extends Controller {
       role: user.data.role,
       sub: user.data.sub,
     };
-  }
-
-  // create new inbound request || takes: {account_id} to be requested
-  @Put("{id}/request")
-  public async request(id: string): Promise<void> {
-    return new VendorService().request(id);
   }
 }
