@@ -5,6 +5,7 @@ import Image from 'next/image';
 import styles from '@/styles/TopHeader.module.css';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import '/node_modules/flag-icons/css/flag-icons.min.css';
 import SignInDropdown from '@/views/SignInDropdown';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
@@ -33,19 +34,23 @@ const TopHeader = () => {
         aria-label="Address Container"
         className={`${styles.addressContainer} ${styles.hoverContainer}`}
       >
-        <Typography variant="caption" className={styles.deliveryText}>
-          {t('topHeader:deliveryText')}
-        </Typography>
-        <Typography
-          aria-label="Address"
-          variant="body2"
-          className={styles.addressText}
-          onClick={
-            () => console.log('Clicked Address') /* FIXME: Add Address Editor */
-          }
-        >
-          Santa Cruz 95060 {/* FIXME: Dynamic Address */}
-        </Typography>
+        <PlaceOutlinedIcon className={styles.addressIcon} />
+        <Box className={styles.addressTextContainer}>
+          <Typography variant="caption" className={styles.deliveryText}>
+            {t('topHeader:deliveryText')}
+          </Typography>
+          <Typography
+            aria-label="Address"
+            variant="body2"
+            className={styles.addressText}
+            onClick={
+              () =>
+                console.log('Clicked Address') /* FIXME: Add Address Editor */
+            }
+          >
+            Santa Cruz 95060 {/* FIXME: Dynamic Address */}
+          </Typography>
+        </Box>
       </Box>
       <Box className={styles.searchContainer}>
         <Button
