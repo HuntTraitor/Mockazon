@@ -79,7 +79,6 @@ const SignInDropdown = () => {
             <Paper elevation={5} className={styles.dropDownPaper}>
               {user.name ? (
                 <Box>
-                  <Typography>{user.name}</Typography>
                   <Button
                     className={styles.signInButton}
                     onClick={() => {
