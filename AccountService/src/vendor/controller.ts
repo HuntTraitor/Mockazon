@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Route,
-  Response,
-  Post,
-  Body,
-  SuccessResponse,
-} from "tsoa";
+import { Controller, Route, Response, Post, Body, SuccessResponse } from "tsoa";
 
 import { CreateVendor } from "./index";
 import { VendorService } from "./service";
