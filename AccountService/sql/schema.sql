@@ -27,5 +27,5 @@ CREATE TABLE vendor(
 CREATE TABLE request(
     id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data jsonb,
+    data jsonb
 );
