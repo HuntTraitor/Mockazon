@@ -206,7 +206,7 @@ describe("API TEST (ADMIN) - General", () => {
               username: "requestaccount1",
               suspended: false,
             }),
-          ])
+          ]),
         );
       });
   });
@@ -233,11 +233,10 @@ describe("API TEST (ADMIN) - General", () => {
               username: "requestaccount2",
               suspended: false,
             }),
-          ])
+          ]),
         );
       });
   });
-
 });
 
 describe("API TEST (ADMIN) - Error Handling", () => {
