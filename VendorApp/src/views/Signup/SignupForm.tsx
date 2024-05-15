@@ -1,8 +1,26 @@
 import { Box, Typography, Grid, TextField, Button, Link } from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import styles from '@/styles/Signup.module.css';
+import { VariantType, useSnackbar } from 'notistack';
 
 export function SignupForm() {
+  const { enqueueSnackbar } = useSnackbar();
+  const handleClickSuccess = () => {
+    enqueueSnackbar('Successfully requested account!', {
+      variant: 'success',
+      preventDuplicate: false,
+      anchorOrigin: {horizontal: 'center', vertical: 'top'}
+    });
+  };
+
+  const handleClickError = () => {
+    enqueueSnackbar('Oops! Something went wrong, please try again', {
+      variant: 'error',
+      persist: true,
+      anchorOrigin: {horizontal: 'center', vertical: 'top'}
+    });
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -26,13 +44,15 @@ export function SignupForm() {
       })
       .then(json => {
         if (json.errors) {
-          alert(`${json.errors[0].message}`);
+          console.log(`${json.errors[0].message}`)
+          handleClickError()
         } else {
-          alert('Request send successfully!');
+          handleClickSuccess()
         }
       })
       .catch(e => {
-        alert(e);
+        console.log(e)
+        handleClickError()
       });
   };
 
