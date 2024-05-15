@@ -47,7 +47,6 @@ export class VendorService {
           'email', $1::text,
           'pwhash', crypt($2::text, gen_salt('bf')),
           'name', $3::text,
-          'username', $4::text,
           'role', 'vendor',
           'suspended', false
         )
@@ -57,7 +56,7 @@ export class VendorService {
 
     const query = {
       text: insert,
-      values: [vendor.email, vendor.password, vendor.name, vendor.username],
+      values: [vendor.email, vendor.password, vendor.name],
     };
 
     let rows;

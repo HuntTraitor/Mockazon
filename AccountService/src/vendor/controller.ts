@@ -39,7 +39,6 @@ export class VendorController extends Controller {
     return {
       id: user.id,
       name: user.data.name,
-      username: user.data.username,
       email: user.data.email,
       role: user.data.role,
       suspended: user.data.suspended,
