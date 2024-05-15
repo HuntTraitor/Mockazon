@@ -18,14 +18,11 @@ export class VendorService {
     };
     const { rows } = await pool.query(query);
 
-    console.log(credentials);
-
     if (rows[0]) {
       const user = rows[0];
       const accessToken = jwt.sign(
         {
           id: user.id,
-          role: user.data.role,
         },
         `${process.env.MASTER_SECRET}`,
         {
