@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Popper, Paper, Button } from '@mui/material';
+import React, { useState, useRef } from 'react';
+import { Popper, Paper, Button, Box } from '@mui/material';
 import { useAppContext } from '@/contexts/AppContext';
 
 interface CustomPopperProps {
@@ -13,32 +13,26 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const popperRef = useRef<HTMLDivElement>(null);
+  const bufferZoneRef = useRef<HTMLDivElement>(null);
   const { setBackDropOpen } = useAppContext();
 
   const handleMouseEnter = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
     setOpen(true);
     setBackDropOpen(true);
   };
 
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
+  const handleMouseLeave = (event: React.MouseEvent) => {
+    const relatedTarget = event.relatedTarget as HTMLElement | null;
+    if (
+      bufferZoneRef.current &&
+      relatedTarget &&
+      !bufferZoneRef.current.contains(relatedTarget)
+    ) {
       setOpen(false);
       setBackDropOpen(false);
-    }, 200);
+    }
   };
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
 
   return (
     <div>
@@ -64,13 +58,17 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
           {
             name: 'offset',
             options: {
-              offset: [0, 5],
+              offset: [0, -4],
             },
           },
         ]}
         sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}
       >
-        <Paper>{children}</Paper>
+        <Box ref={bufferZoneRef} sx={{ pt: 1, pb: 1 }}>
+          <div ref={popperRef}>
+            <Paper>{children}</Paper>
+          </div>
+        </Box>
       </Popper>
     </div>
   );
