@@ -1,16 +1,28 @@
 import { Args, Query, Resolver } from 'type-graphql';
-import { Product, ProductId } from './schema';
+import { Product, ProductId, GetProductsArgs } from './schema';
 import { ProductService } from '@/graphql/product/service';
 
 @Resolver()
 export class ProductResolver {
+  private productService = new ProductService();
+
   @Query(() => Product)
-  async getProduct(@Args() productId: ProductId): Promise<Product> {
-    return new ProductService().getProduct(productId.productId);
+  async getProduct(@Args() { productId }: ProductId): Promise<Product> {
+    return this.productService.getProduct(productId);
   }
 
   @Query(() => [Product])
-  async getProducts(): Promise<Product[]> {
-    return new ProductService().getProducts();
+  async getProducts(@Args() args: GetProductsArgs): Promise<Product[]> {
+    const { vendorId, active, page, pageSize, search, orderBy, descending } =
+      args;
+    return this.productService.getProducts(
+      vendorId,
+      active,
+      page,
+      pageSize,
+      search,
+      orderBy,
+      descending
+    );
   }
 }

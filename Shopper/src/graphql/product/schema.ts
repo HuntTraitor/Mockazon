@@ -1,40 +1,58 @@
-import { ArgsType, Field, ObjectType } from 'type-graphql';
+import { ArgsType, Field, ObjectType, Int } from 'type-graphql';
 import { IsUUID } from 'class-validator';
 
-// @ArgsType()
-// export class Sub {
-//   @Field()
-//     sub!: string;
-// }
+@ArgsType()
+export class GetProductsArgs {
+  @Field({ nullable: true })
+  vendorId?: string;
+
+  @Field({ nullable: true })
+  active?: boolean;
+
+  @Field(() => Int, { nullable: true })
+  page?: number;
+
+  @Field(() => Int, { nullable: true })
+  pageSize?: number;
+
+  @Field({ nullable: true })
+  search?: string;
+
+  @Field({ nullable: true })
+  orderBy?: string;
+
+  @Field({ nullable: true })
+  descending?: boolean;
+}
 
 @ObjectType()
 export class ProductData {
   @Field()
-    brand?: string;
+  brand?: string;
   @Field()
-    name?: string;
+  name?: string;
   @Field()
-    rating?: string;
+  rating?: string;
   @Field()
-    price?: number;
+  price?: number;
   @Field()
-    deliveryDate?: string;
+  deliveryDate?: string;
   @Field()
-    image?: string;
+  image?: string;
 }
 
 @ArgsType()
 export class ProductId {
   @IsUUID()
   @Field()
-    productId!: string;
+  productId!: string;
 }
 
 @ObjectType()
 export class Product {
   @IsUUID()
   @Field()
-    id!: string;
+  id!: string;
   @Field(() => ProductData)
-    data!: ProductData;
+  data!: ProductData;
 }
