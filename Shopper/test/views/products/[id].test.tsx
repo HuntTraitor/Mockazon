@@ -1,12 +1,13 @@
 // test products component
 
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import ProductPage from '@/pages/products/[id]';
 import { getServerSideProps } from '@/pages/products/[id]';
 import http from 'http';
 import * as nextRouter from 'next/router';
+import { AppContext } from '@/contexts/AppContext';
 
 import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
@@ -109,6 +110,11 @@ jest.mock('next/router', () => ({
   }),
 }));
 
+const AppContextProps = {
+  backDropOpen: false,
+  setBackDropOpen: jest.fn(),
+};
+
 it('Renders successfully', async () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const useRouter = jest.spyOn(nextRouter, 'useRouter');
@@ -116,7 +122,11 @@ it('Renders successfully', async () => {
   (useRouter as jest.Mock).mockReturnValue({
     query: { id: '1' },
   });
-  render(<ProductPage />);
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <ProductPage />
+    </AppContext.Provider>
+  );
   await waitFor(() => expect(screen.getByText('test name', { exact: false })));
 });
 
@@ -134,5 +144,26 @@ it('should fetch server side props with translations without locale', async () =
 
 it('Renders with error', async () => {
   error = true;
-  render(<ProductPage />);
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <ProductPage />
+    </AppContext.Provider>
+  );
+});
+
+it('Click Backdrop', () => {
+  render(
+    <AppContext.Provider
+      value={{
+        ...AppContextProps,
+        backDropOpen: true,
+      }}
+    >
+      <ProductPage />
+    </AppContext.Provider>
+  );
+  const backdrop = document.querySelector('.MuiBackdrop-root');
+  if (backdrop) {
+    fireEvent.click(backdrop);
+  }
 });

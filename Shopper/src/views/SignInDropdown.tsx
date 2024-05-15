@@ -30,6 +30,7 @@ const SignInDropdown = () => {
             aria-label="AppBar Account Button"
             display="flex"
             alignItems="center"
+            className={styles.accountBox}
           >
             <Typography className={styles.buttonText}>
               <span className={styles.caption}>
