@@ -165,6 +165,8 @@ VALUES
             'email',
             'addelros@ucsc.edu',
             'name',
+            'username',
+            'alfonsodelr',
             'Alfonso Del Rosario',
             'role',
             'shopper',
