@@ -11,7 +11,6 @@ import { Credentials, Message } from './schema';
 
 export class AuthService {
   public async signup(credentials: Credentials): Promise<Message> {
-    console.log(credentials)
     return new Promise((resolve, reject) => {
       fetch(
         `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/signup`,

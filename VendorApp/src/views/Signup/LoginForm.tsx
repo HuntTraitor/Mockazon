@@ -3,7 +3,7 @@ import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import styles from '@/styles/Signup.module.css';
 import { VariantType, useSnackbar } from 'notistack';
 
-export function SignupForm({navigate}: any) {
+export function LoginForm({navigate}: any) {
 
   const { enqueueSnackbar } = useSnackbar();
   const handleClickSuccess = () => {
@@ -67,24 +67,10 @@ export function SignupForm({navigate}: any) {
       }}
     >
       <Typography component="h1" variant="h5">
-        Create account
+        Login
       </Typography>
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <label htmlFor="firstName" className={styles.formLabel}>
-              Your Name
-            </label>
-            <TextField
-              autoComplete="given-name"
-              name="firstName"
-              required
-              fullWidth
-              id="firstName"
-              autoFocus
-              aria-label="name-input"
-            />
-          </Grid>
           <Grid item xs={12}>
             <label htmlFor="email" className={styles.formLabel}>
               Email
@@ -108,29 +94,8 @@ export function SignupForm({navigate}: any) {
               name="password"
               type="password"
               id="password"
-              label="At least 6 characters"
               autoComplete="new-password"
               aria-label="password-input"
-            />
-            <div className={styles.passwordAlert}>
-              <PriorityHighIcon />
-              <Typography sx={{ fontStyle: 'italic' }}>
-                Passwords must be at least 6 characters.
-              </Typography>
-            </div>
-          </Grid>
-          <Grid item xs={12}>
-            <label htmlFor="firstName" className={styles.formLabel}>
-              Re-enter password
-            </label>
-            <TextField
-              required
-              fullWidth
-              name="repeatpassword"
-              type="password"
-              id="repeatpassword"
-              autoComplete="new-password"
-              aria-label="repeatpassword-input"
             />
           </Grid>
         </Grid>
@@ -142,12 +107,12 @@ export function SignupForm({navigate}: any) {
           aria-label="submit-request"
           className={styles.requestButton}
         >
-          Request
+          Sign in
         </Button>
         <Grid container justifyContent="flex-end">
           <Grid item>
-            <Link href="#" variant="body2" color="secondary" onClick={() => navigate(1)}>
-              Already have an account? Sign in
+            <Link href="#" variant="body2" color="secondary" onClick={() => navigate(0)}>
+              Request a vendor account
             </Link>
           </Grid>
         </Grid>
