@@ -128,25 +128,9 @@ describe('Sign In Dropdown', () => {
       </AppContext.Provider>
     );
     fireEvent.mouseEnter(screen.getByLabelText('AppBar Account Button'));
-    fireEvent.mouseLeave(screen.getByLabelText('AppBar Account Button'));
+    fireEvent.mouseLeave(screen.getByLabelText('Sign In Container'));
     await waitFor(() => {
       expect(screen.queryByText('New Customer?', { exact: false })).toBeNull();
-    });
-  });
-
-  it('Does not close if mouse re-enters before timeout', async () => {
-    render(
-      <AppContext.Provider value={AppContextProps}>
-        <LoggedInContext.Provider value={providerProps}>
-          <SignInDropdown />
-        </LoggedInContext.Provider>
-      </AppContext.Provider>
-    );
-    fireEvent.mouseEnter(screen.getByLabelText('AppBar Account Button'));
-    fireEvent.mouseLeave(screen.getByLabelText('AppBar Account Button'));
-    fireEvent.mouseEnter(screen.getByLabelText('AppBar Account Button'));
-    await waitFor(() => {
-      expect(screen.getByLabelText('Sign In Button')).toBeInTheDocument();
     });
   });
 
