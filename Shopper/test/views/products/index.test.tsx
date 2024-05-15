@@ -6,6 +6,7 @@ import { screen } from '@testing-library/dom';
 import Products from '@/pages/products';
 import { getServerSideProps } from '@/pages/products';
 import http from 'http';
+import { AppContext } from '@/contexts/AppContext';
 
 import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
@@ -112,6 +113,11 @@ jest.mock('next/router', () => ({
   }),
 }));
 
+const AppContextProps = {
+  backDropOpen: false,
+  setBackDropOpen: jest.fn(),
+};
+
 it('Renders successfully', async () => {
   localStorage.setItem(
     'user',
@@ -122,7 +128,11 @@ it('Renders successfully', async () => {
       role: 'Shopper',
     })
   );
-  render(<Products />);
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <Products />
+    </AppContext.Provider>
+  );
   // expect(screen.getByText('test name'));
   await waitFor(() => expect(screen.getByText('test name')));
 });
@@ -137,7 +147,11 @@ it('Adds to shopping cart', async () => {
       role: 'Shopper',
     })
   );
-  render(<Products />);
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <Products />
+    </AppContext.Provider>
+  );
   await waitFor(() => expect(screen.getByText('test name')));
   const button = screen.getByText('Add to Shopping Cart');
   fireEvent.click(button);
@@ -154,7 +168,11 @@ it("Doesn't add to shopping cart because error", async () => {
     })
   );
   errorInShoppingCart = true;
-  render(<Products />);
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <Products />
+    </AppContext.Provider>
+  );
   await waitFor(() => expect(screen.getByText('test name')));
   const button = screen.getByText('Add to Shopping Cart');
   fireEvent.click(button);
@@ -175,5 +193,26 @@ it('should fetch server side props with translations without locale', async () =
 
 it('Renders with error', async () => {
   error = true;
-  render(<Products />);
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <Products />
+    </AppContext.Provider>
+  );
+});
+
+it('Click Backdrop', () => {
+  render(
+    <AppContext.Provider
+      value={{
+        ...AppContextProps,
+        backDropOpen: true,
+      }}
+    >
+      <Products />
+    </AppContext.Provider>
+  );
+  const backdrop = document.querySelector('.MuiBackdrop-root');
+  if (backdrop) {
+    fireEvent.click(backdrop);
+  }
 });
