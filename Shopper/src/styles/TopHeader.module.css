@@ -60,6 +60,10 @@
   display: flex;
 }
 
+.searchInput:focus {
+  outline: none;
+}
+
 .searchInputRoot {
   padding-left: 4px;
   height: 40px;
@@ -70,6 +74,31 @@
   border-radius: 5px 0 0 5px;
   background-color: white;
   font-size: 14px;
+}
+
+.focusedOutline {
+  outline: 4px solid #ff9900;
+  outline-offset: -3px;
+  box-shadow:
+    0 0 0 1px #ffcc80,
+    0 0 0 3px #e68a00;
+  border-radius: 4px;
+}
+
+.suggestionsPaper {
+  margin-top: 4px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.suggestionOption {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestionOption:hover {
+  background-color: #f0f0f0;
 }
 
 .searchInput:focus {
