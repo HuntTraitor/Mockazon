@@ -1,9 +1,10 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { getServerSideProps } from '@/pages/cart';
 import http from 'http';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import { AppContext } from '@/contexts/AppContext';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
@@ -136,6 +137,11 @@ const newLoggedInContextProps = {
   setUser: jest.fn(),
 };
 
+const AppContextProps = {
+  backDropOpen: false,
+  setBackDropOpen: jest.fn(),
+};
+
 it('Renders successfully', async () => {
   localStorage.setItem(
     'user',
@@ -148,9 +154,11 @@ it('Renders successfully', async () => {
   );
 
   render(
-    <LoggedInContext.Provider value={newLoggedInContextProps}>
-      <ShoppingCart />
-    </LoggedInContext.Provider>
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
   );
   await waitFor(() => expect(screen.getByText('test name')));
 });
@@ -161,9 +169,11 @@ it('Render fails because localStorageUser not set', async () => {
   // @ts-expect-error
   newLoggedInContextProps2.user = {};
   render(
-    <LoggedInContext.Provider value={newLoggedInContextProps2}>
-      <ShoppingCart />
-    </LoggedInContext.Provider>
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps2}>
+        <ShoppingCart />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
   );
 });
 
@@ -182,17 +192,40 @@ it('should fetch server side props with translations without locale', async () =
 it('Renders with error in fetch shopping cart items', async () => {
   errorInShoppingCart = true;
   render(
-    <LoggedInContext.Provider value={newLoggedInContextProps}>
-      <ShoppingCart />
-    </LoggedInContext.Provider>
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
   );
 });
 
 it('Renders with error in fetch product', async () => {
   errorInFetchProduct = true;
   render(
-    <LoggedInContext.Provider value={newLoggedInContextProps}>
-      <ShoppingCart />
-    </LoggedInContext.Provider>
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
   );
+});
+
+it('Click Backdrop', () => {
+  render(
+    <AppContext.Provider
+      value={{
+        ...AppContextProps,
+        backDropOpen: true,
+      }}
+    >
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+  const backdrop = document.querySelector('.MuiBackdrop-root');
+  if (backdrop) {
+    fireEvent.click(backdrop);
+  }
 });
