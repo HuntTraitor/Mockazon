@@ -100,7 +100,7 @@ VALUES
     );
 
 INSERT INTO
-    account (data)
+    administrator (data)
 VALUES
     (
         jsonb_build_object(
