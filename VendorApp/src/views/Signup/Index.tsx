@@ -5,12 +5,15 @@ import Container from '@mui/material/Container';
 import { Title } from './Title';
 import { SignupForm } from './SignupForm';
 import { Copyright } from './Copyright';
-import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
-import { Button } from '@mui/material';
+import { SnackbarProvider } from 'notistack';
 import { LoginForm } from './LoginForm';
 
+export interface LoginFormProps {
+  navigate: (newValue: number) => void;
+}
+
 export function Signup() {
-  const [navigate, setNavigate] = React.useState(0)
+  const [navigate, setNavigate] = React.useState(0);
   return (
     <Container component="main" maxWidth="xs">
       <SnackbarProvider maxSnack={1}>
@@ -24,8 +27,8 @@ export function Signup() {
           }}
         >
           <Title />
-          {navigate === 0 && <SignupForm navigate={setNavigate}/>}
-          {navigate === 1 && <LoginForm navigate={setNavigate}/>}
+          {navigate === 0 && <SignupForm navigate={setNavigate} />}
+          {navigate === 1 && <LoginForm navigate={setNavigate} />}
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </SnackbarProvider>

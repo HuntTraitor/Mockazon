@@ -6,7 +6,7 @@ import * as jwt from "jsonwebtoken";
 
 export class AdminService {
   public async login(
-    credentials: Credentials
+    credentials: Credentials,
   ): Promise<Authenticated | undefined> {
     const select =
       `SELECT * FROM administrator` +
@@ -32,7 +32,7 @@ export class AdminService {
         {
           expiresIn: "30m",
           algorithm: "HS256",
-        }
+        },
       );
       return { id: user.id, name: user.data.name, accessToken: accessToken };
     } else {

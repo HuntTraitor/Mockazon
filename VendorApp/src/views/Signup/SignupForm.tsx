@@ -1,16 +1,16 @@
 import { Box, Typography, Grid, TextField, Button, Link } from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import styles from '@/styles/Signup.module.css';
-import { VariantType, useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
+import { LoginFormProps } from './Index';
 
-export function SignupForm({navigate}: any) {
-
+export function SignupForm({ navigate }: LoginFormProps) {
   const { enqueueSnackbar } = useSnackbar();
   const handleClickSuccess = () => {
     enqueueSnackbar('Successfully requested account!', {
       variant: 'success',
       preventDuplicate: false,
-      anchorOrigin: {horizontal: 'center', vertical: 'top'}
+      anchorOrigin: { horizontal: 'center', vertical: 'top' },
     });
   };
 
@@ -18,7 +18,7 @@ export function SignupForm({navigate}: any) {
     enqueueSnackbar('Oops! Something went wrong, please try again', {
       variant: 'error',
       persist: true,
-      anchorOrigin: {horizontal: 'center', vertical: 'top'}
+      anchorOrigin: { horizontal: 'center', vertical: 'top' },
     });
   };
 
@@ -45,15 +45,15 @@ export function SignupForm({navigate}: any) {
       })
       .then(json => {
         if (json.errors) {
-          console.log(`${json.errors[0].message}`)
-          handleClickError()
+          console.log(`${json.errors[0].message}`);
+          handleClickError();
         } else {
-          handleClickSuccess()
+          handleClickSuccess();
         }
       })
       .catch(e => {
-        console.log(e)
-        handleClickError()
+        console.log(e);
+        handleClickError();
       });
   };
 
@@ -146,7 +146,12 @@ export function SignupForm({navigate}: any) {
         </Button>
         <Grid container justifyContent="flex-end">
           <Grid item>
-            <Link href="#" variant="body2" color="secondary" onClick={() => navigate(1)}>
+            <Link
+              href="#"
+              variant="body2"
+              color="secondary"
+              onClick={() => navigate(1)}
+            >
               Already have an account? Sign in
             </Link>
           </Grid>
