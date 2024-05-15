@@ -134,36 +134,44 @@ export class AdminService {
       text: "UPDATE shopper SET data = jsonb_set(data, '{suspended}', to_jsonb(true), false) WHERE id = $1",
       values: [id],
     };
-
     const vendorQuery = {
       text: "UPDATE vendor SET data = jsonb_set(data, '{suspended}', to_jsonb(true), false) WHERE id = $1",
       values: [id],
     };
-
+  
     try {
-      await pool.query(shopperQuery);
-      await pool.query(vendorQuery);
+      const shopperResult = await pool.query(shopperQuery);
+      const vendorResult = await pool.query(vendorQuery);
+  
+      if (shopperResult.rowCount === 0 && vendorResult.rowCount === 0) {
+        throw new Error('No matching user found');
+      }
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
-
+  
   public async resume(id: UUID): Promise<void> {
     const shopperQuery = {
       text: "UPDATE shopper SET data = jsonb_set(data, '{suspended}', to_jsonb(false), false) WHERE id = $1",
       values: [id],
     };
-
     const vendorQuery = {
       text: "UPDATE vendor SET data = jsonb_set(data, '{suspended}', to_jsonb(false), false) WHERE id = $1",
       values: [id],
     };
-
+  
     try {
-      await pool.query(shopperQuery);
-      await pool.query(vendorQuery);
+      const shopperResult = await pool.query(shopperQuery);
+      const vendorResult = await pool.query(vendorQuery);
+  
+      if (shopperResult.rowCount === 0 && vendorResult.rowCount === 0) {
+        throw new Error('No matching user found');
+      }
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 
