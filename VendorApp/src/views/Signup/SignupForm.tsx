@@ -139,6 +139,7 @@ export function SignupForm() {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
           aria-label="submit-request"
+          className={styles.requestButton}
         >
           Request
         </Button>
