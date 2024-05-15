@@ -22,16 +22,9 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
     setBackDropOpen(true);
   };
 
-  const handleMouseLeave = (event: React.MouseEvent) => {
-    const relatedTarget = event.relatedTarget as HTMLElement | null;
-    if (
-      bufferZoneRef.current &&
-      relatedTarget &&
-      !bufferZoneRef.current.contains(relatedTarget)
-    ) {
-      setOpen(false);
-      setBackDropOpen(false);
-    }
+  const handleMouseLeave = () => {
+    setOpen(false);
+    setBackDropOpen(false);
   };
 
   return (
