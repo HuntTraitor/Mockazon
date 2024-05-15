@@ -24,7 +24,7 @@ export const AppContextProvider: React.FC<PropsWithChildren<object>> = ({
 
   useEffect(() => {
     const handleRouteChange = () => {
-      setBackDropOpen(false); // Change the state on route change
+      setBackDropOpen(false);
     };
 
     router.events.on('routeChangeStart', handleRouteChange);
