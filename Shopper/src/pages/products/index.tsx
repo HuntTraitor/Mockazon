@@ -54,8 +54,8 @@ const Index = () => {
 
   useEffect(() => {
     const query = {
-      query: `query GetProducts($search: String!) {
-        getProducts(search: $search) {
+      query: `query GetProducts {
+        getProducts {
           id
           data {
             brand
@@ -67,7 +67,6 @@ const Index = () => {
           }
         }
       }`,
-      variables: { search: query },
     };
 
     fetch('/api/graphql', {
