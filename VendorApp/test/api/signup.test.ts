@@ -13,7 +13,7 @@ let server: http.Server<
 let error = false;
 const handlers = [
   rest.post(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate/vendor/signup`,
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/signup`,
     async () => {
       if (error) {
         return new HttpResponse(null, { status: 401 });
