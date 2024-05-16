@@ -4,6 +4,7 @@ import CustomPopper from '@/components/CustomPopper';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styles from '@/styles/SignInDropdown.module.css';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import { useAppContext } from '@/contexts/AppContext';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,12 +12,14 @@ import { useRouter } from 'next/router';
 const SignInDropdown = () => {
   const { t } = useTranslation('signInDropdown');
   const { user, setUser, setAccessToken } = useContext(LoggedInContext);
+  const { setBackDropOpen } = useAppContext();
   const router = useRouter();
 
   const handleSignOut = () => {
     localStorage.removeItem('user');
     setUser({ accessToken: '', id: '', name: '', role: '' });
     setAccessToken('');
+    setBackDropOpen(false);
   };
 
   return (
@@ -58,7 +61,10 @@ const SignInDropdown = () => {
               <Button
                 className={styles.signInButton}
                 aria-label="Sign In Button"
-                onClick={() => router.push('/login')}
+                onClick={() => {
+                  router.push('/login');
+                  setBackDropOpen(false);
+                }}
               >
                 {t('signInText')}
               </Button>
