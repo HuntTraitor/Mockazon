@@ -60,7 +60,7 @@ export class AuthService {
         })
         .catch((err) => {
           console.log(err)
-          reject(new Error("Unauthorised"))
+          reject(new GraphQLError("Unauthorised"))
         });
     });
   }

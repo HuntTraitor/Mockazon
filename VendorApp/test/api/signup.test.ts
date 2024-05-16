@@ -15,6 +15,7 @@ const handlers = [
   rest.post(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/signup`,
     async () => {
+      console.log("hit here?")
       if (error) {
         return new HttpResponse(null, { status: 401 });
       } else {
