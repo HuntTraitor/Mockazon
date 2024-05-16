@@ -4,8 +4,23 @@ import * as jwt from "jsonwebtoken";
 import { CreateVendor } from "./index";
 
 export class VendorService {
+  public async exists(email: string): Promise<boolean> {
+    const select = `SELECT * FROM request WHERE data->>'email' = $1`;
+    const query = {
+      text: select,
+      values: [email],
+    };
+    const { rows } = await pool.query(query);
+
+    console.log(`Checking if email exists: ${rows.length > 0}`);
+    console.log(`Email: ${email}`);
+    console.log(`Rows: ${rows}`);
+
+    return rows.length > 0;
+  }
+
   public async login(
-    credentials: Credentials,
+    credentials: Credentials
   ): Promise<Authenticated | undefined> {
     const select =
       `SELECT * FROM vendor` +
@@ -28,7 +43,7 @@ export class VendorService {
         {
           expiresIn: "30m",
           algorithm: "HS256",
-        },
+        }
       );
       return { id: user.id, name: user.data.name, accessToken: accessToken };
     } else {
@@ -56,19 +71,9 @@ export class VendorService {
       values: [vendor.email, vendor.password, vendor.name],
     };
 
-    let rows;
-    try {
-      const result = await pool.query(query);
-      rows = result.rows;
-    } catch (e) {
-      console.error("Error creating vendor account:", e);
-      throw e;
-    }
+    const result = await pool.query(query);
+    const rows = result.rows;
 
-    if (rows && rows[0]) {
-      return rows[0];
-    } else {
-      throw new Error("Failed to create vendor account");
-    }
+    return rows[0];
   }
 }

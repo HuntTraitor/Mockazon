@@ -30,12 +30,14 @@ export class VendorController extends Controller {
   public async createVendor(
     @Body() credentials: CreateVendor,
   ): Promise<Vendor | undefined> {
-    const user = await new VendorService().createVendorAccount(credentials);
-    if (!user) {
-      console.log("Failed to create user");
+    console.log('Email: ', credentials.email);
+    if(await new VendorService().exists(credentials.email)) {
+      console.log('Email exists');
       this.setStatus(400);
       return;
     }
+
+    const user = await new VendorService().createVendorAccount(credentials);
     return {
       id: user.id,
       name: user.data.name,
