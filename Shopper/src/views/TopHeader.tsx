@@ -36,6 +36,7 @@ const CustomTextField = styled(TextField)(() => ({
     flexGrow: 1,
     border: 'none',
     display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
     borderRadius: '5px 0 0 5px',
     backgroundColor: 'white',
@@ -137,34 +138,38 @@ const TopHeader = () => {
 
   return (
     <Box className={styles.container}>
-      <Box className={`${styles.logo} ${styles.hoverContainer}`}>
-        <Link href="/">
-          <Image
-            aria-label="bar logo"
-            width="60"
-            height="40"
-            src="/mini_mockazon_logo_white.png"
-            alt="Logo"
-          />
-        </Link>
-      </Box>
-      <Box
-        aria-label="Address Container"
-        className={`${styles.addressContainer} ${styles.hoverContainer}`}
-      >
-        <PlaceOutlinedIcon className={styles.addressIcon} />
-        <Box className={styles.addressTextContainer}>
-          <Typography variant="caption" className={styles.deliveryText}>
-            {t('topHeader:deliveryText')}
-          </Typography>
-          <Typography
-            aria-label="Address"
-            variant="body2"
-            className={styles.addressText}
-            onClick={() => console.log('Clicked Address')}
-          >
-            Santa Cruz 95060
-          </Typography>
+      <Box className={styles.topHeaderLeft}>
+        <Box className={`${styles.logo} ${styles.hoverContainer}`}>
+          <Link href="/">
+            <Image
+              aria-label="bar logo"
+              width="60"
+              height="40"
+              src="/mini_mockazon_logo_white.png"
+              alt="Logo"
+            />
+            {/* Replace with a new logo */}
+          </Link>
+        </Box>
+        <Box
+          aria-label="Address Container"
+          className={`${styles.addressContainer} ${styles.hoverContainer}`}
+        >
+          <PlaceOutlinedIcon className={styles.addressIcon} />
+          <Box className={styles.addressTextContainer}>
+            <Typography variant="caption" className={styles.deliveryText}>
+              {t('topHeader:deliveryText')}
+            </Typography>
+            <Typography
+              aria-label="Address"
+              variant="body2"
+              className={styles.addressText}
+              onClick={() => console.log('Clicked Address')}
+            >
+              Santa Cruz 95060
+              {/* Get location from saved user delivery address information */}
+            </Typography>
+          </Box>
         </Box>
       </Box>
       <Box
@@ -182,20 +187,21 @@ const TopHeader = () => {
         </Button>
         <Autocomplete
           className={styles.searchInputContainer}
-          options={suggestions}
+          forcePopupIcon={false}
+          options={[search, ...suggestions]}
           getOptionLabel={option => option}
+          noOptionsText={''}
           loading={loading}
           renderInput={params => (
             <CustomTextField
               {...params}
-              placeholder={t('searchPlaceholder')}
-              variant="outlined"
+              placeholder={t('searchPlaceholder') ?? 'Search'}
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (
                   <>
                     {loading ? (
-                      <CircularProgress color="inherit" size={20} />
+                      <CircularProgress color="inherit" size={15} />
                     ) : null}
                     {params.InputProps.endAdornment}
                   </>
@@ -213,6 +219,9 @@ const TopHeader = () => {
             option: styles.suggestionOption,
           }}
         />
+        {/* 
+        FIXME fix vertical positioning of the placeholder text 
+        */}
         <Button
           aria-label="Search Button"
           variant="contained"
@@ -222,31 +231,33 @@ const TopHeader = () => {
           <SearchIcon />
         </Button>
       </Box>
-      <LanguageSwitcher />
-      <SignInDropdown />
-      <Box
-        aria-label="Orders Button"
-        className={`${styles.ordersContainer} ${styles.hoverContainer}`}
-        onClick={() => {
-          router.push('/orders');
-        }}
-      >
-        <Typography>
-          <span className={styles.caption}>{t('topHeader:returns')}</span>
-          <span className={styles.boldBody2}>{t('topHeader:orders')}</span>
-        </Typography>
-      </Box>
-      <Box
-        aria-label="Cart Button"
-        className={`${styles.cartContainer} ${styles.hoverContainer}`}
-        onClick={() => {
-          router.push('/cart');
-        }}
-      >
-        <ShoppingCartOutlinedIcon />
-        <Typography className={styles.cartText} variant="body2">
-          {t('cart')}
-        </Typography>
+      <Box className={styles.topHeaderRight}>
+        <LanguageSwitcher />
+        <SignInDropdown />
+        <Box
+          aria-label="Orders Button"
+          className={`${styles.ordersContainer} ${styles.hoverContainer}`}
+          onClick={() => {
+            router.push('/orders');
+          }}
+        >
+          <Typography>
+            <span className={styles.caption}>{t('topHeader:returns')}</span>
+            <span className={styles.boldBody2}>{t('topHeader:orders')}</span>
+          </Typography>
+        </Box>
+        <Box
+          aria-label="Cart Button"
+          className={`${styles.cartContainer} ${styles.hoverContainer}`}
+          onClick={() => {
+            router.push('/cart');
+          }}
+        >
+          <ShoppingCartOutlinedIcon />
+          <Typography className={styles.cartText} variant="body2">
+            {t('cart')}
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );

@@ -10,6 +10,7 @@ import styles from '@/styles/SubHeader.module.css';
 import Menu from '@mui/icons-material/Menu';
 import '/node_modules/flag-icons/css/flag-icons.min.css';
 // import { useRouter } from 'next/router';
+import { useAppContext } from '@/contexts/AppContext';
 
 const SubHeader = () => {
   // const [routes, setRoutes] = useState([
@@ -17,7 +18,7 @@ const SubHeader = () => {
   //   { label: 'Prime Video', component: '/prime-video' },
   //   { label: 'Prime', component: '/prime' },
   // ]);
-
+  const { setMockazonMenuDrawerOpen } = useAppContext();
   const { t } = useTranslation('subHeader');
   // const router = useRouter();
 
@@ -26,6 +27,9 @@ const SubHeader = () => {
       <Box
         aria-label="Toggle All Drawer"
         className={`${styles.subContainer} ${styles.hoverContainer}`}
+        onClick={() => {
+          setMockazonMenuDrawerOpen(true);
+        }}
       >
         <Menu />
         <Typography className={styles.text} variant="body2">
