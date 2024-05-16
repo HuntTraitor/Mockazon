@@ -30,9 +30,9 @@ export class VendorController extends Controller {
   public async createVendor(
     @Body() credentials: CreateVendor,
   ): Promise<Vendor | undefined> {
-    console.log('Email: ', credentials.email);
-    if(await new VendorService().exists(credentials.email)) {
-      console.log('Email exists');
+    console.log("Email: ", credentials.email);
+    if (await new VendorService().exists(credentials.email)) {
+      console.log("Email exists");
       this.setStatus(400);
       return;
     }

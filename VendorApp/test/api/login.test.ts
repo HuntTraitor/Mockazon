@@ -45,36 +45,40 @@ afterAll(done => {
   server.close(done);
 });
 
-test('Successful vendor login', async() => {
+test('Successful vendor login', async () => {
   await supertest(server)
     .post('/api/graphql')
-    .send({query: `{login(
+    .send({
+      query: `{login(
       email: "test@gmail.com"
       password: "somepassword"
-    ) {accessToken}}`})
+    ) {accessToken}}`,
+    })
     .expect('Content-Type', /json/)
     .then(res => {
-      console.log(res.body)
-      expect(res).toBeDefined()
-      expect(res.body).toBeDefined()
-      expect(res.body.data).toBeDefined()
-      expect(res.body.data.login).toBeDefined()
-      expect(res.body.data.login.accessToken).toBe('Some access token')
-    })
-})
+      console.log(res.body);
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.data).toBeDefined();
+      expect(res.body.data.login).toBeDefined();
+      expect(res.body.data.login.accessToken).toBe('Some access token');
+    });
+});
 
-test('Errors on wrong credentials login', async() => {
+test('Errors on wrong credentials login', async () => {
   error = true;
   await supertest(server)
     .post('/api/graphql')
-    .send({query: `{login(
+    .send({
+      query: `{login(
       email: "test@gmail.com"
       password: "somepassword"
-    ) {accessToken}}`})
+    ) {accessToken}}`,
+    })
     .expect('Content-Type', /json/)
     .then(res => {
-      expect(res).toBeDefined()
-      expect(res.body.errors.length).toEqual(1)
-      expect(res.body.errors[0].message).toBe("Unauthorised")
-  })
-})
+      expect(res).toBeDefined();
+      expect(res.body.errors.length).toEqual(1);
+      expect(res.body.errors[0].message).toBe('Unauthorised');
+    });
+});

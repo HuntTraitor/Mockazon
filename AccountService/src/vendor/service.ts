@@ -20,7 +20,7 @@ export class VendorService {
   }
 
   public async login(
-    credentials: Credentials
+    credentials: Credentials,
   ): Promise<Authenticated | undefined> {
     const select =
       `SELECT * FROM vendor` +
@@ -43,7 +43,7 @@ export class VendorService {
         {
           expiresIn: "30m",
           algorithm: "HS256",
-        }
+        },
       );
       return { id: user.id, name: user.data.name, accessToken: accessToken };
     } else {

@@ -40,7 +40,7 @@ export class AuthService {
     });
   }
 
-  public async login(credentials: Credentials): Promise<Authenticated>  {
+  public async login(credentials: Credentials): Promise<Authenticated> {
     return new Promise((resolve, reject) => {
       fetch('http://localhost:3014/api/v0/vendor/login', {
         method: 'POST',
@@ -49,18 +49,18 @@ export class AuthService {
           'Content-Type': 'application/json',
         },
       })
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
-            throw res
+            throw res;
           }
-          return res.json()
+          return res.json();
         })
-        .then((authenticated) => {
-          resolve(authenticated)
+        .then(authenticated => {
+          resolve(authenticated);
         })
-        .catch((err) => {
-          console.log(err)
-          reject(new GraphQLError("Unauthorised"))
+        .catch(err => {
+          console.log(err);
+          reject(new GraphQLError('Unauthorised'));
         });
     });
   }

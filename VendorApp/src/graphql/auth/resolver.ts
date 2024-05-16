@@ -11,9 +11,7 @@ export class AuthResolver {
   }
 
   @Query(() => Authenticated)
-  async login(
-    @Args() credentials: Credentials,
-  ): Promise<Authenticated> {
-    return new AuthService().login(credentials)
+  async login(@Args() credentials: Credentials): Promise<Authenticated> {
+    return new AuthService().login(credentials);
   }
 }

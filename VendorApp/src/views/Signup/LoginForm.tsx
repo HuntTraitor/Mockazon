@@ -1,6 +1,5 @@
 import { Box, Typography, Grid, TextField, Button, Link } from '@mui/material';
 import styles from '@/styles/Signup.module.css';
-import { useSnackbar } from 'notistack';
 import { LoginFormProps } from './Index';
 
 export function LoginForm({ navigate }: LoginFormProps) {
