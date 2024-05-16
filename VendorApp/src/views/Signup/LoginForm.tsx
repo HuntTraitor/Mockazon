@@ -4,56 +4,56 @@ import { useSnackbar } from 'notistack';
 import { LoginFormProps } from './Index';
 
 export function LoginForm({ navigate }: LoginFormProps) {
-  const { enqueueSnackbar } = useSnackbar();
-  const handleClickSuccess = () => {
-    enqueueSnackbar('Successfully requested account!', {
-      variant: 'success',
-      preventDuplicate: false,
-      anchorOrigin: { horizontal: 'center', vertical: 'top' },
-    });
-  };
+  // const { enqueueSnackbar } = useSnackbar();
+  // const handleClickSuccess = () => {
+  //   enqueueSnackbar('Successfully requested account!', {
+  //     variant: 'success',
+  //     preventDuplicate: false,
+  //     anchorOrigin: { horizontal: 'center', vertical: 'top' },
+  //   });
+  // };
 
-  const handleClickError = () => {
-    enqueueSnackbar('Oops! Something went wrong, please try again', {
-      variant: 'error',
-      persist: true,
-      anchorOrigin: { horizontal: 'center', vertical: 'top' },
-    });
-  };
+  // const handleClickError = () => {
+  //   enqueueSnackbar('Oops! Something went wrong, please try again', {
+  //     variant: 'error',
+  //     persist: true,
+  //     anchorOrigin: { horizontal: 'center', vertical: 'top' },
+  //   });
+  // };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const query = {
-      query: `query signup{signup(
-      name: "${data.get('firstName')}"
-      email: "${data.get('email')}"
-      password: "${data.get('password')}"
-    ) {content}}`,
-    };
+    // const data = new FormData(event.currentTarget);
+    // const query = {
+    //   query: `query signup{signup(
+    //   name: "${data.get('firstName')}"
+    //   email: "${data.get('email')}"
+    //   password: "${data.get('password')}"
+    // ) {content}}`,
+    // };
 
-    fetch('/api/graphql', {
-      method: 'POST',
-      body: JSON.stringify(query),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(res => {
-        return res.json();
-      })
-      .then(json => {
-        if (json.errors) {
-          console.log(`${json.errors[0].message}`);
-          handleClickError();
-        } else {
-          handleClickSuccess();
-        }
-      })
-      .catch(e => {
-        console.log(e);
-        handleClickError();
-      });
+    // fetch('/api/graphql', {
+    //   method: 'POST',
+    //   body: JSON.stringify(query),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(res => {
+    //     return res.json();
+    //   })
+    //   .then(json => {
+    //     if (json.errors) {
+    //       console.log(`${json.errors[0].message}`);
+    //       handleClickError();
+    //     } else {
+    //       handleClickSuccess();
+    //     }
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //     handleClickError();
+    //   });
   };
 
   return (
