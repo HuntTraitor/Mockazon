@@ -63,8 +63,10 @@ const fillOutForm = async () => {
   }
 };
 
+const setNavigate = () => {}
+
 it('Renders SignupForm successfully', async () => {
-  render(<SignupForm />);
+  render(<SignupForm navigate={setNavigate}/>);
   expect(screen.getByText('Create account', { exact: false })).toBeDefined();
   expect(screen.getByText('Your Name', { exact: false })).toBeDefined();
   expect(screen.getByText('Email', { exact: false })).toBeDefined();
@@ -72,21 +74,21 @@ it('Renders SignupForm successfully', async () => {
   expect(screen.getByText('Re-enter password', { exact: false })).toBeDefined();
 });
 
-it('Fills out form and clicks on request', async () => {
-  render(<SignupForm />);
+it('Fills out signin form and clicks on request', async () => {
+  render(<SignupForm navigate={setNavigate}/>);
   await fillOutForm();
   fireEvent.click(screen.getByText('Request'));
 });
 
-it('Fills out form and errors on a request', async () => {
-  render(<SignupForm />);
+it('Fills out signin form and errors on a request', async () => {
+  render(<SignupForm navigate={setNavigate}/>);
   await fillOutForm();
   returnError = true;
   fireEvent.click(screen.getByText('Request'));
 });
 
-it('Fills out form and catches server error', async () => {
-  render(<SignupForm />);
+it('Fills out signin form and catches server error', async () => {
+  render(<SignupForm navigate={setNavigate}/>);
   await fillOutForm();
   server.close();
   fireEvent.click(screen.getByText('Request'));
