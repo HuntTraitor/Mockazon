@@ -3,7 +3,6 @@
   color: white;
   display: flex;
   align-items: center;
-  padding: 5px 15px;
   flex-wrap: wrap;
   box-sizing: border-box;
   top: 0;
@@ -12,20 +11,43 @@
   flex-direction: row;
   z-index: 1000;
   width: 100%;
+  font-size: 14px;
+  height: 60px;
 }
 
 .logo {
-  margin-right: 20px;
-  padding: 5px;
+  padding: 1em 5px 5px 5px;
   cursor: pointer;
   position: sticky;
 }
 
 .addressContainer {
-  margin-right: 20px;
+  display: flex;
+  flex-direction: row;
   cursor: pointer;
   position: relative;
-  padding: 5px;
+  margin: 0px 2px;
+  padding: 1em 5px 5px 5px;
+  width: fit-content;
+  flex-flow: row nowrap;
+  -webkit-box-align: center;
+  align-items: center;
+  scroll-margin: 0;
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.addressIcon {
+  background-position: -71px -378px;
+  width: 20px;
+  height: 23px;
+}
+
+.addressTextContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
 .deliveryText {
@@ -35,6 +57,10 @@
 .searchContainer {
   flex-grow: 1;
   display: flex;
+}
+
+.searchInput:focus {
+  outline: none;
 }
 
 .searchInputRoot {
@@ -49,6 +75,31 @@
   font-size: 14px;
 }
 
+.focusedOutline {
+  outline: 4px solid #ff9900;
+  outline-offset: -3px;
+  box-shadow:
+    0 0 0 1px #ffcc80,
+    0 0 0 3px #e68a00;
+  border-radius: 4px;
+}
+
+.suggestionsPaper {
+  margin-top: 4px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.suggestionOption {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.suggestionOption:hover {
+  background-color: #f0f0f0;
+}
+
 .searchInput:focus {
   outline: none;
 }
@@ -61,10 +112,12 @@
 .searchButton {
   border-radius: 0 5px 5px 0;
   height: 40px;
+  background-color: #febd69;
   transition: box-shadow 0.3s ease-in-out;
 }
 
 .searchButton:hover {
+  background-color: #f3a847;
   box-shadow: 0 0 5px white;
 }
 
@@ -108,8 +161,9 @@
 }
 
 .caption {
-  display: block;
-  font-size: 0.75rem;
+  font-size: 12px;
+  line-height: 14px;
+  height: 14px;
   font-weight: 400;
 }
 
@@ -140,6 +194,22 @@
 }
 
 .addressText {
-  font-weight: bold;
-  line-height: 1.2;
+  font-size: 14px;
+  line-height: 15px;
+  font-weight: 700;
+}
+
+.topHeaderLeft {
+  display: flex;
+  position: static;
+  float: none;
+  height: inherit !important;
+}
+
+.topHeaderRight {
+  display: flex;
+  position: static;
+  float: none;
+  min-width: auto;
+  height: inherit !important;
 }

@@ -13,7 +13,7 @@ VALUES
             'username',
             'addelros',
             'role',
-            'vendor',
+            'admin',
             'suspended',
             false
         )
@@ -33,7 +33,7 @@ VALUES
             'username',
             'evmetcal',
             'role',
-            'shopper',
+            'admin',
             'suspended',
             false
         )
@@ -53,7 +53,7 @@ VALUES
             'username',
             'tryles',
             'role',
-            'shopper',
+            'admin',
             'suspended',
             false
         )
@@ -100,7 +100,7 @@ VALUES
     );
 
 INSERT INTO
-    account (data)
+    administrator (data)
 VALUES
     (
         jsonb_build_object(
@@ -152,7 +152,7 @@ VALUES
             'username',
             'huntertratar',
             'role',
-            'admin',
+            'vendor',
             'suspended',
             false
         )
@@ -170,8 +170,12 @@ VALUES
             'addelros@ucsc.edu',
             'name',
             'Alfonso Del Rosario',
+            'username',
+            'addelros',
             'role',
-            'shopper'
+            'shopper',
+            'suspended',
+            false
         )
     );
 

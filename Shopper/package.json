@@ -53,6 +53,7 @@
     "@types/glob": "*",
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "*",
+    "@types/lodash": "^4.17.1",
     "@types/node": "*",
     "@types/pg": "*",
     "@types/react": "*",

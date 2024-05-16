@@ -5,6 +5,7 @@ export interface Vendor {
   email: Email;
   name: string;
   role: string;
+  suspended: boolean;
 }
 
 export interface CreateVendor {

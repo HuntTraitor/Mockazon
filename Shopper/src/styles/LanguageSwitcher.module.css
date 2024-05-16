@@ -11,9 +11,15 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  position: sticky;
-  padding: 1em 5px 5px 5px;
+  position: relative;
+  -webkit-box-align: start;
+  align-items: flex-start;
+  text-decoration: none;
   margin-left: 1em;
+}
+
+.languageBox {
+  padding: 1em 5px 5px 5px;
 }
 
 .hoverContainer:hover::after {

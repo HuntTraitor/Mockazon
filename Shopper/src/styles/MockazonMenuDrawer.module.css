@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+}
+
+.userBox {
+  background-color: #232f3e;
+  height: 50px;
+  align-items: center;
+}

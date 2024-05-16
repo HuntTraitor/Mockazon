@@ -26,6 +26,7 @@
     "jsonwebtoken": "*",
     "mui-image": "^1.0.7",
     "next": "*",
+    "notistack": "^3.0.1",
     "pg": "*",
     "react": "*",
     "react-dom": "*",

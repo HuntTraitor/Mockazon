@@ -4,7 +4,6 @@
   display: flex;
   align-items: center;
   position: relative;
-  padding: 5px;
 }
 
 .accountDropdown {
@@ -44,7 +43,6 @@
   background-color: #ffd700;
   color: black;
   border: none;
-  padding: 10px 20px;
   border-radius: 20px;
   height: 30px;
   width: 150px;
@@ -69,6 +67,10 @@
 
 .dropDownPaper {
   padding-bottom: 0.5em;
+}
+
+.accountBox {
+  padding: 1em 5px 5px 5px;
 }
 
 /* FIXME: Some styles are duplicated */

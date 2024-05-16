@@ -1,6 +1,6 @@
 .cardHeader {
   padding: 15px;
-  background-color: #E8E8E8;
+  background-color: #e8e8e8;
 }
 
 .contentWrapper {
@@ -27,11 +27,11 @@
 }
 
 .buttonStyle:hover {
-  background-color: #E8E8E8;
+  background-color: #e8e8e8;
 }
 
 .buyAgainIcon {
-  background-color: #ffDA00;
+  background-color: #ffda00;
   color: black;
   text-transform: capitalize;
 }

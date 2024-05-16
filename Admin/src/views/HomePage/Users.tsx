@@ -14,9 +14,11 @@ import {
 
 interface User {
   id: number;
-  name: string;
   email: string;
+  name: string;
   username: string;
+  role?: string;
+  suspended?: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types

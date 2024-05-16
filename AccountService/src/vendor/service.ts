@@ -4,8 +4,23 @@ import * as jwt from "jsonwebtoken";
 import { CreateVendor } from "./index";
 
 export class VendorService {
+  public async exists(email: string): Promise<boolean> {
+    const select = `SELECT * FROM request WHERE data->>'email' = $1`;
+    const query = {
+      text: select,
+      values: [email],
+    };
+    const { rows } = await pool.query(query);
+
+    console.log(`Checking if email exists: ${rows.length > 0}`);
+    console.log(`Email: ${email}`);
+    console.log(`Rows: ${rows}`);
+
+    return rows.length > 0;
+  }
+
   public async login(
-    credentials: Credentials,
+    credentials: Credentials
   ): Promise<Authenticated | undefined> {
     const select =
       `SELECT * FROM vendor` +
@@ -18,20 +33,17 @@ export class VendorService {
     };
     const { rows } = await pool.query(query);
 
-    console.log(credentials);
-
     if (rows[0]) {
       const user = rows[0];
       const accessToken = jwt.sign(
         {
           id: user.id,
-          role: user.data.role,
         },
         `${process.env.MASTER_SECRET}`,
         {
           expiresIn: "30m",
           algorithm: "HS256",
-        },
+        }
       );
       return { id: user.id, name: user.data.name, accessToken: accessToken };
     } else {
@@ -40,30 +52,28 @@ export class VendorService {
   }
 
   public async createVendorAccount(vendor: CreateVendor) {
-    const insert = `INSERT INTO request(data) VALUES (
-      jsonb_build_object(
-        'name', $1::text, 
-        'email', $2::text, 
-        'pwhash', crypt($3::text, '87'),
-        'role', 'vendor'
-      )) 
-    RETURNING *`;
+    const insert = `
+      INSERT INTO request(data) 
+      VALUES (
+        jsonb_build_object(
+          'email', $1::text,
+          'pwhash', crypt($2::text, gen_salt('bf')),
+          'name', $3::text,
+          'role', 'vendor',
+          'suspended', false
+        )
+      )
+      RETURNING *
+    `;
 
     const query = {
       text: insert,
-      values: [vendor.name, vendor.email, vendor.password],
+      values: [vendor.email, vendor.password, vendor.name],
     };
-    let rows;
-    try {
-      const result = await pool.query(query);
-      rows = result.rows;
-    } catch (e) {
-      console.log(e);
-    }
-    if (rows && rows[0]) {
-      return rows[0];
-    } else {
-      return undefined;
-    }
+
+    const result = await pool.query(query);
+    const rows = result.rows;
+
+    return rows[0];
   }
 }

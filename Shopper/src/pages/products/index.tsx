@@ -10,6 +10,7 @@ import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import TopNav from '@/views/TopNav';
+import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
@@ -209,6 +210,7 @@ const Index = () => {
           )}
         </Grid>
       </Container>
+      <MockazonMenuDrawer />
       <Backdrop
         open={backDropOpen}
         style={{ zIndex: 1, position: 'fixed' }}
