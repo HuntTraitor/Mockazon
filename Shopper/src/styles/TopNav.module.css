@@ -3,4 +3,5 @@
   position: relative;
   min-width: 1000px;
   zoom: 1;
+  padding-right: 0 !important;
 }

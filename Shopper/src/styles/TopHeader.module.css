@@ -3,7 +3,6 @@
   color: white;
   display: flex;
   align-items: center;
-  padding: 5px 15px;
   flex-wrap: wrap;
   box-sizing: border-box;
   top: 0;
@@ -13,10 +12,10 @@
   z-index: 1000;
   width: 100%;
   font-size: 14px;
+  height: 60px;
 }
 
 .logo {
-  margin-right: 20px;
   padding: 1em 5px 5px 5px;
   cursor: pointer;
   position: sticky;
@@ -27,7 +26,7 @@
   flex-direction: row;
   cursor: pointer;
   position: relative;
-  margin: 5px 2px;
+  margin: 0px 2px;
   padding: 1em 5px 5px 5px;
   width: fit-content;
   flex-flow: row nowrap;
@@ -93,7 +92,7 @@
 }
 
 .suggestionOption {
-  padding: 8px;
+  padding: 4px;
   cursor: pointer;
 }
 
@@ -113,10 +112,12 @@
 .searchButton {
   border-radius: 0 5px 5px 0;
   height: 40px;
+  background-color: #febd69;
   transition: box-shadow 0.3s ease-in-out;
 }
 
 .searchButton:hover {
+  background-color: #f3a847;
   box-shadow: 0 0 5px white;
 }
 
@@ -196,4 +197,19 @@
   font-size: 14px;
   line-height: 15px;
   font-weight: 700;
+}
+
+.topHeaderLeft {
+  display: flex;
+  position: static;
+  float: none;
+  height: inherit !important;
+}
+
+.topHeaderRight {
+  display: flex;
+  position: static;
+  float: none;
+  min-width: auto;
+  height: inherit !important;
 }
