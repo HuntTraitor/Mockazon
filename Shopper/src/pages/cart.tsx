@@ -15,6 +15,7 @@ import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { useAppContext } from '@/contexts/AppContext';
 import TopNav from '@/views/TopNav';
+import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 
 interface Product {
   id: number;
@@ -216,6 +217,7 @@ const Cart = () => {
           ))}
         </Grid>
       </Container>
+      <MockazonMenuDrawer />
       <Backdrop
         open={backDropOpen}
         style={{ zIndex: 1, position: 'fixed' }}

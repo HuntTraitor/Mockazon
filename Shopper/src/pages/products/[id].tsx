@@ -11,6 +11,7 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import TopNav from '@/views/TopNav';
+import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import { useAppContext } from '@/contexts/AppContext';
 
 interface Product {
@@ -144,6 +145,7 @@ const ProductPage = () => {
             </CardContent>
           </Card>
         </Container>
+        <MockazonMenuDrawer />
         <Backdrop
           open={backDropOpen}
           style={{ zIndex: 1, position: 'fixed' }}
