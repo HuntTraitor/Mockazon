@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
-import Index from '../../src/pages/index';
+import Index from '@/pages';
 
-it('Renders', async () => {
+it('Renders index bugged', async () => {
   render(<Index />);
 });

@@ -1,5 +1,18 @@
+import { LoginProvider } from '@/contexts/Login';
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
+import { ThemeProvider, createTheme } from '@mui/material';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#ffDA00',
+    },
+    secondary: {
+      main: '#1976d2',
+    },
+  },
+});
 
 /**
  * App
@@ -8,5 +21,11 @@ import type { AppProps } from 'next/app';
  * @constructor
  */
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <ThemeProvider theme={theme}>
+      <LoginProvider>
+        <Component {...pageProps} />
+      </LoginProvider>
+    </ThemeProvider >
+  );
 }

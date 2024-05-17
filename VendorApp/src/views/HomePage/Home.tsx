@@ -25,7 +25,7 @@ export function Home() {
     } else {
       router.push('/login')
     }
-  }, [loginContext, router])
+  }, [loginContext])
   const pageContext = React.useContext(PageContext);
 
   if (loginContext.accessToken.length > 0) {

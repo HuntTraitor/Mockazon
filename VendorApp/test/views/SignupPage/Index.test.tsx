@@ -13,7 +13,7 @@ it('Changes between signup and login', async () => {
   fireEvent.click(
     screen.getByText('Already have an account?', { exact: false })
   );
-  expect(screen.getByText('Login')).toBeDefined();
+  expect(screen.getAllByText('Login')).toBeDefined();
   fireEvent.click(
     screen.getByText('Request a vendor account', { exact: false })
   );

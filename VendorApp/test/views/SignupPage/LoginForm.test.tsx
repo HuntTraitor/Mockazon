@@ -56,7 +56,7 @@ const setNavigate = () => {};
 
 it('Renders log in form correctly', async () => {
   render(<LoginForm navigate={setNavigate} />);
-  expect(screen.getByText('Login', { exact: false })).toBeDefined();
+  expect(screen.getAllByText('Login', { exact: false })).toBeDefined();
   expect(screen.getByText('Email', { exact: false })).toBeDefined();
   expect(screen.getAllByText('Password', { exact: false })).toBeDefined();
 });
@@ -64,19 +64,19 @@ it('Renders log in form correctly', async () => {
 it('Fills out login form and clicks on request', async () => {
   render(<LoginForm navigate={setNavigate} />);
   await fillOutForm();
-  fireEvent.click(screen.getByText('Sign in'));
+  fireEvent.click(screen.getAllByText('Login')[1]);
 });
 
 it('Fills out signin form and errors on a request', async () => {
   render(<LoginForm navigate={setNavigate} />);
   await fillOutForm();
   returnError = true;
-  fireEvent.click(screen.getByText('Sign in'));
+  fireEvent.click(screen.getAllByText('Login')[1]);
 });
 
 it('Fills out signin form and catches server error', async () => {
   render(<LoginForm navigate={setNavigate} />);
   await fillOutForm();
   server.close();
-  fireEvent.click(screen.getByText('Sign in'));
+  fireEvent.click(screen.getAllByText('Login')[1]);
 });
