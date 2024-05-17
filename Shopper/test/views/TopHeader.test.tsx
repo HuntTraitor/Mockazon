@@ -6,6 +6,10 @@ import { AppContext } from '@/contexts/AppContext';
 const pushMock = jest.fn();
 const locale = 'en';
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 jest.mock('next/router', () => ({
   useRouter: () => ({
     basePath: '',
@@ -28,18 +32,18 @@ jest.mock('next-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       switch (key) {
-        case 'deliveryText':
-          return 'Delivery to';
-        case 'searchPlaceholder':
-          return 'Search Mockazon';
-        case 'returns':
-          return 'Returns';
-        case 'orders':
-          return '& Orders';
-        case 'cart':
-          return 'Cart';
-        default:
-          return key;
+      case 'deliveryText':
+        return 'Delivery to';
+      case 'searchPlaceholder':
+        return 'Search Mockazon';
+      case 'returns':
+        return 'Returns';
+      case 'orders':
+        return '& Orders';
+      case 'cart':
+        return 'Cart';
+      default:
+        return key;
       }
     },
     i18n: {
@@ -51,6 +55,8 @@ jest.mock('next-i18next', () => ({
 const AppContextProps = {
   backDropOpen: false,
   setBackDropOpen: jest.fn(),
+  mockazonMenuDrawerOpen: false,
+  setMockazonMenuDrawerOpen: jest.fn(),
 };
 
 describe('Top Header', () => {

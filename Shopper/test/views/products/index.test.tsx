@@ -70,6 +70,10 @@ const handlers = [
 
 const microServices = setupServer(...handlers);
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 beforeAll(async () => {
   microServices.listen({ onUnhandledRequest: 'bypass' });
   server = http.createServer(requestHandler);
@@ -116,6 +120,8 @@ jest.mock('next/router', () => ({
 const AppContextProps = {
   backDropOpen: false,
   setBackDropOpen: jest.fn(),
+  mockazonMenuDrawerOpen: false,
+  setMockazonMenuDrawerOpen: jest.fn(),
 };
 
 it('Renders successfully', async () => {

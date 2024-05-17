@@ -21,6 +21,10 @@ jest.mock('next/router', () => ({
   }),
 }));
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 jest.mock('@fontsource/open-sans', () => {
   return {};
 });

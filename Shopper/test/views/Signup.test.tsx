@@ -9,6 +9,10 @@ jest.mock('jwt-decode', () => ({
   jwtDecode: jest.fn().mockReturnValue({ sub: 'mockSub' }),
 }));
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 global.fetch = jest.fn().mockResolvedValue({
   ok: true,
   json: jest

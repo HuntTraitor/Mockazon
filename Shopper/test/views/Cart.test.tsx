@@ -11,6 +11,10 @@ import { setupServer } from 'msw/node';
 import requestHandler from '../api/requestHandler';
 import ShoppingCart from '@/pages/cart';
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 let server: http.Server<
   typeof http.IncomingMessage,
   typeof http.ServerResponse
@@ -140,6 +144,8 @@ const newLoggedInContextProps = {
 const AppContextProps = {
   backDropOpen: false,
   setBackDropOpen: jest.fn(),
+  mockazonMenuDrawerOpen: false,
+  setMockazonMenuDrawerOpen: jest.fn(),
 };
 
 it('Renders successfully', async () => {

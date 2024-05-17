@@ -21,6 +21,10 @@ let server: http.Server<
 
 let error = false;
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 const handlers = [
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/1`,
@@ -113,6 +117,8 @@ jest.mock('next/router', () => ({
 const AppContextProps = {
   backDropOpen: false,
   setBackDropOpen: jest.fn(),
+  mockazonMenuDrawerOpen: false,
+  setMockazonMenuDrawerOpen: jest.fn(),
 };
 
 it('Renders successfully', async () => {
