@@ -69,24 +69,42 @@ describe("API TEST (ADMIN) - General", () => {
       .get("/api/v0/admin/accounts")
       .then((res) => {
         expect(res.status).toBe(200);
-        expect(res.body).toEqual([
-          {
-            id: userOne,
-            email: "shopper@email.com",
-            name: "shopper account 1",
-            role: "shopper",
-            username: "shopperaccount",
-            suspended: false,
-          },
-          {
-            id: userTwo,
-            email: "vendor@email.com",
-            name: "vendor account 1",
-            role: "vendor",
-            username: "vendoraccount",
-            suspended: false,
-          },
-        ]);
+        expect(res.body).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: userOne,
+              email: "shopper@email.com",
+              name: "shopper account 1",
+              role: "shopper",
+              username: "shopperaccount",
+              suspended: false,
+            }),
+            expect.objectContaining({
+              email: "victor@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f3",
+              name: "Victor",
+              role: "vendor",
+              suspended: false,
+              username: "victorvendor",
+            }),
+            expect.objectContaining({
+              email: "shirly@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f1",
+              name: "Shirly",
+              role: "shopper",
+              suspended: false,
+              username: "shirlyshopper",
+            }),
+            expect.objectContaining({
+              id: userTwo,
+              email: "vendor@email.com",
+              name: "vendor account 1",
+              role: "vendor",
+              username: "vendoraccount",
+              suspended: false,
+            }),
+          ])
+        );
       });
   });
 
@@ -117,7 +135,7 @@ describe("API TEST (ADMIN) - General", () => {
   });
 
   test("PUT /api/v0/admin/account/{id}/suspend", async () => {
-    // suspend userOne
+    // suspend userTwo
     await supertest(server)
       .put(`/api/v0/admin/account/${userTwo}/suspend`)
       .then((res) => {
@@ -129,29 +147,47 @@ describe("API TEST (ADMIN) - General", () => {
       .get("/api/v0/admin/accounts")
       .then((res) => {
         expect(res.status).toBe(200);
-        expect(res.body).toEqual([
-          {
-            id: userOne,
-            email: "shopper@email.com",
-            name: "shopper account 1",
-            role: "shopper",
-            username: "shopperaccount",
-            suspended: false,
-          },
-          {
-            id: userTwo,
-            email: "vendor@email.com",
-            name: "vendor account 1",
-            role: "vendor",
-            username: "vendoraccount",
-            suspended: true,
-          },
-        ]);
+        expect(res.body).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: userOne,
+              email: "shopper@email.com",
+              name: "shopper account 1",
+              role: "shopper",
+              username: "shopperaccount",
+              suspended: false,
+            }),
+            expect.objectContaining({
+              id: userTwo,
+              email: "vendor@email.com",
+              name: "vendor account 1",
+              role: "vendor",
+              username: "vendoraccount",
+              suspended: true,
+            }),
+            expect.objectContaining({
+              email: "victor@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f3",
+              name: "Victor",
+              role: "vendor",
+              suspended: false,
+              username: "victorvendor",
+            }),
+            expect.objectContaining({
+              email: "shirly@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f1",
+              name: "Shirly",
+              role: "shopper",
+              suspended: false,
+              username: "shirlyshopper",
+            }),
+          ])
+        );
       });
   });
 
   test("PUT /api/v0/admin/account/{id}/resume", async () => {
-    // resume userOne
+    // resume userTwo
     await supertest(server)
       .put(`/api/v0/admin/account/${userTwo}/resume`)
       .then((res) => {
@@ -163,24 +199,42 @@ describe("API TEST (ADMIN) - General", () => {
       .get("/api/v0/admin/accounts")
       .then((res) => {
         expect(res.status).toBe(200);
-        expect(res.body).toEqual([
-          {
-            id: userOne,
-            email: "shopper@email.com",
-            name: "shopper account 1",
-            role: "shopper",
-            username: "shopperaccount",
-            suspended: false,
-          },
-          {
-            id: userTwo,
-            email: "vendor@email.com",
-            name: "vendor account 1",
-            role: "vendor",
-            username: "vendoraccount",
-            suspended: false,
-          },
-        ]);
+        expect(res.body).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: userOne,
+              email: "shopper@email.com",
+              name: "shopper account 1",
+              role: "shopper",
+              username: "shopperaccount",
+              suspended: false,
+            }),
+            expect.objectContaining({
+              id: userTwo,
+              email: "vendor@email.com",
+              name: "vendor account 1",
+              role: "vendor",
+              username: "vendoraccount",
+              suspended: false,
+            }),
+            expect.objectContaining({
+              email: "victor@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f3",
+              name: "Victor",
+              role: "vendor",
+              suspended: false,
+              username: "victorvendor",
+            }),
+            expect.objectContaining({
+              email: "shirly@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f1",
+              name: "Shirly",
+              role: "shopper",
+              suspended: false,
+              username: "shirlyshopper",
+            }),
+          ])
+        );
       });
   });
 
@@ -206,7 +260,7 @@ describe("API TEST (ADMIN) - General", () => {
               username: "requestaccount1",
               suspended: false,
             }),
-          ]),
+          ])
         );
       });
   });
@@ -233,7 +287,7 @@ describe("API TEST (ADMIN) - General", () => {
               username: "requestaccount2",
               suspended: false,
             }),
-          ]),
+          ])
         );
       });
   });
