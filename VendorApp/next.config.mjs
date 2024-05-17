@@ -5,6 +5,9 @@ const isProd = process.env.ENVIRONMENT == 'production';
 const nextConfig = {
   basePath: isProd ? '/vendor' : undefined,
   assetPrefix: isProd ? '/vendor' : undefined,
+  publicRuntimeConfig: {
+    basePath: isProd ? '/vendor' : '',
+  },
   reactStrictMode: true,
 };
 

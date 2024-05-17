@@ -35,6 +35,7 @@ const ProductPage = () => {
   const [error, setError] = useState('');
   const { backDropOpen, setBackDropOpen } = useAppContext();
 
+  // FIXME: Do not fetch to microservice from the browser
   useEffect(() => {
     fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${id}`,

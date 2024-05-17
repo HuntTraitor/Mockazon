@@ -14,6 +14,10 @@ import {
 import React from 'react';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import DoneIcon from '@mui/icons-material/Done';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
+
 interface Key {
   key: string;
   requested: boolean;
@@ -26,7 +30,7 @@ const fetchKeys = (setKeys: (products: Key[]) => void) => {
     query: `query key {key (vendor_id: "4f061f79-e0e8-48ff-a2ac-0a56a8ad5f0e") {key, requested, active}}`,
   };
   console.log('Hello');
-  fetch('/api/graphql', {
+  fetch(`${basePath}/api/graphql`, {
     method: 'POST',
     body: JSON.stringify(query),
     headers: {
@@ -57,7 +61,7 @@ const fetchKeys = (setKeys: (products: Key[]) => void) => {
 //     query: `mutation key {key (key: ${key_id}) {key, requested, active}}`,
 //   };
 //   console.log('Hello');
-//   fetch('/api/graphql', {
+//   fetch(`${basePath}/api/graphql`, {
 //     method: 'POST',
 //     body: JSON.stringify(query),
 //     headers: {

@@ -62,6 +62,7 @@ services:
   postgres:
     container_name: database
     image: luke121/mockazon:database
+    env_file: .env
     build: 
         context: .
         dockerfile: Postgres.Dockerfile

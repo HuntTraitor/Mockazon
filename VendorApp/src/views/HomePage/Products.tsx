@@ -25,7 +25,7 @@
 //   const query = {
 //     query: `query product {product (vendor_id: "78b9467a-8029-4c1f-afd9-ea56932c3f45") {id, data {name, price}}}`,
 //   };
-//   fetch('/api/graphql', {
+//   fetch(`${basePath}/api/graphql`, {
 //     method: 'POST',
 //     body: JSON.stringify(query),
 //     headers: {

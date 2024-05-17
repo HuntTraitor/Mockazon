@@ -22,6 +22,9 @@ import { useRouter } from 'next/router';
 import styles from '@/styles/Login.module.css';
 import Image from 'next/image';
 import { mainTheme } from '@/styles/themes';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 const namespaces = ['common', 'login', 'signup', 'products'];
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -56,7 +59,7 @@ const Login = () => {
     }
   }`,
       };
-      const response = await fetch('/api/graphql', {
+      const response = await fetch(`${basePath}/api/graphql`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(query),
@@ -96,7 +99,7 @@ const Login = () => {
           }
         }`,
       };
-      const response = await fetch('/api/graphql', {
+      const response = await fetch(`${basePath}/api/graphql`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(query),

@@ -16,6 +16,9 @@ import Link from 'next/link';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { useAppContext } from '@/contexts/AppContext';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 interface Product {
   id: number;
@@ -69,7 +72,7 @@ const Index = () => {
       }`,
     };
 
-    fetch('/api/graphql', {
+    fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(query),
@@ -96,6 +99,7 @@ const Index = () => {
       });
   }, []);
 
+  // FIXME: Do not call the microservice from the browser
   const addToShoppingCart = (productId: string) => {
     fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?vendorId=${user.id}`,

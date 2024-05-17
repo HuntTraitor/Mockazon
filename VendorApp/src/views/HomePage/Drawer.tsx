@@ -14,6 +14,9 @@ import {
 import KeyIcon from '@mui/icons-material/Key';
 import Image from 'next/image';
 import { PageContext } from '../../contexts/PageContext';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 const drawerWidth = 300;
 
@@ -67,7 +70,7 @@ export function MyDrawer() {
         }}
       >
         <Image
-          src={`${process.env.ENVIRONMENT == 'production' ? '/vendor' : ''}/mini_mockazon_logo.png`}
+          src={`${basePath}/mini_mockazon_logo.png`}
           alt="Mockazon Logo"
           width={40}
           height={30}

@@ -12,6 +12,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LoginContext } from '../contexts/Login';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 const defaultTheme = createTheme();
 const Login = () => {
@@ -35,7 +38,7 @@ const Login = () => {
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget as HTMLFormElement);
-    fetch('/api/login', {
+    fetch(`${basePath}/api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -73,7 +76,7 @@ const Login = () => {
           }}
         >
           <Image
-            src={`${process.env.ENVIRONMENT == 'production' ? '/admin' : ''}/mini_mockazon_logo.png`}
+            src={`${basePath}/mini_mockazon_logo.png`}
             alt="Mockazon Logo"
             width={40}
             height={30}

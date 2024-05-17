@@ -1,5 +1,8 @@
 import React from 'react';
 import { Box, AppBar, Toolbar, Button, Avatar } from '@mui/material';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 /**
  * defines the AppBar
@@ -31,7 +34,7 @@ export function MyAppBar() {
           >
             Sign Out
           </Button>
-          <Avatar alt="User Avatar" src="/avatar.png" />
+          <Avatar alt="User Avatar" src={`${basePath}/avatar.png`} />
         </Box>
       </Toolbar>
     </AppBar>

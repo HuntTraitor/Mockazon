@@ -12,6 +12,10 @@ import {
   Paper,
 } from '@mui/material';
 
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
+
 interface User {
   id: number;
   email: string;
@@ -27,7 +31,7 @@ const fetchAccounts = async (setAccounts: Function) => {
     query: `query GetAccounts {account {id, name, email, username}}`,
   };
 
-  fetch('/api/graphql', {
+  fetch(`${basePath}/api/graphql`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(query),

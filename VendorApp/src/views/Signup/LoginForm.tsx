@@ -31,7 +31,7 @@ export function LoginForm({ navigate }: LoginFormProps) {
     // ) {content}}`,
     // };
 
-    // fetch('/api/graphql', {
+    // fetch(`${basePath}/api/graphql`, {
     //   method: 'POST',
     //   body: JSON.stringify(query),
     //   headers: {

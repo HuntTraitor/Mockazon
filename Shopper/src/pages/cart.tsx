@@ -16,6 +16,9 @@ import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { useAppContext } from '@/contexts/AppContext';
 import TopNav from '@/views/TopNav';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 interface Product {
   id: number;
@@ -78,7 +81,7 @@ const Cart = () => {
     }
   }`,
     };
-    fetch('/api/graphql', {
+    fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(query),
@@ -107,7 +110,7 @@ const Cart = () => {
               }
             }`,
             };
-            return fetch('/api/graphql', {
+            return fetch(`${basePath}/api/graphql`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(query),

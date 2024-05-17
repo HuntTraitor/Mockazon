@@ -22,6 +22,9 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import debounce from 'lodash/debounce';
 import { useAppContext } from '@/contexts/AppContext';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 interface Product {
   data: {
@@ -86,7 +89,7 @@ const TopHeader = () => {
 
       setLoading(true);
       try {
-        const response = await fetch('/api/graphql', {
+        const response = await fetch(`${basePath}/api/graphql`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(graphqlQuery),
@@ -145,7 +148,7 @@ const TopHeader = () => {
               aria-label="bar logo"
               width="60"
               height="40"
-              src="/mini_mockazon_logo_white.png"
+              src={`${basePath}/mini_mockazon_logo_white.png`}
               alt="Logo"
             />
             {/* Replace with a new logo */}

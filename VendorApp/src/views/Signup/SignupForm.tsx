@@ -3,6 +3,9 @@ import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import styles from '@/styles/Signup.module.css';
 import { useSnackbar } from 'notistack';
 import { LoginFormProps } from './Index';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 export function SignupForm({ navigate }: LoginFormProps) {
   const { enqueueSnackbar } = useSnackbar();
@@ -33,7 +36,7 @@ export function SignupForm({ navigate }: LoginFormProps) {
     ) {content}}`,
     };
 
-    fetch('/api/graphql', {
+    fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       body: JSON.stringify(query),
       headers: {

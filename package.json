@@ -43,7 +43,7 @@
     "lint-vendorapp": "cd VendorApp && npm run lint",
     "lint-vendorapi": "cd VendorAPI && npm run lint",
     "lints": "npm run lint-admin && npm run lint-account && npm run lint-key && npm run lint-order && npm run lint-product && npm run lint-shopper && npm run lint-vendorapp && npm run lint-vendorapi",
-    "containerized": "npm run installs && npm run builds && docker-compose up --build",
+    "containerized": "npm run installs && dotenv -- npm run builds && docker-compose up --build",
     "build-admin": "cd Admin && npm run build",
     "build-account": "cd AccountService && npm run build",
     "build-key": "cd KeyService && npm run build",
@@ -80,7 +80,7 @@
     "test-product": "cd ProductService && npm test",
     "test-shopper": "cd Shopper && npm test",
     "test-vendor": "cd VendorAPI && npm test && cd VendorApp && npm test",
-    "tests" : "npm run test-account && npm run test-account && npm run test-key && npm run test-order && npm run test-product && npm run test-shopper && npm run test-vendor",
+    "tests": "npm run test-account && npm run test-account && npm run test-key && npm run test-order && npm run test-product && npm run test-shopper && npm run test-vendor",
     "test-e2es": "cd VendorApp && npm run test-e2e && cd .. && cd Shopper && npm run test-e2e && cd .. && cd Admin && npm run test-e2e"
   },
   "devDependencies": {
@@ -88,6 +88,7 @@
     "prettier": "*"
   },
   "dependencies": {
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2"
   }
 }

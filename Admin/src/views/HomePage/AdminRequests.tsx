@@ -12,6 +12,10 @@ import {
   Paper,
 } from '@mui/material';
 
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
+
 interface Request {
   id: number;
   name: string;
@@ -26,7 +30,7 @@ const fetchRequests = async (setRequests: Function) => {
     query: `query GetRequests {request {id name email role suspended username}}`,
   };
 
-  fetch('/api/graphql', {
+  fetch(`${basePath}/api/graphql`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(query),

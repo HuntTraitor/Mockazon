@@ -23,6 +23,9 @@ import styles from '@/styles/Signup.module.css';
 import Image from 'next/image';
 import { Button } from '@mui/material';
 import Link from 'next/link';
+import getConfig from 'next/config';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 const namespaces = ['common', 'login', 'signup', 'products'];
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -64,7 +67,7 @@ const Signup = () => {
     }
   }`,
       };
-      const response = await fetch('/api/graphql', {
+      const response = await fetch(`${basePath}/api/graphql`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(query),
@@ -116,7 +119,7 @@ const Signup = () => {
     }
   }`,
       };
-      const response = await fetch('/api/graphql', {
+      const response = await fetch(`${basePath}/api/graphql`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(query),
