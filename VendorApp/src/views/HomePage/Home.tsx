@@ -18,14 +18,14 @@ export function Home() {
   const loginContext = React.useContext(LoginContext);
   const router = useRouter();
   React.useEffect(() => {
-    const token = localStorage.getItem("accessToken")
+    const token = localStorage.getItem('accessToken');
     if (token) {
       loginContext.setAccessToken(token);
       router.push('/');
     } else {
-      router.push('/login')
+      router.push('/login');
     }
-  }, [loginContext])
+  }, [loginContext]);
   const pageContext = React.useContext(PageContext);
 
   if (loginContext.accessToken.length > 0) {
@@ -42,6 +42,6 @@ export function Home() {
       </Box>
     );
   } else {
-    return null
+    return null;
   }
 }

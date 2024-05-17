@@ -57,7 +57,6 @@ export function AdminRequests() {
     fetchRequests(setRequests);
   }, []);
 
-
   const handleApproveRequest = (requestId: number) => {
     console.log(`Approving request with ID: ${requestId}`);
   };

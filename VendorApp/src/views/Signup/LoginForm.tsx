@@ -3,7 +3,7 @@ import styles from '@/styles/Signup.module.css';
 import { LoginFormProps } from './Index';
 import getConfig from 'next/config';
 import { useSnackbar } from 'notistack';
-import * as React from 'react'
+import * as React from 'react';
 import { LoginContext } from '@/contexts/Login';
 import { useRouter } from 'next/router';
 const { basePath } = getConfig().publicRuntimeConfig;
@@ -46,9 +46,9 @@ export function LoginForm({ navigate }: LoginFormProps) {
           console.log(`${json.errors[0].message}`);
           handleClickError();
         } else {
-          loginContext.setAccessToken(json.data.login.accessToken)
+          loginContext.setAccessToken(json.data.login.accessToken);
           localStorage.setItem('accessToken', json.data.login.accessToken);
-          router.push('/')
+          router.push('/');
         }
       })
       .catch(e => {

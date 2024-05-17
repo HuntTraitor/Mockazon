@@ -103,7 +103,7 @@ describe("API TEST (ADMIN) - General", () => {
               username: "vendoraccount",
               suspended: false,
             }),
-          ])
+          ]),
         );
       });
   });
@@ -181,7 +181,7 @@ describe("API TEST (ADMIN) - General", () => {
               suspended: false,
               username: "shirlyshopper",
             }),
-          ])
+          ]),
         );
       });
   });
@@ -233,7 +233,7 @@ describe("API TEST (ADMIN) - General", () => {
               suspended: false,
               username: "shirlyshopper",
             }),
-          ])
+          ]),
         );
       });
   });
@@ -260,7 +260,7 @@ describe("API TEST (ADMIN) - General", () => {
               username: "requestaccount1",
               suspended: false,
             }),
-          ])
+          ]),
         );
       });
   });
@@ -287,7 +287,7 @@ describe("API TEST (ADMIN) - General", () => {
               username: "requestaccount2",
               suspended: false,
             }),
-          ])
+          ]),
         );
       });
   });

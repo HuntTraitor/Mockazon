@@ -15,4 +15,4 @@ jest.mock('next/config', () => () => ({
   publicRuntimeConfig: { basePath: '' },
 }));
 
-jest.mock('next/router', () => jest.requireActual('next-router-mock'))
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));

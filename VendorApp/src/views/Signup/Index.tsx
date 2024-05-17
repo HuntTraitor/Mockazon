@@ -15,7 +15,7 @@ export interface LoginFormProps {
 
 export function Signup() {
   const [navigate, setNavigate] = React.useState(0);
-  const loginContext = React.useContext(LoginContext)
+  const loginContext = React.useContext(LoginContext);
   if (loginContext.accessToken.length < 1) {
     return (
       <Container component="main" maxWidth="xs">
@@ -38,6 +38,6 @@ export function Signup() {
       </Container>
     );
   } else {
-    return null
+    return null;
   }
 }

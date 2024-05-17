@@ -18,9 +18,7 @@ export const LoginProvider = ({
   const [accessToken, setAccessToken] = useState('');
 
   return (
-    <LoginContext.Provider
-      value={{accessToken, setAccessToken }}
-    >
+    <LoginContext.Provider value={{ accessToken, setAccessToken }}>
       {children}
     </LoginContext.Provider>
   );
