@@ -1,58 +1,59 @@
 import { Box, Typography, Grid, TextField, Button, Link } from '@mui/material';
 import styles from '@/styles/Signup.module.css';
 import { LoginFormProps } from './Index';
+import getConfig from 'next/config';
+import { useSnackbar } from 'notistack';
+import * as React from 'react'
+import { LoginContext } from '@/contexts/Login';
+const { basePath } = getConfig().publicRuntimeConfig;
 
 export function LoginForm({ navigate }: LoginFormProps) {
-  // const { enqueueSnackbar } = useSnackbar();
-  // const handleClickSuccess = () => {
-  //   enqueueSnackbar('Successfully requested account!', {
-  //     variant: 'success',
-  //     preventDuplicate: false,
-  //     anchorOrigin: { horizontal: 'center', vertical: 'top' },
-  //   });
-  // };
+  const { enqueueSnackbar } = useSnackbar();
+  const loginContext = React.useContext(LoginContext)
 
-  // const handleClickError = () => {
-  //   enqueueSnackbar('Oops! Something went wrong, please try again', {
-  //     variant: 'error',
-  //     persist: true,
-  //     anchorOrigin: { horizontal: 'center', vertical: 'top' },
-  //   });
-  // };
+  console.log(loginContext.accessToken)
+
+  const handleClickError = () => {
+    enqueueSnackbar('Oops! Something went wrong, please try again', {
+      variant: 'error',
+      persist: true,
+      anchorOrigin: { horizontal: 'center', vertical: 'top' },
+    });
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // const data = new FormData(event.currentTarget);
-    // const query = {
-    //   query: `query signup{signup(
-    //   name: "${data.get('firstName')}"
-    //   email: "${data.get('email')}"
-    //   password: "${data.get('password')}"
-    // ) {content}}`,
-    // };
+    const data = new FormData(event.currentTarget);
+    const query = {
+      query: `query login{login(
+      email: "${data.get('email')}"
+      password: "${data.get('password')}"
+    ) {accessToken}}`,
+    };
 
-    // fetch(`${basePath}/api/graphql`, {
-    //   method: 'POST',
-    //   body: JSON.stringify(query),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then(res => {
-    //     return res.json();
-    //   })
-    //   .then(json => {
-    //     if (json.errors) {
-    //       console.log(`${json.errors[0].message}`);
-    //       handleClickError();
-    //     } else {
-    //       handleClickSuccess();
-    //     }
-    //   })
-    //   .catch(e => {
-    //     console.log(e);
-    //     handleClickError();
-    //   });
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      body: JSON.stringify(query),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then(json => {
+        if (json.errors) {
+          console.log(`${json.errors[0].message}`);
+          handleClickError();
+        } else {
+          console.log(json)
+          loginContext.setAccessToken(json.data.login.accessToken)
+        }
+      })
+      .catch(e => {
+        console.log(e);
+        handleClickError();
+      });
   };
 
   return (
@@ -105,7 +106,7 @@ export function LoginForm({ navigate }: LoginFormProps) {
           aria-label="submit-request"
           className={styles.requestButton}
         >
-          Sign in
+          Login
         </Button>
         <Grid container justifyContent="flex-end">
           <Grid item>
