@@ -46,8 +46,8 @@ export function LoginForm({ navigate }: LoginFormProps) {
           console.log(`${json.errors[0].message}`);
           handleClickError();
         } else {
-          console.log(json)
           loginContext.setAccessToken(json.data.login.accessToken)
+          localStorage.setItem('accessToken', json.data.login.accessToken)
         }
       })
       .catch(e => {
