@@ -20,48 +20,39 @@ interface Request {
   requestType: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+const fetchRequests = async (setRequests: Function) => {
+  const query = {
+    query: `query GetRequests {request {id name email role suspended username}}`,
+  };
+
+  fetch('/api/graphql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(query),
+  })
+    .then(res => {
+      return res.json();
+    })
+    .then(json => {
+      setRequests(json.data.request);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
 /**
  * Defines the AdminRequests component
  * @return {JSX.Element} AdminRequests
  */
 export function AdminRequests() {
-  const requests: Request[] = [
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      username: 'johndoe',
-      requestType: 'Account Upgrade',
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      email: 'janesmith@example.com',
-      username: 'janesmith',
-      requestType: 'Password Reset',
-    },
-    {
-      id: 3,
-      name: 'Michael Johnson',
-      email: 'michaeljohnson@example.com',
-      username: 'michaelj',
-      requestType: 'Account Deletion',
-    },
-    {
-      id: 4,
-      name: 'Emily Davis',
-      email: 'emilydavis@example.com',
-      username: 'emilydavis',
-      requestType: 'Account Upgrade',
-    },
-    {
-      id: 5,
-      name: 'Daniel Wilson',
-      email: 'danielwilson@example.com',
-      username: 'danielw',
-      requestType: 'Password Reset',
-    },
-  ];
+  const [requests, setRequests] = React.useState<Request[]>([]);
+
+  React.useEffect(() => {
+    fetchRequests(setRequests);
+  }, []);
+
 
   const handleApproveRequest = (requestId: number) => {
     console.log(`Approving request with ID: ${requestId}`);
@@ -90,7 +81,6 @@ export function AdminRequests() {
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Username</TableCell>
-                <TableCell>Request Type</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -100,7 +90,6 @@ export function AdminRequests() {
                   <TableCell>{request.name}</TableCell>
                   <TableCell>{request.email}</TableCell>
                   <TableCell>{request.username}</TableCell>
-                  <TableCell>{request.requestType}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
