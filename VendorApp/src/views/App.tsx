@@ -1,6 +1,8 @@
 import { ThemeProvider, createTheme } from '@mui/material';
 import { PageProvider } from '../contexts/PageContext';
 import { Signup } from './Signup/Index';
+import { LoginProvider } from '@/contexts/Login';
+import { Home } from './HomePage/Home';
 
 const theme = createTheme({
   palette: {
@@ -16,12 +18,12 @@ const theme = createTheme({
 export function App() {
   return (
     <ThemeProvider theme={theme}>
-      {/* <LoginProvider>
-        <Signup /> */}
-      <PageProvider>
-        <Signup />
-      </PageProvider>
-      {/* </LoginProvider> */}
+      <LoginProvider>
+        <PageProvider>
+          <Signup />
+          <Home />
+        </PageProvider>
+      </LoginProvider>
     </ThemeProvider>
   );
 }
