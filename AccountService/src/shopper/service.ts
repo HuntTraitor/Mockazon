@@ -39,7 +39,7 @@ export class ShopperService {
     email: string;
     name: string;
   }) {
-    const insert = `INSERT INTO shopper(data) VALUES (jsonb_build_object('sub', $1::text, 'email', $2::text, 'name', $3::text, 'role', $4::text)) RETURNING *`;
+    const insert = `INSERT INTO shopper(data) VALUES (jsonb_build_object('sub', $1::text, 'email', $2::text, 'name', $3::text, 'username', 'temp', 'role', $4::text, 'suspended', false)) RETURNING *`;
     const query = {
       text: insert,
       values: [data.sub, data.email, data.name, "Shopper"],
