@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, CssBaseline, Divider } from '@mui/material';
+import { useRouter } from 'next/router';
 
 import { MyDrawer } from './Drawer';
 //import { Users } from './Users';
@@ -15,6 +16,16 @@ import APIKeys from './APIKeys';
  */
 export function Home() {
   const loginContext = React.useContext(LoginContext);
+  const router = useRouter();
+  React.useEffect(() => {
+    const token = localStorage.getItem("accessToken")
+    if (token) {
+      loginContext.setAccessToken(token);
+      router.push('/');
+    } else {
+      router.push('/login')
+    }
+  }, [loginContext, router])
   const pageContext = React.useContext(PageContext);
 
   if (loginContext.accessToken.length > 0) {

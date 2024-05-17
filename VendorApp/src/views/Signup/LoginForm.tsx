@@ -5,13 +5,13 @@ import getConfig from 'next/config';
 import { useSnackbar } from 'notistack';
 import * as React from 'react'
 import { LoginContext } from '@/contexts/Login';
+import { useRouter } from 'next/router';
 const { basePath } = getConfig().publicRuntimeConfig;
 
 export function LoginForm({ navigate }: LoginFormProps) {
   const { enqueueSnackbar } = useSnackbar();
-  const loginContext = React.useContext(LoginContext)
-
-  console.log(loginContext.accessToken)
+  const loginContext = React.useContext(LoginContext);
+  const router = useRouter();
 
   const handleClickError = () => {
     enqueueSnackbar('Oops! Something went wrong, please try again', {
@@ -47,7 +47,8 @@ export function LoginForm({ navigate }: LoginFormProps) {
           handleClickError();
         } else {
           loginContext.setAccessToken(json.data.login.accessToken)
-          localStorage.setItem('accessToken', json.data.login.accessToken)
+          localStorage.setItem('accessToken', json.data.login.accessToken);
+          router.push('/')
         }
       })
       .catch(e => {

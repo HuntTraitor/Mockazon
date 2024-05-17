@@ -7,9 +7,6 @@ interface LoginProviderProps {
 }
 
 export const LoginContext = createContext({
-  userName: '',
-  // eslint-disable-next-line
-  setUserName: (userName: string) => {},
   accessToken: '',
   // eslint-disable-next-line
   setAccessToken: (accessToken: string) => {},
@@ -18,19 +15,11 @@ export const LoginContext = createContext({
 export const LoginProvider = ({
   children,
 }: PropsWithChildren<LoginProviderProps>) => {
-  const [userName, setUserName] = useState('');
   const [accessToken, setAccessToken] = useState('');
-
-  React.useEffect(() => {
-    const token = localStorage.getItem("accessToken")
-    if (token) {
-      setAccessToken(token)
-    }
-  })
 
   return (
     <LoginContext.Provider
-      value={{ userName, setUserName, accessToken, setAccessToken }}
+      value={{accessToken, setAccessToken }}
     >
       {children}
     </LoginContext.Provider>
