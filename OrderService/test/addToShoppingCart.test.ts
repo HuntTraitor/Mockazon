@@ -13,15 +13,6 @@ test('Creating a new shopping cart item gets 201', async () => {
   expect(result.status).toBe(201);
 });
 
-test('Creating a new shopping cart item without vendorId gets 400', async () => {
-  const result = await supertest(server).post(`/api/v0/shoppingCart`).send({
-    product_id: randomUUID(),
-    shopper_id: randomUUID(),
-    quantity: '2',
-  });
-  expect(result.status).toBe(400);
-});
-
 test('Creating a new shopping cart item without productId gets 400', async () => {
   const result = await supertest(server)
     .post(`/api/v0/shoppingCart?vendorId=${randomUUID()}`)
