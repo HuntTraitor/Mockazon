@@ -17,6 +17,7 @@ import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { useAppContext } from '@/contexts/AppContext';
 import getConfig from 'next/config';
+import { useSnackbar } from 'notistack';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -53,6 +54,7 @@ const Index = () => {
   const [error, setError] = useState('');
   const { user, setUser, setAccessToken } = useContext(LoggedInContext);
   const { backDropOpen, setBackDropOpen } = useAppContext();
+  const { enqueueSnackbar } = useSnackbar();
   useLoadLocalStorageUser(setUser, setAccessToken);
 
   useEffect(() => {
@@ -99,22 +101,25 @@ const Index = () => {
       });
   }, []);
 
-  // FIXME: Do not call the microservice from the browser
   const addToShoppingCart = (productId: string) => {
-    fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?vendorId=${user.id}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          product_id: productId,
-          shopper_id: user.id,
-          quantity: '3',
-        }),
-      }
-    )
+    const query = {
+      query: `mutation AddToShoppingCart {
+        addToShoppingCart(productId: "${productId}", shopperId: "${user.id}", quantity: "1") {
+          id
+          product_id
+          shopper_id
+          data { 
+            quantity
+          }
+        }
+      }`,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(query),
+    })
       .then(response => {
         if (!response.ok) {
           throw response;
@@ -122,12 +127,25 @@ const Index = () => {
         return response.json();
       })
       .then(shoppingCart => {
-        alert('Added to shopping cart');
+        if(shoppingCart.errors && shoppingCart.errors.length > 0){
+          throw new Error(shoppingCart.errors[0].message);
+        }
+        enqueueSnackbar('Added to shopping cart', {
+          variant: 'success',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
         console.log(shoppingCart);
       })
       .catch(err => {
-        console.log('401', err);
-        setError('Could not fetch products');
+        console.log(err);
+        enqueueSnackbar('Could not add product to cart', {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
       });
   };
 

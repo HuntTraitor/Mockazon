@@ -74,7 +74,6 @@ const Cart = () => {
       id
       product_id
       shopper_id
-      vendor_id
       data {
         quantity
       }

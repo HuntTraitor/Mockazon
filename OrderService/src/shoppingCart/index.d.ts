@@ -11,7 +11,6 @@ export interface ShoppingCartItem {
   id: UUID;
   product_id: UUID;
   shopper_id: UUID;
-  vendor_id: UUID;
   data: {
     quantity: Quantity;
   };

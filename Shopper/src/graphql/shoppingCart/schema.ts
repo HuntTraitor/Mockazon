@@ -1,16 +1,10 @@
 import { ArgsType, Field, ObjectType } from 'type-graphql';
 import { IsUUID } from 'class-validator';
 
-// @ArgsType()
-// export class Sub {
-//   @Field()
-//     sub!: string;
-// }
-
 @ObjectType()
 export class ShoppingCartData {
   @Field()
-    quantity!: number;
+    quantity!: string;
 }
 
 @ArgsType()
@@ -18,6 +12,18 @@ export class ShopperId {
   @IsUUID()
   @Field()
     shopperId!: string;
+}
+
+@ArgsType()
+export class AddItem {
+  @IsUUID()
+  @Field()
+    productId!: string;
+  @IsUUID()
+  @Field()
+    shopperId!: string;
+  @Field()
+    quantity!: string;
 }
 
 @ObjectType()
@@ -31,9 +37,6 @@ export class ShoppingCartItem {
   @IsUUID()
   @Field()
     shopper_id!: string;
-  @IsUUID()
-  @Field()
-    vendor_id!: string;
   @Field(() => ShoppingCartData)
     data!: ShoppingCartData;
 }

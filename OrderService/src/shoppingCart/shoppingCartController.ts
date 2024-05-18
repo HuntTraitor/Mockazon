@@ -17,10 +17,9 @@ export class ShoppingCartController extends Controller {
   @Post('')
   @SuccessResponse('201', 'Added to Shopping Cart')
   public async addToShoppingCart(
-    @Body() order: ShoppingCartInput,
-    @Query() vendorId: UUID
+    @Body() order: ShoppingCartInput
   ): Promise<ShoppingCartItem | undefined> {
-    return await new ShoppingCartService().create(order, vendorId);
+    return await new ShoppingCartService().addToShoppingCart(order);
   }
 
   @Get('')
