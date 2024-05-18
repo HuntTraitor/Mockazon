@@ -16,6 +16,9 @@ const nextConfig = {
     ],
     dangerouslyAllowSVG: true,
   },
+  experimental: {
+    serverMinification: false,
+  }
 };
 
 export default nextConfig;
