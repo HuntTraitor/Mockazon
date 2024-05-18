@@ -12,24 +12,39 @@ import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from '../../api/requestHandler';
+import { SnackbarProvider, useSnackbar } from 'notistack';
 
 let server: http.Server<
   typeof http.IncomingMessage,
   typeof http.ServerResponse
 >;
 
-let error = false;
-let errorInShoppingCart = false;
+let errorInGetProducts = false;
+let errorInGetProductsGraphQL = false;
+let errorInAddToShoppingCart = false;
+let errorInAddToShoppingCartGraphQL = false;
 
 const handlers = [
   graphql.query('GetProducts', ({ query }) => {
     console.log(query);
-    if (error) {
+    if (errorInGetProducts) {
+      if(errorInGetProductsGraphQL){
+        return HttpResponse.json(
+          {
+            errors: [
+              {
+                message: 'test errorInGetProducts',
+              },
+            ],
+          },
+          { status: 200 }
+        );
+      }
       return HttpResponse.json(
         {
           errors: [
             {
-              message: 'test error',
+              message: 'test errorInGetProducts',
             },
           ],
         },
@@ -58,12 +73,49 @@ const handlers = [
       );
     }
   }),
-  graphql.query('AddProduct', ({ query /*variables*/ }) => {
+  graphql.mutation('AddToShoppingCart', ({ query }) => {
     console.log(query);
-    if (errorInShoppingCart) {
-      return HttpResponse.json({}, { status: 400 });
+    if (errorInAddToShoppingCart) {
+      if(errorInAddToShoppingCartGraphQL){
+        return HttpResponse.json(
+          {
+            errors: [
+              {
+                message: 'test errorInGetProducts',
+              },
+            ],
+          },
+          { status: 200 }
+        );
+      }
+      return HttpResponse.json(
+        {
+          errors: [
+            {
+              message: 'test errorInGetProducts',
+            },
+          ],
+        },
+        { status: 400 }
+      );
     } else {
-      return HttpResponse.json({}, { status: 200 });
+      return HttpResponse.json(
+        {
+          data: {
+            addToShoppingCart: [
+              {
+                id: '123',
+                product_id: 'prodid123',
+                shopper_id: 'shopperid123',
+                data: {
+                  quantity: '5',
+                },
+              },
+            ],
+          },
+        },
+        { status: 200 }
+      );
     }
   }),
 ];
@@ -82,6 +134,13 @@ beforeAll(async () => {
 
 afterEach(() => {
   microServices.resetHandlers();
+});
+
+beforeEach(() => {
+  errorInGetProducts = false;
+  errorInGetProductsGraphQL = false;
+  errorInAddToShoppingCart = false;
+  errorInAddToShoppingCartGraphQL = false;
 });
 
 afterAll(done => {
@@ -124,19 +183,30 @@ const AppContextProps = {
   setMockazonMenuDrawerOpen: jest.fn(),
 };
 
+jest.mock('notistack', () => ({
+  ...jest.requireActual('notistack'),
+  useSnackbar: jest.fn(),
+}));
+
 it('Renders successfully', async () => {
   localStorage.setItem(
     'user',
     JSON.stringify({
       accessToken: 'abc',
       id: 'abc',
-      name: 'Trevor',
+      name: 'John',
       role: 'Shopper',
     })
   );
+
+  const mockEnqueueSnackbar = jest.fn();
+  (useSnackbar as jest.Mock).mockReturnValue({ enqueueSnackbar: mockEnqueueSnackbar });
+
   render(
     <AppContext.Provider value={AppContextProps}>
-      <Products />
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
     </AppContext.Provider>
   );
   // expect(screen.getByText('test name'));
@@ -153,58 +223,132 @@ it('Adds to shopping cart', async () => {
       role: 'Shopper',
     })
   );
+  const mockEnqueueSnackbar = jest.fn();
+  (useSnackbar as jest.Mock).mockReturnValue({ enqueueSnackbar: mockEnqueueSnackbar });
+
   render(
     <AppContext.Provider value={AppContextProps}>
-      <Products />
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
     </AppContext.Provider>
   );
   await waitFor(() => expect(screen.getByText('test name')));
   const button = screen.getByText('Add to Shopping Cart');
   fireEvent.click(button);
+  await waitFor(() => {
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Added to shopping cart', {
+      variant: 'success',
+      persist: false,
+      autoHideDuration: 3000,
+      anchorOrigin: { horizontal: 'center', vertical: 'top' },
+    });
+  });
 });
 
-it("Doesn't add to shopping cart because error", async () => {
+it("Doesn't add to shopping cart because error in add to shopping cart", async () => {
   localStorage.setItem(
     'user',
     JSON.stringify({
       accessToken: 'abc',
       id: 'abc',
-      name: 'Trevor',
+      name: 'John',
       role: 'Shopper',
     })
   );
-  errorInShoppingCart = true;
+  const mockEnqueueSnackbar = jest.fn();
+  (useSnackbar as jest.Mock).mockReturnValue({ enqueueSnackbar: mockEnqueueSnackbar });
+  errorInAddToShoppingCart = true;
+
   render(
     <AppContext.Provider value={AppContextProps}>
-      <Products />
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
     </AppContext.Provider>
   );
+
   await waitFor(() => expect(screen.getByText('test name')));
   const button = screen.getByText('Add to Shopping Cart');
   fireEvent.click(button);
-  await waitFor(() => expect(screen.getByText('Could not fetch products')));
+  await waitFor(() => {
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Could not add product to cart', {
+      variant: 'error',
+      persist: false,
+      autoHideDuration: 3000,
+      anchorOrigin: { horizontal: 'center', vertical: 'top' },
+    });
+  });
+});
+
+it("Doesn't add to shopping cart because error in add to shopping cart graphql", async () => {
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+
+  const mockEnqueueSnackbar = jest.fn();
+  (useSnackbar as jest.Mock).mockReturnValue({ enqueueSnackbar: mockEnqueueSnackbar });
+  errorInAddToShoppingCart = true;
+  errorInAddToShoppingCartGraphQL = true;
+
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+
+  await waitFor(() => expect(screen.getByText('test name')));
+  const button = screen.getByText('Add to Shopping Cart');
+  fireEvent.click(button);
+  await waitFor(() => {
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Could not add product to cart', {
+      variant: 'error',
+      persist: false,
+      autoHideDuration: 3000,
+      anchorOrigin: { horizontal: 'center', vertical: 'top' },
+    });
+  });
 });
 
 it('should fetch server side props with translations', async () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+  // @ts-expect-errorInGetProducts
   await getServerSideProps({ locale: 'en' });
 });
 
 it('should fetch server side props with translations without locale', async () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+  // @ts-expect-errorInGetProducts
   await getServerSideProps({});
 });
 
-it('Renders with error', async () => {
-  error = true;
+it('Renders with error in get products', async () => {
+  errorInGetProducts = true;
   render(
     <AppContext.Provider value={AppContextProps}>
       <Products />
     </AppContext.Provider>
   );
 });
+
+it('Renders error in get products graphql', async () => {
+  errorInGetProducts = true;
+  errorInGetProductsGraphQL = true;
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <Products />
+    </AppContext.Provider>
+  );
+});
+
 
 it('Click Backdrop', () => {
   render(

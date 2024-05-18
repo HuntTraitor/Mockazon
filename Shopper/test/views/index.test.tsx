@@ -32,6 +32,8 @@ jest.mock('@fontsource/open-sans', () => {
 const AppContextProps = {
   backDropOpen: false,
   setBackDropOpen: jest.fn(),
+  mockazonMenuDrawerOpen: false,
+  setMockazonMenuDrawerOpen: jest.fn(),
 };
 
 it('Renders', async () => {

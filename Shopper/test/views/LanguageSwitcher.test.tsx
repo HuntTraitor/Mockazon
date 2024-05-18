@@ -27,6 +27,8 @@ jest.mock('next/router', () => ({
 const AppContextProps = {
   backDropOpen: false,
   setBackDropOpen: jest.fn(),
+  mockazonMenuDrawerOpen: false,
+  setMockazonMenuDrawerOpen: jest.fn(),
 };
 
 describe('Language Switcher', () => {

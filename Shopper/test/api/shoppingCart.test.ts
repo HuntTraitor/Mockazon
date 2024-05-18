@@ -13,13 +13,14 @@ let server: http.Server<
   typeof http.ServerResponse
 >;
 
-let rightCreds = true;
+let getPasses = true;
+let postPasses = true;
 
 const handlers = [
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
     async () => {
-      if (rightCreds) {
+      if (getPasses) {
         return HttpResponse.json(
           [
             {
@@ -30,6 +31,24 @@ const handlers = [
               data: { quantity: '5' },
             },
           ],
+          { status: 200 }
+        );
+      } else {
+        return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+      }
+    }
+  ),
+  rest.post(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
+    async () => {
+      if (postPasses) {
+        return HttpResponse.json(
+          {
+            id: '123',
+            product_id: '123',
+            shopper_id: '123',
+            data: { quantity: '5' },
+          },
           { status: 200 }
         );
       } else {
@@ -57,7 +76,7 @@ afterAll(done => {
 });
 
 test('Gets shopping cart', async () => {
-  rightCreds = true;
+  getPasses = true;
   const result = await supertest(server)
     .post('/api/graphql')
     .send({
@@ -67,7 +86,6 @@ test('Gets shopping cart', async () => {
                 id
                 product_id
                 shopper_id
-                vendor_id
                 data {
                   quantity
                 }
@@ -77,13 +95,12 @@ test('Gets shopping cart', async () => {
   expect(result.body.data).toBeDefined();
   expect(result.body.data.getShoppingCart[0].id).toBe('123');
   expect(result.body.data.getShoppingCart[0].product_id).toBe('123');
-  expect(result.body.data.getShoppingCart[0].vendor_id).toBe('123');
   expect(result.body.data.getShoppingCart[0].shopper_id).toBe('123');
-  expect(result.body.data.getShoppingCart[0].data.quantity).toBe(5);
+  expect(result.body.data.getShoppingCart[0].data.quantity).toBe('5');
 });
 
 test('Gets shopping cart with failure', async () => {
-  rightCreds = false;
+  getPasses = false;
   const result = await supertest(server)
     .post('/api/graphql')
     .send({
@@ -93,13 +110,47 @@ test('Gets shopping cart with failure', async () => {
                 id
                 product_id
                 shopper_id
-                vendor_id
                 data {
                   quantity
                 }
               }
             }`,
     });
+  expect(result.body.errors[0].message).toBeDefined();
+  expect(result.body.errors.data).toBeUndefined();
+});
+
+test('Add item to shopping cart', async () => {
+  postPasses = true;
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query: `mutation { addToShoppingCart(
+      productId: "${randomUUID()}",
+      shopperId: "${randomUUID()}",
+      quantity: "3")
+    { id, product_id, shopper_id, data { quantity } }}`,
+    });
+
+  expect(result.body.data).toBeDefined();
+  expect(result.body.data.addToShoppingCart.id).toBe('123');
+  expect(result.body.data.addToShoppingCart.product_id).toBe('123');
+  expect(result.body.data.addToShoppingCart.shopper_id).toBe('123');
+  expect(result.body.data.addToShoppingCart.data.quantity).toBe('5');
+});
+
+test('Add item to shopping cart with failure', async () => {
+  postPasses = false;
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query: `mutation { addToShoppingCart(
+      productId: "${randomUUID()}",
+      shopperId: "${randomUUID()}",
+      quantity: "3")
+    { id, product_id, shopper_id, data { quantity } }}`,
+    });
+
   expect(result.body.errors[0].message).toBeDefined();
   expect(result.body.errors.data).toBeUndefined();
 });
