@@ -19,7 +19,10 @@ function App({ Component, pageProps }: AppProps) {
         <SnackbarProvider maxSnack={1}>
           <Head>
             <title>Mockazon</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1"
+            />
             <link rel="icon" href="/favicon.ico" />
           </Head>
           <Component {...pageProps} />

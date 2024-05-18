@@ -127,7 +127,7 @@ const Index = () => {
         return response.json();
       })
       .then(shoppingCart => {
-        if(shoppingCart.errors && shoppingCart.errors.length > 0){
+        if (shoppingCart.errors && shoppingCart.errors.length > 0) {
           throw new Error(shoppingCart.errors[0].message);
         }
         enqueueSnackbar('Added to shopping cart', {

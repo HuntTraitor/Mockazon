@@ -12,9 +12,7 @@ export class ShoppingCartResolver {
   }
 
   @Mutation(() => ShoppingCartItem)
-  async addToShoppingCart(
-    @Args() item: AddItem
-  ): Promise<ShoppingCartItem> {
+  async addToShoppingCart(@Args() item: AddItem): Promise<ShoppingCartItem> {
     return new ShoppingCartService().addToShoppingCart(item);
   }
 }

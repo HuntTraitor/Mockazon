@@ -28,7 +28,7 @@ const handlers = [
   graphql.query('GetProducts', ({ query }) => {
     console.log(query);
     if (errorInGetProducts) {
-      if(errorInGetProductsGraphQL){
+      if (errorInGetProductsGraphQL) {
         return HttpResponse.json(
           {
             errors: [
@@ -76,7 +76,7 @@ const handlers = [
   graphql.mutation('AddToShoppingCart', ({ query }) => {
     console.log(query);
     if (errorInAddToShoppingCart) {
-      if(errorInAddToShoppingCartGraphQL){
+      if (errorInAddToShoppingCartGraphQL) {
         return HttpResponse.json(
           {
             errors: [
@@ -200,7 +200,9 @@ it('Renders successfully', async () => {
   );
 
   const mockEnqueueSnackbar = jest.fn();
-  (useSnackbar as jest.Mock).mockReturnValue({ enqueueSnackbar: mockEnqueueSnackbar });
+  (useSnackbar as jest.Mock).mockReturnValue({
+    enqueueSnackbar: mockEnqueueSnackbar,
+  });
 
   render(
     <AppContext.Provider value={AppContextProps}>
@@ -224,7 +226,9 @@ it('Adds to shopping cart', async () => {
     })
   );
   const mockEnqueueSnackbar = jest.fn();
-  (useSnackbar as jest.Mock).mockReturnValue({ enqueueSnackbar: mockEnqueueSnackbar });
+  (useSnackbar as jest.Mock).mockReturnValue({
+    enqueueSnackbar: mockEnqueueSnackbar,
+  });
 
   render(
     <AppContext.Provider value={AppContextProps}>
@@ -257,7 +261,9 @@ it("Doesn't add to shopping cart because error in add to shopping cart", async (
     })
   );
   const mockEnqueueSnackbar = jest.fn();
-  (useSnackbar as jest.Mock).mockReturnValue({ enqueueSnackbar: mockEnqueueSnackbar });
+  (useSnackbar as jest.Mock).mockReturnValue({
+    enqueueSnackbar: mockEnqueueSnackbar,
+  });
   errorInAddToShoppingCart = true;
 
   render(
@@ -272,12 +278,15 @@ it("Doesn't add to shopping cart because error in add to shopping cart", async (
   const button = screen.getByText('Add to Shopping Cart');
   fireEvent.click(button);
   await waitFor(() => {
-    expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Could not add product to cart', {
-      variant: 'error',
-      persist: false,
-      autoHideDuration: 3000,
-      anchorOrigin: { horizontal: 'center', vertical: 'top' },
-    });
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+      'Could not add product to cart',
+      {
+        variant: 'error',
+        persist: false,
+        autoHideDuration: 3000,
+        anchorOrigin: { horizontal: 'center', vertical: 'top' },
+      }
+    );
   });
 });
 
@@ -293,7 +302,9 @@ it("Doesn't add to shopping cart because error in add to shopping cart graphql",
   );
 
   const mockEnqueueSnackbar = jest.fn();
-  (useSnackbar as jest.Mock).mockReturnValue({ enqueueSnackbar: mockEnqueueSnackbar });
+  (useSnackbar as jest.Mock).mockReturnValue({
+    enqueueSnackbar: mockEnqueueSnackbar,
+  });
   errorInAddToShoppingCart = true;
   errorInAddToShoppingCartGraphQL = true;
 
@@ -309,12 +320,15 @@ it("Doesn't add to shopping cart because error in add to shopping cart graphql",
   const button = screen.getByText('Add to Shopping Cart');
   fireEvent.click(button);
   await waitFor(() => {
-    expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Could not add product to cart', {
-      variant: 'error',
-      persist: false,
-      autoHideDuration: 3000,
-      anchorOrigin: { horizontal: 'center', vertical: 'top' },
-    });
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+      'Could not add product to cart',
+      {
+        variant: 'error',
+        persist: false,
+        autoHideDuration: 3000,
+        anchorOrigin: { horizontal: 'center', vertical: 'top' },
+      }
+    );
   });
 });
 
@@ -348,7 +362,6 @@ it('Renders error in get products graphql', async () => {
     </AppContext.Provider>
   );
 });
-
 
 it('Click Backdrop', () => {
   render(

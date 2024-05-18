@@ -30,9 +30,7 @@ export class ShoppingCartService {
     return result;
   }
 
-  public async addToShoppingCart(
-    item: AddItem
-  ): Promise<ShoppingCartItem> {
+  public async addToShoppingCart(item: AddItem): Promise<ShoppingCartItem> {
     const result = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
       {
@@ -43,7 +41,7 @@ export class ShoppingCartService {
         body: JSON.stringify({
           shopper_id: item.shopperId,
           product_id: item.productId,
-          quantity: item.quantity
+          quantity: item.quantity,
         }),
       }
     )

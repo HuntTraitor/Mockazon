@@ -15,11 +15,7 @@ export class ShoppingCartService {
 
     const query = {
       text: insert,
-      values: [
-        `${NewOrder.shopper_id}`,
-        `${NewOrder.product_id}`,
-        orderData,
-      ],
+      values: [`${NewOrder.shopper_id}`, `${NewOrder.product_id}`, orderData],
     };
     const { rows } = await pool.query(query);
     return rows[0];
