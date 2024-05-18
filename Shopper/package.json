@@ -34,6 +34,7 @@
     "jwt-decode": "^4.0.0",
     "next": "*",
     "next-i18next": "^13.2.2",
+    "notistack": "^3.0.1",
     "pg": "*",
     "react": "*",
     "react-dom": "*",
