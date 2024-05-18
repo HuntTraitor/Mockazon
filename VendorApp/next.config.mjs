@@ -9,6 +9,9 @@ const nextConfig = {
     basePath: isProd ? '/vendor' : '',
   },
   reactStrictMode: true,
+  experimental: {
+    serverMinification: false,
+  }
 };
 
 export default nextConfig;
