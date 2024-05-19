@@ -174,3 +174,40 @@ test('Gets product with failure', async () => {
   expect(result.body.errors[0].message).toBeDefined();
   expect(result.body.errors.data).toBeUndefined();
 });
+
+test('Gets products with parameters', async () => {
+  noErrorInProducts = true;
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query: `{getProducts(
+        vendorId: "${randomUUID()}",
+        active: true,
+        page: 1,
+        pageSize: 1,
+        search: "search",
+        orderBy: "orderBy",
+        descending: true
+      ) {
+                id
+                data {
+                  brand
+                  name
+                  rating
+                  price
+                  deliveryDate
+                  image
+                }
+              }
+            }`,
+    });
+  expect(result.body.data).toBeDefined();
+  expect(result.body.data.getProducts[0].id).toBe('123');
+  expect(result.body.data.getProducts[0].data.brand).toBe('brand');
+  expect(result.body.data.getProducts[0].data.name).toBe('name');
+  expect(result.body.data.getProducts[0].data.rating).toBe('5');
+  expect(result.body.data.getProducts[0].data.price).toBe(5);
+  expect(result.body.data.getProducts[0].data.deliveryDate).toBe('5');
+  expect(result.body.data.getProducts[0].data.image).toBe('image');
+});
+
