@@ -51,6 +51,13 @@ const CustomTextField = styled(TextField)(() => ({
       border: 'none',
     },
   },
+  '& .MuiInputBase-input::placeholder': {
+    fontWeight: '700',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+  },
   '& .MuiInputBase-input': {
     padding: '8px 12px',
     fontSize: '14px',
@@ -150,6 +157,18 @@ const TopHeader = () => {
     router.push(`/products?${queryParams}`);
   };
 
+  const handleSuggestionChange = (event: React.ChangeEvent<unknown>, value: string | null) => {
+    if (value !== null) {
+      setSearch(value);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <Box className={styles.container}>
       <Box className={styles.topHeaderLeft}>
@@ -202,10 +221,10 @@ const TopHeader = () => {
           className={styles.searchInputContainer}
           forcePopupIcon={false}
           options={[search, ...suggestions]}
-          getOptionLabel={option => option}
+          getOptionLabel={(option) => option}
           noOptionsText={''}
           loading={loading}
-          renderInput={params => (
+          renderInput={(params) => (
             <CustomTextField
               {...params}
               placeholder={t('searchPlaceholder') as string}
@@ -219,9 +238,10 @@ const TopHeader = () => {
                     {params.InputProps.endAdornment}
                   </>
                 ),
+                onKeyDown: handleKeyDown,
               }}
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               onFocus={handleFocus}
               onBlur={handleBlur}
             />
@@ -231,6 +251,7 @@ const TopHeader = () => {
             paper: styles.suggestionsPaper,
             option: styles.suggestionOption,
           }}
+          onChange={handleSuggestionChange}
         />
         <Button
           aria-label="Search Button"

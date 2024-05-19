@@ -217,7 +217,7 @@ const Index = () => {
           Products
         </Typography>
         <Grid container spacing={3}>
-          {products.map(
+          {products.length > 0 ? products.map(
             product =>
               product.data && (
                 <Grid item key={product.id} xs={12}>
@@ -284,6 +284,10 @@ const Index = () => {
                   </Card>
                 </Grid>
               )
+          ) : (
+            <Typography variant="h6" align="center">
+              No products found
+            </Typography>
           )}
         </Grid>
       </Container>
