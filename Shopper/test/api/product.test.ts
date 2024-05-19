@@ -210,4 +210,3 @@ test('Gets products with parameters', async () => {
   expect(result.body.data.getProducts[0].data.deliveryDate).toBe('5');
   expect(result.body.data.getProducts[0].data.image).toBe('image');
 });
-

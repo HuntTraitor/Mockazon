@@ -8,10 +8,10 @@ test('triggers onClose when backdrop is clicked', async () => {
   const AppContextProps = {
     backDropOpen: false,
     setBackDropOpen: jest.fn(),
-    mockazonMenuDrawerOpen: true,  // Initially open the drawer
+    mockazonMenuDrawerOpen: true, // Initially open the drawer
     setMockazonMenuDrawerOpen,
   };
-  
+
   render(
     <AppContext.Provider value={AppContextProps}>
       <MockazonMenuDrawer />
@@ -22,6 +22,6 @@ test('triggers onClose when backdrop is clicked', async () => {
   if (backdrop) {
     fireEvent.click(backdrop);
   }
-  
+
   expect(setMockazonMenuDrawerOpen).toHaveBeenCalledWith(false);
 });

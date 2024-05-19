@@ -1,7 +1,10 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
-import { AppContextProvider, useAppContext } from '../../src/contexts/AppContext';
+import {
+  AppContextProvider,
+  useAppContext,
+} from '../../src/contexts/AppContext';
 import userEvent from '@testing-library/user-event';
 
 jest.mock('next/router', () => ({
@@ -30,7 +33,9 @@ describe('AppContextProvider', () => {
       return (
         <div>
           <span>backDropOpen: {backDropOpen.toString()}</span>
-          <span>mockazonMenuDrawerOpen: {mockazonMenuDrawerOpen.toString()}</span>
+          <span>
+            mockazonMenuDrawerOpen: {mockazonMenuDrawerOpen.toString()}
+          </span>
         </div>
       );
     };
@@ -42,18 +47,29 @@ describe('AppContextProvider', () => {
     );
 
     expect(screen.getByText('backDropOpen: false')).toBeInTheDocument();
-    expect(screen.getByText('mockazonMenuDrawerOpen: false')).toBeInTheDocument();
+    expect(
+      screen.getByText('mockazonMenuDrawerOpen: false')
+    ).toBeInTheDocument();
   });
 
   test('updates context values', async () => {
     const TestComponent = () => {
-      const { backDropOpen, setBackDropOpen, mockazonMenuDrawerOpen, setMockazonMenuDrawerOpen } = useAppContext();
+      const {
+        backDropOpen,
+        setBackDropOpen,
+        mockazonMenuDrawerOpen,
+        setMockazonMenuDrawerOpen,
+      } = useAppContext();
       return (
         <div>
           <span>backDropOpen: {backDropOpen.toString()}</span>
-          <span>mockazonMenuDrawerOpen: {mockazonMenuDrawerOpen.toString()}</span>
+          <span>
+            mockazonMenuDrawerOpen: {mockazonMenuDrawerOpen.toString()}
+          </span>
           <button onClick={() => setBackDropOpen(true)}>Open BackDrop</button>
-          <button onClick={() => setMockazonMenuDrawerOpen(true)}>Open Drawer</button>
+          <button onClick={() => setMockazonMenuDrawerOpen(true)}>
+            Open Drawer
+          </button>
         </div>
       );
     };
@@ -71,7 +87,9 @@ describe('AppContextProvider', () => {
 
     userEvent.click(screen.getByText('Open Drawer'));
     await waitFor(() => {
-      expect(screen.getByText('mockazonMenuDrawerOpen: true')).toBeInTheDocument();
+      expect(
+        screen.getByText('mockazonMenuDrawerOpen: true')
+      ).toBeInTheDocument();
     });
   });
 
@@ -81,7 +99,9 @@ describe('AppContextProvider', () => {
       return (
         <div>
           <span>backDropOpen: {backDropOpen.toString()}</span>
-          <span>mockazonMenuDrawerOpen: {mockazonMenuDrawerOpen.toString()}</span>
+          <span>
+            mockazonMenuDrawerOpen: {mockazonMenuDrawerOpen.toString()}
+          </span>
         </div>
       );
     };

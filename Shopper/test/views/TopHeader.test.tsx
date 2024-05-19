@@ -35,18 +35,18 @@ jest.mock('next-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       switch (key) {
-      case 'deliveryText':
-        return 'Delivery to';
-      case 'searchPlaceholder':
-        return 'Search Mockazon';
-      case 'returns':
-        return 'Returns';
-      case 'orders':
-        return '& Orders';
-      case 'cart':
-        return 'Cart';
-      default:
-        return key;
+        case 'deliveryText':
+          return 'Delivery to';
+        case 'searchPlaceholder':
+          return 'Search Mockazon';
+        case 'returns':
+          return 'Returns';
+        case 'orders':
+          return '& Orders';
+        case 'cart':
+          return 'Cart';
+        default:
+          return key;
       }
     },
     i18n: {
@@ -101,14 +101,19 @@ describe('Top Header', () => {
 
   it('Typing in search bar fetches suggestions', async () => {
     const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() =>
-      Promise.resolve(new Response(JSON.stringify({
-        data: {
-          getProducts: [
-            { data: { name: 'test product 1' } },
-            { data: { name: 'test product 2' } },
-          ],
-        },
-      }), { status: 200 }))
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getProducts: [
+                { data: { name: 'test product 1' } },
+                { data: { name: 'test product 2' } },
+              ],
+            },
+          }),
+          { status: 200 }
+        )
+      )
     );
 
     render(
@@ -131,11 +136,16 @@ describe('Top Header', () => {
 
   it('Typing in search bar fetches suggestions with no results', async () => {
     const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() =>
-      Promise.resolve(new Response(JSON.stringify({
-        data: {
-          getProducts: [],
-        },
-      }), { status: 200 }))
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getProducts: [],
+            },
+          }),
+          { status: 200 }
+        )
+      )
     );
 
     render(
@@ -158,9 +168,14 @@ describe('Top Header', () => {
 
   it('Typing in search bar fetches suggestions with error', async () => {
     const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() =>
-      Promise.resolve(new Response(JSON.stringify({
-        errors: ['Error fetching products'],
-      }), { status: 500 }))
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            errors: ['Error fetching products'],
+          }),
+          { status: 500 }
+        )
+      )
     );
 
     render(
@@ -191,7 +206,9 @@ describe('Top Header', () => {
     fireEvent.change(searchInput, { target: { value: 'test' } });
     const searchButton = screen.getByLabelText('Search Button');
     fireEvent.click(searchButton);
-    expect(pushMock).toHaveBeenCalledWith('/products?page=1&pageSize=20&search=test');
+    expect(pushMock).toHaveBeenCalledWith(
+      '/products?page=1&pageSize=20&search=test'
+    );
   });
 
   it('Focus and blur events on search bar set backdrop state', async () => {
