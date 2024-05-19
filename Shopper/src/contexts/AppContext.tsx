@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { useRouter } from 'next/router';
 
-interface ContextType {
+export interface ContextType {
   backDropOpen: boolean;
   setBackDropOpen: Dispatch<SetStateAction<boolean>>;
   mockazonMenuDrawerOpen: boolean;

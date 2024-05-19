@@ -6,7 +6,7 @@ import {
   Dispatch,
 } from 'react';
 
-interface ContextType {
+export interface ContextType {
   accessToken: string;
   setAccessToken: Dispatch<SetStateAction<string>>;
   location: string;
@@ -28,7 +28,7 @@ export const LoggedInContext = createContext<ContextType>({
   setUser: () => {},
 });
 
-interface User {
+export interface User {
   accessToken: string;
   id: string;
   name: string;

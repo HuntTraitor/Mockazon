@@ -97,7 +97,7 @@ const TopHeader = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          console.error('Error fetching products:', response.statusText);
         }
 
         const data = await response.json();
@@ -208,7 +208,7 @@ const TopHeader = () => {
           renderInput={params => (
             <CustomTextField
               {...params}
-              placeholder={t('searchPlaceholder') ?? 'Search'}
+              placeholder={t('searchPlaceholder') as string}
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (
