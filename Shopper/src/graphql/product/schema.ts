@@ -1,9 +1,9 @@
 import { ArgsType, Field, ObjectType, Int } from 'type-graphql';
-import { IsUUID } from 'class-validator';
+import UUID from '../types/uuidScalar';
 
 @ArgsType()
 export class GetProductsArgs {
-  @Field({ nullable: true })
+  @Field(() => UUID, { nullable: true })
     vendorId?: string;
 
   @Field({ nullable: true })
@@ -43,15 +43,13 @@ export class ProductData {
 
 @ArgsType()
 export class ProductId {
-  @IsUUID()
-  @Field()
+  @Field(() => UUID)
     productId!: string;
 }
 
 @ObjectType()
 export class Product {
-  @IsUUID()
-  @Field()
+  @Field(() => UUID)
     id!: string;
   @Field(() => ProductData)
     data!: ProductData;
