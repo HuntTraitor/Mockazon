@@ -157,7 +157,10 @@ const TopHeader = () => {
     router.push(`/products?${queryParams}`);
   };
 
-  const handleSuggestionChange = (event: React.ChangeEvent<unknown>, value: string | null) => {
+  const handleSuggestionChange = (
+    event: React.ChangeEvent<unknown>,
+    value: string | null
+  ) => {
     if (value !== null) {
       setSearch(value);
     }
@@ -176,9 +179,9 @@ const TopHeader = () => {
           <Link href="/">
             <Image
               aria-label="bar logo"
-              width="60"
-              height="40"
-              src={`${basePath}/mini_mockazon_logo_white.png`}
+              src={`${basePath}/mockazon_logo_white_transparent.png`}
+              width={150}
+              height={50}
               alt="Logo"
             />
             {/* Replace with a new logo */}
@@ -221,10 +224,10 @@ const TopHeader = () => {
           className={styles.searchInputContainer}
           forcePopupIcon={false}
           options={[search, ...suggestions]}
-          getOptionLabel={(option) => option}
+          getOptionLabel={option => option}
           noOptionsText={''}
           loading={loading}
-          renderInput={(params) => (
+          renderInput={params => (
             <CustomTextField
               {...params}
               placeholder={t('searchPlaceholder') as string}
@@ -241,7 +244,7 @@ const TopHeader = () => {
                 onKeyDown: handleKeyDown,
               }}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={e => setSearch(e.target.value)}
               onFocus={handleFocus}
               onBlur={handleBlur}
             />

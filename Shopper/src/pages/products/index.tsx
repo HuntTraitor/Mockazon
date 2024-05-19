@@ -217,73 +217,75 @@ const Index = () => {
           Products
         </Typography>
         <Grid container spacing={3}>
-          {products.length > 0 ? products.map(
-            product =>
-              product.data && (
-                <Grid item key={product.id} xs={12}>
-                  <Card style={{ display: 'flex' }}>
-                    <Image
-                      src={product.data.image || '/no-image.png'}
-                      alt={product.data.name || 'No Image'}
-                      width={200}
-                      height={200}
-                      objectFit="cover"
-                    />
-                    <CardContent style={{ flex: 1 }}>
-                      <Link
-                        aria-label={`product-link-${product.id}`}
-                        style={{ color: 'blue' }}
-                        href={`/products/${product.id}`}
-                      >
-                        <Typography
-                          variant="h6"
-                          component="h2"
-                          style={{ fontWeight: 'bold' }}
+          {products.length > 0 ? (
+            products.map(
+              product =>
+                product.data && (
+                  <Grid item key={product.id} xs={12}>
+                    <Card style={{ display: 'flex' }}>
+                      <Image
+                        src={product.data.image || '/no-image.png'}
+                        alt={product.data.name || 'No Image'}
+                        width={200}
+                        height={200}
+                        objectFit="cover"
+                      />
+                      <CardContent style={{ flex: 1 }}>
+                        <Link
+                          aria-label={`product-link-${product.id}`}
+                          style={{ color: 'blue' }}
+                          href={`/products/${product.id}`}
                         >
-                          {product.data.brand}
+                          <Typography
+                            variant="h6"
+                            component="h2"
+                            style={{ fontWeight: 'bold' }}
+                          >
+                            {product.data.brand}
+                          </Typography>
+                        </Link>
+                        <Typography variant="h6" component="h2">
+                          {product.data.name}
                         </Typography>
-                      </Link>
-                      <Typography variant="h6" component="h2">
-                        {product.data.name}
-                      </Typography>
-                      <Typography
-                        aria-label={`rating is ${product.data.rating}`}
-                        variant="subtitle1"
-                        component="p"
-                      >
-                        {t('rating')}: {product.data.rating}
-                      </Typography>
-                      <Typography
-                        aria-label={`price is ${product.data.price}`}
-                        variant="subtitle1"
-                        component="p"
-                      >
-                        {t('price')}: ${product.data.price}
-                      </Typography>
-                      <Typography
-                        aria-label={`deliveryDate is ${product.data.deliveryDate}`}
-                        variant="subtitle1"
-                        component="p"
-                      >
-                        {t('deliveryDate')}: {product.data.deliveryDate}
-                      </Typography>
-                      <Link
-                        aria-label={`add-shopping-cart-${product.id}`}
-                        style={{ color: 'blue' }}
-                        href={`/`}
-                        onClick={() => addToShoppingCart(`${product.id}`)}
-                      >
                         <Typography
+                          aria-label={`rating is ${product.data.rating}`}
+                          variant="subtitle1"
                           component="p"
-                          style={{ fontWeight: 'bold' }}
                         >
-                          Add to Shopping Cart
+                          {t('rating')}: {product.data.rating}
                         </Typography>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              )
+                        <Typography
+                          aria-label={`price is ${product.data.price}`}
+                          variant="subtitle1"
+                          component="p"
+                        >
+                          {t('price')}: ${product.data.price}
+                        </Typography>
+                        <Typography
+                          aria-label={`deliveryDate is ${product.data.deliveryDate}`}
+                          variant="subtitle1"
+                          component="p"
+                        >
+                          {t('deliveryDate')}: {product.data.deliveryDate}
+                        </Typography>
+                        <Link
+                          aria-label={`add-shopping-cart-${product.id}`}
+                          style={{ color: 'blue' }}
+                          href={`/`}
+                          onClick={() => addToShoppingCart(`${product.id}`)}
+                        >
+                          <Typography
+                            component="p"
+                            style={{ fontWeight: 'bold' }}
+                          >
+                            Add to Shopping Cart
+                          </Typography>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                )
+            )
           ) : (
             <Typography variant="h6" align="center">
               No products found
