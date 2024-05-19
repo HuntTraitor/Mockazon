@@ -16,8 +16,10 @@ import Link from 'next/link';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { useAppContext } from '@/contexts/AppContext';
+import { useRouter } from 'next/router';
 import getConfig from 'next/config';
 import { useSnackbar } from 'notistack';
+import Image from 'next/image';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -50,6 +52,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
 const Index = () => {
   const [products, setProducts] = useState([] as Product[]);
+  const router = useRouter();
+  const { vendorId, active, page, pageSize, search, orderBy, descending } =
+    router.query;
   const { t } = useTranslation('products');
   const [error, setError] = useState('');
   const { user, setUser, setAccessToken } = useContext(LoggedInContext);
@@ -58,20 +63,58 @@ const Index = () => {
   useLoadLocalStorageUser(setUser, setAccessToken);
 
   useEffect(() => {
+    fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vendorId, active, page, pageSize, search, orderBy, descending]);
+
+  const fetchProducts = () => {
+    const variables: { [key: string]: string | boolean | number } = {};
+
+    if (vendorId) variables.vendorId = vendorId.toString();
+    if (active !== undefined) variables.active = active === 'true';
+    if (page) variables.page = parseInt(page as string);
+    if (pageSize) variables.pageSize = parseInt(pageSize as string);
+    if (search) variables.search = search.toString();
+    if (orderBy) variables.orderBy = orderBy.toString();
+    if (descending !== undefined) variables.descending = descending === 'true';
+
+    const filteredVariables = Object.fromEntries(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(variables).filter(([_, v]) => v !== undefined)
+    );
+
     const query = {
-      query: `query GetProducts {
-        getProducts {
-          id
-          data {
-            brand
-            name
-            rating
-            price
-            deliveryDate
-            image
+      query: `
+        query GetProducts(
+          $vendorId: UUID,
+          $active: Boolean,
+          $page: Int,
+          $pageSize: Int,
+          $search: String,
+          $orderBy: String,
+          $descending: Boolean
+        ) {
+          getProducts(
+            vendorId: $vendorId,
+            active: $active,
+            page: $page,
+            pageSize: $pageSize,
+            search: $search,
+            orderBy: $orderBy,
+            descending: $descending
+          ) {
+            id
+            data {
+              brand
+              name
+              rating
+              price
+              deliveryDate
+              image
+            }
           }
-        }
-      }`,
+        }`,
+      variables: filteredVariables,
     };
 
     fetch(`${basePath}/api/graphql`, {
@@ -79,27 +122,20 @@ const Index = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(query),
     })
-      .then(response => {
-        if (!response.ok) {
-          throw response;
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
         if (data.errors && data.errors.length > 0) {
           console.error('Error fetching products:', data.errors);
           setError('Could not fetch products');
           return;
         }
-        if (data.data.getProducts.length > 0) {
-          setProducts(data.data.getProducts);
-        }
+        setProducts(data.data.getProducts);
       })
       .catch(error => {
         console.error('Error fetching products:', error);
         setError('Could not fetch products');
       });
-  }, []);
+  };
 
   const addToShoppingCart = (productId: string) => {
     const query = {
@@ -120,12 +156,7 @@ const Index = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(query),
     })
-      .then(response => {
-        if (!response.ok) {
-          throw response;
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(shoppingCart => {
         if (shoppingCart.errors && shoppingCart.errors.length > 0) {
           throw new Error(shoppingCart.errors[0].message);
@@ -149,7 +180,34 @@ const Index = () => {
       });
   };
 
-  // https://chat.openai.com/share/86f158f1-110e-4905-ac4a-85ae8282f2c2
+  if (
+    !vendorId &&
+    !active &&
+    !page &&
+    !pageSize &&
+    !search &&
+    !orderBy &&
+    !descending
+  ) {
+    return (
+      <>
+        <TopNav />
+        <Container style={{ marginTop: '20px' }}>
+          <Typography variant="h4" align="center" style={{ color: 'blue' }}>
+            Welcome to the Homepage
+          </Typography>
+          {/* FIXME Add more homepage content here */}
+        </Container>
+        <MockazonMenuDrawer />
+        <Backdrop
+          open={backDropOpen}
+          style={{ zIndex: 1, position: 'fixed' }}
+          onClick={() => setBackDropOpen(false)}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       {error && <p>{error}</p>}
@@ -164,15 +222,12 @@ const Index = () => {
               product.data && (
                 <Grid item key={product.id} xs={12}>
                   <Card style={{ display: 'flex' }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={product.data.image}
-                      alt={product.data.name}
-                      style={{
-                        width: '150px',
-                        height: '100%',
-                        objectFit: 'cover',
-                      }}
+                    <Image
+                      src={product.data.image || '/no-image.png'}
+                      alt={product.data.name || 'No Image'}
+                      width={200}
+                      height={200}
+                      objectFit="cover"
                     />
                     <CardContent style={{ flex: 1 }}>
                       <Link
