@@ -24,8 +24,7 @@ let errorInFetchProduct = false;
 let errorInShoppingCart = false;
 
 const handlers = [
-  graphql.query('GetShoppingCart', ({ query }) => {
-    console.log(query);
+  graphql.query('GetShoppingCart', () => {
     if (errorInShoppingCart) {
       return HttpResponse.json({}, { status: 400 });
     } else {
@@ -49,8 +48,7 @@ const handlers = [
       );
     }
   }),
-  graphql.query('GetProduct', ({ query /*variables*/ }) => {
-    console.log(query);
+  graphql.query('GetProduct', () => {
     if (errorInFetchProduct) {
       return HttpResponse.json({}, { status: 400 });
     } else {

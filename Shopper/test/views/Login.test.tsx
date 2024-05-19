@@ -59,7 +59,6 @@ jest.mock('@react-oauth/google', () => ({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   GoogleLogin: ({ onSuccess, locale }) => {
-    console.log(locale);
     const [l, setLocale] = React.useState('en');
     React.useEffect(() => {
       setLocale(locale);
@@ -333,9 +332,6 @@ describe('Login component', () => {
         setLocale,
       } = useContext(LoggedInContext);
       useEffect(() => {
-        console.log(accessToken);
-        console.log(locale);
-        console.log(location);
         setAccessToken('mockToken');
         setLocation('mockToken');
         setLocale('mockToken');

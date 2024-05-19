@@ -25,8 +25,7 @@ let errorInAddToShoppingCart = false;
 let errorInAddToShoppingCartGraphQL = false;
 
 const handlers = [
-  graphql.query('GetProducts', ({ query }) => {
-    console.log(query);
+  graphql.query('GetProducts', () => {
     if (errorInGetProducts) {
       if (errorInGetProductsGraphQL) {
         return HttpResponse.json(
@@ -73,8 +72,7 @@ const handlers = [
       );
     }
   }),
-  graphql.mutation('AddToShoppingCart', ({ query }) => {
-    console.log(query);
+  graphql.mutation('AddToShoppingCart', () => {
     if (errorInAddToShoppingCart) {
       if (errorInAddToShoppingCartGraphQL) {
         return HttpResponse.json(
