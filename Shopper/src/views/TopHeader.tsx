@@ -12,7 +12,7 @@ import Image from 'next/image';
 import styles from '@/styles/TopHeader.module.css';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
-import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+// import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import 'flag-icons/css/flag-icons.min.css';
 import SignInDropdown from '@/views/SignInDropdown';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
@@ -69,6 +69,7 @@ const TopHeader = () => {
   const [focused, setFocused] = useState(false);
   const { setBackDropOpen } = useAppContext();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchSuggestions = useCallback(
     debounce(async (query: string) => {
       if (!query) {
@@ -139,6 +140,16 @@ const TopHeader = () => {
     setBackDropOpen(false);
   };
 
+  const handleSearch = () => {
+    const queryParams = new URLSearchParams({
+      page: '1',
+      pageSize: '20',
+      search,
+    }).toString();
+
+    router.push(`/products?${queryParams}`);
+  };
+
   return (
     <Box className={styles.container}>
       <Box className={styles.topHeaderLeft}>
@@ -154,7 +165,7 @@ const TopHeader = () => {
             {/* Replace with a new logo */}
           </Link>
         </Box>
-        <Box
+        {/* <Box
           aria-label="Address Container"
           className={`${styles.addressContainer} ${styles.hoverContainer}`}
         >
@@ -170,10 +181,9 @@ const TopHeader = () => {
               onClick={() => console.log('Clicked Address')}
             >
               Santa Cruz 95060
-              {/* Get location from saved user delivery address information */}
             </Typography>
           </Box>
-        </Box>
+        </Box> */}
       </Box>
       <Box
         className={`${styles.searchContainer} ${
@@ -222,14 +232,12 @@ const TopHeader = () => {
             option: styles.suggestionOption,
           }}
         />
-        {/* 
-        FIXME fix vertical positioning of the placeholder text 
-        */}
         <Button
           aria-label="Search Button"
           variant="contained"
           color="warning"
           className={styles.searchButton}
+          onClick={handleSearch}
         >
           <SearchIcon />
         </Button>

@@ -1,16 +1,16 @@
-import { useTranslation } from 'next-i18next';
+// import { useTranslation } from 'next-i18next';
 import React from 'react'; // useState,
 import {
   Box,
   // Button,
-  Typography,
+  // Typography,
 } from '@mui/material';
 import styles from '@/styles/SubHeader.module.css';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Menu from '@mui/icons-material/Menu';
+// import Menu from '@mui/icons-material/Menu';
 import '/node_modules/flag-icons/css/flag-icons.min.css';
 // import { useRouter } from 'next/router';
-import { useAppContext } from '@/contexts/AppContext';
+// import { useAppContext } from '@/contexts/AppContext';
 
 const SubHeader = () => {
   // const [routes, setRoutes] = useState([
@@ -18,13 +18,13 @@ const SubHeader = () => {
   //   { label: 'Prime Video', component: '/prime-video' },
   //   { label: 'Prime', component: '/prime' },
   // ]);
-  const { setMockazonMenuDrawerOpen } = useAppContext();
-  const { t } = useTranslation('subHeader');
+  // const { setMockazonMenuDrawerOpen } = useAppContext();
+  // const { t } = useTranslation('subHeader');
   // const router = useRouter();
 
   return (
     <Box className={styles.container}>
-      <Box
+      {/*<Box
         aria-label="Toggle All Drawer"
         className={`${styles.subContainer} ${styles.hoverContainer}`}
         onClick={() => {
@@ -36,7 +36,7 @@ const SubHeader = () => {
           {t('All')}
         </Typography>
       </Box>
-      {/* {routes.map(route => (
+       {routes.map(route => (
         <Box
           key={route.label}
           aria-label={route.label}
