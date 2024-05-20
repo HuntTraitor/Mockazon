@@ -20,7 +20,7 @@ const customJestConfig = {
     '!**/node_modules/**',
     '!src/graphql/*/resolver.ts',
     '!src/graphql/auth/checker.ts',
-    "!**/schema.ts",
+    '!**/schema.ts',
     // FIXME: Double check that we should exclude all these
   ],
   collectCoverage: true,

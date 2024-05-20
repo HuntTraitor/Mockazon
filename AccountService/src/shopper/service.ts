@@ -1,15 +1,31 @@
-import { pool } from "../db";
-import * as jwt from "jsonwebtoken";
+import {CreateUserInput, LoginInput} from '.';
+import {pool} from '../db';
+import * as jwt from 'jsonwebtoken';
 
 export class ShopperService {
   // sub stands for subject and is the unique google identifier
-  public async getUserWithSub(sub: string) {
-    const select = `SELECT * FROM shopper` + ` WHERE data->>'sub' = $1`;
+  public async login(loginInput: LoginInput) {
+    const {sub, email, password} = loginInput;
+
+    console.log('logging in', loginInput);
+    let select;
+    let values;
+
+    if (sub) {
+      select = `SELECT * FROM shopper WHERE data->>'sub' = $1`;
+      values = [sub];
+    } else {
+      select = `SELECT * FROM shopper WHERE data->>'email' = $1 
+                AND crypt($2, data->>'pwhash') = data->>'pwhash'`;
+      values = [email, password];
+    }
+
     const query = {
       text: select,
-      values: [sub],
+      values: values,
     };
-    const { rows } = await pool.query(query);
+
+    const {rows} = await pool.query(query);
     if (rows[0]) {
       const user = rows[0];
       const accessToken = jwt.sign(
@@ -19,9 +35,9 @@ export class ShopperService {
         },
         `${process.env.MASTER_SECRET}`,
         {
-          expiresIn: "30m",
-          algorithm: "HS256",
-        },
+          expiresIn: '30m',
+          algorithm: 'HS256',
+        }
       );
       return {
         id: user.id,
@@ -34,15 +50,11 @@ export class ShopperService {
     }
   }
 
-  public async createUserWithSub(data: {
-    sub: string;
-    email: string;
-    name: string;
-  }) {
-    const insert = `INSERT INTO shopper(data) VALUES (jsonb_build_object('sub', $1::text, 'email', $2::text, 'name', $3::text, 'username', 'temp', 'role', $4::text, 'suspended', false)) RETURNING *`;
+  public async createUser(data: CreateUserInput) {
+    const insert = `INSERT INTO shopper(data) VALUES (jsonb_build_object('sub', $1::text, 'email', $2::text, 'name', $3::text, 'username', 'temp', 'role', $4::text, 'suspended', false, 'password', $5::text)) RETURNING *`;
     const query = {
       text: insert,
-      values: [data.sub, data.email, data.name, "Shopper"],
+      values: [data.sub, data.email, data.name, 'Shopper', data.password],
     };
     let rows;
     try {
@@ -60,9 +72,9 @@ export class ShopperService {
         },
         `${process.env.MASTER_SECRET}`,
         {
-          expiresIn: "30m",
-          algorithm: "HS256",
-        },
+          expiresIn: '30m',
+          algorithm: 'HS256',
+        }
       );
       return {
         ...user,

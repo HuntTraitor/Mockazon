@@ -11,4 +11,4 @@ INSERT INTO request(id, data) VALUES ('81c689b1-b7a7-4100-8b2d-309908b444f8', js
 -- Login Test Data --
 INSERT INTO administrator(id, data) VALUES ('81c689b1-b7a7-4100-8b2d-309908b444f9', jsonb_build_object( 'email', 'anna@books.com', 'pwhash', crypt('annaadmin', '87'), 'name', 'Anna', 'username', 'annaadmin', 'role', 'admin', 'suspended', false));
 INSERT INTO vendor(id, data) VALUES ('81c689b1-b7a7-4100-8b2d-309908b444f3', jsonb_build_object( 'email', 'victor@books.com', 'pwhash', crypt('victorvendor', '87'), 'name', 'Victor', 'username', 'victorvendor', 'role', 'vendor', 'suspended', false));
-INSERT INTO shopper(id, data) VALUES ('81c689b1-b7a7-4100-8b2d-309908b444f1', jsonb_build_object( 'email', 'shirly@books.com', 'pwhash', crypt('shirlyshopper', '87'), 'name', 'Shirly', 'username', 'shirlyshopper', 'role', 'shopper', 'suspended', false));
+INSERT INTO shopper(id, data) VALUES ('81c689b1-b7a7-4100-8b2d-309908b444f1', jsonb_build_object( 'email', 'shirly@books.com', 'pwhash', crypt('shirlyshopper', '87'), 'name', 'Shirly', 'username', 'shirlyshopper', 'role', 'shopper', 'suspended', false, 'sub', 'testsub'));

@@ -36,7 +36,10 @@ const handlers = [
             { status: 409 }
           );
         } else {
-          return HttpResponse.json({ message: 'Sign Up error' }, { status: 500 });
+          return HttpResponse.json(
+            { message: 'Sign Up error' },
+            { status: 500 }
+          );
         }
       }
     }

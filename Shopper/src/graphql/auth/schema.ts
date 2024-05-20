@@ -38,11 +38,11 @@ export class GoogleCredentials {
 @ArgsType()
 export class SignUpArgs {
   @Field(() => Credentials, { nullable: true })
-    // FIXME: Weird coverage issue
+  // FIXME: Weird coverage issue
     credentials?: Credentials;
 
   @Field(() => GoogleCredentials, { nullable: true })
-    // FIXME: Weird coverage issue
+  // FIXME: Weird coverage issue
     googleCredentials?: GoogleCredentials;
 }
 

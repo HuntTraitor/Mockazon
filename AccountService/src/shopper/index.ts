@@ -6,3 +6,16 @@ export interface Shopper {
   name: string;
   role: string;
 }
+
+export interface CreateUserInput {
+  email: Email;
+  name: string;
+  password?: string;
+  sub?: string;
+}
+
+export interface LoginInput {
+  email?: Email;
+  password?: string;
+  sub?: string;
+}
