@@ -6,18 +6,18 @@ import type { NextApiRequest } from 'next';
 @Resolver()
 export class KeyResolver {
   @Query(() => [Key])
-  @Authorized("vendor")
+  @Authorized('vendor')
   async keys(@Ctx() request: NextApiRequest): Promise<Key[]> {
-    console.log(request.user)
+    console.log(request.user);
     return new KeyService().list(request.user.id);
   }
 
-  @Authorized("vendor")
+  @Authorized('vendor')
   @Mutation(() => Key)
   async setActiveStatus(@Arg('apiKey') apiKey: string): Promise<Key> {
     return new KeyService().setActiveStatus(apiKey);
   }
-  @Authorized("vendor")
+  @Authorized('vendor')
   @Mutation(() => Key)
   async postAPIKeyRequest(@Ctx() request: NextApiRequest): Promise<Key> {
     return new KeyService().postAPIKeyRequest(request.user.id);

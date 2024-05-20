@@ -23,6 +23,7 @@ export function Home() {
     } else {
       router.push('/login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginContext]);
 
   return loginContext.accessToken.length > 0 ? (
