@@ -37,7 +37,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 
 const Signup = () => {
-  const [error, setError] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -52,13 +51,13 @@ const Signup = () => {
 
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      alert(t('signup:passwordMismatch'));
       return;
     }
     try {
       const query = {
         query: `mutation SignUp {
-    signUp(name: "${name}", password: "${password}") {
+    signUp(name: "${name}", email: "${email}", password: "${password}") {
       id
       name
       email
@@ -76,25 +75,26 @@ const Signup = () => {
         const data = await response.json();
         if (data.errors && data.errors.length > 0) {
           if (data.errors[0].message === 'Duplicate account') {
-            console.error('Duplicate account:', error);
-            setError('Duplicate account');
+            console.error('Duplicate account:', data.errors[0].message);
+            alert(t('signup:duplicateAccount'));
+            return;
+          } else {
+            console.error('Error signing up:', data.errors[0].message);
+            alert(t('signup:signupFailed'));
             return;
           }
-        } else {
-          console.error('Error logging in:', error);
-          setError('Login failed');
         }
         localStorage.setItem('user', JSON.stringify(data.data.signUp));
         setAccessToken(data.data.signUp.accessToken);
         await router.push('/');
       } else {
-        console.error('Error logging in:', error);
-        setError('Login failed');
+        console.error('Network error signing up.');
+        alert(t('signup:signupFailed'));
         return;
       }
     } catch (error) {
-      console.error('Error logging in:', error);
-      setError('Login failed');
+      console.error('Error signing up:', error);
+      alert(t('signup:signupFailed'));
     }
   };
 
@@ -128,25 +128,27 @@ const Signup = () => {
         const data = await response.json();
         if (data.errors && data.errors.length > 0) {
           if (data.errors[0].message === 'Duplicate account') {
-            console.error('Duplicate account:', error);
-            setError('Duplicate account');
+            console.error('Duplicate account:', data.errors[0].message);
+            alert(t('signup:duplicateAccount'));
+            return;
+          } else {
+            console.error('Error signing up:', data.errors[0].message);
+            alert(t('signup:signupFailed'));
             return;
           }
-        } else {
-          console.error('Error logging in:', error);
-          setError('Login failed');
         }
+        console.log(data);
         localStorage.setItem('user', JSON.stringify(data.data.signUp));
         setAccessToken(data.data.signUp.accessToken);
         await router.push('/');
       } else {
-        console.error('Error logging in:', error);
-        setError('Login failed');
+        console.error('Network error signing up.');
+        alert(t('signup:signupFailed'));
         return;
       }
     } catch (error) {
-      console.error('Error logging in:', error);
-      setError('Login failed');
+      console.error('Error signing up:', error);
+      alert(t('signup:signupFailed'));
     }
   };
 
@@ -216,6 +218,7 @@ const Signup = () => {
             variant="contained"
             color="primary"
             onClick={handleSignUp}
+            aria-label={`${t('signup:signUpText')}`}
             fullWidth
           >
             {t('signup:signUpText')}
