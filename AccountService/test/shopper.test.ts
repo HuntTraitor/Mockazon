@@ -1,9 +1,9 @@
-import supertest from 'supertest';
-import * as http from 'http';
+import supertest from "supertest";
+import * as http from "http";
 
-import * as db from './db';
-import app from '../src/app';
-import { randomUUID } from 'crypto';
+import * as db from "./db";
+import app from "../src/app";
+import { randomUUID } from "crypto";
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -21,21 +21,21 @@ afterAll((done) => {
   server.close(done);
 });
 
-test('Renders the Swagger UI', async () => {
+test("Renders the Swagger UI", async () => {
   await supertest(server)
-    .get('/api/v0/docs/')
+    .get("/api/v0/docs/")
     .then((res) => {
       expect(res.status).toBe(200);
     });
 });
 
-describe('API TEST (SHOPPER) - Login', () => {
-  test('Logs in with valid credentials', async () => {
+describe("API TEST (SHOPPER) - Login", () => {
+  test("Logs in with valid credentials", async () => {
     await supertest(server)
-      .post('/api/v0/shopper/login')
+      .post("/api/v0/shopper/login")
       .send({
-        email: 'shirly@books.com',
-        password: 'shirlyshopper',
+        email: "shirly@books.com",
+        password: "shirlyshopper",
       })
       .then((res) => {
         expect(res.status).toBe(200);
@@ -46,11 +46,11 @@ describe('API TEST (SHOPPER) - Login', () => {
       });
   });
 
-  test('Logs in with valid sub', async () => {
+  test("Logs in with valid sub", async () => {
     await supertest(server)
-      .post('/api/v0/shopper/login')
+      .post("/api/v0/shopper/login")
       .send({
-        sub: 'testsub',
+        sub: "testsub",
       })
       .then((res) => {
         expect(res.status).toBe(200);
@@ -61,34 +61,34 @@ describe('API TEST (SHOPPER) - Login', () => {
       });
   });
 
-  test('Fails to login with invalid credentials', async () => {
+  test("Fails to login with invalid credentials", async () => {
     await supertest(server)
-      .post('/api/v0/shopper/login')
+      .post("/api/v0/shopper/login")
       .send({
-        email: 'wrong@email.com',
-        password: 'wrongpassword',
+        email: "wrong@email.com",
+        password: "wrongpassword",
       })
       .then((res) => {
         expect(res.status).toBe(404);
       });
   });
 
-  test('Fails to login with invalid sub', async () => {
+  test("Fails to login with invalid sub", async () => {
     await supertest(server)
-      .post('/api/v0/shopper/login')
+      .post("/api/v0/shopper/login")
       .send({
-        sub: 'wrongsub',
+        sub: "wrongsub",
       })
       .then((res) => {
         expect(res.status).toBe(404);
       });
   });
 
-  test('Fails to login with invalid input', async () => {
+  test("Fails to login with invalid input", async () => {
     await supertest(server)
-      .post('/api/v0/shopper/login')
+      .post("/api/v0/shopper/login")
       .send({
-        email: 'test@email.com',
+        email: "test@email.com",
       })
       .then((res) => {
         expect(res.status).toBe(400);
@@ -96,14 +96,14 @@ describe('API TEST (SHOPPER) - Login', () => {
   });
 });
 
-describe('API TEST (SHOPPER) - Signup', () => {
-  test('Signs up with valid credentials', async () => {
+describe("API TEST (SHOPPER) - Signup", () => {
+  test("Signs up with valid credentials", async () => {
     await supertest(server)
-      .post('/api/v0/shopper/signup')
+      .post("/api/v0/shopper/signup")
       .send({
-        email: 'test@gmail.com',
-        name: 'test',
-        password: 'testpassword',
+        email: "test@gmail.com",
+        name: "test",
+        password: "testpassword",
       })
       .then((res) => {
         expect(res.status).toBe(200);
@@ -114,12 +114,12 @@ describe('API TEST (SHOPPER) - Signup', () => {
       });
   });
 
-  test('Signs up with valid sub', async () => {
+  test("Signs up with valid sub", async () => {
     await supertest(server)
-      .post('/api/v0/shopper/signup')
+      .post("/api/v0/shopper/signup")
       .send({
-        email: 'test2@email.com',
-        name: 'test2',
+        email: "test2@email.com",
+        name: "test2",
         sub: `${randomUUID()}`,
       })
       .then((res) => {
@@ -131,25 +131,74 @@ describe('API TEST (SHOPPER) - Signup', () => {
       });
   });
 
-  test('Fails to signup with invalid credentials', async () => {
+  test("Fails to signup without email", async () => {
     await supertest(server)
-      .post('/api/v0/shopper/signup')
+      .post("/api/v0/shopper/signup")
       .send({
-        email: 'test3@email.com',
-        name: 'test3',
+        email: "test3@email.com",
+        name: "test3",
       })
       .then((res) => {
-        expect(res.status).toBe(409);
+        expect(res.status).toBe(400);
       });
   });
 
-  test('Fails to sign up with duplicate email', async () => {
+  test("Fails to sign up without name", async () => {
     await supertest(server)
-      .post('/api/v0/shopper/signup')
+      .post("/api/v0/shopper/signup")
       .send({
-        email: 'test@gmail.com',
-        name: 'test',
-        password: 'testpassword',
+        email: "test3@email.com",
+        password: "testpassword",
+      })
+      .then((res) => {
+        expect(res.status).toBe(400);
+      });
+  });
+
+  test("Fails to sign up with sub and password", async () => {
+    await supertest(server)
+      .post("/api/v0/shopper/signup")
+      .send({
+        email: "test3@email.com",
+        name: "test3",
+        sub: `${randomUUID()}`,
+        password: "testpassword",
+      })
+      .then((res) => {
+        expect(res.status).toBe(400);
+      });
+  });
+
+  test("Fails to sign up without password", async () => {
+    await supertest(server)
+      .post("/api/v0/shopper/signup")
+      .send({
+        email: "test3@email.com",
+        name: "test3",
+      })
+      .then((res) => {
+        expect(res.status).toBe(400);
+      });
+  });
+
+  test("Fails to sign up with duplicate email", async () => {
+    await supertest(server)
+      .post("/api/v0/shopper/signup")
+      .send({
+        email: "test5@email.com",
+        name: "test5",
+        password: "testpassword",
+      })
+      .then((res) => {
+        expect(res.status).toBe(200);
+      });
+
+    await supertest(server)
+      .post("/api/v0/shopper/signup")
+      .send({
+        email: "test5@email.com",
+        name: "test5",
+        password: "testpassword",
       })
       .then((res) => {
         expect(res.status).toBe(409);

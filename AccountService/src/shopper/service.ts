@@ -1,13 +1,13 @@
-import {CreateUserInput, LoginInput} from '.';
-import {pool} from '../db';
-import * as jwt from 'jsonwebtoken';
+import { CreateUserInput, LoginInput } from ".";
+import { pool } from "../db";
+import * as jwt from "jsonwebtoken";
 
 export class ShopperService {
   // sub stands for subject and is the unique google identifier
   public async login(loginInput: LoginInput) {
-    const {sub, email, password} = loginInput;
+    const { sub, email, password } = loginInput;
 
-    console.log('logging in', loginInput);
+    console.log("logging in", loginInput);
     let select;
     let values;
 
@@ -25,7 +25,7 @@ export class ShopperService {
       values: values,
     };
 
-    const {rows} = await pool.query(query);
+    const { rows } = await pool.query(query);
     if (rows[0]) {
       const user = rows[0];
       const accessToken = jwt.sign(
@@ -35,9 +35,9 @@ export class ShopperService {
         },
         `${process.env.MASTER_SECRET}`,
         {
-          expiresIn: '30m',
-          algorithm: 'HS256',
-        }
+          expiresIn: "30m",
+          algorithm: "HS256",
+        },
       );
       return {
         id: user.id,
@@ -51,37 +51,37 @@ export class ShopperService {
   }
 
   public async createUser(data: CreateUserInput) {
+    const { sub, email, name, password } = data;
+    const select = `SELECT * FROM shopper WHERE data->>'email' = $1`;
+    const { rows: existingUsers } = await pool.query(select, [email]);
+    if (existingUsers[0]) {
+      return undefined; // user already exists
+    }
+
     const insert = `INSERT INTO shopper(data) VALUES (jsonb_build_object('sub', $1::text, 'email', $2::text, 'name', $3::text, 'username', 'temp', 'role', $4::text, 'suspended', false, 'password', $5::text)) RETURNING *`;
     const query = {
       text: insert,
-      values: [data.sub, data.email, data.name, 'Shopper', data.password],
+      values: [sub, email, name, "Shopper", password],
     };
-    let rows;
-    try {
-      const result = await pool.query(query);
-      rows = result.rows;
-    } catch (exception) {
-      console.log(exception);
-    }
-    if (rows && rows[0]) {
-      const user = rows[0];
-      const accessToken = jwt.sign(
-        {
-          id: user.id,
-          role: user.data.role,
-        },
-        `${process.env.MASTER_SECRET}`,
-        {
-          expiresIn: '30m',
-          algorithm: 'HS256',
-        }
-      );
-      return {
-        ...user,
-        accessToken: accessToken,
-      };
-    } else {
-      return undefined;
-    }
+    const result = await pool.query(query);
+    const rows = result.rows;
+
+    const user = rows[0];
+    const accessToken = jwt.sign(
+      {
+        id: user.id,
+        role: user.data.role,
+      },
+      `${process.env.MASTER_SECRET}`,
+      {
+        expiresIn: "30m",
+        algorithm: "HS256",
+      },
+    );
+
+    return {
+      ...user,
+      accessToken: accessToken,
+    };
   }
 }
