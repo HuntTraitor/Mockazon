@@ -3,13 +3,11 @@ import { Box, CssBaseline, Divider } from '@mui/material';
 import { useRouter } from 'next/router';
 
 import { MyDrawer } from './Drawer';
-//import { Users } from './Users';
 import { MyAppBar } from './AppBar';
-import { LoginContext } from '../../contexts/Login';
-import { PageContext } from '../../contexts/PageContext';
-// import { AdminRequests } from './AdminRequests';
-// import Products from './Products';
+import { LoginContext } from '../../contexts/LoginContext';
 import APIKeys from './APIKeys';
+import { KeyProvider } from '@/contexts/KeyContext';
+
 /**
  * defines the Home page
  * @return {JSX.Element} Home page
@@ -25,23 +23,19 @@ export function Home() {
     } else {
       router.push('/login');
     }
-  }, [loginContext]);
-  const pageContext = React.useContext(PageContext);
+  }, [loginContext, router]);
 
-  if (loginContext.accessToken.length > 0) {
-    return (
+  return loginContext.accessToken.length > 0 ? (
+    <KeyProvider>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <MyDrawer />
         <Box component="main" width={'100%'}>
           <MyAppBar />
           <Divider />
-          {/* {pageContext.page === 'Products' ? <Products /> : undefined} */}
-          {pageContext.page === 'API Keys' ? <APIKeys /> : undefined}
+          <APIKeys />
         </Box>
       </Box>
-    );
-  } else {
-    return null;
-  }
+    </KeyProvider>
+  ) : null;
 }

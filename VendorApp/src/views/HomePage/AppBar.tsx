@@ -1,15 +1,14 @@
 import React from 'react';
-import { Box, AppBar, Toolbar, Button, Avatar } from '@mui/material';
-import getConfig from 'next/config';
-
-const { basePath } = getConfig().publicRuntimeConfig;
-
+import { Box, AppBar, Toolbar, Button } from '@mui/material';
+import { LoginContext } from '@/contexts/LoginContext';
+import { useRouter } from 'next/router';
 /**
  * defines the AppBar
  * @return {JSX.Element} AppBar
  */
 export function MyAppBar() {
-  // const loginContext = React.useContext(LoginContext);
+  const router = useRouter();
+  const loginContext = React.useContext(LoginContext);
   return (
     <AppBar
       elevation={0}
@@ -28,14 +27,15 @@ export function MyAppBar() {
               event.preventDefault();
               console.log('Sign Out');
               localStorage.removeItem('accessToken');
-              //   loginContext.setAccessToken('');
-              //   loginContext.setId('');
+              localStorage.removeItem('id');
+              loginContext.setAccessToken('');
+              loginContext.setId('');
+              router.push('/login');
             }}
             sx={{ color: 'black', borderColor: 'black' }}
           >
             Sign Out
           </Button>
-          <Avatar alt="User Avatar" src={`${basePath}/avatar.png`} />
         </Box>
       </Toolbar>
     </AppBar>

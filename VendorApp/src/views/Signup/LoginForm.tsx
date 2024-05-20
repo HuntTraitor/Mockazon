@@ -4,7 +4,7 @@ import { LoginFormProps } from './Index';
 import getConfig from 'next/config';
 import { useSnackbar } from 'notistack';
 import * as React from 'react';
-import { LoginContext } from '@/contexts/Login';
+import { LoginContext } from '@/contexts/LoginContext';
 import { useRouter } from 'next/router';
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -21,17 +21,17 @@ export function LoginForm({ navigate }: LoginFormProps) {
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const query = {
       query: `query login{login(
       email: "${data.get('email')}"
       password: "${data.get('password')}"
-    ) {accessToken}}`,
+    ) {id, accessToken}}`,
     };
 
-    fetch(`${basePath}/api/graphql`, {
+    await fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       body: JSON.stringify(query),
       headers: {
@@ -46,8 +46,11 @@ export function LoginForm({ navigate }: LoginFormProps) {
           console.log(`${json.errors[0].message}`);
           handleClickError();
         } else {
+          console.log(json.data.login.accessToken);
           loginContext.setAccessToken(json.data.login.accessToken);
+          loginContext.setId(json.data.login.id);
           localStorage.setItem('accessToken', json.data.login.accessToken);
+          localStorage.setItem('id', json.data.login.id);
           router.push('/');
         }
       })

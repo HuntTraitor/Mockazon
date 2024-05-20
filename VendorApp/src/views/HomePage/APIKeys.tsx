@@ -10,31 +10,59 @@ import {
   Button,
   TableHead,
 } from '@mui/material';
-// import EditIcon from '@mui/icons-material/Edit';
 import React from 'react';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import DoneIcon from '@mui/icons-material/Done';
+import AddAPIKey from './AddAPIKey';
+import { Key, KeyContext } from '@/contexts/KeyContext';
 import getConfig from 'next/config';
+import { LoginContext } from '@/contexts/LoginContext';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
-interface Key {
-  key: string;
-  requested: boolean;
-  vendor_id: string;
-  active: boolean;
-}
-
-const fetchKeys = (setKeys: (products: Key[]) => void) => {
+const fetchKeys = (setKeys: (keys: Key[]) => void, accessToken: string) => {
   const query = {
-    query: `query key {key (vendor_id: "4f061f79-e0e8-48ff-a2ac-0a56a8ad5f0e") {key, requested, active}}`,
+    query: `query key {keys {key, vendor_id, active, blacklisted}}`,
   };
-  console.log('Hello');
+  fetch(`${basePath}/api/graphql`, {
+    method: 'POST',
+    body: JSON.stringify(query),
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(res => {
+      console.log(res.status);
+      return res.json();
+    })
+    .then(json => {
+      if (json.errors) {
+        setKeys([]);
+      } else {
+        setKeys(json.data.keys);
+      }
+    })
+    .catch(() => {
+      alert('Error retrieving API Keys');
+    });
+};
+
+const setActiveStatus = (
+  keys: Key[],
+  setKeys: (keys: Key[]) => void,
+  key_id: string,
+  accessToken: string
+) => {
+  const query = {
+    query: `mutation {setActiveStatus (apiKey: "${key_id}") {key, vendor_id, blacklisted, active}}`,
+  };
   fetch(`${basePath}/api/graphql`, {
     method: 'POST',
     body: JSON.stringify(query),
     headers: {
       // Need authorization header
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
   })
@@ -42,56 +70,31 @@ const fetchKeys = (setKeys: (products: Key[]) => void) => {
       return res.json();
     })
     .then(json => {
-      console.log(json);
       if (json.errors) {
-        setKeys([]);
+        console.log(json.errors);
       } else {
-        console.log(json.data.key);
-        setKeys(json.data.key);
+        const indexFound = keys.findIndex(
+          obj => obj.key === json.data.setActiveStatus.key
+        );
+        if (indexFound != -1) {
+          const temp = keys.slice();
+          temp.splice(indexFound, 1, json.data.setActiveStatus);
+          setKeys(temp);
+        }
+        return;
       }
     })
-    .catch(e => {
-      console.log(e.error);
-      alert('Error retrieving API Keys');
+    .catch(() => {
+      console.log('Error occurred');
     });
 };
 
-// const setActiveStatus = (key_id: string) => {
-//   const query = {
-//     query: `mutation key {key (key: ${key_id}) {key, requested, active}}`,
-//   };
-//   console.log('Hello');
-//   fetch(`${basePath}/api/graphql`, {
-//     method: 'POST',
-//     body: JSON.stringify(query),
-//     headers: {
-//       // Need authorization header
-//       'Content-Type': 'application/json',
-//     },
-//   })
-//     .then(res => {
-//       return res.json();
-//     })
-//     .then(json => {
-//       console.log(json);
-//       if (json.errors) {
-//         setKeys([]);
-//       } else {
-//         console.log(json.data.key);
-//         setKeys(json.data.key);
-//       }
-//     })
-//     .catch(e => {
-//       console.log(e.error);
-//       alert('Error retrieving API Keys');
-//     });
-// };
-
 const APIKeys = () => {
-  const [keys, setKeys] = React.useState<Key[]>([]);
+  const loginContext = React.useContext(LoginContext);
+  const keyContext = React.useContext(KeyContext);
   React.useEffect(() => {
-    fetchKeys(setKeys);
-  }, []);
+    fetchKeys(keyContext.setKeys, loginContext.accessToken);
+  }, [keyContext.setKeys, loginContext.accessToken]);
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', padding: '3' }}>
       <Typography variant="h4" component="h1" gutterBottom>
@@ -113,32 +116,55 @@ const APIKeys = () => {
                 <TableCell>Status</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
-              {keys.map(key => (
+
+              {keyContext.keys.map(key => (
                 <TableRow key={key.key}>
                   <TableCell>{key.key}</TableCell>
-                  {key.requested ? (
+                  {key.blacklisted ? (
                     <TableCell>
-                      <Typography>Pending Approval</Typography>
+                      <Typography>Invalid Key</Typography>
                       <PendingActionsIcon />
                     </TableCell>
                   ) : (
                     <TableCell>
-                      <Typography>Approved</Typography>
+                      <Typography>Valid Key</Typography>
                       <DoneIcon />
                     </TableCell>
                   )}
                   {key.active ? (
                     <TableCell>
-                      <Button variant="outlined" color="error">
+                      <Button
+                        disabled={key.blacklisted ? true : false}
+                        onClick={event => {
+                          event.preventDefault();
+                          setActiveStatus(
+                            keyContext.keys,
+                            keyContext.setKeys,
+                            key.key,
+                            loginContext.accessToken
+                          );
+                        }}
+                        variant="outlined"
+                        color="error"
+                      >
                         Deactivate
                       </Button>
                     </TableCell>
                   ) : (
                     <TableCell>
                       <Button
-                        disabled={key.requested ? true : false}
+                        disabled={key.blacklisted ? true : false}
                         variant="outlined"
                         color="success"
+                        onClick={event => {
+                          event.preventDefault();
+                          setActiveStatus(
+                            keyContext.keys,
+                            keyContext.setKeys,
+                            key.key,
+                            loginContext.accessToken
+                          );
+                        }}
                       >
                         Activate
                       </Button>
@@ -149,8 +175,8 @@ const APIKeys = () => {
             </TableHead>
             <TableBody></TableBody>
           </Table>
+          <AddAPIKey />
         </TableContainer>
-        <Button variant="contained">Hi</Button>
       </Paper>
     </Box>
   );

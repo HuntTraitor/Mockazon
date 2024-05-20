@@ -3,6 +3,7 @@ import { SignupForm } from '@/views/Signup/SignupForm';
 import userEvent from '@testing-library/user-event';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import { LoginContext } from '@/contexts/LoginContext';
 
 let returnError = false;
 
@@ -66,7 +67,15 @@ const fillOutForm = async () => {
 const setNavigate = () => {};
 
 it('Renders SignupForm successfully', async () => {
-  render(<SignupForm navigate={setNavigate} />);
+  const accessToken = '';
+  const setAccessToken = () => {};
+  const id = '';
+  const setId = () => {};
+  render(
+    <LoginContext.Provider value={{ id, accessToken, setId, setAccessToken }}>
+      <SignupForm navigate={setNavigate} />
+    </LoginContext.Provider>
+  );
   expect(screen.getByText('Create account', { exact: false })).toBeDefined();
   expect(screen.getByText('Your Name', { exact: false })).toBeDefined();
   expect(screen.getByText('Email', { exact: false })).toBeDefined();

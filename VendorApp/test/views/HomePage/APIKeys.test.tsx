@@ -1,12 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-// import Products from '@/views/HomePage/Products';
 import APIKeys from '@/views/HomePage/APIKeys';
 let returnError = false;
 
 const handlers = [
-  graphql.query('GetAccounts', ({ query /*variables*/ }) => {
+  graphql.query('keys', ({ query /*variables*/ }) => {
     console.log(query);
     if (returnError) {
       return HttpResponse.json({
@@ -17,9 +16,9 @@ const handlers = [
       data: {
         account: [
           {
-            id: '81c689b1-b7a7-4100-8b2d-309908b444f5',
-            email: 'test1@email.com',
-            name: 'test account 1',
+            key: '81c689b1-b7a7-4100-8b2d-309908b444f5',
+            vendor_id: 'test1@email.com',
+            n: 'test account 1',
             username: 'testaccount1',
             role: 'test',
             suspended: false,
@@ -41,6 +40,9 @@ it('Renders', async () => {
   await screen.findByText('API Keys', {
     exact: false,
   });
+  await screen.findByText('API Key ID');
+  await screen.findByText('Status');
+  await screen.findByText('Actions');
 });
 
 it('Renders table', async () => {

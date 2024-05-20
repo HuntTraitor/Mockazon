@@ -7,7 +7,7 @@ import { SignupForm } from './SignupForm';
 import { Copyright } from './Copyright';
 import { SnackbarProvider } from 'notistack';
 import { LoginForm } from './LoginForm';
-import { LoginContext } from '@/contexts/Login';
+import { LoginContext } from '@/contexts/LoginContext';
 
 export interface LoginFormProps {
   navigate: (newValue: number) => void;

@@ -1,9 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { SignupForm } from '@/views/Signup/SignupForm';
 import userEvent from '@testing-library/user-event';
-import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { LoginForm } from '@/views/Signup/LoginForm';
+import { LoginContext } from '@/contexts/LoginContext';
+import { graphql, HttpResponse } from 'msw';
+import React from 'react';
 
 let returnError = false;
 
@@ -20,7 +22,7 @@ const handlers = [
     }
     return HttpResponse.json({
       data: {
-        signup: { content: { message: 'Request Sent Successfully' } },
+        login: { content: { accessToken: 'some token' } },
       },
     });
   }),
@@ -72,6 +74,29 @@ it('Fills out signin form and errors on a request', async () => {
   await fillOutForm();
   returnError = true;
   fireEvent.click(screen.getAllByText('Login')[1]);
+});
+
+it('Sends out signin form', async () => {
+  // server.use(
+  //   http.post(URL, async () => {
+  //     return HttpResponse.json({}, { status: 401 });
+  //   })
+  // );
+  // window.alert = () => {
+  //   alerted = true;
+  // };
+  const id: string = 'some id';
+  const setId = () => {};
+  const accessToken: string = '';
+  const setAccessToken = () => {};
+  render(
+    <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
+      <LoginForm navigate={setNavigate} />
+    </LoginContext.Provider>
+  );
+  await fillOutForm();
+  returnError = false;
+  await fireEvent.click(screen.getAllByText('Login')[1]);
 });
 
 it('Fills out signin form and catches server error', async () => {

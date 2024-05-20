@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-
 import { MyAppBar } from '../../../src/views/HomePage/AppBar';
 import { jest } from '@jest/globals';
 
@@ -8,11 +7,6 @@ it('Renders', async () => {
   await screen.findByText('Sign Out', {
     exact: false,
   });
-});
-
-it('Renders Avatar', async () => {
-  render(<MyAppBar />);
-  await screen.findByAltText('User Avatar');
 });
 
 it('Sign Out button is clickable', async () => {

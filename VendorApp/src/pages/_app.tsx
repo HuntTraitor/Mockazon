@@ -1,4 +1,4 @@
-import { LoginProvider } from '@/contexts/Login';
+import { LoginProvider } from '@/contexts/LoginContext';
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { ThemeProvider, createTheme } from '@mui/material';

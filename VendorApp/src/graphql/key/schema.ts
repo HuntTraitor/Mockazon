@@ -9,5 +9,5 @@ export class Key {
   @Field()
     active!: boolean;
   @Field()
-    requested!: boolean;
+    blacklisted!: boolean;
 }

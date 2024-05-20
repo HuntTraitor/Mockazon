@@ -27,20 +27,11 @@ const drawerWidth = 300;
 export function MyDrawer() {
   const pageContext = React.useContext(PageContext);
 
-  // const handleProductsClick = () => {
-  //   pageContext.setPage('Products');
-  // };
-
   const handleKeysClick = () => {
     pageContext.setPage('API Keys');
   };
 
   const listItems = [
-    // {
-    //   // text: 'Products',
-    //   // icon: <StorefrontIcon />,
-    //   // onClick: handleProductsClick,
-    // },
     {
       text: 'API Keys',
       icon: <KeyIcon />,
