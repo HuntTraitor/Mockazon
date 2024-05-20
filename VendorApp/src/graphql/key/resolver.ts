@@ -1,13 +1,17 @@
-import { Query, Resolver, Arg, Mutation } from 'type-graphql';
+import { Query, Resolver, Arg, Mutation, Ctx, Authorized } from 'type-graphql';
 import { Key } from './schema';
 import { KeyService } from './service';
+import type { NextApiRequest } from 'next'
 
 @Resolver()
 export class KeyResolver {
   // @Authorized("vendor")
   @Query(() => [Key])
-  async key(@Arg('vendor_id') vendor_id: string): Promise<Key[]> {
-    return new KeyService().list(vendor_id);
+  @Authorized()
+  async key(
+    @Ctx() request: NextApiRequest
+  ): Promise<Key[]> {
+    return new KeyService().list(request.user.id);
   }
 
   @Mutation(() => Key)
