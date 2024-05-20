@@ -1,10 +1,32 @@
-import { Field, ObjectType, ArgsType } from 'type-graphql';
+import { IsEmail, IsUUID } from 'class-validator';
+import { Field, ObjectType, ArgsType, InputType } from 'type-graphql';
 
 @ArgsType()
+export class SignUpArgs {
+  @Field(() => Credentials, { nullable: true })
+    credentials?: Credentials;
+
+  @Field(() => GoogleCredentials, { nullable: true })
+    googleCredentials?: GoogleCredentials;
+}
+
+@InputType()
 export class Credentials {
+  @Field()
+    name!: string;
+  @Field()
+  @IsEmail()
+    email!: string;
+  @Field()
+    password!: string;
+}
+
+@InputType()
+export class GoogleCredentials {
   @Field()
     sub!: string;
   @Field()
+  @IsEmail()
     email!: string;
   @Field()
     name!: string;
@@ -27,6 +49,7 @@ export class Authenticated {
 @ObjectType()
 export class AuthenticatedWithId {
   @Field()
+  @IsUUID()
     id!: string;
   @Field()
     name!: string;
@@ -45,10 +68,12 @@ export class Message {
 @ObjectType()
 export class SignUpResponse {
   @Field()
+  @IsUUID()
     id!: string;
   @Field()
     name!: string;
   @Field()
+  @IsEmail()
     email!: string;
   @Field()
     role!: string;
