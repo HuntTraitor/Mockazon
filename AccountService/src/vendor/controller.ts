@@ -1,4 +1,13 @@
-import { Controller, Route, Response, Post, Body, SuccessResponse, Get, Query } from "tsoa";
+import {
+  Controller,
+  Route,
+  Response,
+  Post,
+  Body,
+  SuccessResponse,
+  Get,
+  Query,
+} from "tsoa";
 
 import { CreateVendor, SessionUser, Vendor } from "./index";
 import { VendorService } from "./service";
@@ -47,16 +56,21 @@ export class VendorController extends Controller {
   }
 
   @Get("check")
-  @Response('401', 'Unauthorized')
+  @Response("401", "Unauthorized")
   public async check(
     @Query() accessToken: string,
   ): Promise<SessionUser | undefined> {
-    return new VendorService().check(accessToken)
-      .then(async (account: SessionUser | undefined): Promise<SessionUser | undefined> => {
-        if (!account) {
-          this.setStatus(401)
-        }
-        return account
-      })
+    return new VendorService()
+      .check(accessToken)
+      .then(
+        async (
+          account: SessionUser | undefined,
+        ): Promise<SessionUser | undefined> => {
+          if (!account) {
+            this.setStatus(401);
+          }
+          return account;
+        },
+      );
   }
 }

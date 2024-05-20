@@ -15,5 +15,5 @@ export interface CreateVendor {
 }
 
 export type SessionUser = {
-  id: string
-}
+  id: string;
+};

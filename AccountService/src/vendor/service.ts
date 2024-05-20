@@ -5,8 +5,8 @@ import { CreateVendor } from "./index";
 import { SessionUser } from "./index";
 
 interface Account {
-  id: string,
-  name: string
+  id: string;
+  name: string;
 }
 
 export class VendorService {
@@ -82,19 +82,20 @@ export class VendorService {
   public async check(accessToken: string): Promise<SessionUser> {
     return new Promise((resolve, reject) => {
       try {
-        jwt.verify(accessToken, 
+        jwt.verify(
+          accessToken,
           `${process.env.MASTER_SECRET}`,
           (err: jwt.VerifyErrors | null, decoded?: object | string) => {
             if (err) {
               reject(err);
             }
-            const account = decoded as Account
-            resolve({id: account.id})
-          }
-        )
+            const account = decoded as Account;
+            resolve({ id: account.id });
+          },
+        );
       } catch (e) {
-        reject(e)
+        reject(e);
       }
-    })
+    });
   }
 }

@@ -15,8 +15,8 @@ export async function authChecker(
   return true;
 }
 
-export const nextAuthChecker: AuthChecker<NextApiRequest> = async (
-  { context }
-) => {
+export const nextAuthChecker: AuthChecker<NextApiRequest> = async ({
+  context,
+}) => {
   return await authChecker(context, context.req.headers.authorization);
 };

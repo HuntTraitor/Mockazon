@@ -32,7 +32,7 @@ export class AuthService {
         .then(() => {
           resolve({ content: 'Account successfully requested' });
         })
-        .catch(err => {
+        .catch(() => {
           reject(new GraphQLError('Request failed, please try again'));
         });
     });
@@ -56,7 +56,7 @@ export class AuthService {
         .then(authenticated => {
           resolve(authenticated);
         })
-        .catch(err => {
+        .catch(() => {
           reject(new GraphQLError('Unauthorised'));
         });
     });
@@ -65,18 +65,22 @@ export class AuthService {
   public async check(authHeader?: string): Promise<SessionUser> {
     return new Promise((resolve, reject) => {
       if (!authHeader) {
-        reject(new GraphQLError("Unauthorized"))
+        reject(new GraphQLError('Unauthorized'));
       } else {
         const tokens = authHeader.split(' ');
         if (tokens.length != 2 || tokens[0] !== 'Bearer') {
-          reject(new GraphQLError("Unauthorized"))
+          reject(new GraphQLError('Unauthorized'));
         } else {
-          fetch('http://localhost:3014/api/v0/vendor/check?accessToken=' + tokens[1], {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
+          fetch(
+            'http://localhost:3014/api/v0/vendor/check?accessToken=' +
+              tokens[1],
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
             }
-          })
+          )
             .then(res => {
               if (!res.ok) {
                 throw res;
@@ -84,13 +88,13 @@ export class AuthService {
               return res.json();
             })
             .then(sessionUser => {
-              resolve({id: sessionUser.id})
+              resolve({ id: sessionUser.id });
             })
-            .catch(err => {
-              reject(new GraphQLError("Unauthorized"))
-            })
+            .catch(() => {
+              reject(new GraphQLError('Unauthorized'));
+            });
         }
       }
-    })
+    });
   }
 }
