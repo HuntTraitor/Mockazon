@@ -139,9 +139,10 @@ VALUES
     );
 
 INSERT INTO
-    vendor (data)
+    vendor (id, data)
 VALUES
     (
+        ('e309eba3-2e56-425c-a6f7-fb8055acd7f7'),
         jsonb_build_object(
             'email',
             'htratar@ucsc.edu',
