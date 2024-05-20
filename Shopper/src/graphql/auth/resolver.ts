@@ -6,6 +6,7 @@ import {
   LoginInput,
 } from './schema';
 import { AuthService } from '@/graphql/auth/service';
+import { GraphQLError } from 'graphql';
 
 @Resolver()
 export class AuthResolver {
@@ -20,7 +21,7 @@ export class AuthResolver {
     } else if (credentials) {
       return new AuthService().signUp(credentials);
     } else {
-      throw new Error('Invalid input');
+      throw new GraphQLError('Invalid input');
     }
   }
 
@@ -28,12 +29,13 @@ export class AuthResolver {
   async login(
     @Args() { sub, email, password }: LoginInput
   ): Promise<AuthenticatedWithId | null> {
-    if (sub) {
+    if (sub && !email && !password) {
       return new AuthService().loginGoogle(sub);
-    } else if (email && password) {
+    } else if (email && password && !sub) {
+      console.log('login with email and password');
       return new AuthService().login({ email, password });
     } else {
-      throw new Error('Invalid input');
+      throw new GraphQLError('Invalid input');
     }
   }
 }

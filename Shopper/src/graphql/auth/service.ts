@@ -57,31 +57,29 @@ export class AuthService {
   public async loginGoogle(sub: string): Promise<AuthenticatedWithId | null> {
     // FIXME: This endpoint needs to be converted to POST maybe
     const result = await fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/login?sub=${sub.sub}`,
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/login`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ sub }),
       }
     )
       .then(response => {
         if (!response.ok) {
-          throw response;
+          throw new GraphQLError('Login error');
         }
         return response.json();
       })
       .then(authenticated => {
         return authenticated;
-      })
-      .catch(err => {
-        console.log(err);
-        throw new GraphQLError('Internal Server Error');
       });
     return result;
   }
 
   public async login(credentials: { email: string; password: string }) {
+    console.log(credentials);
     const result = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/login`,
       {
@@ -93,17 +91,14 @@ export class AuthService {
       }
     )
       .then(response => {
+        console.log('response', response);
         if (!response.ok) {
-          throw response;
+          throw new GraphQLError('Login error');
         }
         return response.json();
       })
       .then(authenticated => {
         return authenticated;
-      })
-      .catch(err => {
-        console.log(err);
-        throw new GraphQLError('Internal Server Error');
       });
     return result;
   }
