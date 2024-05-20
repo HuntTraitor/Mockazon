@@ -106,6 +106,8 @@ VALUES
         jsonb_build_object(
             'email',
             'elkrishn@ucsc.edu',
+            'pwhash',
+            crypt('pass', '87'),
             'name',
             'Eesha',
             'username',
@@ -142,7 +144,7 @@ INSERT INTO
     vendor (id, data)
 VALUES
     (
-        ('e309eba3-2e56-425c-a6f7-fb8055acd7f7'),
+        '4f061f79-e0e8-48ff-a2ac-0a56a8ad5f0e',
         jsonb_build_object(
             'email',
             'htratar@ucsc.edu',
