@@ -5,11 +5,10 @@ import { AuthService } from './service';
 
 export async function authChecker(
   context: NextApiRequest,
-  authHeader: string,
-  roles: string[]
+  authHeader: string
 ): Promise<boolean> {
   try {
-    context.user = await new AuthService().check(authHeader, roles);
+    context.user = await new AuthService().check(authHeader);
   } catch (err) {
     return false;
   }
@@ -17,8 +16,7 @@ export async function authChecker(
 }
 
 export const nextAuthChecker: AuthChecker<NextApiRequest> = async (
-  { context },
-  roles
+  { context }
 ) => {
-  return await authChecker(context, context.req.headers.authorization, roles);
+  return await authChecker(context, context.req.headers.authorization);
 };
