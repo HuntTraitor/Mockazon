@@ -22,7 +22,12 @@ const customJestConfig = {
     '!src/graphql/auth/checker.ts',
   ],
   collectCoverage: true,
-  coveragePathIgnorePatterns: ['src/pages/_app.tsx', 'src/pages/_document.tsx'],
+  coveragePathIgnorePatterns: [
+    'src/pages/_app.tsx',
+    'src/pages/_document.tsx',
+    // ok to ignore schema.ts as there's an issue with next and graphql
+    'schema.ts'
+  ],
   testMatch: ['**/test/**/?(*.)+(spec|test).[jt]s?(x)'],
 };
 
