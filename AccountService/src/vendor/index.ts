@@ -13,3 +13,7 @@ export interface CreateVendor {
   email: Email;
   password: string;
 }
+
+export type SessionUser = {
+  id: string
+}

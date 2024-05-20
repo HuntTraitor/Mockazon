@@ -2,6 +2,12 @@ import { pool } from "../db";
 import { Authenticated, Credentials } from "../types";
 import * as jwt from "jsonwebtoken";
 import { CreateVendor } from "./index";
+import { SessionUser } from "./index";
+
+interface Account {
+  id: string,
+  name: string
+}
 
 export class VendorService {
   public async exists(email: string): Promise<boolean> {
@@ -11,10 +17,6 @@ export class VendorService {
       values: [email],
     };
     const { rows } = await pool.query(query);
-
-    console.log(`Checking if email exists: ${rows.length > 0}`);
-    console.log(`Email: ${email}`);
-    console.log(`Rows: ${rows}`);
 
     return rows.length > 0;
   }
@@ -75,5 +77,24 @@ export class VendorService {
     const rows = result.rows;
 
     return rows[0];
+  }
+
+  public async check(accessToken: string): Promise<SessionUser> {
+    return new Promise((resolve, reject) => {
+      try {
+        jwt.verify(accessToken, 
+          `${process.env.MASTER_SECRET}`,
+          (err: jwt.VerifyErrors | null, decoded?: object | string) => {
+            if (err) {
+              reject(err);
+            }
+            const account = decoded as Account
+            resolve({id: account.id})
+          }
+        )
+      } catch (e) {
+        reject(e)
+      }
+    })
   }
 }

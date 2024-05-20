@@ -2,6 +2,7 @@ import { Field, ObjectType, ArgsType } from 'type-graphql';
 import { Matches, MinLength } from 'class-validator';
 
 @ArgsType()
+@ObjectType()
 export class Credentials {
   @Field()
   @Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
@@ -11,6 +12,7 @@ export class Credentials {
 }
 
 @ArgsType()
+@ObjectType()
 export class SignupCredentials {
   @Field()
     name!: string;

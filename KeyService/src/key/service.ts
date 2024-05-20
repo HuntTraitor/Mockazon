@@ -41,7 +41,6 @@ export class KeyService {
       values: [`${apiKey}`],
     };
     const { rows } = await pool.query(query);
-    console.log(rows);
     return rows.length > 0 ? rows[0] : undefined;
   }
 }

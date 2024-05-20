@@ -1,6 +1,6 @@
-import { Controller, Route, Response, Post, Body, SuccessResponse } from "tsoa";
+import { Controller, Route, Response, Post, Body, SuccessResponse, Get, Query } from "tsoa";
 
-import { CreateVendor, Vendor } from "./index";
+import { CreateVendor, SessionUser, Vendor } from "./index";
 import { VendorService } from "./service";
 import { Authenticated, Credentials } from "../types";
 
@@ -36,7 +36,6 @@ export class VendorController extends Controller {
       this.setStatus(400);
       return;
     }
-
     const user = await new VendorService().createVendorAccount(credentials);
     return {
       id: user.id,
@@ -45,5 +44,19 @@ export class VendorController extends Controller {
       role: user.data.role,
       suspended: user.data.suspended,
     };
+  }
+
+  @Get("check")
+  @Response('401', 'Unauthorized')
+  public async check(
+    @Query() accessToken: string,
+  ): Promise<SessionUser | undefined> {
+    return new VendorService().check(accessToken)
+      .then(async (account: SessionUser | undefined): Promise<SessionUser | undefined> => {
+        if (!account) {
+          this.setStatus(401)
+        }
+        return account
+      })
   }
 }
