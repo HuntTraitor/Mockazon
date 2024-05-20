@@ -174,7 +174,7 @@ describe('Signup component', () => {
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: jest.fn().mockResolvedValue({ errors: [{ message: 'mockError' }]}),
+      json: jest.fn().mockResolvedValue({ errors: [{ message: 'mockError' }] }),
     });
     render(
       <LoggedInContext.Provider value={loggedInContextProps}>

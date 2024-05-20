@@ -32,11 +32,11 @@ const handlers = [
       } else {
         if (duplicateError) {
           return HttpResponse.json(
-            { message: 'Duplicate error' },
+            { message: 'Duplicate account' },
             { status: 409 }
           );
         } else {
-          return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+          return HttpResponse.json({ message: 'Sign Up error' }, { status: 500 });
         }
       }
     }
@@ -86,56 +86,321 @@ afterAll(done => {
   server.close(done);
 });
 
-test('Correct Credentials', async () => {
-  const result = await supertest(server)
-    .post('/api/graphql')
-    .send({
-      query: `mutation { signUp(
-      email: "abcd@email.com",
-      name: "john",
-      sub: "125")
-    { id, name, email, role, sub }}`,
-    });
+describe('Sign Up BE', () => {
+  afterEach(() => {
+    noError = true;
+    duplicateError = false;
+  });
 
-  expect(result.body.data.signUp.id).toBeDefined();
-  expect(result.body.data.signUp.name).toBe('john');
-  expect(result.body.data.signUp.email).toBe('abc@email.com');
-  expect(result.body.data.signUp.role).toBe('Shopper');
-  expect(result.body.data.signUp.sub).toBe('123');
-});
+  test('Signs up with google correctly', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(googleCredentials: {
+            email: "abcd@email.com",
+            name: "john",
+            sub: "125"
+          }) {
+            id, 
+            name, 
+            email, 
+            role, 
+            sub 
+          }
+        }`,
+      });
 
-test('Wrong Credentials', async () => {
-  noError = false;
-  const result = await supertest(server)
-    .post('/api/graphql')
-    .send({
-      query: `mutation { signUp(
-      email: "abcd@email.com",
-      name: "john",
-      sub: "125")
-    { id, name, email, role, sub }}`,
-    });
-  expect(result.body.errors[0].message).toBeDefined();
-  expect(result.body.errors.data).toBeUndefined();
-});
+    expect(result.body.data.signUp.id).toBeDefined();
+    expect(result.body.data.signUp.name).toBe('john');
+    expect(result.body.data.signUp.email).toBe('abc@email.com');
+    expect(result.body.data.signUp.role).toBe('Shopper');
+    expect(result.body.data.signUp.sub).toBe('123');
+  });
 
-test('Duplicate Account', async () => {
-  noError = false;
-  duplicateError = true;
-  const result = await supertest(server)
-    .post('/api/graphql')
-    .send({
-      query: `mutation { signUp(
-      email: "abcd@email.com",
-      name: "john",
-      sub: "125")
-    { id, name, email, role, sub }}`,
-    });
-  expect(result.body.errors[0].message).toBeDefined();
-  expect(result.body.errors.data).toBeUndefined();
-  expect(result.status).toBe(200);
-});
+  test('Signs up with regular credentials correctly', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(credentials: {
+            email: "abcd@email.com",
+            name: "john",
+            password: "password123"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
 
-test('Check test', async () => {
-  await new AuthService().check();
+    expect(result.body.data.signUp.id).toBeDefined();
+    expect(result.body.data.signUp.name).toBe('john');
+    expect(result.body.data.signUp.email).toBe('abc@email.com');
+    expect(result.body.data.signUp.role).toBe('Shopper');
+  });
+
+  test('Rejects Sign Up with both google and regular credentials', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(credentials: {
+            email: "abcd@email.com",
+            name: "john",
+            password: "password123"
+          },
+          googleCredentials: {
+            email: "abcd@email.com",
+            name: "john",
+            sub: "125"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+  });
+
+  test('Rejects Sign Up with no credentials', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+  });
+
+  test('Rejects signups with duplicate email', async () => {
+    noError = false;
+    duplicateError = true;
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(credentials: {
+            email: "abcd@email.com",
+            name: "john",
+            password: "password123"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+    expect(result.body.errors[0].message).toBe('Duplicate account');
+  });
+
+  test('Rejects google signup with duplicate email', async () => {
+    noError = false;
+    duplicateError = true;
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(googleCredentials: {
+            email: "abcd@email.com",
+            name: "john",
+            sub: "125"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+    expect(result.body.errors[0].message).toBe('Duplicate account');
+  });
+
+  test('Rejects google signup with microservice error', async () => {
+    noError = false;
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(googleCredentials: {
+            email: "abcd@email.com",
+            name: "john",
+            sub: "125"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+    expect(result.body.errors[0].message).toBe('Unexpected error.');
+  });
+
+  test('Rejects regular signup with microservice error', async () => {
+    noError = false;
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(credentials: {
+            email: "abcd@email.com",
+            name: "john",
+            password: "password123"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+    expect(result.body.errors[0].message).toBe('Unexpected error.');
+  });
+
+  test('Rejects google signup without sub', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(googleCredentials: {
+            email: "abcd@email.com",
+            name: "john"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+  });
+
+  test('Rejects google signup without email', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(googleCredentials: {
+            name: "john",
+            sub: "125"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+  });
+
+  test('Rejects google signup without name', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(googleCredentials: {
+            email: "abcd@email.com",
+            sub: "125"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+  });
+
+  test('Rejects regular signup without email', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(credentials: {
+            name: "john",
+            password: "password123"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+  });
+
+  test('Rejects regular signup without name', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(credentials: {
+            email: "abcd@email.com",
+            password: "password123"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+  });
+
+  test('Rejects regular signup without password', async () => {
+    const result = await supertest(server)
+      .post('/api/graphql')
+      .send({
+        query: `mutation { 
+          signUp(credentials: {
+            email: "abcd@email.com",
+            name: "john"
+          }) {
+            id, 
+            name, 
+            email, 
+            role
+          }
+        }`,
+      });
+
+    expect(result.body.errors).toBeDefined();
+  });
+
+  // FIXME: This test needs to be better
+  test('Check test', async () => {
+    await new AuthService().check();
+  });
 });
