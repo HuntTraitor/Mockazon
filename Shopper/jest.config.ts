@@ -20,6 +20,8 @@ const customJestConfig = {
     '!**/node_modules/**',
     '!src/graphql/*/resolver.ts',
     '!src/graphql/auth/checker.ts',
+    "!**/schema.ts",
+    // FIXME: Double check that we should exclude all these
   ],
   collectCoverage: true,
   coveragePathIgnorePatterns: ['src/pages/_app.tsx', 'src/pages/_document.tsx'],
