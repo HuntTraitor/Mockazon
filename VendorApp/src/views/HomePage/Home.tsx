@@ -23,7 +23,7 @@ export function Home() {
     } else {
       router.push('/login');
     }
-  }, [loginContext, router]);
+  }, [loginContext]);
 
   return loginContext.accessToken.length > 0 ? (
     <KeyProvider>
