@@ -3,7 +3,8 @@ import { pool } from '../db';
 
 export class KeyService {
   public async create(vendorId: UUID): Promise<Key> {
-    const insert = `INSERT INTO api_key (vendor_id, requested, active) VALUES ($1, true, false) RETURNING key`;
+    let insert = `INSERT INTO api_key (vendor_id, blacklisted, active) VALUES ($1, false, true) RETURNING`;
+    insert += ` key, vendor_id, blacklisted, active`;
     const query = {
       text: insert,
       values: [`${vendorId}`],
@@ -35,7 +36,7 @@ export class KeyService {
 
   public async setActiveStatus(apiKey: UUID): Promise<Key | undefined> {
     let select = `UPDATE api_key SET active = CASE WHEN active IS TRUE THEN FALSE ELSE TRUE END WHERE key = $1`;
-    select += ` RETURNING *`;
+    select += ` AND blacklisted = FALSE RETURNING *`;
     const query = {
       text: select,
       values: [`${apiKey}`],
