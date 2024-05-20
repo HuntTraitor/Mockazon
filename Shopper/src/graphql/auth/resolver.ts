@@ -1,9 +1,9 @@
 import { Args, Mutation, Query, Resolver } from 'type-graphql';
 import {
   AuthenticatedWithId,
-  Credentials,
   SignUpResponse,
-  Sub,
+  SignUpArgs,
+  LoginInput,
 } from './schema';
 import { AuthService } from '@/graphql/auth/service';
 
@@ -11,13 +11,29 @@ import { AuthService } from '@/graphql/auth/service';
 export class AuthResolver {
   @Mutation(() => SignUpResponse)
   async signUp(
-    @Args() credentials: Credentials
+    @Args() { credentials, googleCredentials }: SignUpArgs
   ): Promise<SignUpResponse | null> {
-    return new AuthService().signUp(credentials);
+    if (googleCredentials && credentials) {
+      throw new Error('Invalid input');
+    } else if (googleCredentials) {
+      return new AuthService().signUpGoogle(googleCredentials);
+    } else if (credentials) {
+      return new AuthService().signUp(credentials);
+    } else {
+      throw new Error('Invalid input');
+    }
   }
 
   @Query(() => AuthenticatedWithId)
-  async login(@Args() sub: Sub): Promise<AuthenticatedWithId | null> {
-    return new AuthService().getUserWithSub(sub);
+  async login(
+    @Args() { sub, email, password }: LoginInput
+  ): Promise<AuthenticatedWithId | null> {
+    if (sub) {
+      return new AuthService().loginGoogle(sub);
+    } else if (email && password) {
+      return new AuthService().login({ email, password });
+    } else {
+      throw new Error('Invalid input');
+    }
   }
 }

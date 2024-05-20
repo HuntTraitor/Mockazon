@@ -2,14 +2,17 @@ import { IsEmail, IsUUID } from 'class-validator';
 import { Field, ObjectType, ArgsType, InputType } from 'type-graphql';
 
 @ArgsType()
-export class SignUpArgs {
-  @Field(() => Credentials, { nullable: true })
-    credentials?: Credentials;
+export class LoginInput {
+  @Field({ nullable: true })
+    sub?: string;
 
-  @Field(() => GoogleCredentials, { nullable: true })
-    googleCredentials?: GoogleCredentials;
+  @Field({ nullable: true })
+  @IsEmail()
+    email?: string;
+
+  @Field({ nullable: true })
+    password?: string;
 }
-
 @InputType()
 export class Credentials {
   @Field()
@@ -30,6 +33,17 @@ export class GoogleCredentials {
     email!: string;
   @Field()
     name!: string;
+}
+
+@ArgsType()
+export class SignUpArgs {
+  @Field(() => Credentials, { nullable: true })
+    // FIXME: Weird coverage issue
+    credentials?: Credentials;
+
+  @Field(() => GoogleCredentials, { nullable: true })
+    // FIXME: Weird coverage issue
+    googleCredentials?: GoogleCredentials;
 }
 
 @ArgsType()
