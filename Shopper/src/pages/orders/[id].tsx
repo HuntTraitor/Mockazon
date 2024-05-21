@@ -1,25 +1,16 @@
-import React, { useEffect } from 'react';
-import {
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  Box,
-  Backdrop,
-} from '@mui/material';
-import Image from 'next/image';
-import { useTranslation } from 'next-i18next';
-import { Order } from '@/graphql/types';
-import { useAppContext } from '@/contexts/AppContext';
-import TopNav from '@/views/TopNav';
-import styles from '@/styles/OrderView.module.css';
+import React, { useEffect, useState, useContext } from 'react';
+import { Container, Backdrop } from '@mui/material';
+import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useContext, useState } from 'react';
+import { useAppContext } from '@/contexts/AppContext';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
-import { useRouter } from 'next/router';
+import TopNav from '@/views/TopNav';
+import OrderDetails from '@/views/order/OrderDetails';
 import OrderCard from './ordercard';
+import styles from '@/styles/OrderView.module.css';
+import { Order } from '@/graphql/types';
 
 const namespaces = [
   'products',
@@ -38,10 +29,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-// Replace this with your actual data fetching logic
-async function fetchOrderById(id: string): Promise<Order> {
+const fetchOrderById = async (id: string) => {
   console.log('Fetching order with id:', id);
-  // Mocked data for illustration
   return {
     id,
     createdAt: '2024-05-08T00:00:00Z',
@@ -59,16 +48,15 @@ async function fetchOrderById(id: string): Promise<Order> {
     tax: 10.27,
     total: 121.26,
   };
-}
+};
 
 const OrderView: React.FC = () => {
-  const { t, i18n } = useTranslation(['order', 'common']);
   const { backDropOpen, setBackDropOpen } = useAppContext();
   const router = useRouter();
   const { id } = router.query;
-  const [order, setOrder] = useState<Order>({} as Order);
+  const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  const { accessToken, setUser, setAccessToken } = useContext(LoggedInContext);
+  const { setUser, setAccessToken } = useContext(LoggedInContext);
   useLoadLocalStorageUser(setUser, setAccessToken);
 
   useEffect(() => {
@@ -83,129 +71,15 @@ const OrderView: React.FC = () => {
         setLoading(false);
       });
     }
-  }, [id, accessToken]);
+  }, [id]);
 
-  if (loading) {
-    // FIXME: Add a loading spinner or something
-    return (
-      <>
-        <TopNav />
-      </>
-    );
-  }
+  if (loading) return <TopNav />;
 
   return (
     <>
       <TopNav />
       <Container maxWidth="lg" className={styles.container}>
-        <Grid
-          container
-          spacing={2}
-          xs={12}
-          justifyContent="space-between"
-          alignItems="center"
-          className={styles.gridContainer}
-        >
-          <Grid item>
-            <Typography variant="h4" component="h1" className={styles.header}>
-              {t('order:orderDetails')}
-            </Typography>
-            <Typography variant="body2" className={styles.orderedOn}>
-              {t('order:orderedOn')}{' '}
-              {new Date(order.createdAt).toLocaleDateString(
-                i18n.language === 'en' ? 'en-US' : 'es-US',
-                { year: 'numeric', month: 'long', day: 'numeric' }
-              )}{' '}
-              <span className={styles.separator}>|</span> {t('common:order')}# {order.id}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Paper elevation={3} className={styles.paper}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
-              <Box>
-                <Typography
-                  variant="body2"
-                  gutterBottom
-                  className={styles.address}
-                >
-                  {t('order:shippingAddress')}
-                </Typography>
-                <Typography variant="body2">
-                  {order.shippingAddress.name}
-                </Typography>
-                <Typography variant="body2">
-                  {order.shippingAddress.addressLine1}
-                </Typography>
-                <Typography variant="body2">
-                  {order.shippingAddress.city}, {order.shippingAddress.state}{' '}
-                  {order.shippingAddress.postalCode}
-                </Typography>
-                <Typography variant="body2">
-                  {order.shippingAddress.country}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Box>
-                <Typography
-                  variant="body2"
-                  gutterBottom
-                  className={styles.paymentMethod}
-                >
-                  {t('order:paymentMethod')}
-                </Typography>
-                <Box display="flex" alignItems="center">
-                  <Image
-                    src="https://placehold.co/20x20"
-                    alt="Mastercard"
-                    style={{ marginRight: '8px' }}
-                    width={20}
-                    height={20}
-                  />
-                  {/* FIXME: Add real icon and base it on the card type */}
-                  {/* FIXME: Add translation for "ending in" */}
-                  <Typography variant="body2">{order.paymentMethod}</Typography>
-                </Box>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Box>
-                <Typography
-                  variant="body2"
-                  gutterBottom
-                  className={styles.orderSummary}
-                >
-                  {t('order:orderSummary')}
-                </Typography>
-                <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2">{t('order:subtotal')}</Typography>
-                  <Typography variant="body2">${order.subtotal}</Typography>
-                </Box>
-                <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2">
-                    {t('order:totalBeforeTax')}
-                  </Typography>
-                  <Typography variant="body2">
-                    ${order.totalBeforeTax}
-                  </Typography>
-                </Box>
-                <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2">{t('order:tax')}</Typography>
-                  <Typography variant="body2">${order.tax}</Typography>
-                </Box>
-                <Box display="flex" justifyContent="space-between" mt={1}>
-                  <Typography variant="body2" className={styles.grandTotal}>
-                    {t('grandTotal')}
-                  </Typography>
-                  <Typography variant="body2" className={styles.grandTotal}>
-                    ${order.total}
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-          </Grid>
-        </Paper>
+        <OrderDetails order={order} />
       </Container>
       <OrderCard />
       <Backdrop
