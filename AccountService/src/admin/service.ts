@@ -3,6 +3,7 @@ import { pool } from "../db";
 import { Credentials, Authenticated } from "../types";
 // import { SessionUser } from "../types";
 import * as jwt from "jsonwebtoken";
+import { Vendor } from "../vendor";
 
 export class AdminService {
   public async login(
@@ -118,7 +119,6 @@ export class AdminService {
       id: row.id,
       email: row.data.email,
       name: row.data.name,
-      username: row.data.username,
       role: row.data.role,
       suspended: row.data.suspended,
     }));
@@ -172,7 +172,7 @@ export class AdminService {
     }
   }
 
-  public async approve(id: string): Promise<void> {
+  public async approve(id: string): Promise<Vendor> {
     const query = {
       text: "SELECT data FROM request WHERE id = $1",
       values: [id],
@@ -194,13 +194,19 @@ export class AdminService {
     await pool.query(insertQuery);
 
     const deleteQuery = {
-      text: "DELETE FROM request WHERE id = $1",
+      text: "DELETE FROM request WHERE id = $1 RETURNING *",
       values: [id],
     };
 
-    await pool.query(deleteQuery);
-
-    return;
+    const res = await pool.query(deleteQuery);
+    const user: Vendor = {
+      id: res.rows[0].id,
+      email: res.rows[0].data.email,
+      name: res.rows[0].data.name,
+      role: res.rows[0].data.role,
+      suspended: res.rows[0].data.suspended,
+    }
+    return user;
   }
 
   public async reject(id: string): Promise<void> {
