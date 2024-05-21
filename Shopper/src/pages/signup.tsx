@@ -159,6 +159,11 @@ const Signup = () => {
     return null;
   }
 
+  const handleFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    handleSignUp();
+  };
+
   return (
     <ThemeProvider theme={mainTheme}>
       <Box className={styles.signUpContainer}>
@@ -170,85 +175,88 @@ const Signup = () => {
           className={styles.logo}
         />
         <Paper elevation={3} className={styles.signUpForm}>
-          <div className={styles.titleContainer}>
-            <Typography variant="h4" className={styles.title}>
-              {t('signup:title')}
-            </Typography>
-          </div>
-          <TextField
-            className={styles.nameInput}
-            label={t('signup:name')}
-            value={name}
-            size="small"
-            onChange={event => setName(event.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            className={styles.emailInput}
-            label={t('signup:email')}
-            value={email}
-            size="small"
-            onChange={event => setEmail(event.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            className={styles.passwordInput}
-            label={t('signup:password')}
-            type="password"
-            size="small"
-            value={password}
-            onChange={event => setPassword(event.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            className={styles.confirmPasswordInput}
-            label={t('signup:confirmPassword')}
-            type="password"
-            size="small"
-            value={confirmPassword}
-            onChange={event => setConfirmPassword(event.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <Button
-            className={styles.signUpButton}
-            variant="contained"
-            color="primary"
-            onClick={handleSignUp}
-            aria-label={`${t('signup:signUpText')}`}
-            fullWidth
-          >
-            {t('signup:signUpText')}
-          </Button>
-          <Divider className={styles.divider}>{t('common:or')}</Divider>
-          <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
-            <GoogleLogin
-              shape="rectangular"
-              width="350px"
-              context="signup"
-              text="signup_with"
-              locale={i18n.language == 'en' ? 'en-US' : 'es-US'}
-              onSuccess={handleGoogleSuccess}
+          <form onSubmit={handleFormSubmit}>
+            <div className={styles.titleContainer}>
+              <Typography variant="h4" className={styles.title}>
+                {t('signup:title')}
+              </Typography>
+            </div>
+            <TextField
+              className={styles.nameInput}
+              label={t('signup:name')}
+              value={name}
+              size="small"
+              onChange={event => setName(event.target.value)}
+              fullWidth
+              margin="normal"
             />
-          </GoogleOAuthProvider>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            className={styles.agreementText}
-          >
-            {t('signup:agreement')}
-          </Typography>
-          <div className={styles.titleContainer}>
-            <Typography variant="body2" className={styles.alreadyHaveAccount}>
-              {t('signup:alreadyHaveAccount')}{' '}
-              <Link className={styles.signInButton} href="/login">
-                {t('common:signInText')}
-              </Link>
+            <TextField
+              className={styles.emailInput}
+              label={t('signup:email')}
+              value={email}
+              size="small"
+              onChange={event => setEmail(event.target.value)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              className={styles.passwordInput}
+              label={t('signup:password')}
+              type="password"
+              size="small"
+              value={password}
+              onChange={event => setPassword(event.target.value)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              className={styles.confirmPasswordInput}
+              label={t('signup:confirmPassword')}
+              type="password"
+              size="small"
+              value={confirmPassword}
+              onChange={event => setConfirmPassword(event.target.value)}
+              fullWidth
+              margin="normal"
+            />
+            <Button
+              className={styles.signUpButton}
+              variant="contained"
+              color="primary"
+              type="submit"
+              onClick={handleSignUp}
+              aria-label={`${t('signup:signUpText')}`}
+              fullWidth
+            >
+              {t('signup:signUpText')}
+            </Button>
+            <Divider className={styles.divider}>{t('common:or')}</Divider>
+            <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
+              <GoogleLogin
+                shape="rectangular"
+                width="350px"
+                context="signup"
+                text="signup_with"
+                locale={i18n.language == 'en' ? 'en-US' : 'es-US'}
+                onSuccess={handleGoogleSuccess}
+              />
+            </GoogleOAuthProvider>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className={styles.agreementText}
+            >
+              {t('signup:agreement')}
             </Typography>
-          </div>
+            <div className={styles.titleContainer}>
+              <Typography variant="body2" className={styles.alreadyHaveAccount}>
+                {t('signup:alreadyHaveAccount')}{' '}
+                <Link className={styles.signInButton} href="/login">
+                  {t('common:signInText')}
+                </Link>
+              </Typography>
+            </div>
+          </form>
         </Paper>
       </Box>
     </ThemeProvider>

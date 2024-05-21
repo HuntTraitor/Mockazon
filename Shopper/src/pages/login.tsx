@@ -134,6 +134,11 @@ const Login = () => {
     return null;
   }
 
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSignIn();
+  };
+
   return (
     <ThemeProvider theme={mainTheme}>
       <Box className={styles.loginContainer}>
@@ -145,58 +150,61 @@ const Login = () => {
           className={styles.logo}
         />
         <Paper elevation={3} className={styles.loginForm}>
-          <div className={styles.titleContainer}>
-            <Typography variant="h4" className={styles.title}>
-              {t('login:title')}
-            </Typography>
-          </div>
-          <TextField
-            className={styles.emailInput}
-            label={t('login:email')}
-            value={email}
-            size="small"
-            onChange={event => setEmail(event.target.value)}
-            inputProps={{ 'font-size': 2 }}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            className={styles.passwordInput}
-            label={t('login:password')}
-            type="password"
-            size="small"
-            value={password}
-            onChange={event => setPassword(event.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <Button
-            className={styles.signInButton}
-            variant="contained"
-            color="primary"
-            onClick={handleSignIn}
-            fullWidth
-          >
-            {t('common:signInText')}
-          </Button>
-          <Divider className={styles.divider}>{t('common:or')}</Divider>
-          <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
-            <GoogleLogin
-              shape="rectangular"
-              width="350px"
-              context="signin"
-              aria-label="Google Login Button"
-              locale={i18n.language == 'en' ? 'en-US' : 'es-US'}
-              onSuccess={handleGoogleSuccess}
+          <form onSubmit={handleFormSubmit}>
+            <div className={styles.titleContainer}>
+              <Typography variant="h4" className={styles.title}>
+                {t('login:title')}
+              </Typography>
+            </div>
+            <TextField
+              className={styles.emailInput}
+              label={t('login:email')}
+              value={email}
+              size="small"
+              onChange={event => setEmail(event.target.value)}
+              inputProps={{ 'font-size': 2 }}
+              fullWidth
+              margin="normal"
             />
-          </GoogleOAuthProvider>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            className={styles.agreementText}
-          >
-            {t('login:agreement')}
-          </Typography>
+            <TextField
+              className={styles.passwordInput}
+              label={t('login:password')}
+              type="password"
+              size="small"
+              value={password}
+              onChange={event => setPassword(event.target.value)}
+              fullWidth
+              margin="normal"
+            />
+            <Button
+              className={styles.signInButton}
+              variant="contained"
+              color="primary"
+              type="submit"
+              onClick={handleSignIn}
+              fullWidth
+            >
+              {t('common:signInText')}
+            </Button>
+            <Divider className={styles.divider}>{t('common:or')}</Divider>
+            <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
+              <GoogleLogin
+                shape="rectangular"
+                width="350px"
+                context="signin"
+                aria-label="Google Login Button"
+                locale={i18n.language == 'en' ? 'en-US' : 'es-US'}
+                onSuccess={handleGoogleSuccess}
+              />
+            </GoogleOAuthProvider>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className={styles.agreementText}
+            >
+              {t('login:agreement')}
+            </Typography>
+          </form>
         </Paper>
         <Divider className={styles.newToAmazonDivider}>
           {t('login:newToMockazon')}
