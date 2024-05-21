@@ -19,3 +19,28 @@ export interface LoginInput {
   password?: string;
   sub?: string;
 }
+
+export interface Decoded {
+  id: UUID;
+  role: string;
+}
+
+export interface ShippingAddress {
+  name: string;
+  addressLine1: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface Order {
+  id: string;
+  createdAt: string;
+  shippingAddress: ShippingAddress;
+  paymentMethod: string;
+  subtotal: number;
+  totalBeforeTax: number;
+  tax: number;
+  total: number;
+}
