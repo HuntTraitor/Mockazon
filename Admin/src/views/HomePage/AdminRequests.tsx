@@ -79,7 +79,7 @@ export function AdminRequests() {
       })
       .then(json => {
         if (json.errors) {
-          console.error(json.errors)
+          throw new Error(json.errors[0].message);
         } else {
           console.log(json)
         }
