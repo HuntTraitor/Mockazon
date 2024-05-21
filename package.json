@@ -44,6 +44,7 @@
     "lint-vendorapi": "cd VendorAPI && npm run lint",
     "lints": "npm run lint-admin && npm run lint-account && npm run lint-key && npm run lint-order && npm run lint-product && npm run lint-shopper && npm run lint-vendorapp && npm run lint-vendorapi",
     "containerized": "npm run installs && dotenv -- npm run builds && docker-compose up --build",
+    "containerized": "npm run installs && dotenv -- npm run builds && docker-compose up -d --build",
     "build-admin": "cd Admin && npm run build",
     "build-account": "cd AccountService && npm run build",
     "build-key": "cd KeyService && npm run build",
