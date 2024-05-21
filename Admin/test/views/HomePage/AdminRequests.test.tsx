@@ -1,18 +1,21 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { AdminRequests } from '../../../src/views/HomePage/AdminRequests';
 
-let returnError = false;
+let requestsError = false;
+let approveError = false;
 
 jest.mock('next/config', () => () => ({
-  publicRuntimeConfig: { basePath: '' },
+  publicRuntimeConfig: {
+    basePath: '',
+  },
 }));
 
 const handlers = [
-  graphql.query('GetRequests', ({ query /*variables*/ }) => {
+  graphql.query('GetRequests', ({ query /*, variables*/ }) => {
     console.log(query);
-    if (returnError) {
+    if (requestsError) {
       return HttpResponse.json({
         errors: [{ message: 'Some Error' }],
       });
@@ -21,14 +24,32 @@ const handlers = [
       data: {
         request: [
           {
-            id: '81c689b1-b7a7-4100-8b2d-309908b444f5',
+            id: 1,
             email: 'test1@email.com',
             name: 'test account 1',
-            username: 'testaccount1',
             role: 'test',
             suspended: false,
           },
         ],
+      },
+    });
+  }),
+  graphql.mutation('approveVendor', ({ query /*, variables*/ }) => {
+    console.log(query);
+    if (approveError) {
+      return HttpResponse.json({
+        errors: [{ message: 'Some Error' }],
+      });
+    }
+    return HttpResponse.json({
+      data: {
+        approveVendor: {
+          id: 1,
+          email: 'approved@email.com',
+          name: 'approved account',
+          role: 'approved',
+          suspended: false,
+        },
       },
     });
   }),
@@ -42,17 +63,7 @@ afterAll(() => server.close());
 
 it('Renders', async () => {
   render(<AdminRequests />);
-  await screen.findByText('Requests', {
-    exact: false,
-  });
-});
-
-
-it('Renders', async () => {
-  render(<AdminRequests />);
-  await screen.findByText('Requests', {
-    exact: false,
-  });
+  await screen.findByText('Requests', { exact: false });
 });
 
 it('Renders table', async () => {
@@ -64,27 +75,28 @@ it('Renders table', async () => {
 
 it('Approve button for request with ID 1 is clickable', async () => {
   render(<AdminRequests />);
-  const approveButtonForRequest1 = await screen.findByTestId(
-    'approve-request-81c689b1-b7a7-4100-8b2d-309908b444f5'
-  );
-
-  approveButtonForRequest1.click();
-
+  const approveButtonForRequest1 = await screen.findByTestId('approve-request-1');
+  fireEvent.click(approveButtonForRequest1);
   expect(approveButtonForRequest1).not.toBeNull();
 });
 
 it('Reject button for request with ID 1 is clickable', async () => {
   render(<AdminRequests />);
-  const rejectButtonForRequest1 = await screen.findByTestId(
-    'reject-request-81c689b1-b7a7-4100-8b2d-309908b444f5'
-  );
-
-  rejectButtonForRequest1.click();
-  
+  const rejectButtonForRequest1 = await screen.findByTestId('reject-request-1');
+  fireEvent.click(rejectButtonForRequest1);
   expect(rejectButtonForRequest1).not.toBeNull();
 });
 
 it('Handles error', async () => {
-  returnError = true;
+  requestsError = true;
   render(<AdminRequests />);
+});
+
+it('Handles approve error', async () => {
+  requestsError = false;
+  approveError = true;
+  render(<AdminRequests />);
+
+  const approveButtonForRequest1 = await screen.findByTestId('approve-request-1');
+  fireEvent.click(approveButtonForRequest1);
 });
