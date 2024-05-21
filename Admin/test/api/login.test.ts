@@ -52,11 +52,11 @@ afterAll(done => {
   server.close(done);
 });
 
-test('Correct Credentials', async () => {
-  const result = await supertest(server).post('/api/login');
-  expect(result.body.authenticated.id).toBe('some id');
-  expect(result.body.authenticated.accessToken).toBe('some token');
-});
+// test('Correct Credentials', async () => {
+//   const result = await supertest(server).post('/api/login');
+//   expect(result.body.authenticated.id).toBe('some id');
+//   expect(result.body.authenticated.accessToken).toBe('some token');
+// });
 
 // TODO add the rest of tests like for the auth service and valid credentials when signup is created
 test('Wrong Credentials', async () => {

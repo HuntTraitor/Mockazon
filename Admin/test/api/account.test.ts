@@ -1,7 +1,6 @@
 import * as http from 'http';
 import supertest from 'supertest';
 
-import * as db from './db';
 import requestHandler from './requestHandler';
 
 let server: http.Server<
@@ -12,13 +11,10 @@ let server: http.Server<
 beforeAll(async () => {
   server = http.createServer(requestHandler);
   server.listen();
-  await db.reset();
 });
 
 afterAll(done => {
-  db.shutdown(() => {
-    server.close(done);
-  });
+  server.close(done);
 });
 
 it('fetches all accounts', async () => {
