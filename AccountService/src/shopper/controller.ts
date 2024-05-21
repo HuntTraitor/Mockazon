@@ -1,7 +1,7 @@
-import { Controller, Route, Post, Body } from "tsoa";
+import { Controller, Route, Post, Body, Header, Get } from "tsoa";
 
 import { ShopperService } from "./service";
-import { CreateUserInput, LoginInput } from ".";
+import { CreateUserInput, LoginInput, ShippingAddress, Order } from ".";
 
 @Route("shopper")
 export class ShopperController extends Controller {
@@ -38,5 +38,55 @@ export class ShopperController extends Controller {
     }
 
     return { id: user.id, accessToken: user.accessToken, ...user.data };
+  }
+
+  @Get("shippinginfo")
+  public async getShippingInfo(@Header("authorization") accessToken: string) {
+    const userData = await new ShopperService().getShippingInfo(accessToken);
+    if (!userData) {
+      this.setStatus(404);
+    }
+    return userData;
+  }
+
+  @Post("shippinginfo")
+  public async createShippingInfo(
+    @Header("authorization") accessToken: string,
+    @Body() shippingInfo: ShippingAddress,
+  ) {
+    try {
+      const userData = await new ShopperService().createShippingInfo({
+        accessToken,
+        shippingInfo,
+      });
+      return userData;
+    } catch (error) {
+      this.setStatus(404);
+    }
+  }
+
+  @Get("orderhistory")
+  public async getOrderHistory(@Header("authorization") accessToken: string) {
+    const userData = await new ShopperService().getOrderHistory(accessToken);
+    if (!userData) {
+      this.setStatus(404);
+    }
+    return userData;
+  }
+
+  @Post("orderhistory")
+  public async createOrderHistory(
+    @Header("authorization") accessToken: string,
+    @Body() order: Order,
+  ) {
+    try {
+      const userData = await new ShopperService().createOrderHistory({
+        accessToken,
+        order,
+      });
+      return userData;
+    } catch (error) {
+      this.setStatus(404);
+    }
   }
 }

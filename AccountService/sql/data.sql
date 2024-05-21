@@ -202,3 +202,70 @@ VALUES
             false
         )
     );
+
+--- Shopper Data ---
+INSERT INTO
+    shopper (data)
+VALUES
+    (
+        jsonb_build_object(
+        'email', 'evan.metcalf3@gmail.com',
+        'pwhash', crypt('pass', '87'),
+        'sub',
+        'pass1',
+        'name', 'Evan Metcalf',
+        'username', 'Nave Flactem',
+        'role', 'shopper',
+        'suspended', false,
+        'shippingInfo', jsonb_build_array(
+            jsonb_build_object(
+                'address', '1234 Elm St',
+                'city', 'Santa Cruz',
+                'state', 'CA',
+                'zip', '95060'
+            ),
+            jsonb_build_object(
+                'address', '5678 Oak St',
+                'city', 'Santa Cruz',
+                'state', 'CA',
+                'zip', '95060'
+            )
+        ),
+        'orderHistory', jsonb_build_array(
+            jsonb_build_object(
+                'orderId', 'ORD123',
+                'date', '2024-05-01',
+                'items', jsonb_build_array(
+                    jsonb_build_object(
+                        'productId', 'P001',
+                        'quantity', 2,
+                        'price', 19.99
+                    ),
+                    jsonb_build_object(
+                        'productId', 'P002',
+                        'quantity', 1,
+                        'price', 9.99
+                    )
+                ),
+                'total', 49.97
+            ),
+            jsonb_build_object(
+                'orderId', 'ORD124',
+                'date', '2024-05-15',
+                'items', jsonb_build_array(
+                    jsonb_build_object(
+                        'productId', 'P003',
+                        'quantity', 1,
+                        'price', 29.99
+                    ),
+                    jsonb_build_object(
+                        'productId', 'P004',
+                        'quantity', 3,
+                        'price', 15.99
+                    )
+                ),
+                'total', 77.96
+            )
+        )
+    )
+);

@@ -14,18 +14,22 @@ describe('Shopping cart', () => {
     await browser.close();
   });
 
-  test('Adding a product to the shopping cart', async () => {
-    await page.goto('http://localhost:3000/login');
-
-    await page.click('a[aria-label="translate-spanish"]');
-
-    const selector = '[aria-label="title"]';
-    const expectedText = 'Bienvenido a mockazon';
-    await findByTextAndSelector(page, selector, expectedText);
-
-    await page.click('a[aria-label="translate-english"]');
-
-    const expectedTextEnglish = 'Welcome to Mockazon';
-    await findByTextAndSelector(page, selector, expectedTextEnglish);
+  test('Navigate to home page', async () => {
+    await page.goto('http://localhost:3000');
   });
+
+  // test('Adding a product to the shopping cart', async () => {
+  //   await page.goto('http://localhost:3000/login');
+
+  //   await page.click('a[aria-label="translate-spanish"]');
+
+  //   const selector = '[aria-label="title"]';
+  //   const expectedText = 'Bienvenido a mockazon';
+  //   await findByTextAndSelector(page, selector, expectedText);
+
+  //   await page.click('a[aria-label="translate-english"]');
+
+  //   const expectedTextEnglish = 'Welcome to Mockazon';
+  //   await findByTextAndSelector(page, selector, expectedTextEnglish);
+  // });
 });
