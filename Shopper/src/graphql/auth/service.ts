@@ -91,7 +91,6 @@ export class AuthService {
       }
     )
       .then(response => {
-        console.log('response', response);
         if (!response.ok) {
           throw new GraphQLError('Login error');
         }

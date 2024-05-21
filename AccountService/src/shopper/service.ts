@@ -58,7 +58,19 @@ export class ShopperService {
       return undefined; // user already exists
     }
 
-    const insert = `INSERT INTO shopper(data) VALUES (jsonb_build_object('sub', $1::text, 'email', $2::text, 'name', $3::text, 'username', 'temp', 'role', $4::text, 'suspended', false, 'password', $5::text)) RETURNING *`;
+    const insert = `
+      INSERT INTO shopper(data) 
+      VALUES (
+        jsonb_build_object(
+          'sub', $1::text, 
+          'email', $2::text, 
+          'name', $3::text, 
+          'role', $4::text, 
+          'suspended', false, 
+          'pwhash', crypt($5::text, '87')
+        )
+      ) 
+      RETURNING *`;
     const query = {
       text: insert,
       values: [sub, email, name, "Shopper", password],

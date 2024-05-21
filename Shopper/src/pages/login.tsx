@@ -50,14 +50,14 @@ const Login = () => {
   const handleSignIn = async () => {
     try {
       const query = {
-        query: `query LogIn {
-    login(email: "${email}", password: "${password}") {
-      id
-      name
-      accessToken
-      role
-    }
-  }`,
+        query: `query Login {
+        login(email: "${email}", password: "${password}") {
+          id
+          name
+          accessToken
+          role
+        }
+      }`,
       };
       const response = await fetch(`${basePath}/api/graphql`, {
         method: 'POST',

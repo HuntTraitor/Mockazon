@@ -57,14 +57,14 @@ const Signup = () => {
     try {
       const query = {
         query: `mutation SignUp {
-    signUp(name: "${name}", email: "${email}", password: "${password}") {
-      id
-      name
-      email
-      role
-      accessToken
-    }
-  }`,
+          signUp(credentials: { name: "${name}", email: "${email}", password: "${password}" }) {
+            id
+            name
+            email
+            role
+            accessToken
+          }
+        }`,
       };
       const response = await fetch(`${basePath}/api/graphql`, {
         method: 'POST',
@@ -107,17 +107,18 @@ const Signup = () => {
       );
       const query = {
         query: `mutation SignUp {
-    signUp(sub: "${decoded.sub}",
-    email: "${decoded.email}",
-    name: "${decoded.name}") {
-      id
-      name
-      email
-      role
-      sub
-      accessToken
-    }
-  }`,
+          signUp(googleCredentials: {
+          sub: "${decoded.sub}",
+          email: "${decoded.email}",
+          name: "${decoded.name}"}) {
+            id
+            name
+            email
+            role
+            sub
+            accessToken
+          }
+        }`,
       };
       const response = await fetch(`${basePath}/api/graphql`, {
         method: 'POST',
