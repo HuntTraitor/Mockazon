@@ -27,7 +27,7 @@ interface Request {
 // eslint-disable-next-line @typescript-eslint/ban-types
 const fetchRequests = async (setRequests: Function) => {
   const query = {
-    query: `query GetRequests {request {id name email role suspended username}}`,
+    query: `query GetRequests {request {id name email role suspended}}`,
   };
 
   fetch(`${basePath}/api/graphql`, {
@@ -57,8 +57,36 @@ export function AdminRequests() {
     fetchRequests(setRequests);
   }, []);
 
-  const handleApproveRequest = (requestId: number) => {
-    console.log(`Approving request with ID: ${requestId}`);
+  const handleApproveRequest = (vendorId: number) => {
+    console.log(vendorId)
+    const query = {
+      query: `mutation approveVendor{approveVendor(VendorId: "${vendorId}") {
+        id email name role suspended
+      }}`
+    }
+
+    console.log(query)
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(query)
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then(json => {
+        if (json.errors) {
+          console.error(json.errors)
+        } else {
+          console.log(json)
+        }
+      })
+      .catch(e => {
+        alert(e.toString())
+      })
   };
 
   const handleRejectRequest = (requestId: number) => {
