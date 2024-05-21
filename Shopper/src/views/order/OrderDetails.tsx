@@ -18,16 +18,24 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
 
   return (
     <>
-      <Grid container spacing={2} justifyContent="space-between" alignItems="center" className={styles.gridContainer}>
+      <Grid
+        container
+        spacing={2}
+        justifyContent="space-between"
+        alignItems="center"
+        className={styles.gridContainer}
+      >
         <Grid item>
           <Typography variant="h4" component="h1" className={styles.header}>
             {t('order:orderDetails')}
           </Typography>
           <Typography variant="body2" className={styles.orderedOn}>
-            {t('order:orderedOn')} {new Date(order.createdAt).toLocaleDateString(
+            {t('order:orderedOn')}{' '}
+            {new Date(order.createdAt).toLocaleDateString(
               i18n.language === 'en' ? 'en-US' : 'es-US',
               { year: 'numeric', month: 'long', day: 'numeric' }
-            )} | {t('common:order')}# {order.id}
+            )}{' '}
+            | {t('common:order')}# {order.id}
           </Typography>
         </Grid>
       </Grid>
