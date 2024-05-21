@@ -148,6 +148,7 @@ const ProductPage = () => {
         </Container>
         <MockazonMenuDrawer />
         <Backdrop
+          aria-label={'backdrop'}
           open={backDropOpen}
           style={{ zIndex: 1, position: 'fixed' }}
           onClick={() => setBackDropOpen(false)}

@@ -132,17 +132,17 @@ describe('Signup component', () => {
         <Signup />
       </LoggedInContext.Provider>
     );
-    fireEvent.change(screen.getByLabelText('signup:name'), {
+    fireEvent.change(screen.getAllByLabelText('signup:name')[0], {
       target: { value: 'mockName' },
     });
-    fireEvent.change(screen.getByLabelText('signup:email'), {
+    fireEvent.change(screen.getAllByLabelText('signup:email')[0], {
       target: { value: 'mockemail@gmail.com' },
     });
-    fireEvent.change(screen.getByLabelText('signup:password'), {
+    fireEvent.change(screen.getAllByLabelText('signup:password')[0], {
       target: { value: 'mockPassword' },
     });
 
-    fireEvent.change(screen.getByLabelText('signup:confirmPassword'), {
+    fireEvent.change(screen.getAllByLabelText('signup:confirmPassword')[0], {
       target: { value: 'mockPassword' },
     });
 
@@ -162,17 +162,17 @@ describe('Signup component', () => {
       </LoggedInContext.Provider>
     );
 
-    fireEvent.change(screen.getByLabelText('signup:name'), {
+    fireEvent.change(screen.getAllByLabelText('signup:name')[0], {
       target: { value: 'mockName' },
     });
-    fireEvent.change(screen.getByLabelText('signup:email'), {
+    fireEvent.change(screen.getAllByLabelText('signup:email')[0], {
       target: { value: 'mockemail@gmail.com' },
     });
-    fireEvent.change(screen.getByLabelText('signup:password'), {
+    fireEvent.change(screen.getAllByLabelText('signup:password')[0], {
       target: { value: 'mockPassword' },
     });
 
-    fireEvent.change(screen.getByLabelText('signup:confirmPassword'), {
+    fireEvent.change(screen.getAllByLabelText('signup:confirmPassword')[0], {
       target: { value: 'mockPassword' },
     });
 
@@ -194,17 +194,17 @@ describe('Signup component', () => {
       </LoggedInContext.Provider>
     );
 
-    fireEvent.change(screen.getByLabelText('signup:name'), {
+    fireEvent.change(screen.getAllByLabelText('signup:name')[0], {
       target: { value: 'mockName' },
     });
-    fireEvent.change(screen.getByLabelText('signup:email'), {
+    fireEvent.change(screen.getAllByLabelText('signup:email')[0], {
       target: { value: 'mockemail@gmail.com' },
     });
-    fireEvent.change(screen.getByLabelText('signup:password'), {
+    fireEvent.change(screen.getAllByLabelText('signup:password')[0], {
       target: { value: 'mockPassword' },
     });
 
-    fireEvent.change(screen.getByLabelText('signup:confirmPassword'), {
+    fireEvent.change(screen.getAllByLabelText('signup:confirmPassword')[0], {
       target: { value: 'mockPassword' },
     });
 
@@ -226,19 +226,19 @@ describe('Signup component', () => {
       </LoggedInContext.Provider>
     );
 
-    fireEvent.change(screen.getByLabelText('signup:name'), {
+    fireEvent.change(screen.getAllByLabelText('signup:name')[0], {
       target: { value: 'mockName' },
     });
 
-    fireEvent.change(screen.getByLabelText('signup:email'), {
+    fireEvent.change(screen.getAllByLabelText('signup:email')[0], {
       target: { value: 'mockemail@gmail.com' },
     });
 
-    fireEvent.change(screen.getByLabelText('signup:password'), {
+    fireEvent.change(screen.getAllByLabelText('signup:password')[0], {
       target: { value: 'mockPassword' },
     });
 
-    fireEvent.change(screen.getByLabelText('signup:confirmPassword'), {
+    fireEvent.change(screen.getAllByLabelText('signup:confirmPassword')[0], {
       target: { value: 'mockPassword' },
     });
 
@@ -255,17 +255,17 @@ describe('Signup component', () => {
         <Signup />
       </LoggedInContext.Provider>
     );
-    fireEvent.change(screen.getByLabelText('signup:name'), {
+    fireEvent.change(screen.getAllByLabelText('signup:name')[0], {
       target: { value: 'mockName' },
     });
-    fireEvent.change(screen.getByLabelText('signup:email'), {
+    fireEvent.change(screen.getAllByLabelText('signup:email')[0], {
       target: { value: 'mockemail@gmail.com' },
     });
-    fireEvent.change(screen.getByLabelText('signup:password'), {
+    fireEvent.change(screen.getAllByLabelText('signup:password')[0], {
       target: { value: 'mockPassword' },
     });
 
-    fireEvent.change(screen.getByLabelText('signup:confirmPassword'), {
+    fireEvent.change(screen.getAllByLabelText('signup:confirmPassword')[0], {
       target: { value: 'mockPassword2' },
     });
 
@@ -372,17 +372,17 @@ describe('Signup component', () => {
       </LoggedInContext.Provider>
     );
 
-    fireEvent.change(screen.getByLabelText('signup:name'), {
+    fireEvent.change(screen.getAllByLabelText('signup:name')[0], {
       target: { value: 'mockName' },
     });
-    fireEvent.change(screen.getByLabelText('signup:email'), {
+    fireEvent.change(screen.getAllByLabelText('signup:email')[0], {
       target: { value: 'mockEmail@gmail.com' },
     });
-    fireEvent.change(screen.getByLabelText('signup:password'), {
+    fireEvent.change(screen.getAllByLabelText('signup:password')[0], {
       target: { value: 'mockPassword' },
     });
 
-    fireEvent.change(screen.getByLabelText('signup:confirmPassword'), {
+    fireEvent.change(screen.getAllByLabelText('signup:confirmPassword')[0], {
       target: { value: 'mockPassword' },
     });
 

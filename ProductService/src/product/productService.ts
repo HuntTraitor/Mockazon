@@ -98,7 +98,7 @@ export class ProductService {
     }
     if (search) {
       conditions.push(`data->>'name' ILIKE $${values.length + 1}`);
-      values.push(`${search}%`);
+      values.push(`%${search}%`);
     }
 
     // Append conditions to query

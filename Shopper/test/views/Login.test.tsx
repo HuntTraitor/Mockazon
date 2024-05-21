@@ -144,10 +144,10 @@ describe('Login component', () => {
       </LoggedInContext.Provider>
     );
 
-    fireEvent.change(screen.getByLabelText('login:email'), {
+    fireEvent.change(screen.getAllByLabelText('login:email')[0], {
       target: { value: 'mockEmail' },
     });
-    fireEvent.change(screen.getByLabelText('login:password'), {
+    fireEvent.change(screen.getAllByLabelText('login:password')[0], {
       target: { value: 'mockPassword' },
     });
 
@@ -171,10 +171,10 @@ describe('Login component', () => {
       </LoggedInContext.Provider>
     );
 
-    fireEvent.change(screen.getByLabelText('login:email'), {
+    fireEvent.change(screen.getAllByLabelText('login:email')[0], {
       target: { value: 'mockEmail' },
     });
-    fireEvent.change(screen.getByLabelText('login:password'), {
+    fireEvent.change(screen.getAllByLabelText('login:password')[0], {
       target: { value: 'mockPassword' },
     });
 
@@ -199,10 +199,10 @@ describe('Login component', () => {
       </LoggedInContext.Provider>
     );
 
-    fireEvent.change(screen.getByLabelText('login:email'), {
+    fireEvent.change(screen.getAllByLabelText('login:email')[0], {
       target: { value: 'mockEmail' },
     });
-    fireEvent.change(screen.getByLabelText('login:password'), {
+    fireEvent.change(screen.getAllByLabelText('login:password')[0], {
       target: { value: 'mockPassword' },
     });
 
@@ -222,10 +222,10 @@ describe('Login component', () => {
       </LoggedInContext.Provider>
     );
 
-    fireEvent.change(screen.getByLabelText('login:email'), {
+    fireEvent.change(screen.getAllByLabelText('login:email')[0], {
       target: { value: 'mockEmail' },
     });
-    fireEvent.change(screen.getByLabelText('login:password'), {
+    fireEvent.change(screen.getAllByLabelText('login:password')[0], {
       target: { value: 'mockPassword' },
     });
 

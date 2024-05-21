@@ -8,12 +8,12 @@ describe('Auth', () => {
   jest.setTimeout(10000);
   let browser: Browser;
   let page: Page;
-  
+
   /* https://stackoverflow.com/questions/58887985/how-to-test-an-alert-displaying-using-jest-puppeteer */
   const dialogHandler = jest.fn(dialog => dialog.dismiss());
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: true});
+    browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
     page.on('dialog', dialogHandler);
   });
