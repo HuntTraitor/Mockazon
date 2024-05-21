@@ -2,9 +2,10 @@ import React from 'react';
 import {
   fireEvent,
   render,
+  waitFor,
   // waitFor
 } from '@testing-library/react';
-// import { screen } from '@testing-library/dom';
+import { screen } from '@testing-library/dom';
 import Products from '@/pages/products';
 import { getServerSideProps } from '@/pages/products';
 import http from 'http';
@@ -15,6 +16,7 @@ import { setupServer } from 'msw/node';
 
 import requestHandler from '../../api/requestHandler';
 import { SnackbarProvider, useSnackbar } from 'notistack';
+import * as nextRouter from 'next/router';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -65,7 +67,7 @@ const handlers = [
                   rating: 'test',
                   price: 1,
                   deliveryDate: 'test',
-                  image: 'test',
+                  // image: 'test',
                 },
               },
             ],
@@ -138,6 +140,24 @@ afterEach(() => {
   microServices.resetHandlers();
 });
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    basePath: '',
+    pathname: '/',
+    query: { active: true },
+    asPath: '/',
+    locale: 'en',
+    locales: ['en', 'es'],
+    defaultLocale: 'en',
+    push: jest.fn(),
+    replace: jest.fn(),
+    reload: jest.fn(),
+    back: jest.fn(),
+    prefetch: jest.fn(),
+    beforePopState: jest.fn(),
+  }),
+}));
+
 beforeEach(() => {
   errorInGetProducts = false;
   errorInGetProductsGraphQL = false;
@@ -157,24 +177,6 @@ jest.mock('next-i18next/serverSideTranslations', () => ({
         title: 'Mock Title',
       },
     },
-  }),
-}));
-
-jest.mock('next/router', () => ({
-  useRouter: () => ({
-    basePath: '',
-    pathname: '/',
-    query: {},
-    asPath: '/',
-    locale: 'en',
-    locales: ['en', 'es'],
-    defaultLocale: 'en',
-    push: jest.fn(),
-    replace: jest.fn(),
-    reload: jest.fn(),
-    back: jest.fn(),
-    prefetch: jest.fn(),
-    beforePopState: jest.fn(),
   }),
 }));
 
@@ -239,17 +241,17 @@ it('Adds to shopping cart', async () => {
       </SnackbarProvider>
     </AppContext.Provider>
   );
-  // await waitFor(() => expect(screen.getByText('test name')));
-  // const button = screen.getByText('Add to Shopping Cart');
-  // fireEvent.click(button);
-  // await waitFor(() => {
-  //   expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Added to shopping cart', {
-  //     variant: 'success',
-  //     persist: false,
-  //     autoHideDuration: 3000,
-  //     anchorOrigin: { horizontal: 'center', vertical: 'top' },
-  //   });
-  // });
+  await waitFor(() => expect(screen.getByText('test name')));
+  const button = screen.getByText('Add to Shopping Cart');
+  fireEvent.click(button);
+  await waitFor(() => {
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Added to shopping cart', {
+      variant: 'success',
+      persist: false,
+      autoHideDuration: 3000,
+      anchorOrigin: { horizontal: 'center', vertical: 'top' },
+    });
+  });
 });
 
 it("Doesn't add to shopping cart because error in add to shopping cart", async () => {
@@ -276,20 +278,20 @@ it("Doesn't add to shopping cart because error in add to shopping cart", async (
     </AppContext.Provider>
   );
 
-  // await waitFor(() => expect(screen.getByText('test name')));
-  // const button = screen.getByText('Add to Shopping Cart');
-  // fireEvent.click(button);
-  // await waitFor(() => {
-  //   expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-  //     'Could not add product to cart',
-  //     {
-  //       variant: 'error',
-  //       persist: false,
-  //       autoHideDuration: 3000,
-  //       anchorOrigin: { horizontal: 'center', vertical: 'top' },
-  //     }
-  //   );
-  // });
+  await waitFor(() => expect(screen.getByText('test name')));
+  const button = screen.getByText('Add to Shopping Cart');
+  fireEvent.click(button);
+  await waitFor(() => {
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+      'Could not add product to cart',
+      {
+        variant: 'error',
+        persist: false,
+        autoHideDuration: 3000,
+        anchorOrigin: { horizontal: 'center', vertical: 'top' },
+      }
+    );
+  });
 });
 
 it("Doesn't add to shopping cart because error in add to shopping cart graphql", async () => {
@@ -318,20 +320,20 @@ it("Doesn't add to shopping cart because error in add to shopping cart graphql",
     </AppContext.Provider>
   );
 
-  // await waitFor(() => expect(screen.getByText('test name')));
-  // const button = screen.getByText('Add to Shopping Cart');
-  // fireEvent.click(button);
-  // await waitFor(() => {
-  //   expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-  //     'Could not add product to cart',
-  //     {
-  //       variant: 'error',
-  //       persist: false,
-  //       autoHideDuration: 3000,
-  //       anchorOrigin: { horizontal: 'center', vertical: 'top' },
-  //     }
-  //   );
-  // });
+  await waitFor(() => expect(screen.getByText('test name')));
+  const button = screen.getByText('Add to Shopping Cart');
+  fireEvent.click(button);
+  await waitFor(() => {
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+      'Could not add product to cart',
+      {
+        variant: 'error',
+        persist: false,
+        autoHideDuration: 3000,
+        anchorOrigin: { horizontal: 'center', vertical: 'top' },
+      }
+    );
+  });
 });
 
 it('should fetch server side props with translations', async () => {
@@ -348,6 +350,11 @@ it('should fetch server side props with translations without locale', async () =
 
 it('Renders with error in get products', async () => {
   errorInGetProducts = true;
+  const mockEnqueueSnackbar = jest.fn();
+  (useSnackbar as jest.Mock).mockReturnValue({
+    enqueueSnackbar: mockEnqueueSnackbar,
+  });
+
   render(
     <AppContext.Provider value={AppContextProps}>
       <Products />
@@ -381,3 +388,37 @@ it('Click Backdrop', () => {
     fireEvent.click(backdrop);
   }
 });
+
+// TODO fix this test
+// it('Clicks backdrop', async () => {
+//   localStorage.setItem(
+//     'user',
+//     JSON.stringify({
+//       accessToken: 'abc',
+//       id: 'abc',
+//       name: 'John',
+//       role: 'Shopper',
+//     })
+//   );
+//
+//   const mockEnqueueSnackbar = jest.fn();
+//   (useSnackbar as jest.Mock).mockReturnValue({
+//     enqueueSnackbar: mockEnqueueSnackbar,
+//   });
+//
+//   // eslint-disable-next-line @typescript-eslint/no-var-requires
+//   const useRouter = jest.spyOn(nextRouter, 'useRouter');
+//   jest.mock('next/router');
+//   (useRouter as jest.Mock).mockReturnValue({
+//     query: { active: undefined},
+//   });
+//
+//   render(
+//     <AppContext.Provider value={AppContextProps}>
+//       <SnackbarProvider>
+//         <Products />
+//       </SnackbarProvider>
+//     </AppContext.Provider>
+//   );
+//   fireEvent.click(screen.getByLabelText('backdrop'));
+// });

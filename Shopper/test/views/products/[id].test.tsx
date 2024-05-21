@@ -122,18 +122,22 @@ const AppContextProps = {
 };
 
 it('Renders successfully', async () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const useRouter = jest.spyOn(nextRouter, 'useRouter');
-  jest.mock('next/router');
-  (useRouter as jest.Mock).mockReturnValue({
-    query: { id: '1' },
-  });
   render(
     <AppContext.Provider value={AppContextProps}>
       <ProductPage />
     </AppContext.Provider>
   );
   await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+});
+
+it('Clicks backdrop', async () => {
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <ProductPage />
+    </AppContext.Provider>
+  );
+  await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+  fireEvent.click(screen.getByLabelText('backdrop'));
 });
 
 it('should fetch server side props with translations', async () => {
