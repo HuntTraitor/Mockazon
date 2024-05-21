@@ -4,6 +4,10 @@ import { Home } from '../../../src/views/HomePage/Home';
 import { LoginContext } from '@/contexts/Login';
 import { PageContext } from '@/contexts/PageContext';
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 it('Renders...Access Key Exists', async () => {
   const accessToken = 'some old token';
   const setAccessToken = () => {};

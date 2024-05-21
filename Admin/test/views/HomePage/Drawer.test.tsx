@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react';
 
 import { MyDrawer } from '../../../src/views/HomePage/Drawer';
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 it('Renders', async () => {
   render(<MyDrawer />);
   await screen.findByText('Mockazon', {

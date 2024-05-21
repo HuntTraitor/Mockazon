@@ -12,6 +12,10 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 it('Renders', async () => {
   render(<Login />);
   await screen.findByText('Sign In', {

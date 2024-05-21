@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react';
 
 import { MyAppBar } from '../../../src/views/HomePage/AppBar';
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 it('Renders', async () => {
   render(<MyAppBar />);
   await screen.findByText('Sign Out', {
