@@ -7,5 +7,6 @@
   "subtotal": "Item(s) Subtotal:",
   "totalBeforeTax": "Total before tax:",
   "Estimated tax to be collected": "Estimated tax to be collected:",
-  "grandTotal": "Grand Total:"
+  "grandTotal": "Grand Total:",
+  "tax": "Estimated tax to be collected:"
 }

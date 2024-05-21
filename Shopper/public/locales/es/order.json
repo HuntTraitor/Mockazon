@@ -7,5 +7,6 @@
   "subtotal": "Productos:",
   "totalBeforeTax": "Total antes de impuestos:",
   "Estimated tax to be collected": "Impuestos:",
-  "grandTotal": "Total (I.V.A. Incluido):"
+  "grandTotal": "Total (I.V.A. Incluido):",
+  "tax": "Impuestos:"
 }

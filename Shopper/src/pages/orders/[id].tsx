@@ -101,53 +101,58 @@ const OrderView: React.FC = () => {
         <Grid
           container
           spacing={2}
+          xs={12}
           justifyContent="space-between"
           alignItems="center"
           className={styles.gridContainer}
         >
           <Grid item>
-            <Typography variant="h5" component="h1" className={styles.header}>
+            <Typography variant="h4" component="h1" className={styles.header}>
               {t('order:orderDetails')}
+            </Typography>
+            <Typography variant="body2" className={styles.orderedOn}>
+              {t('order:orderedOn')}{' '}
+              {new Date(order.createdAt).toLocaleDateString(
+                i18n.language === 'en' ? 'en-US' : 'es-US',
+                { year: 'numeric', month: 'long', day: 'numeric' }
+              )}{' '}
+              <span className={styles.separator}>|</span> {t('common:order')}# {order.id}
             </Typography>
           </Grid>
         </Grid>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          className={styles.orderedOn}
-        >
-          {t('order:orderedOn')}{' '}
-          {new Date(order.createdAt).toLocaleDateString(
-            i18n.language === 'en' ? 'en-US' : 'es-US',
-            { year: 'numeric', month: 'long', day: 'numeric' }
-          )}{' '}
-          | {t('common:order')}# {order.id}
-        </Typography>
         <Paper elevation={3} className={styles.paper}>
-          <Grid container spacing={2}>
+          <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
-              <Box className={styles.address}>
-                <Typography variant="h6" gutterBottom>
+              <Box>
+                <Typography
+                  variant="body2"
+                  gutterBottom
+                  className={styles.address}
+                >
                   {t('order:shippingAddress')}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2">
                   {order.shippingAddress.name}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2">
                   {order.shippingAddress.addressLine1}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2">
                   {order.shippingAddress.city}, {order.shippingAddress.state}{' '}
                   {order.shippingAddress.postalCode}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2">
                   {order.shippingAddress.country}
                 </Typography>
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box className={styles.paymentMethod}>
-                <Typography variant="h6" gutterBottom>
+              <Box>
+                <Typography
+                  variant="body2"
+                  gutterBottom
+                  className={styles.paymentMethod}
+                >
                   {t('order:paymentMethod')}
                 </Typography>
                 <Box display="flex" alignItems="center">
@@ -158,49 +163,44 @@ const OrderView: React.FC = () => {
                     width={20}
                     height={20}
                   />
-                  <Typography variant="body2" color="text.secondary">
-                    {order.paymentMethod}
-                  </Typography>
+                  {/* FIXME: Add real icon and base it on the card type */}
+                  {/* FIXME: Add translation for "ending in" */}
+                  <Typography variant="body2">{order.paymentMethod}</Typography>
                 </Box>
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box className={styles.orderSummary}>
-                <Typography variant="h6" gutterBottom>
+              <Box>
+                <Typography
+                  variant="body2"
+                  gutterBottom
+                  className={styles.orderSummary}
+                >
                   {t('order:orderSummary')}
                 </Typography>
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2" color="text.secondary">
-                    {t('order:subtotal')}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    ${order.subtotal}
-                  </Typography>
+                  <Typography variant="body2">{t('order:subtotal')}</Typography>
+                  <Typography variant="body2">${order.subtotal}</Typography>
                 </Box>
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2">
                     {t('order:totalBeforeTax')}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2">
                     ${order.totalBeforeTax}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2" color="text.secondary">
-                    {t('order:tax')}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    ${order.tax}
-                  </Typography>
+                  <Typography variant="body2">{t('order:tax')}</Typography>
+                  <Typography variant="body2">${order.tax}</Typography>
                 </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  fontWeight="bold"
-                  mt={1}
-                >
-                  <Typography variant="body1">{t('grandTotal')}</Typography>
-                  <Typography variant="body1">${order.total}</Typography>
+                <Box display="flex" justifyContent="space-between" mt={1}>
+                  <Typography variant="body2" className={styles.grandTotal}>
+                    {t('grandTotal')}
+                  </Typography>
+                  <Typography variant="body2" className={styles.grandTotal}>
+                    ${order.total}
+                  </Typography>
                 </Box>
               </Box>
             </Grid>
