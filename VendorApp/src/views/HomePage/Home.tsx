@@ -7,7 +7,7 @@ import { MyAppBar } from './AppBar';
 import { LoginContext } from '../../contexts/LoginContext';
 import APIKeys from './APIKeys';
 import { KeyProvider } from '@/contexts/KeyContext';
-
+import AddAPIKey from './AddAPIKey';
 /**
  * defines the Home page
  * @return {JSX.Element} Home page
@@ -28,13 +28,14 @@ export function Home() {
 
   return loginContext.accessToken.length > 0 ? (
     <KeyProvider>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', overflowY: 'scroll' }}>
         <CssBaseline />
         <MyDrawer />
-        <Box component="main" width={'100%'}>
+        <Box component="main" width={'100%'} sx={{ overflowY: 'scroll' }}>
           <MyAppBar />
-          <Divider />
+          <Divider />s
           <APIKeys />
+          <AddAPIKey />
         </Box>
       </Box>
     </KeyProvider>

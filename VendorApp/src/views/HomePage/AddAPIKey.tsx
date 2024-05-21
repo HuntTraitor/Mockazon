@@ -28,14 +28,12 @@ const postAPIKeyRequest = (
     .then(json => {
       if (json.errors) {
         console.log(json.errors);
+        setKeys([]);
       } else {
         const temp = keys.slice();
         temp.push(json.data.postAPIKeyRequest);
         setKeys(temp);
       }
-    })
-    .catch(() => {
-      alert('Error requesting API Keys');
     });
 };
 

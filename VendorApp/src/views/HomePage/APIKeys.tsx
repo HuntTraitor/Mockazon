@@ -9,11 +9,11 @@ import {
   TableCell,
   Button,
   TableHead,
+  TableFooter,
 } from '@mui/material';
 import React from 'react';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import DoneIcon from '@mui/icons-material/Done';
-import AddAPIKey from './AddAPIKey';
 import { Key, KeyContext } from '@/contexts/KeyContext';
 import getConfig from 'next/config';
 import { LoginContext } from '@/contexts/LoginContext';
@@ -33,7 +33,6 @@ const fetchKeys = (setKeys: (keys: Key[]) => void, accessToken: string) => {
     },
   })
     .then(res => {
-      console.log(res.status);
       return res.json();
     })
     .then(json => {
@@ -42,9 +41,6 @@ const fetchKeys = (setKeys: (keys: Key[]) => void, accessToken: string) => {
       } else {
         setKeys(json.data.keys);
       }
-    })
-    .catch(() => {
-      alert('Error retrieving API Keys');
     });
 };
 
@@ -55,7 +51,7 @@ const setActiveStatus = (
   accessToken: string
 ) => {
   const query = {
-    query: `mutation {setActiveStatus (apiKey: "${key_id}") {key, vendor_id, blacklisted, active}}`,
+    query: `mutation key {setActiveStatus (apiKey: "${key_id}") {key, vendor_id, blacklisted, active}}`,
   };
   fetch(`${basePath}/api/graphql`, {
     method: 'POST',
@@ -83,9 +79,6 @@ const setActiveStatus = (
         }
         return;
       }
-    })
-    .catch(() => {
-      console.log('Error occurred');
     });
 };
 
@@ -96,16 +89,21 @@ const APIKeys = () => {
     fetchKeys(keyContext.setKeys, loginContext.accessToken);
   }, [keyContext.setKeys, loginContext.accessToken]);
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', padding: '3' }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        API Keys
-      </Typography>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 3,
+        height: '90vh',
+        overflowY: 'scroll',
+      }}
+    >
       <Paper
         sx={{
           border: '1px solid rgba(0, 0, 0, 0.12)',
           borderRadius: '4px',
           elevation: 0,
-          height: '100vh',
+          marginTop: 4,
         }}
       >
         <TableContainer>
@@ -116,7 +114,8 @@ const APIKeys = () => {
                 <TableCell>Status</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
-
+            </TableHead>
+            <TableBody>
               {keyContext.keys.map(key => (
                 <TableRow key={key.key}>
                   <TableCell>{key.key}</TableCell>
@@ -154,6 +153,7 @@ const APIKeys = () => {
                     <TableCell>
                       <Button
                         disabled={key.blacklisted ? true : false}
+                        aria-label="active-button"
                         variant="outlined"
                         color="success"
                         onClick={event => {
@@ -172,10 +172,11 @@ const APIKeys = () => {
                   )}
                 </TableRow>
               ))}
-            </TableHead>
-            <TableBody></TableBody>
+            </TableBody>
+            <TableFooter>
+              <TableCell>Key Count: {keyContext.keys.length}</TableCell>
+            </TableFooter>
           </Table>
-          <AddAPIKey />
         </TableContainer>
       </Paper>
     </Box>
