@@ -185,6 +185,7 @@ const Signup = () => {
             <TextField
               className={styles.nameInput}
               label={t('signup:name')}
+              aria-label={`${t('signup:name')}`}
               value={name}
               size="small"
               onChange={event => setName(event.target.value)}
@@ -194,6 +195,7 @@ const Signup = () => {
             <TextField
               className={styles.emailInput}
               label={t('signup:email')}
+              aria-label={`${t('signup:email')}`}
               value={email}
               size="small"
               onChange={event => setEmail(event.target.value)}
@@ -203,6 +205,7 @@ const Signup = () => {
             <TextField
               className={styles.passwordInput}
               label={t('signup:password')}
+              aria-label={`${t('signup:password')}`}
               type="password"
               size="small"
               value={password}
@@ -213,6 +216,7 @@ const Signup = () => {
             <TextField
               className={styles.confirmPasswordInput}
               label={t('signup:confirmPassword')}
+              aria-label={`${t('signup:confirmPassword')}`}
               type="password"
               size="small"
               value={confirmPassword}
