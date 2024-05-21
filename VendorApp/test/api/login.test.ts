@@ -25,6 +25,21 @@ const handlers = [
       }
     }
   ),
+  rest.get(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/check`,
+    async ({request}) => {
+      const url = new URL(request.url);
+      const accessToken = url.searchParams.get('accessToken');
+      if (error || !accessToken) {
+        return new HttpResponse(null, { status: 401 });
+      } else {
+        return HttpResponse.json(
+          { id: 'some id' },
+          { status: 200 }
+        );
+      }
+    }
+  ),
 ];
 
 const microServices = setupServer(...handlers);
@@ -82,3 +97,21 @@ test('Errors on wrong credentials login', async () => {
       expect(res.body.errors[0].message).toBe('Unauthorised');
     });
 });
+
+// test('Successful auth check', async () => {
+//   await supertest(server)
+//     .post('/api/graphql')
+//     .send({
+//       query: `{login(
+//       email: "test@gmail.com"
+//       password: "somepassword"
+//     ) {id}}`,
+//     })
+//     .expect('Content-Type', /json/)
+//     .then(res => {
+//       console.log(res.body);
+//       expect(res).toBeDefined();
+//       expect(res.body).toBeDefined();
+//       expect(res.body.data).toBeDefined();
+//     });
+// });
