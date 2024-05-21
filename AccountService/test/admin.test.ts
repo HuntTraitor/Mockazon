@@ -33,7 +33,6 @@ export type Account = {
   email: string;
   name: string;
   role: string;
-  username: string;
   suspended: boolean;
 };
 
@@ -76,7 +75,6 @@ describe("API TEST (ADMIN) - General", () => {
               email: "shopper@email.com",
               name: "shopper account 1",
               role: "shopper",
-              username: "shopperaccount",
               suspended: false,
             }),
             expect.objectContaining({
@@ -85,7 +83,6 @@ describe("API TEST (ADMIN) - General", () => {
               name: "Victor",
               role: "vendor",
               suspended: false,
-              username: "victorvendor",
             }),
             expect.objectContaining({
               email: "shirly@books.com",
@@ -93,14 +90,12 @@ describe("API TEST (ADMIN) - General", () => {
               name: "Shirly",
               role: "shopper",
               suspended: false,
-              username: "shirlyshopper",
             }),
             expect.objectContaining({
               id: userTwo,
               email: "vendor@email.com",
               name: "vendor account 1",
               role: "vendor",
-              username: "vendoraccount",
               suspended: false,
             }),
           ]),
@@ -152,7 +147,6 @@ describe("API TEST (ADMIN) - General", () => {
               email: "shopper@email.com",
               name: "shopper account 1",
               role: "shopper",
-              username: "shopperaccount",
               suspended: false,
             }),
             expect.objectContaining({
@@ -160,7 +154,6 @@ describe("API TEST (ADMIN) - General", () => {
               email: "vendor@email.com",
               name: "vendor account 1",
               role: "vendor",
-              username: "vendoraccount",
               suspended: true,
             }),
             expect.objectContaining({
@@ -169,7 +162,6 @@ describe("API TEST (ADMIN) - General", () => {
               name: "Victor",
               role: "vendor",
               suspended: false,
-              username: "victorvendor",
             }),
             expect.objectContaining({
               email: "shirly@books.com",
@@ -177,7 +169,6 @@ describe("API TEST (ADMIN) - General", () => {
               name: "Shirly",
               role: "shopper",
               suspended: false,
-              username: "shirlyshopper",
             }),
           ]),
         );
@@ -204,7 +195,6 @@ describe("API TEST (ADMIN) - General", () => {
               email: "shopper@email.com",
               name: "shopper account 1",
               role: "shopper",
-              username: "shopperaccount",
               suspended: false,
             }),
             expect.objectContaining({
@@ -212,7 +202,6 @@ describe("API TEST (ADMIN) - General", () => {
               email: "vendor@email.com",
               name: "vendor account 1",
               role: "vendor",
-              username: "vendoraccount",
               suspended: false,
             }),
             expect.objectContaining({
@@ -221,7 +210,6 @@ describe("API TEST (ADMIN) - General", () => {
               name: "Victor",
               role: "vendor",
               suspended: false,
-              username: "victorvendor",
             }),
             expect.objectContaining({
               email: "shirly@books.com",
@@ -229,7 +217,6 @@ describe("API TEST (ADMIN) - General", () => {
               name: "Shirly",
               role: "shopper",
               suspended: false,
-              username: "shirlyshopper",
             }),
           ]),
         );
@@ -255,7 +242,6 @@ describe("API TEST (ADMIN) - General", () => {
               email: "request1@email.com",
               name: "request account 1",
               role: "vendor",
-              username: "requestaccount1",
               suspended: false,
             }),
           ]),
@@ -282,7 +268,6 @@ describe("API TEST (ADMIN) - General", () => {
               email: "request2@email.com",
               name: "request account 2",
               role: "vendor",
-              username: "requestaccount2",
               suspended: false,
             }),
           ]),
