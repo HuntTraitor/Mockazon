@@ -13,6 +13,7 @@ import { UUID, User } from "../types";
 import { AdminService } from "./service";
 import { Authenticated, Credentials } from "../types";
 import { Account } from "./index";
+import { Vendor } from "../vendor";
 // import { SessionUser } from "../types";
 
 @Route("admin")
@@ -86,7 +87,7 @@ export class AdminController extends Controller {
 
   // approve inbound request || takes: {account_id} to be approved
   @Put("requests/{id}/approve")
-  public async approve(id: string): Promise<void> {
+  public async approve(id: string): Promise<Vendor> {
     return new AdminService().approve(id);
   }
 
