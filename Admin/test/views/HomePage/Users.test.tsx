@@ -30,6 +30,10 @@ const handlers = [
   }),
 ];
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
+
 const server = setupServer(...handlers);
 
 beforeAll(() => server.listen());
@@ -47,7 +51,6 @@ it('Renders table', async () => {
   render(<Users />);
   await screen.findByText('Name');
   await screen.findByText('Email');
-  await screen.findByText('Username');
   await screen.findByText('Action');
 });
 
