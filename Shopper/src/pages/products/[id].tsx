@@ -160,13 +160,19 @@ const ProductPage = () => {
   }
 };
 
+const namespaces = [
+  'products',
+  'topHeader',
+  'subHeader',
+  'common',
+  'signInDropdown',
+  'order',
+];
+
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {
-      ...(await serverSideTranslations(context.locale ?? 'en', [
-        'products',
-        'viewProduct',
-      ])),
+      ...(await serverSideTranslations(context.locale ?? 'en', namespaces)),
     },
   };
 };
