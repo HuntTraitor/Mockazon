@@ -20,6 +20,8 @@ global.fetch = jest.fn().mockResolvedValue({
     .mockResolvedValue({ data: { signUp: { accessToken: 'mockToken' } } }),
 });
 
+const mockPush = jest.fn();
+
 jest.mock('next/router', () => ({
   useRouter: () => ({
     basePath: '',
@@ -29,7 +31,7 @@ jest.mock('next/router', () => ({
     locale: 'en',
     locales: ['en', 'es'],
     defaultLocale: 'en',
-    push: jest.fn(),
+    push: mockPush,
     replace: jest.fn(),
     reload: jest.fn(),
     back: jest.fn(),
@@ -88,6 +90,16 @@ describe('Signup component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     loggedInContextProps.locale = 'en';
+  });
+
+  test('Clicking the logo navigates to the home page', async () => {
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Signup />
+      </LoggedInContext.Provider>
+    );
+    fireEvent.click(screen.getByAltText('logo'));
+    await waitFor(() => expect(mockPush).toHaveBeenCalledWith('/'));
   });
 
   it('Can render the google signup in spanish', async () => {

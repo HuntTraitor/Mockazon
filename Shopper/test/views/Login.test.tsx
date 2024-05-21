@@ -103,6 +103,16 @@ describe('Login component', () => {
     loggedInContextProps.locale = 'en';
   });
 
+  it('Clicking the logo navigates to the home page', () => {
+    render(
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Login />
+      </LoggedInContext.Provider>
+    );
+    fireEvent.click(screen.getByAltText('logo'));
+    expect(pushMock).toHaveBeenCalledWith('/');
+  });
+
   it('Can render the google login in spanish', async () => {
     i18nMock.language = 'es';
     render(

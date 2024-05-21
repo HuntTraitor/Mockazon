@@ -148,6 +148,7 @@ const Login = () => {
           width={180}
           height={100}
           className={styles.logo}
+          onClick={() => router.push('/')}
         />
         <Paper elevation={3} className={styles.loginForm}>
           <form onSubmit={handleFormSubmit}>
