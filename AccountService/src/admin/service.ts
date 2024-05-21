@@ -18,9 +18,6 @@ export class AdminService {
       values: [credentials.email, credentials.password],
     };
     const { rows } = await pool.query(query);
-
-    console.log(credentials);
-
     if (rows[0]) {
       const user = rows[0];
       const accessToken = jwt.sign(

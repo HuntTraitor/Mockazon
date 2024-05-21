@@ -32,7 +32,6 @@ export class AuthResolver {
     if (sub && !email && !password) {
       return new AuthService().loginGoogle(sub);
     } else if (email && password && !sub) {
-      console.log('login with email and password');
       return new AuthService().login({ email, password });
     } else {
       throw new GraphQLError('Invalid input');

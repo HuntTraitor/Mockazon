@@ -138,7 +138,6 @@ const Signup = () => {
             return;
           }
         }
-        console.log(data);
         localStorage.setItem('user', JSON.stringify(data.data.signUp));
         setAccessToken(data.data.signUp.accessToken);
         await router.push('/');

@@ -6,8 +6,6 @@ export class ShopperService {
   // sub stands for subject and is the unique google identifier
   public async login(loginInput: LoginInput) {
     const { sub, email, password } = loginInput;
-
-    console.log("logging in", loginInput);
     let select;
     let values;
 

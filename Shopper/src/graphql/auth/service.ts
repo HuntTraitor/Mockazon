@@ -79,7 +79,6 @@ export class AuthService {
   }
 
   public async login(credentials: { email: string; password: string }) {
-    console.log(credentials);
     const result = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/login`,
       {
