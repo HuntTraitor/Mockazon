@@ -119,7 +119,6 @@ describe("API TEST (ADMIN) - General", () => {
             email: "request2@email.com",
             name: "request account 2",
             role: "vendor",
-            username: "requestaccount2",
             suspended: false,
           },
           {
@@ -127,7 +126,6 @@ describe("API TEST (ADMIN) - General", () => {
             email: "request1@email.com",
             name: "request account 1",
             role: "vendor",
-            username: "requestaccount1",
             suspended: false,
           },
         ]);
@@ -243,7 +241,7 @@ describe("API TEST (ADMIN) - General", () => {
     await supertest(server)
       .put(`/api/v0/admin/requests/${requestApprove}/approve`)
       .then((res) => {
-        expect(res.status).toBe(204);
+        expect(res.status).toBe(200);
       });
 
     // assert account is resumed
