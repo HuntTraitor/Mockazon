@@ -160,6 +160,7 @@ const Login = () => {
             <TextField
               className={styles.emailInput}
               label={t('login:email')}
+              aria-label={`${t('login:email')}`}
               value={email}
               size="small"
               onChange={event => setEmail(event.target.value)}
@@ -170,6 +171,7 @@ const Login = () => {
             <TextField
               className={styles.passwordInput}
               label={t('login:password')}
+              aria-label={`${t('login:password')}`}
               type="password"
               size="small"
               value={password}

@@ -6,5 +6,6 @@
   "confirmPassword": "Vuelve a escribir la contraseña",
   "signUpText": "Inscribirse",
   "agreement": "Al crear una cuenta, aceptas las Condiciones de Uso y el Aviso de Privacidad de Mockazon.",
-  "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+  "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+  "passwordMismatch": "Las contraseñas no coinciden"
 }
