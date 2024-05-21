@@ -1,7 +1,9 @@
 import * as http from 'http';
 import supertest from 'supertest';
 
-import * as db from './db';
+import { http as rest, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
+
 import requestHandler from './requestHandler';
 
 let server: http.Server<
@@ -9,16 +11,55 @@ let server: http.Server<
   typeof http.ServerResponse
 >;
 
+let error = false;
+
+const handlers = [
+  rest.get(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/requests`,
+    async () => {
+      if (error) {
+        return new HttpResponse(null, { status: 404 });
+      } else {
+        return HttpResponse.json(
+          [
+            {
+              id: '81c689b1-b7a7-4100-8b2d-309908b444f1',
+              email: 'request@email.com',
+              name: 'request account 1',
+              role: 'vendor',
+              suspended: false,
+            },
+            {
+              id: '81c689b1-b7a7-4100-8b2d-309908b444f2',
+              email: 'request@email.com',
+              name: 'request account 2',
+              role: 'vendor',
+              suspended: false,
+            },
+          ],
+          { status: 200 }
+        );
+      }
+    }
+  ),
+];
+
+const microServices = setupServer(...handlers);
+
 beforeAll(async () => {
+  microServices.listen();
   server = http.createServer(requestHandler);
   server.listen();
-  await db.reset();
+});
+
+afterEach(() => {
+  error = false;
+  microServices.resetHandlers();
 });
 
 afterAll(done => {
-  db.shutdown(() => {
-    server.close(done);
-  });
+  microServices.close();
+  server.close(done);
 });
 
 it('fetches all requests', async () => {
@@ -27,5 +68,27 @@ it('fetches all requests', async () => {
     .send({
       query: 'query GetRequests {request {id name email role suspended}}',
     })
-    .expect(200);
+    .expect(200)
+    .then(res => {
+      expect(res.body).toEqual({
+        data: {
+          request: [
+            {
+              id: '81c689b1-b7a7-4100-8b2d-309908b444f1',
+              email: 'request@email.com',
+              name: 'request account 1',
+              role: 'vendor',
+              suspended: false,
+            },
+            {
+              id: '81c689b1-b7a7-4100-8b2d-309908b444f2',
+              email: 'request@email.com',
+              name: 'request account 2',
+              role: 'vendor',
+              suspended: false,
+            },
+          ],
+        },
+      });
+    });
 });
