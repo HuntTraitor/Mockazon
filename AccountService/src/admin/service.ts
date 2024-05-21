@@ -61,7 +61,6 @@ export class AdminService {
           id AS shopper_id,
           data->>'email' AS shopper_email,
           data->>'name' AS shopper_name,
-          data->>'username' AS shopper_username,
           data->>'role' AS shopper_role,
           (data->>'suspended')::boolean AS shopper_suspended
         FROM
@@ -75,7 +74,6 @@ export class AdminService {
           id AS vendor_id,
           data->>'email' AS vendor_email,
           data->>'name' AS vendor_name,
-          data->>'username' AS vendor_username,
           data->>'role' AS vendor_role,
           (data->>'suspended')::boolean AS vendor_suspended
         FROM
@@ -88,7 +86,6 @@ export class AdminService {
       id: row.shopper_id,
       email: row.shopper_email,
       name: row.shopper_name,
-      username: row.shopper_username,
       role: row.shopper_role,
       suspended: row.shopper_suspended,
     }));
@@ -98,7 +95,6 @@ export class AdminService {
       id: row.vendor_id,
       email: row.vendor_email,
       name: row.vendor_name,
-      username: row.vendor_username,
       role: row.vendor_role,
       suspended: row.vendor_suspended,
     }));

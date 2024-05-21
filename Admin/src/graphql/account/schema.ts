@@ -12,8 +12,6 @@ export class Account {
   @Field()
     name!: string;
   @Field()
-    username!: string;
-  @Field()
     role!: string;
   @Field()
     suspended!: boolean;

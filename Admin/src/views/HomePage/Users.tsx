@@ -20,7 +20,6 @@ interface User {
   id: number;
   email: string;
   name: string;
-  username: string;
   role?: string;
   suspended?: boolean;
 }
@@ -28,7 +27,7 @@ interface User {
 // eslint-disable-next-line @typescript-eslint/ban-types
 const fetchAccounts = async (setAccounts: Function) => {
   const query = {
-    query: `query GetAccounts {account {id, name, email, username}}`,
+    query: `query GetAccounts {account {id, name, email}}`,
   };
 
   fetch(`${basePath}/api/graphql`, {
@@ -80,7 +79,6 @@ export function Users() {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Username</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -89,7 +87,6 @@ export function Users() {
                 <TableRow key={account.id}>
                   <TableCell>{account.name}</TableCell>
                   <TableCell>{account.email}</TableCell>
-                  <TableCell>{account.username}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"

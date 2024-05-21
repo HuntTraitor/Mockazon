@@ -111,7 +111,6 @@ export function AdminRequests() {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Username</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -120,7 +119,6 @@ export function AdminRequests() {
                 <TableRow key={request.id}>
                   <TableCell>{request.name}</TableCell>
                   <TableCell>{request.email}</TableCell>
-                  <TableCell>{request.username}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"

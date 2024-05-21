@@ -12,8 +12,6 @@ export class Request {
   @Field()
     name!: string;
   @Field()
-    username!: string;
-  @Field()
     role!: string;
   @Field()
     suspended!: boolean;
