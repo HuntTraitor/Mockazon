@@ -1,0 +1,11 @@
+{
+  "orderDetails": "Detalles del pedido",
+  "orderedOn": "Pedido el",
+  "shippingAddress": "Dirección de envío",
+  "paymentMethod": "Métodos de pago",
+  "orderSummary": "Resumen del pedido",
+  "subtotal": "Productos:",
+  "totalBeforeTax": "Total antes de impuestos:",
+  "Estimated tax to be collected": "Impuestos:",
+  "grandTotal": "Total (I.V.A. Incluido):"
+}

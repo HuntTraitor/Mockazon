@@ -1,0 +1,11 @@
+{
+  "orderDetails": "Order Details",
+  "orderedOn": "Ordered on",
+  "shippingAddress": "Shipping Address",
+  "paymentMethod": "Payment Method",
+  "orderSummary": "Order Summary",
+  "subtotal": "Item(s) Subtotal:",
+  "totalBeforeTax": "Total before tax:",
+  "Estimated tax to be collected": "Estimated tax to be collected:",
+  "grandTotal": "Grand Total:"
+}

@@ -201,7 +201,7 @@ export class AdminService {
       name: res.rows[0].data.name,
       role: res.rows[0].data.role,
       suspended: res.rows[0].data.suspended,
-    }
+    };
     return user;
   }
 

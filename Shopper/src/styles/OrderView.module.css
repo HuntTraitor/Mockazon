@@ -1,0 +1,37 @@
+.container {
+  padding-bottom: 24px;
+  margin-top: 40px;
+}
+
+.paper {
+  padding: 16px;
+  background-color: var(--background-paper);
+  color: var(--text-primary);
+}
+
+.gridContainer {
+  margin-bottom: 10px;
+}
+
+.header {
+  font-weight: bold;
+}
+
+.address,
+.paymentMethod,
+.orderSummary {
+  margin-top: 0px;
+}
+
+.button {
+  margin-top: 16px;
+}
+
+.backdrop {
+  z-index: 1;
+  position: fixed;
+}
+
+.orderedOn {
+  margin-bottom: 12px;
+}

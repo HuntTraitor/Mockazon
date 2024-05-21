@@ -5,7 +5,6 @@ jest.mock('next/config', () => () => ({
   publicRuntimeConfig: { basePath: '' },
 }));
 
-
 it('Renders', async () => {
   render(<Index />);
   await screen.findByText('Sign In', {

@@ -5,3 +5,21 @@
  * @example "52907745-7672-470e-a803-a2f8feb52944"
  */
 export type UUID = string;
+
+export type Order = {
+  id: string;
+  createdAt: string;
+  shippingAddress: {
+    name: string;
+    addressLine1: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  paymentMethod: string;
+  subtotal: number;
+  totalBeforeTax: number;
+  tax: number;
+  total: number;
+};

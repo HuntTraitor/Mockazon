@@ -18,24 +18,27 @@ export class AccountService {
 
   public async approve(id: string): Promise<Account> {
     return new Promise((resolve, reject) => {
-      fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/requests/${id}/approve`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/requests/${id}/approve`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
-      })
+      )
         .then(res => {
           if (!res.ok) {
             throw res;
           }
           return res.json();
         })
-        .then((json) => {
-          resolve(json)
+        .then(json => {
+          resolve(json);
         })
-        .catch((e) => {
-          reject(new GraphQLError(e))
-        })
-    })
+        .catch(e => {
+          reject(new GraphQLError(e));
+        });
+    });
   }
 }

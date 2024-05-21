@@ -12,9 +12,7 @@ export class AccountResolver {
   }
 
   @Mutation(() => Account)
-  async approveVendor(
-    @Arg('VendorId') vendorId: string
-  ): Promise<Account> {
+  async approveVendor(@Arg('VendorId') vendorId: string): Promise<Account> {
     return new AccountService().approve(vendorId);
   }
 }

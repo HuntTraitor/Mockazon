@@ -55,7 +55,6 @@ export class AuthService {
   }
 
   public async loginGoogle(sub: string): Promise<AuthenticatedWithId | null> {
-    // FIXME: This endpoint needs to be converted to POST maybe
     const result = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/login`,
       {

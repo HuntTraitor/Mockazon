@@ -58,21 +58,21 @@ export function AdminRequests() {
   }, []);
 
   const handleApproveRequest = (vendorId: number) => {
-    console.log(vendorId)
+    console.log(vendorId);
     const query = {
       query: `mutation approveVendor{approveVendor(VendorId: "${vendorId}") {
         id email name role suspended
-      }}`
-    }
+      }}`,
+    };
 
-    console.log(query)
+    console.log(query);
 
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(query)
+      body: JSON.stringify(query),
     })
       .then(res => {
         return res.json();
@@ -81,12 +81,12 @@ export function AdminRequests() {
         if (json.errors) {
           throw new Error(json.errors[0].message);
         } else {
-          console.log(json)
+          console.log(json);
         }
       })
       .catch(e => {
-        alert(e.toString())
-      })
+        alert(e.toString());
+      });
   };
 
   const handleRejectRequest = (requestId: number) => {

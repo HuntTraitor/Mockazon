@@ -2,5 +2,6 @@
   "title": "Comprador Mockazon",
   "change-locale": "Cambiar configuración regional a \"Inglés\"",
   "signInText": "Identifícate",
-  "or": "O"
+  "or": "O",
+  "order": "Pedido"
 }
