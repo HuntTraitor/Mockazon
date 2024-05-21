@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, useMediaQuery, useTheme } from '@mui/material';
 import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import styles from '@/styles/OrderView.module.css';
@@ -10,12 +10,20 @@ type PaymentMethodProps = {
 
 const PaymentMethod: React.FC<PaymentMethodProps> = ({ method }) => {
   const { t } = useTranslation(['order']);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <Box>
-      <Typography variant="body2" gutterBottom className={styles.paymentMethod}>
-        {t('order:paymentMethod')}
-      </Typography>
+      {!isMobile && (
+        <Typography
+          variant="body2"
+          gutterBottom
+          className={styles.paymentMethod}
+        >
+          {t('order:paymentMethod')}
+        </Typography>
+      )}
       <Box display="flex" alignItems="center">
         <Image
           src="https://placehold.co/20x20"

@@ -1,7 +1,10 @@
 .container {
   padding-bottom: 24px;
-  margin-top: 40px;
-  width: 49%;
+  max-width: 61rem;
+}
+
+.mobileContainer {
+  margin-bottom: 20px;
 }
 
 .paper {
@@ -10,8 +13,19 @@
   color: var(--text-primary);
 }
 
+.paperWide {
+  padding: 16px;
+  background-color: var(--background-paper);
+  margin-top: 10px;
+  color: var(--text-primary);
+  margin-left: 1rem;
+  max-width: 55rem;
+  width: 100%;
+}
+
 .gridContainer {
   margin-bottom: 10px;
+  margin-top: 5px;
 }
 
 .address,
@@ -19,7 +33,7 @@
 .orderSummary,
 .grandTotal {
   font-weight: bold;
-  text-shadow: 0.2px 0.2px 0.2px rgba(0, 0, 0, 0.2); /* Add text shadow */
+  text-shadow: 0.2px 0.2px 0.2px rgba(0, 0, 0, 0.2);
 }
 
 .button {
@@ -43,4 +57,9 @@
 
 .header {
   font-size: 30px;
+}
+
+.sectionTitle {
+  font-weight: bold;
+  margin-bottom: 10px;
 }

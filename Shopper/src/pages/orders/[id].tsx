@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Container, Backdrop } from '@mui/material';
+import { Container, Backdrop, useMediaQuery, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -57,6 +57,8 @@ const OrderView: React.FC = () => {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const { setUser, setAccessToken } = useContext(LoggedInContext);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   useLoadLocalStorageUser(setUser, setAccessToken);
 
   useEffect(() => {
@@ -78,7 +80,10 @@ const OrderView: React.FC = () => {
   return (
     <>
       <TopNav />
-      <Container maxWidth="lg" className={styles.container}>
+      <Container
+        maxWidth={isMobile ? 'xs' : 'lg'}
+        className={isMobile ? styles.mobileContainer : styles.container}
+      >
         <OrderDetails order={order} />
       </Container>
       <OrderCard />

@@ -1,5 +1,11 @@
 import React from 'react';
-import { Grid, Paper, Typography } from '@mui/material';
+import {
+  Grid,
+  Paper,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { Order } from '@/graphql/types';
 import ShippingAddress from './ShippingAddress';
@@ -13,8 +19,27 @@ type OrderDetailsProps = {
 
 const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
   const { t, i18n } = useTranslation(['order', 'common']);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   if (!order) return null;
+
+  const section = (title: string, Component: React.ReactNode) => (
+    <Grid item xs={12} md={4} className={styles.section}>
+      {isMobile ? (
+        <>
+          <Typography variant="body1" className={styles.sectionTitle}>
+            {title}
+          </Typography>
+          <Paper elevation={3} className={styles.paper}>
+            {Component}
+          </Paper>
+        </>
+      ) : (
+        Component
+      )}
+    </Grid>
+  );
 
   return (
     <>
@@ -25,7 +50,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
         alignItems="center"
         className={styles.gridContainer}
       >
-        <Grid item>
+        <Grid item xs={12}>
           <Typography variant="h4" component="h1" className={styles.header}>
             {t('order:orderDetails')}
           </Typography>
@@ -35,23 +60,44 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
               i18n.language === 'en' ? 'en-US' : 'es-US',
               { year: 'numeric', month: 'long', day: 'numeric' }
             )}{' '}
-            | {t('common:order')}# {order.id}
+            <span className={styles.separator}>|</span> {t('common:order')}#{' '}
+            {order.id}
           </Typography>
         </Grid>
       </Grid>
-      <Paper elevation={3} className={styles.paper}>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
-            <ShippingAddress address={order.shippingAddress} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <PaymentMethod method={order.paymentMethod} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <OrderSummary order={order} />
-          </Grid>
-        </Grid>
-      </Paper>
+      <Grid
+        container
+        spacing={2}
+        className={isMobile ? styles.mobileContainer : styles.desktopContainer}
+      >
+        {isMobile ? (
+          <>
+            {section(
+              t('order:shippingAddress'),
+              <ShippingAddress address={order.shippingAddress} />
+            )}
+            {section(
+              t('order:paymentMethod'),
+              <PaymentMethod method={order.paymentMethod} />
+            )}
+            {section(t('order:orderSummary'), <OrderSummary order={order} />)}
+          </>
+        ) : (
+          <Paper elevation={3} className={styles.paperWide}>
+            <Grid container spacing={4}>
+              {section(
+                t('order:shippingAddress'),
+                <ShippingAddress address={order.shippingAddress} />
+              )}
+              {section(
+                t('order:paymentMethod'),
+                <PaymentMethod method={order.paymentMethod} />
+              )}
+              {section(t('order:orderSummary'), <OrderSummary order={order} />)}
+            </Grid>
+          </Paper>
+        )}
+      </Grid>
     </>
   );
 };

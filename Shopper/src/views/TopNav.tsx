@@ -1,14 +1,19 @@
+import React from 'react';
+import { AppBar, Grid } from '@mui/material';
 import TopHeader from '@/views/TopHeader';
 import SubHeader from '@/views/SubHeader';
 import styles from '@/styles/TopNav.module.css';
-import { AppBar } from '@mui/material';
 
 const TopNav = () => {
   return (
-    <AppBar position="fixed" className={styles.container}>
-      <TopHeader />
-      <SubHeader />
-    </AppBar>
+    <Grid container spacing={2} className={styles.container}>
+      <Grid item xs={12} className={styles.item}>
+        <AppBar position="fixed" className={styles.appBar}>
+          <TopHeader />
+          <SubHeader />
+        </AppBar>
+      </Grid>
+    </Grid>
   );
 };
 
