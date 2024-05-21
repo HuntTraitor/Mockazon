@@ -1,7 +1,7 @@
-import { CreateUserInput, LoginInput } from ".";
+import { CreateUserInput, LoginInput, ShippingAddress, Order } from ".";
 import { pool } from "../db";
 import * as jwt from "jsonwebtoken";
-
+import { Decoded } from "./index";
 export class ShopperService {
   // sub stands for subject and is the unique google identifier
   public async login(loginInput: LoginInput) {
@@ -93,5 +93,117 @@ export class ShopperService {
       ...user,
       accessToken: accessToken,
     };
+  }
+
+  public async getShippingInfo(
+    accessToken: string,
+  ): Promise<string[] | undefined> {
+    try {
+      const decoded = jwt.verify(accessToken, `${process.env.MASTER_SECRET}`, {
+        algorithms: ["HS256"],
+      }) as Decoded;
+
+      const select = `SELECT * FROM shopper WHERE id = $1`;
+      const query = {
+        text: select,
+        values: [decoded.id],
+      };
+      const { rows } = await pool.query(query);
+      if (rows[0].data.shippingInfo) {
+        return rows[0].data.shippingInfo;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return undefined;
+    }
+  }
+
+  public async createShippingInfo(data: {
+    accessToken: string;
+    shippingInfo: ShippingAddress;
+  }): Promise<string[]> {
+    try {
+      const decoded = jwt.verify(
+        data.accessToken,
+        `${process.env.MASTER_SECRET}`,
+        {
+          algorithms: ["HS256"],
+        }
+      ) as Decoded;
+
+      const select = `SELECT * FROM shopper WHERE id = $1`;
+      const { rows } = await pool.query({ text: select, values: [decoded.id] });
+
+      const currentShippingInfo = rows[0]?.data.shippingInfo || [];
+
+      const updatedShippingInfo = [...currentShippingInfo, data.shippingInfo];
+
+      const update = `UPDATE shopper SET data = jsonb_set(data, '{shippingInfo}', $1::jsonb) WHERE id = $2 RETURNING *`;
+      const query = {
+        text: update,
+        values: [JSON.stringify(updatedShippingInfo), decoded.id],
+      };
+      const { rows: updatedRows } = await pool.query(query);
+      return updatedRows[0].data.shippingInfo;
+    } catch (error) {
+      throw new Error("Invalid token");
+    }
+  }
+
+  public async getOrderHistory(
+    accessToken: string,
+  ): Promise<string[] | undefined> {
+    try {
+      const decoded = jwt.verify(accessToken, `${process.env.MASTER_SECRET}`, {
+        algorithms: ["HS256"],
+      }) as Decoded;
+      const select = `SELECT * FROM shopper WHERE id = $1`;
+      const query = {
+        text: select,
+        values: [decoded.id],
+      };
+      const { rows } = await pool.query(query);
+
+      if (rows[0].data.orderHistory) {
+        return rows[0].data.orderHistory;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return undefined;
+    }
+  }
+
+  public async createOrderHistory(data: {
+    accessToken: string;
+    order: Order;
+  }): Promise<string[]> {
+    try {
+      const decoded = jwt.verify(
+        data.accessToken,
+        `${process.env.MASTER_SECRET}`,
+        {
+          algorithms: ["HS256"],
+        }
+      ) as Decoded;
+
+      const select = `SELECT * FROM shopper WHERE id = $1`;
+      const { rows } = await pool.query({ text: select, values: [decoded.id] });
+      const currentOrderHistory = rows[0]?.data.orderHistory || [];
+
+      const updatedOrderHistory = [...currentOrderHistory, data.order];
+
+      const update = `UPDATE shopper SET data = jsonb_set(data, '{orderHistory}', $1::jsonb) WHERE id = $2 RETURNING *`;
+      const query = {
+        text: update,
+        values: [JSON.stringify(updatedOrderHistory), decoded.id],
+      };
+      const { rows: updatedRows } = await pool.query(query);
+
+      return updatedRows[0].data.orderHistory;
+    } catch (error) {
+      throw new Error("Invalid token");
+    }
   }
 }
