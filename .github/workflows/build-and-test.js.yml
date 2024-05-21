@@ -56,7 +56,7 @@ jobs:
           echo MICROSERVICE_URL=${{ vars.MICROSERVICE_URL }} >> .env
           echo ENVIRONMENT=production >> .env
       - name: Spin up container
-        run: docker-compose up -d --build
+        run: npm run containerized
       - name: Sleep for 20 seconds
         run: sleep 20s
         shell: bash
