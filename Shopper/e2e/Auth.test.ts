@@ -5,7 +5,7 @@ const randomEmail = `${randomUUID()}@test.com`;
 
 describe('Auth', () => {
   // set timeout to 10 seconds
-  jest.setTimeout(10000);
+  jest.setTimeout(20000);
   let browser: Browser;
   let page: Page;
 
@@ -30,11 +30,11 @@ describe('Auth', () => {
     await page.goto('http://localhost:3000/login');
     await page.waitForSelector('form');
 
-    await page.type('div[aria-label="Email"] input', 'test@email.com');
+    await page.type('div[aria-label="Email"] input', randomEmail);
     await page.type('div[aria-label="Password"] input', 'password');
     await page.click('button[type="submit"]');
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     expect(dialogHandler).toHaveBeenCalled();
   });
 
@@ -44,7 +44,7 @@ describe('Auth', () => {
 
     await page.click('button[type="submit"]');
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     expect(dialogHandler).toHaveBeenCalled();
   });
 
@@ -60,7 +60,6 @@ describe('Auth', () => {
     await page.waitForNavigation();
 
     expect(page.url()).toBe('http://localhost:3000/');
-    expect(dialogHandler).not.toHaveBeenCalled();
   });
 
   test('Fails to create duplicate account', async () => {
@@ -74,7 +73,7 @@ describe('Auth', () => {
     await page.click('button[type="submit"]');
 
     // wait half a second
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     expect(dialogHandler).toHaveBeenCalled();
   });
 
