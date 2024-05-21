@@ -22,6 +22,10 @@ describe('Auth', () => {
     await browser.close();
   });
 
+  beforeEach(async () => {
+    dialogHandler.mockClear();
+  });
+
   test('Fails to log in with invalid credentials', async () => {
     await page.goto('http://localhost:3000/login');
     await page.waitForSelector('form');
@@ -30,7 +34,6 @@ describe('Auth', () => {
     await page.type('div[aria-label="Password"] input', 'password');
     await page.click('button[type="submit"]');
 
-    // wait half a second
     await new Promise(resolve => setTimeout(resolve, 500));
     expect(dialogHandler).toHaveBeenCalled();
   });
@@ -41,7 +44,6 @@ describe('Auth', () => {
 
     await page.click('button[type="submit"]');
 
-    // wait half a second
     await new Promise(resolve => setTimeout(resolve, 500));
     expect(dialogHandler).toHaveBeenCalled();
   });
