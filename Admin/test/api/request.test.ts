@@ -42,6 +42,22 @@ const handlers = [
       }
     }
   ),
+  rest.get(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/check?someToken`,
+    async () => {
+      if (error) {
+        return new HttpResponse(null, { status: 401 });
+      } else {
+        return HttpResponse.json(
+          {
+            id: '37a65191-2a4a-46c6-b7e5-d36133132b09',
+            role: 'admin',
+          },
+          { status: 200 }
+        );
+      }
+    }
+  ),
 ];
 
 const microServices = setupServer(...handlers);
@@ -65,6 +81,7 @@ afterAll(done => {
 it('fetches all requests', async () => {
   await supertest(server)
     .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
     .send({
       query: 'query GetRequests {request {id name email role suspended}}',
     })

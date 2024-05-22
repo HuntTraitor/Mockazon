@@ -115,6 +115,7 @@ it('fetches all accounts', async () => {
 it('approve an existing vendor request', async () => {
   await supertest(server)
     .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
     .send({
       query:
         'mutation approveVendor{approveVendor(VendorId: "someId") {id email name role suspended}}',
