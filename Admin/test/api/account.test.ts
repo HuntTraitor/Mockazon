@@ -43,7 +43,7 @@ const handlers = [
     }
   ),
   rest.put(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/requests/81c689b1-b7a7-4100-8b2d-309908b444f1/approve`,
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/requests/someId/approve`,
     async () => {
       if (error) {
         return new HttpResponse(null, { status: 500 });
@@ -55,6 +55,22 @@ const handlers = [
             name: 'test account 3',
             role: 'vendor',
             suspended: false,
+          },
+          { status: 200 }
+        );
+      }
+    }
+  ),
+  rest.get(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/check?someToken`,
+    async () => {
+      if (error) {
+        return new HttpResponse(null, { status: 401 });
+      } else {
+        return HttpResponse.json(
+          {
+            id: '37a65191-2a4a-46c6-b7e5-d36133132b09',
+            role: 'admin',
           },
           { status: 200 }
         );
@@ -84,6 +100,7 @@ afterAll(done => {
 it('fetches all accounts', async () => {
   await supertest(server)
     .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
     .send({
       query: 'query GetAccount {account {id name email role suspended}}',
     })
@@ -100,7 +117,7 @@ it('approve an existing vendor request', async () => {
     .post('/api/graphql')
     .send({
       query:
-        'mutation approveVendor{approveVendor(VendorId: "81c689b1-b7a7-4100-8b2d-309908b444f1") {id email name role suspended}}',
+        'mutation approveVendor{approveVendor(VendorId: "someId") {id email name role suspended}}',
     })
     .expect(200)
     .then(res => {
@@ -116,7 +133,7 @@ it('approve an existing vendor request with error', async () => {
     .post('/api/graphql')
     .send({
       query:
-        'mutation approveVendor{approveVendor(VendorId: "81c689b1-b7a7-4100-8b2d-309908b444f1") {id email name role suspended}}',
+        'mutation approveVendor{approveVendor(VendorId: "invalidId") {id email name role suspended}}',
     })
     .expect('Content-Type', /json/)
     .then(res => {
@@ -124,4 +141,3 @@ it('approve an existing vendor request with error', async () => {
       expect(res.body.errors.length).toEqual(1);
     });
 });
-
