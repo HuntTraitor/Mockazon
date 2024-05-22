@@ -11,6 +11,7 @@ export class AccountResolver {
     return new AccountService().all();
   }
 
+  @Authorized("admin")
   @Mutation(() => Account)
   async approveVendor(@Arg('VendorId') vendorId: string): Promise<Account> {
     return new AccountService().approve(vendorId);
