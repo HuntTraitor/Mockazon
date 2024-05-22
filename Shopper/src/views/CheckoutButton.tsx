@@ -14,7 +14,7 @@ interface Product {
         brand?: string;
         name?: string;
         rating?: string;
-        price?: string;
+        price?: number;
         deliveryDate?: string;
         image?: string;
       };
@@ -46,7 +46,7 @@ export default function CheckoutButton({
     const lineItems = productsWithContent.map(p => ({
       price_data: {
         currency: 'usd',
-        unit_amount: parseInt(p.data.getProduct.data.price as string),
+        unit_amount: p.data.getProduct.data.price,
         product_data: {
           name: p.data.getProduct.data.name,
           images: [p.data.getProduct.data.image],

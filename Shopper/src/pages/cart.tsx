@@ -25,7 +25,7 @@ import Subtotal from '@/views/Subtotal';
 const { basePath } = getConfig().publicRuntimeConfig;
 
 interface Product {
-  id: number;
+  id: string;
   quantity: string;
   data: {
     getProduct: {
@@ -33,7 +33,7 @@ interface Product {
         brand?: string;
         name?: string;
         rating?: string;
-        price?: string;
+        price?: number;
         deliveryDate?: string;
         image?: string;
       };
@@ -144,16 +144,16 @@ const Cart = () => {
         Promise.all(fetchPromises)
           .then(productsWithContent => {
             setProducts(productsWithContent);
-            const subtotal = productsWithContent.reduce(
+            const subtotal: number = productsWithContent.reduce(
               (accumulator: number, currentValue: Product) => {
                 return (
                   accumulator +
-                  parseInt(currentValue.data.getProduct.data.price as string)
+                  (currentValue.data.getProduct.data.price as number)
                 );
               },
               0
             );
-            setSubtotal(subtotal.toFixed(2));
+            setSubtotal(subtotal);
             console.log(productsWithContent);
           })
           .catch(err => {
