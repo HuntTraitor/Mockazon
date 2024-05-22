@@ -6,7 +6,7 @@ import {
   Post,
   Response,
   Body,
-  /*Query*/
+  Query
 } from "tsoa";
 
 import { UUID, User } from "../types";
@@ -14,7 +14,7 @@ import { AdminService } from "./service";
 import { Authenticated, Credentials } from "../types";
 import { Account } from "./index";
 import { Vendor } from "../vendor";
-// import { SessionUser } from "../types";
+import { SessionUser } from "../types";
 
 @Route("admin")
 export class AdminController extends Controller {
@@ -37,27 +37,25 @@ export class AdminController extends Controller {
       );
   }
 
-  // Not sure if this is necessary for now
-
-  // @Get('check')
-  // @Response("401", "Unauthorized")
-  // public async check(
-  //   @Query() accessToken: string
-  // ): Promise<SessionUser | undefined> {
-  //   return new AdminService()
-  //     .check(accessToken)
-  //     .then(
-  //       async (
-  //         account: SessionUser | undefined
-  //       ): Promise<SessionUser | undefined> => {
-  //         return account;
-  //       }
-  //     )
-  //     .catch(() => {
-  //       this.setStatus(401);
-  //       return undefined;
-  //     });
-  // }
+  @Get("check")
+  @Response("401", "Unauthorized")
+  public async check(
+    @Query() accessToken: string
+  ): Promise<SessionUser | undefined> {
+    return new AdminService()
+      .check(accessToken)
+      .then(
+        async (
+          account: SessionUser | undefined
+        ): Promise<SessionUser | undefined> => {
+          return account;
+        }
+      )
+      .catch(() => {
+        this.setStatus(401);
+        return undefined;
+      });
+  }
 
   // fetch all exsiting user accounts
   @Get("accounts")

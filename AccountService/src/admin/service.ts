@@ -1,7 +1,7 @@
 import { User, UUID } from "../types";
 import { pool } from "../db";
 import { Credentials, Authenticated } from "../types";
-// import { SessionUser } from "../types";
+import { SessionUser } from "../types";
 import * as jwt from "jsonwebtoken";
 import { Vendor } from "../vendor";
 
@@ -38,21 +38,21 @@ export class AdminService {
     }
   }
 
-  // public async check(accessToken: string): Promise<SessionUser | undefined> {
-  //   return new Promise((resolve, reject) => {
-  //     jwt.verify(
-  //       accessToken,
-  //       `${process.env.MASTER_SECRET}`,
-  //       (err: jwt.VerifyErrors | null, decoded?: object | string) => {
-  //         if (err) {
-  //           reject(err);
-  //         }
-  //         const account = decoded as SessionUser;
-  //         resolve({ id: account.id, role: account.role });
-  //       }
-  //     );
-  //   });
-  // }
+  public async check(accessToken: string): Promise<SessionUser | undefined> {
+    return new Promise((resolve, reject) => {
+      jwt.verify(
+        accessToken,
+        `${process.env.MASTER_SECRET}`,
+        (err: jwt.VerifyErrors | null, decoded?: object | string) => {
+          if (err) {
+            reject(err);
+          }
+          const account = decoded as SessionUser;
+          resolve({ id: account.id, role: account.role });
+        }
+      );
+    });
+  }
 
   public async accounts(): Promise<User[]> {
     const shopperQuery = {
