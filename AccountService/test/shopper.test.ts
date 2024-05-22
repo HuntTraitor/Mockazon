@@ -85,7 +85,10 @@ const validateShippingInfo = (shippingInfo: ShippingAddress) => {
   expect(shippingInfo.country).toBeDefined();
 };
 
-const compareShippingInfo = (shippingInfo1: ShippingAddress, shippingInfo2: ShippingAddress) => {
+const compareShippingInfo = (
+  shippingInfo1: ShippingAddress,
+  shippingInfo2: ShippingAddress,
+) => {
   expect(shippingInfo1.addressLine1).toBe(shippingInfo2.addressLine1);
   expect(shippingInfo1.city).toBe(shippingInfo2.city);
   expect(shippingInfo1.state).toBe(shippingInfo2.state);
@@ -408,7 +411,10 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
     }
 
     expect(newShippingInfo.length).toBe(shippingInfo.length + 1);
-    compareShippingInfo(newShippingInfo[newShippingInfo.length - 1], exampleShippingInfo[0]);
+    compareShippingInfo(
+      newShippingInfo[newShippingInfo.length - 1],
+      exampleShippingInfo[0],
+    );
   });
 
   test("POST /api/v0/shopper/shippinginfo (authorized) (other user)", async () => {

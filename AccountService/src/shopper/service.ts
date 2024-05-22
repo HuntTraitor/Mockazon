@@ -129,7 +129,7 @@ export class ShopperService {
         `${process.env.MASTER_SECRET}`,
         {
           algorithms: ["HS256"],
-        }
+        },
       ) as Decoded;
 
       const select = `SELECT * FROM shopper WHERE id = $1`;
@@ -185,7 +185,7 @@ export class ShopperService {
         `${process.env.MASTER_SECRET}`,
         {
           algorithms: ["HS256"],
-        }
+        },
       ) as Decoded;
 
       const select = `SELECT * FROM shopper WHERE id = $1`;

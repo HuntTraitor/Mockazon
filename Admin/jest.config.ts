@@ -20,8 +20,21 @@ const customJestConfig = {
     '!src/graphql/auth/checker.ts',
   ],
   collectCoverage: true,
+  coverageDirectory: '<rootDir>/../.nyc_output/Admin',
   coveragePathIgnorePatterns: ['src/pages/_app.tsx', 'src/pages/_document.tsx'],
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
+  reporters: [
+    'default',
+    [
+      'jest-html-reporter',
+      {
+        outputPath: '<rootDir>/coverage/jest-report.html',
+        pageTitle: 'Test Report',
+        includeFailureMsg: true,
+        includeConsoleLog: true,
+      },
+    ],
+  ],
 };
 
 export default createJestConfig(customJestConfig);

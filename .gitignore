@@ -17,7 +17,7 @@ node_modules
 # production
 */build
 coverage
-
+w
 # misc
 .DS_Store
 *.pem
@@ -43,3 +43,7 @@ build
 **/.env
 .vscode
 .idea
+/.nyc_output
+coverage.json
+/.nyc_temp
+/merged_coverage

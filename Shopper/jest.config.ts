@@ -24,6 +24,7 @@ const customJestConfig = {
     // FIXME: Double check that we should exclude all these
   ],
   collectCoverage: true,
+  coverageDirectory: '<rootDir>/../.nyc_output/Shopper',
   coveragePathIgnorePatterns: [
     'src/pages/_app.tsx',
     'src/pages/_document.tsx',
@@ -31,6 +32,18 @@ const customJestConfig = {
     'schema.ts',
   ],
   testMatch: ['**/test/**/?(*.)+(spec|test).[jt]s?(x)'],
+  reporters: [
+    'default',
+    [
+      'jest-html-reporter',
+      {
+        outputPath: '<rootDir>/coverage/jest-report.html',
+        pageTitle: 'Test Report',
+        includeFailureMsg: true,
+        includeConsoleLog: true,
+      },
+    ],
+  ],
 };
 
 export default createJestConfig(customJestConfig);
