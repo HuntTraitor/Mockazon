@@ -5,13 +5,12 @@ import { buildSchemaSync } from 'type-graphql';
 import { AccountResolver } from '../../graphql/account/resolver';
 import { RequestResolver } from '../../graphql/request/resolver';
 import { AuthResolver } from '../../graphql/auth/resolver';
-// import { nextAuthChecker } from '@/graphql/auth/checker';
+import { nextAuthChecker } from '@/graphql/auth/checker';
 
 const schema = buildSchemaSync({
   resolvers: [AccountResolver, RequestResolver, AuthResolver],
   validate: true,
-  // authChecker: nextAuthChecker,
-  //   authChecker: nextAuthChecker,
+  authChecker: nextAuthChecker,
 });
 
 export default createYoga({
