@@ -14,6 +14,7 @@ export interface CreateVendor {
   password: string;
 }
 
-export type SessionUser = {
-  id: string;
-};
+// export type SessionUser = {
+//   id: string;
+//   role: string;
+// };

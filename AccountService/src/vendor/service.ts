@@ -2,11 +2,12 @@ import { pool } from "../db";
 import { Authenticated, Credentials } from "../types";
 import * as jwt from "jsonwebtoken";
 import { CreateVendor } from "./index";
-import { SessionUser } from "./index";
+import { SessionUser } from "../types";
 
 interface Account {
   id: string;
   name: string;
+  role: string;
 }
 
 export class VendorService {
@@ -90,7 +91,7 @@ export class VendorService {
               reject(err);
             }
             const account = decoded as Account;
-            resolve({ id: account.id });
+            resolve({ id: account.id, role: account.role});
           },
         );
       } catch (e) {
