@@ -18,7 +18,10 @@
     "bestzip": "*",
     "concurrently": "*",
     "eslint": "*",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-config-typescript": "*",
+    "eslint-plugin-prettier": "^5.1.3",
     "jest": "*",
     "jest-html-reporter": "*",
     "joi": "*",
@@ -27,10 +30,7 @@
     "ts-jest": "*",
     "ts-node": "*",
     "ts-postgres": "*",
-    "typescript": "*",
-    "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3"
+    "typescript": "*"
   },
   "dependencies": {
     "cors": "*",
@@ -38,6 +38,7 @@
     "express": "*",
     "jsonwebtoken": "*",
     "pg": "*",
+    "stripe": "^15.7.0",
     "swagger-ui-express": "*",
     "tsoa": "^6.2.1"
   },
