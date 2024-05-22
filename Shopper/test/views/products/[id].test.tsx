@@ -1,12 +1,9 @@
-// test products component
-
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import ProductPage from '@/pages/products/[id]';
 import { getServerSideProps } from '@/pages/products/[id]';
 import http from 'http';
-import * as nextRouter from 'next/router';
 import { AppContext } from '@/contexts/AppContext';
 
 import { http as rest, HttpResponse } from 'msw';
