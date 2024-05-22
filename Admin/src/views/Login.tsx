@@ -38,15 +38,16 @@ const Login = () => {
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget as HTMLFormElement);
-    fetch(`${basePath}/api/login`, {
+    const email = data.get('email');
+    const password = data.get('password');
+    const query = {
+      query: `query Login {login(email: "${email}", password: "${password}") {name accessToken id}}`,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: data.get('email'),
-        password: data.get('password'),
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(query),
     })
       .then(response => {
         if (response.status == 200) {
@@ -54,8 +55,8 @@ const Login = () => {
         }
       })
       .then(json => {
-        loginContext.setAccessToken(`${json.authenticated.accessToken}`);
-        loginContext.setId(`${json.authenticated.id}`);
+        loginContext.setAccessToken(`${json.data.login.accessToken}`);
+        loginContext.setId(`${json.data.login.id}`);
         localStorage.setItem('user', JSON.stringify(json));
       })
       .catch(() => {
