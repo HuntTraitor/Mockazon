@@ -54,8 +54,7 @@ export class AuthService {
           reject(new Error('Unauthorised'));
         } else {
           fetch(
-            'http://localhost:3011/api/v0/authenticate?accessToken=' +
-              tokens[1],
+            'http://localhost:3014/api/v0/admin/check?accessToken=' + tokens[1],
             {
               method: 'GET',
               headers: {
