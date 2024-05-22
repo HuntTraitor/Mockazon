@@ -83,3 +83,21 @@ it('Successful admin login', async () => {
       });
     });
 });
+
+it('Unsuccessful admin login', async () => {
+  error = true;
+  await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query: `query Login{
+        login(email: "test@email.com" password: "password") {
+          name accessToken id
+        }
+      }`,
+    })
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.body.errors.length).toEqual(1);
+    });
+});
