@@ -27,16 +27,13 @@ const handlers = [
   ),
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/check`,
-    async ({request}) => {
+    async ({ request }) => {
       const url = new URL(request.url);
       const accessToken = url.searchParams.get('accessToken');
       if (error || !accessToken) {
         return new HttpResponse(null, { status: 401 });
       } else {
-        return HttpResponse.json(
-          { id: 'some id' },
-          { status: 200 }
-        );
+        return HttpResponse.json({ id: 'some id' }, { status: 200 });
       }
     }
   ),

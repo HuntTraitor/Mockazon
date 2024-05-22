@@ -7,7 +7,7 @@ import '@testing-library/jest-dom/jest-globals';
 
 import { TextEncoder } from 'node:util';
 import 'cross-fetch/polyfill';
-import mockRouter from 'next-router-mock';
+// import mockRouter from 'next-router-mock';
 
 global.TextEncoder = TextEncoder;
 

@@ -124,4 +124,3 @@ it('approve an existing vendor request with error', async () => {
       expect(res.body.errors.length).toEqual(1);
     });
 });
-

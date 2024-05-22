@@ -20,6 +20,7 @@
     "eslint": "*",
     "eslint-config-typescript": "*",
     "jest": "*",
+    "jest-html-reporter": "*",
     "joi": "*",
     "nodemon": "*",
     "supertest": "*",
@@ -60,6 +61,20 @@
     ],
     "testPathIgnorePatterns": [
       "build"
+    ],
+    "collectCoverage": true,
+    "coverageDirectory": "<rootDir>/../.nyc_output/AccountService",
+    "reporters": [
+      "default",
+      [
+        "jest-html-reporter",
+        {
+          "outputPath": "<rootDir>/coverage/jest-report.html",
+          "pageTitle": "Test Report",
+          "includeFailureMsg": true,
+          "includeConsoleLog": true
+        }
+      ]
     ]
   },
   "eslintConfig": {
