@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Put,
-  Route,
-  Post,
-  Response,
-  Body,
-  Query
-} from "tsoa";
+import { Controller, Get, Put, Route, Post, Response, Body, Query } from "tsoa";
 
 import { UUID, User } from "../types";
 import { AdminService } from "./service";
@@ -40,16 +31,16 @@ export class AdminController extends Controller {
   @Get("check")
   @Response("401", "Unauthorized")
   public async check(
-    @Query() accessToken: string
+    @Query() accessToken: string,
   ): Promise<SessionUser | undefined> {
     return new AdminService()
       .check(accessToken)
       .then(
         async (
-          account: SessionUser | undefined
+          account: SessionUser | undefined,
         ): Promise<SessionUser | undefined> => {
           return account;
-        }
+        },
       )
       .catch(() => {
         this.setStatus(401);

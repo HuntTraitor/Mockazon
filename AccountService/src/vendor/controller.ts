@@ -9,7 +9,7 @@ import {
   Query,
 } from "tsoa";
 
-import { SessionUser} from "../types";
+import { SessionUser } from "../types";
 import { CreateVendor, Vendor } from "./index";
 import { VendorService } from "./service";
 import { Authenticated, Credentials } from "../types";

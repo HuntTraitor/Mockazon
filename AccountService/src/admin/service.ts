@@ -49,7 +49,7 @@ export class AdminService {
           }
           const account = decoded as SessionUser;
           resolve({ id: account.id, role: account.role });
-        }
+        },
       );
     });
   }

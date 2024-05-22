@@ -5,7 +5,7 @@ import { AccountService } from './service';
 
 @Resolver()
 export class AccountResolver {
-  @Authorized("admin")
+  @Authorized('admin')
   @Query(() => [Account])
   async account(): Promise<Account[]> {
     return new AccountService().all();

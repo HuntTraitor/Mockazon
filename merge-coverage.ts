@@ -36,9 +36,13 @@ function generateHtmlReport() {
     execSync(reportCommand, { stdio: 'inherit' });
 }
 
-// Main execution
+
 const subfolders = getSubfolders(nycOutputDir);
 mergeCoverageReports(subfolders);
 generateHtmlReport();
+
+if (fs.existsSync(coverageOutputFile)) {
+    fs.unlinkSync(coverageOutputFile);
+}
 
 console.log(`HTML coverage report generated at ${mergedCoverageDir}`);

@@ -91,7 +91,7 @@ export class VendorService {
               reject(err);
             }
             const account = decoded as Account;
-            resolve({ id: account.id, role: account.role});
+            resolve({ id: account.id, role: account.role });
           },
         );
       } catch (e) {

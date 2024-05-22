@@ -1,80 +1,125 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
+import cheerio from 'cheerio';
+import Table from 'cli-table3';
 
-interface StatementCoverage {
-  total: number;
+interface CoverageData {
+  pct: number;
   covered: number;
-}
-
-interface FileCoverage {
-  path: string;
-  s: { [key: string]: number };
-  f: { [key: string]: number };
-  b: { [key: string]: number[] };
-  statementMap: { [key: string]: { start: any; end: any } };
-  fnMap: { [key: string]: { name: string; decl: any; loc: any } };
-  branchMap: { [key: string]: any };
-}
-
-interface CoverageFile {
-  [filePath: string]: FileCoverage;
+  total: number;
 }
 
 interface CoverageSummary {
-  lines: StatementCoverage;
-  statements: StatementCoverage;
-  functions: StatementCoverage;
-  branches: StatementCoverage;
+  statements: CoverageData;
+  branches: CoverageData;
+  functions: CoverageData;
+  lines: CoverageData;
 }
 
-const coverageFilePath = path.resolve(__dirname, 'coverage.json');
+const coverageFilePath = path.resolve('merged_coverage', 'index.html');
 
-function readCoverageFile(filePath: string): CoverageFile {
-  const rawData = fs.readFileSync(filePath, 'utf-8');
-  return JSON.parse(rawData) as CoverageFile;
+function readCoverageFile(filePath: string): string {
+  return fs.readFileSync(filePath, 'utf-8');
 }
 
-function calculateCoverageSummary(coverageData: CoverageFile): CoverageSummary {
-  const summary: CoverageSummary = {
-    lines: { total: 0, covered: 0 },
-    statements: { total: 0, covered: 0 },
-    functions: { total: 0, covered: 0 },
-    branches: { total: 0, covered: 0 },
+function extractCoverageSummary(htmlContent: string): CoverageSummary {
+  const $ = cheerio.load(htmlContent);
+  const coverageData: CoverageSummary = {
+    statements: {
+      pct: parseFloat($('.strong').eq(0).text()),
+      covered: parseInt($('.fraction').eq(0).text().split('/')[0], 10),
+      total: parseInt($('.fraction').eq(0).text().split('/')[1], 10),
+    },
+    branches: {
+      pct: parseFloat($('.strong').eq(1).text()),
+      covered: parseInt($('.fraction').eq(1).text().split('/')[0], 10),
+      total: parseInt($('.fraction').eq(1).text().split('/')[1], 10),
+    },
+    functions: {
+      pct: parseFloat($('.strong').eq(2).text()),
+      covered: parseInt($('.fraction').eq(2).text().split('/')[0], 10),
+      total: parseInt($('.fraction').eq(2).text().split('/')[1], 10),
+    },
+    lines: {
+      pct: parseFloat($('.strong').eq(3).text()),
+      covered: parseInt($('.fraction').eq(3).text().split('/')[0], 10),
+      total: parseInt($('.fraction').eq(3).text().split('/')[1], 10),
+    },
   };
+  return coverageData;
+}
 
-  for (const file in coverageData) {
-    const fileCoverage = coverageData[file];
+function extractDetailedCoverage(htmlContent: string) {
+  const $ = cheerio.load(htmlContent);
+  const rows: Array<{ [key: string]: string }> = [];
+  $('tbody tr').each((index, element) => {
+    const cols = $(element).children('td');
+    rows.push({
+      file: $(cols[0]).text(),
+      statements: $(cols[2]).text(),
+      branches: $(cols[4]).text(),
+      functions: $(cols[6]).text(),
+      lines: $(cols[8]).text(),
+    });
+  });
+  return rows;
+}
 
-    summary.statements.total += Object.keys(fileCoverage.statementMap).length;
-    summary.statements.covered += Object.values(fileCoverage.s).filter(value => value > 0).length;
+function colorize(text: string, color: string): string {
+  const colors: { [key: string]: string } = {
+    red: '\x1b[31m',
+    yellow: '\x1b[33m',
+    green: '\x1b[32m',
+    reset: '\x1b[0m',
+  };
+  return `${colors[color]}${text}${colors.reset}`;
+}
 
-    summary.functions.total += Object.keys(fileCoverage.fnMap).length;
-    summary.functions.covered += Object.values(fileCoverage.f).filter(value => value > 0).length;
+function formatCoverage(pct: number, covered: number, total: number, label: string) {
+  const color = pct >= 80 ? 'green' : pct >= 50 ? 'yellow' : 'red';
+  const labelStr = `${label}:`.padEnd(15);
+  const pctStr = `${colorize(pct.toFixed(2) + '%', color)}`.padEnd(10);
+  const coveredStr = `${covered}`.padStart(5);
+  const totalStr = `${total}`.padStart(5);
+  return `${labelStr} ${pctStr} (Covered: ${coveredStr} / Total: ${totalStr})`;
+}
 
-    summary.branches.total += Object.keys(fileCoverage.branchMap).length;
-    summary.branches.covered += Object.values(fileCoverage.b).filter(value => value.every(v => v > 0)).length;
-
-    summary.lines.total += Object.keys(fileCoverage.statementMap).length; // Assuming line coverage is similar to statement coverage
-    summary.lines.covered += Object.values(fileCoverage.s).filter(value => value > 0).length;
-  }
-
-  return summary;
+function colorizePct(pct: string): string {
+  const pctValue = parseFloat(pct);
+  const color = pctValue >= 80 ? 'green' : pctValue >= 50 ? 'yellow' : 'red';
+  return colorize(pct, color);
 }
 
 function printCoverageReport(summary: CoverageSummary) {
-  const linesPct = (summary.lines.covered / summary.lines.total) * 100;
-  const statementsPct = (summary.statements.covered / summary.statements.total) * 100;
-  const functionsPct = (summary.functions.covered / summary.functions.total) * 100;
-  const branchesPct = (summary.branches.covered / summary.branches.total) * 100;
-
   console.log('Coverage Summary:');
-  console.log(`Lines: ${linesPct.toFixed(2)}% (Covered: ${summary.lines.covered} / Total: ${summary.lines.total})`);
-  console.log(`Statements: ${statementsPct.toFixed(2)}% (Covered: ${summary.statements.covered} / Total: ${summary.statements.total})`);
-  console.log(`Functions: ${functionsPct.toFixed(2)}% (Covered: ${summary.functions.covered} / Total: ${summary.functions.total})`);
-  console.log(`Branches: ${branchesPct.toFixed(2)}% (Covered: ${summary.branches.covered} / Total: ${summary.branches.total})`);
+  console.log(formatCoverage(summary.lines.pct, summary.lines.covered, summary.lines.total, 'Lines'));
+  console.log(formatCoverage(summary.statements.pct, summary.statements.covered, summary.statements.total, 'Statements'));
+  console.log(formatCoverage(summary.functions.pct, summary.functions.covered, summary.functions.total, 'Functions'));
+  console.log(formatCoverage(summary.branches.pct, summary.branches.covered, summary.branches.total, 'Branches'));
 }
 
-// Main execution
-const coverageData = readCoverageFile(coverageFilePath);
-const coverageSummary = calculateCoverageSummary(coverageData);
+function printDetailedCoverage(detailedCoverage: Array<{ [key: string]: string }>) {
+  const table = new Table({
+    head: ['File', 'Statements', 'Branches', 'Functions', 'Lines'].map(header => colorize(header, 'reset')),
+    colWidths: [40, 15, 15, 15, 15],
+  });
+
+  detailedCoverage.forEach(row => {
+    table.push([
+      row.file,
+      colorizePct(row.statements),
+      colorizePct(row.branches),
+      colorizePct(row.functions),
+      colorizePct(row.lines),
+    ]);
+  });
+
+  console.log(table.toString());
+}
+
+const htmlContent = readCoverageFile(coverageFilePath);
+const coverageSummary = extractCoverageSummary(htmlContent);
+const detailedCoverage = extractDetailedCoverage(htmlContent);
 printCoverageReport(coverageSummary);
+console.log('\nDetailed Coverage:');
+printDetailedCoverage(detailedCoverage);

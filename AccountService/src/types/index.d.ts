@@ -32,6 +32,6 @@ export interface Authenticated {
 }
 
 export type SessionUser = {
-    id: string,
-    role: string
-  }
+  id: string;
+  role: string;
+};

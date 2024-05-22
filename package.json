@@ -96,6 +96,7 @@
     "display-coverage": "ts-node display-coverage.ts"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.35",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.12",
     "concurrently": "*",
@@ -109,7 +110,10 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "cli-table3": "^0.6.5",
     "dotenv": "^16.4.5",
-    "dotenv-cli": "^7.4.2"
+    "dotenv-cli": "^7.4.2",
+    "node-fetch": "^2.7.0"
   }
 }
