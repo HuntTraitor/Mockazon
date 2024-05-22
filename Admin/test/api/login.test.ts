@@ -1,6 +1,3 @@
-// Referenced from Dr. Harrison's CSE 187 examples
-// Referenced the Shopper's BE test
-
 import http from 'http';
 import supertest from 'supertest';
 
@@ -13,37 +10,52 @@ let server: http.Server<
   typeof http.IncomingMessage,
   typeof http.ServerResponse
 >;
-
-let rightCreds = true;
-
+let error = false;
 const handlers = [
   rest.post(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3010/api/v0/authenticate`,
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/login`,
     async () => {
-      if (rightCreds) {
-        return HttpResponse.json(
-          { id: 'some id', accessToken: 'some token' },
-          { status: 200 }
-        );
+      if (error) {
+        return new HttpResponse(null, { status: 401 });
       } else {
         return HttpResponse.json(
-          { message: 'Error logging in' },
-          { status: 401 }
+          {
+            id: 'Some id',
+            name: 'Some name',
+            accessToken: 'Some access token',
+          },
+          { status: 200 }
         );
       }
     }
   ),
+  // rest.get(
+  //   `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/check`,
+  //   async ({request}) => {
+  //     const url = new URL(request.url);
+  //     const accessToken = url.searchParams.get('accessToken');
+  //     if (error || !accessToken) {
+  //       return new HttpResponse(null, { status: 401 });
+  //     } else {
+  //       return HttpResponse.json(
+  //         { id: 'some id' },
+  //         { status: 200 }
+  //       );
+  //     }
+  //   }
+  // ),
 ];
 
 const microServices = setupServer(...handlers);
 
 beforeAll(async () => {
-  microServices.listen({ onUnhandledRequest: 'bypass' });
+  microServices.listen();
   server = http.createServer(requestHandler);
   server.listen();
 });
 
 afterEach(() => {
+  error = false;
   microServices.resetHandlers();
 });
 
@@ -52,15 +64,22 @@ afterAll(done => {
   server.close(done);
 });
 
-// test('Correct Credentials', async () => {
-//   const result = await supertest(server).post('/api/login');
-//   expect(result.body.authenticated.id).toBe('some id');
-//   expect(result.body.authenticated.accessToken).toBe('some token');
-// });
-
-// TODO add the rest of tests like for the auth service and valid credentials when signup is created
-test('Wrong Credentials', async () => {
-  rightCreds = false;
-  const result = await supertest(server).post('/api/login');
-  expect(result.status).toBe(401);
+it('Successful admin login', async () => {
+  await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query: `query Login{
+        login(email: "test@email.com" password: "password") {
+          name accessToken id
+        }
+      }`,
+    })
+    .then(res => {
+      expect(res.status).toBe(200);
+      expect(res.body.data.login).toEqual({
+        name: 'Some name',
+        accessToken: 'Some access token',
+        id: 'Some id',
+      });
+    });
 });
