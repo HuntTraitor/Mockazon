@@ -9,3 +9,7 @@ import { TextEncoder } from 'node:util';
 import 'cross-fetch/polyfill';
 
 global.TextEncoder = TextEncoder;
+
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: { basePath: '' },
+}));
