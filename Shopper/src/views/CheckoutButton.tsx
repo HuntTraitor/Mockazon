@@ -46,7 +46,8 @@ export default function CheckoutButton({
     const lineItems = productsWithContent.map(p => ({
       price_data: {
         currency: 'usd',
-        unit_amount: p.data.getProduct.data.price,
+        // unit amount is in cents so multiply by 100
+        unit_amount: (p.data.getProduct.data.price as number) * 100,
         product_data: {
           name: p.data.getProduct.data.name,
           images: [p.data.getProduct.data.image],
