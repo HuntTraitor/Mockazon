@@ -5,9 +5,6 @@ import { Locale } from '@/graphql/stripe/sessions/schema';
 
 @Resolver()
 export class StripeCheckoutResolver {
-  // TODO fix this error
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   @Mutation(() => Session)
   async createStripeCheckoutSession(
     @Args() input: CheckoutSessionInput
