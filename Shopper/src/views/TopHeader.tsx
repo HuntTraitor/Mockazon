@@ -183,6 +183,7 @@ const TopHeader = () => {
               width={150}
               height={50}
               alt="Logo"
+              priority
             />
             {/* Replace with a new logo */}
           </Link>

@@ -14,44 +14,49 @@ import DeliveryText from '@/views/product/DeliveryText';
 import AddToCartButton from '@/views/product/AddToCartButton';
 import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
+import getConfig from 'next/config';
+import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
+const { basePath } = getConfig().publicRuntimeConfig;
+import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
-// https://chat.openai.com/share/c61c7fd0-a650-42f8-b89f-db88f972d9ed
 const ProductPage = () => {
   const router = useRouter();
   const { id } = router.query;
   // const { t } = useTranslation(['products', 'viewProduct']);
   const [product, setProduct] = useState({} as Product);
   const [error, setError] = useState('');
+  const { setUser, setAccessToken } = React.useContext(LoggedInContext);
   // const { backDropOpen, setBackDropOpen } = useAppContext();
-
-  // FIXME: Do not fetch to microservice from the browser
+  useLoadLocalStorageUser(setUser, setAccessToken);
   useEffect(() => {
-    fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    const query = {
+      query: `query getProduct{getProduct(
+        productId: "${id}"
+      ) {id data {brand name rating price deliveryDate image}}}`,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(query),
+    })
       .then(response => {
+        console.log(response);
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
       .then(product => {
-        setProduct(product);
-        console.log(product);
+        setProduct(product.data.getProduct);
       })
       .catch(err => {
-        console.log('401', err);
+        console.error('Error fetching product:', err);
         setError('Could not fetch products');
       });
   }, [id]);
-
-  console.log(product);
 
   if (product && product.data) {
     return (
@@ -64,6 +69,7 @@ const ProductPage = () => {
                 alt="product image"
                 height={400}
                 width={400}
+                priority
               />
             </Box>
             <Box>
