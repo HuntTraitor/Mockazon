@@ -5,6 +5,10 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import styles from '@/styles/ProductCard.module.css'
+import { enqueueSnackbar } from 'notistack';
+import getConfig from 'next/config';
+const { basePath } = getConfig().publicRuntimeConfig;
+import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 const convertDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -21,14 +25,57 @@ export default function ProductCard({product}: any) {
   const price = product.data.price.toString()
   let beforeDot, afterDot: string;
   const dotIndex = price.indexOf('.')
-  beforeDot = price.slice(0, dotIndex)
   if (dotIndex === -1) {
+    beforeDot = price
     afterDot = '00'
   } else {
+    beforeDot = price.slice(0, dotIndex)
     afterDot = afterDot = price.slice(dotIndex + 1);
   }
+  const { user } = React.useContext(LoggedInContext);
 
-  console.log(convertDate(product.data.deliveryDate))
+  const addToShoppingCart = (productId: string) => {
+    const query = {
+      query: `mutation AddToShoppingCart {
+        addToShoppingCart(productId: "${productId}", shopperId: "${user.id}", quantity: "1") {
+          id
+          product_id
+          shopper_id
+          data { 
+            quantity
+          }
+        }
+      }`,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(query),
+    })
+      .then(response => response.json())
+      .then(shoppingCart => {
+        if (shoppingCart.errors && shoppingCart.errors.length > 0) {
+          throw new Error(shoppingCart.errors[0].message);
+        }
+        enqueueSnackbar('Added to shopping cart', {
+          variant: 'success',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
+        console.log(shoppingCart);
+      })
+      .catch(err => {
+        console.log(err);
+        enqueueSnackbar('Could not add product to cart', {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
+      });
+  };
 
   return (
     <Card sx={{ 
@@ -62,7 +109,7 @@ export default function ProductCard({product}: any) {
         <Typography variant="body2">
           FREE delivery <span className={styles.deliveryDate}>{convertDate(product.data.deliveryDate)}</span>
         </Typography>
-        <Button size="small" className={styles.addToCart}>Add to cart</Button>
+        <Button size="small" className={styles.addToCart} onClick={() => addToShoppingCart(product.id)} aria-label='Add to cart button'>Add to cart</Button>
       </CardContent>
     </Card>
   );
