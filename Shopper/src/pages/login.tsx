@@ -149,6 +149,7 @@ const Login = () => {
           height={100}
           className={styles.logo}
           onClick={() => router.push('/')}
+          priority
         />
         <Paper elevation={3} className={styles.loginForm}>
           <form onSubmit={handleFormSubmit}>
@@ -164,7 +165,7 @@ const Login = () => {
               value={email}
               size="small"
               onChange={event => setEmail(event.target.value)}
-              inputProps={{ 'font-size': 2 }}
+              inputProps={{ fontSize: 2 }}
               fullWidth
               margin="normal"
             />
