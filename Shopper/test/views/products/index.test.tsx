@@ -389,6 +389,7 @@ it('Click Backdrop', () => {
 });
 
 // TODO fix this test - it's failing because the module can't be remocked from within the test
+// TODO create a new file in order to test this
 // it('Clicks backdrop', async () => {
 //   localStorage.setItem(
 //     'user',

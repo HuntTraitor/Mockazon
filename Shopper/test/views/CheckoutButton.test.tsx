@@ -120,6 +120,7 @@ const products = [
     id: '123',
     data: {
       getProduct: {
+        id: '123',
         data: {
           brand: 'test',
           name: 'test name',
@@ -196,6 +197,7 @@ it('Clicks checkout button and encounters error creating session', async () => {
 });
 
 // TODO fix this test - it's not covering what it's intended to because the module can't be remocked from within the test
+// TODO create a new file in order to test this
 it('Clicks checkout button and encounters error during redirect', async () => {
   jest.resetAllMocks();
   const mockStripe = {
@@ -221,6 +223,7 @@ it('Clicks checkout button and encounters error during redirect', async () => {
 });
 
 // TODO fix this test - it's not covering what it's intended to because the module can't be remocked from within the test
+// TODO create a new file in order to test this
 it('Clicks checkout button and encounters error redirecting to checkout', async () => {
   jest.mock('@stripe/stripe-js', () => {
     return {
