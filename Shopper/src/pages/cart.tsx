@@ -21,6 +21,7 @@ import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import getConfig from 'next/config';
 import CheckoutButton from '@/views/CheckoutButton';
 import Subtotal from '@/views/Subtotal';
+import { useRouter } from 'next/router';
 const { basePath } = getConfig().publicRuntimeConfig;
 import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
@@ -52,22 +53,31 @@ interface ProductFromFetch {
   };
 }
 
-const namespaces = ['products', 'topHeader', 'common', 'signInDropdown'];
+const namespaces = [
+  'products',
+  'topHeader',
+  'common',
+  'signInDropdown',
+  'cart',
+];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale ?? 'en', namespaces)),
+      locale: context.locale ?? 'en',
     },
   };
 };
 
-const Cart = () => {
+const Cart = ({ locale }: { locale: string }) => {
   const [products, setProducts] = useState([] as Product[]);
-  const { t } = useTranslation('products');
+  const { t } = useTranslation(['products', 'cart']);
   const [error, setError] = useState('');
   const [subtotal, setSubtotal] = useState(0.0);
   const { user, setUser, setAccessToken } = useContext(LoggedInContext);
   const { backDropOpen, setBackDropOpen } = useAppContext();
+  const router = useRouter();
+
   useLoadLocalStorageUser(setUser, setAccessToken);
 
   // https://chat.openai.com/share/66cd884d-cc95-4e82-8b4f-a4d035f844af
@@ -76,6 +86,7 @@ const Cart = () => {
   // https://chatgpt.com/share/018e08ea-be97-49b5-a207-a8ade89baf92
   useEffect(() => {
     if (JSON.stringify(user) === '{}') {
+      router.push('/login');
       return;
     }
     const query = {
@@ -166,9 +177,11 @@ const Cart = () => {
         console.log('Error fetching shopping cart:', err);
         setError('Could not fetch shopping cart');
       });
-  }, [user]);
+  }, [router, user]);
 
-  if (JSON.stringify(user) === '{}') return;
+  // if(JSON.stringify(user) === '{}') {
+  //   return null
+  // }
 
   return (
     <>
@@ -180,7 +193,7 @@ const Cart = () => {
               className={`${styles.heading} ${styles.h1}`}
               variant="h1"
             >
-              Shopping Cart
+              {t('cart:title')}
             </Typography>
             {products.map((product, index) => (
               <Card
@@ -242,7 +255,7 @@ const Cart = () => {
                     href={`/shoppingCart`}
                   >
                     <Typography component="p" className={styles.removeText}>
-                      Remove
+                      {t('cart:remove')}
                     </Typography>
                   </Link>
                 </CardContent>
@@ -262,6 +275,7 @@ const Cart = () => {
                 subtotal={subtotal}
                 productsWithContent={products}
                 shopperId={user.id}
+                locale={locale}
               />
             </Box>
             <Box className={styles.buyAgainBox}>

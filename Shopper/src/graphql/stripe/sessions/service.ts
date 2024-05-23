@@ -1,11 +1,12 @@
-import { LineItem, Session, ShopperId } from './schema';
+import { LineItem, Locale, Session, ShopperId } from './schema';
 import { GraphQLError } from 'graphql/error';
 
 export class StripeService {
   public async createCheckoutSession(
     lineItems: LineItem[],
     shopperId: ShopperId,
-    origin: string
+    origin: string,
+    locale: Locale
   ): Promise<Session> {
     const result = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/stripeCheckout`,
@@ -14,7 +15,7 @@ export class StripeService {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ lineItems, shopperId, origin }),
+        body: JSON.stringify({ lineItems, shopperId, origin, locale }),
       }
     )
       .then(response => {

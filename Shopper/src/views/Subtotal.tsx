@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import styles from '@/styles/cart.module.css';
+import { useTranslation } from 'next-i18next';
 
 export default function Subtotal({
   numberOfProducts,
@@ -8,10 +9,12 @@ export default function Subtotal({
   numberOfProducts: number;
   subtotal: number;
 }) {
+  const { t } = useTranslation(['products', 'cart']);
+
   return (
     <span className={styles.subtotal}>
-      Subtotal ({numberOfProducts} {numberOfProducts > 1 ? 'items' : 'item'}): $
-      {subtotal}
+      {t('cart:subtotal')}: ({numberOfProducts}{' '}
+      {numberOfProducts > 1 ? t('cart:items') : t('cart:item')}): ${subtotal}
     </span>
   );
 }

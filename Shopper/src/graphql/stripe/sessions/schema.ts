@@ -1,5 +1,21 @@
-import { ArgsType, Field, InputType, ObjectType } from 'type-graphql';
+import {
+  ArgsType,
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from 'type-graphql';
 import { IsUUID } from 'class-validator';
+
+export enum Locale {
+  en = 'en',
+  es = 'es',
+}
+
+registerEnumType(Locale, {
+  name: 'Locale', // this one is mandatory
+  description: 'The supported locales', // this one is optional
+});
 
 @InputType()
 export class ShopperId {
@@ -50,6 +66,8 @@ export class CheckoutSessionInput {
     shopperId!: ShopperId;
   @Field()
     origin!: string;
+  @Field(() => Locale)
+    locale!: Locale;
 }
 
 @ObjectType()

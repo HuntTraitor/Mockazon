@@ -4,6 +4,12 @@ import styles from '@/styles/cart.module.css';
 import PropTypes from 'prop-types';
 import Subtotal from '@/views/Subtotal';
 import getConfig from 'next/config';
+import { useTranslation } from 'next-i18next';
+
+enum Locale {
+  en = 'en',
+  es = 'es',
+}
 
 interface Product {
   id: string;
@@ -31,12 +37,15 @@ export default function CheckoutButton({
   subtotal,
   productsWithContent,
   shopperId,
+  locale,
 }: {
   productsWithContent: Product[];
   shopperId: string;
   subtotal: number;
+  locale: string;
 }) {
   const { basePath } = getConfig().publicRuntimeConfig;
+  const { t } = useTranslation(['products', 'cart']);
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -57,11 +66,13 @@ export default function CheckoutButton({
     }));
 
     const query = `
-      mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!) {
+      mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!) {
         createStripeCheckoutSession(
         lineItems: $lineItems, 
         shopperId: $shopperId, 
-        origin: $origin) {
+        origin: $origin,
+        locale: $locale
+        ) {
           id
           url
         }
@@ -72,6 +83,7 @@ export default function CheckoutButton({
       lineItems: lineItems, // ensure this is an array of objects matching LineItemInput
       shopperId: { shopperId },
       origin: window.location.origin,
+      locale: Locale[locale as keyof typeof Locale],
     };
 
     fetch(`${basePath}/api/graphql`, {
@@ -83,6 +95,10 @@ export default function CheckoutButton({
         return res.json();
       })
       .then(async session => {
+        if (session.errors) {
+          console.log(session.errors[0].message);
+          return;
+        }
         // Redirect to Stripe Checkout
         const result = await stripe.redirectToCheckout({
           sessionId: session.data.createStripeCheckoutSession.id,
@@ -105,7 +121,7 @@ export default function CheckoutButton({
           subtotal={subtotal}
         />
         <button className={styles.checkoutButton} type="submit" role="link">
-          Proceed to checkout
+          {t('cart:proceedToCheckout')}
         </button>
       </section>
     </form>
@@ -116,4 +132,5 @@ CheckoutButton.propTypes = {
   productsWithContent: PropTypes.array.isRequired,
   shopperId: PropTypes.string.isRequired,
   subtotal: PropTypes.number.isRequired,
+  locale: PropTypes.string,
 };
