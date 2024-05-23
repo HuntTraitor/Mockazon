@@ -160,7 +160,7 @@ it('Renders successfully', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>
-        <ShoppingCart />
+        <ShoppingCart locale={'en'} />
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
@@ -175,7 +175,7 @@ it('Render fails because localStorageUser not set', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps2}>
-        <ShoppingCart />
+        <ShoppingCart locale={'en'} />
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
@@ -198,7 +198,7 @@ it('Renders with error in fetch shopping cart items', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>
-        <ShoppingCart />
+        <ShoppingCart locale={'en'} />
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
@@ -209,7 +209,7 @@ it('Renders with error in fetch product', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>
-        <ShoppingCart />
+        <ShoppingCart locale={'en'} />
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
@@ -224,7 +224,7 @@ it('Click Backdrop', () => {
       }}
     >
       <LoggedInContext.Provider value={newLoggedInContextProps}>
-        <ShoppingCart />
+        <ShoppingCart locale={'en'} />
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );

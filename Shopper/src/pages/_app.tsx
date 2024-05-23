@@ -5,6 +5,17 @@ import { LoggedInUserProvider } from '@/contexts/LoggedInUserContext';
 import { AppContextProvider } from '@/contexts/AppContext';
 import { SnackbarProvider } from 'notistack';
 import Head from 'next/head';
+import type { ReactElement, ReactNode } from 'react';
+import type { NextPage } from 'next';
+
+// eslint-disable-next-line
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
 
 /**
  * App
@@ -12,7 +23,9 @@ import Head from 'next/head';
  * @param {any} pageProps
  * @constructor
  */
-function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? (page => page);
+
   return (
     <AppContextProvider>
       <LoggedInUserProvider>
@@ -25,7 +38,7 @@ function App({ Component, pageProps }: AppProps) {
             />
             <link rel="icon" href="/favicon.ico" />
           </Head>
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
         </SnackbarProvider>
       </LoggedInUserProvider>
     </AppContextProvider>

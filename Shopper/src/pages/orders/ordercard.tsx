@@ -25,7 +25,7 @@ const mockOrder = {
     country: 'United States',
   },
   delieveredDate: 'May 6',
-  productName: 'Computer science book for dumb people',
+  productName: 'Computer science book for dummies',
 };
 
 const card = (

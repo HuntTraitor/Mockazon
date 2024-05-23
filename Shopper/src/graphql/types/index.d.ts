@@ -32,3 +32,15 @@ export type ShippingAddress = {
   postalCode: string;
   country: string;
 };
+
+export interface Product {
+  id: string;
+  data: {
+    brand?: string;
+    name: string;
+    rating?: string;
+    price: number;
+    deliveryDate: string;
+    image: string;
+  };
+}

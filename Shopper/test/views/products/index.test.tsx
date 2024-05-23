@@ -16,7 +16,6 @@ import { setupServer } from 'msw/node';
 
 import requestHandler from '../../api/requestHandler';
 import { SnackbarProvider, useSnackbar } from 'notistack';
-import * as nextRouter from 'next/router';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -389,7 +388,7 @@ it('Click Backdrop', () => {
   }
 });
 
-// TODO fix this test
+// TODO fix this test - it's failing because the module can't be remocked from within the test
 // it('Clicks backdrop', async () => {
 //   localStorage.setItem(
 //     'user',

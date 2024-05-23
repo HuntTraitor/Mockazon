@@ -5,6 +5,7 @@ import {
   CardContent,
   Typography,
   Backdrop,
+  Box,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
@@ -20,20 +21,10 @@ import { useRouter } from 'next/router';
 import getConfig from 'next/config';
 import { useSnackbar } from 'notistack';
 import Image from 'next/image';
+import ProductCard from '@/views/product/ProductCard';
+import { Product } from '@/graphql/types';
 
 const { basePath } = getConfig().publicRuntimeConfig;
-
-interface Product {
-  id: number;
-  data: {
-    brand?: string;
-    name?: string;
-    rating?: string;
-    price?: number;
-    deliveryDate?: string;
-    image?: string;
-  };
-}
 
 const namespaces = [
   'products',
@@ -66,6 +57,8 @@ const Index = () => {
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vendorId, active, page, pageSize, search, orderBy, descending]);
+
+  console.log(products);
 
   const fetchProducts = () => {
     const variables: { [key: string]: string | boolean | number } = {};
@@ -189,14 +182,23 @@ const Index = () => {
     !orderBy &&
     !descending
   ) {
+    console.log(products);
     return (
       <>
-        <TopNav />
-        <Container style={{ marginTop: '20px' }}>
-          <Typography variant="h4" align="center" style={{ color: 'blue' }}>
-            Welcome to the Homepage
-          </Typography>
-          {/* FIXME Add more homepage content here */}
+        <Container style={{ marginTop: '20px', maxWidth: '100%' }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid
+              container
+              spacing={{ xs: 1, sm: 2, md: 3, lg: 5 }}
+              columns={{ xs: 2, sm: 4, md: 6, lg: 10 }}
+            >
+              {products.map((product, index) => (
+                <Grid item xs={2} sm={2} md={2} lg={2} key={index}>
+                  <ProductCard product={product} />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         </Container>
         <MockazonMenuDrawer />
         <Backdrop

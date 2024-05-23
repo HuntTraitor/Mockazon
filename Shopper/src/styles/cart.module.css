@@ -1,0 +1,103 @@
+/*
+https://chatgpt.com/share/872a5a3a-b9fa-4b65-aff1-7267086d14ce
+*/
+.container {
+  margin-top: 100px;
+}
+
+.topDivider {
+  margin-top: 50px !important;
+}
+
+.heading {
+  text-align: left;
+  margin-bottom: 15px !important;
+}
+
+.card {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.productImage {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+}
+
+.productLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.productBrand {
+  font-weight: bold;
+}
+
+.deleteLink {
+  text-decoration: none;
+  color: #007185;
+}
+
+.removeText {
+  margin-top: 1rem;
+}
+
+.checkoutBox {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.buyAgainBox {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  height: calc(100% - 4rem); /* Adjust based on the desired layout */
+}
+
+.backdrop {
+  z-index: 1300;
+  color: #fff;
+}
+
+.subtotal {
+  font-family: "Amazon Ember", Arial, sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+section .section{
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 112px;
+  border-radius: 6px;
+  justify-content: space-between;
+}
+
+button.checkoutButton{
+  width: 400px;
+  height: 36px;
+  background: #ffd814;
+  border-radius: 30px;
+  color: black;
+  border: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+  font-size: 13px;
+  line-height: 29px;
+  margin-top: 25px
+}
+button:hover .checkoutButton{
+  opacity: 0.8;
+}
+
+h1.h1 {
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 36px;
+}
