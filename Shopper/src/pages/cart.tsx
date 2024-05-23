@@ -74,11 +74,9 @@ const Cart = ({ locale }: { locale: string }) => {
   const { t } = useTranslation(['products', 'cart']);
   const [error, setError] = useState('');
   const [subtotal, setSubtotal] = useState(0.0);
-  const { user, setUser, setAccessToken } = useContext(LoggedInContext);
+  const { user } = useContext(LoggedInContext);
   const { backDropOpen, setBackDropOpen } = useAppContext();
   const router = useRouter();
-
-  useLoadLocalStorageUser(setUser, setAccessToken);
 
   // https://chat.openai.com/share/66cd884d-cc95-4e82-8b4f-a4d035f844af
   // https://chat.openai.com/share/86f158f1-110e-4905-ac4a-85ae8282f2c2

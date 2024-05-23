@@ -1,3 +1,4 @@
+import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import {
   PropsWithChildren,
   useState,
@@ -42,6 +43,8 @@ export const LoggedInUserProvider = ({
   const [location, setLocation] = useState('login');
   const [locale, setLocale] = useState('en');
   const [user, setUser] = useState({} as User);
+  useLoadLocalStorageUser(setUser, setAccessToken)
+
   return (
     <LoggedInContext.Provider
       value={{

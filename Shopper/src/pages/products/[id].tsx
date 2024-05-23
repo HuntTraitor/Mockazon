@@ -27,7 +27,6 @@ const ProductPage = () => {
   const [error, setError] = useState('');
   const { setUser, setAccessToken } = React.useContext(LoggedInContext);
   // const { backDropOpen, setBackDropOpen } = useAppContext();
-  useLoadLocalStorageUser(setUser, setAccessToken);
   useEffect(() => {
     const query = {
       query: `query getProduct{getProduct(

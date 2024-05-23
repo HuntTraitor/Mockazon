@@ -59,7 +59,6 @@ const OrderView: React.FC = () => {
   const { setUser, setAccessToken } = useContext(LoggedInContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  useLoadLocalStorageUser(setUser, setAccessToken);
 
   useEffect(() => {
     if (id) {
