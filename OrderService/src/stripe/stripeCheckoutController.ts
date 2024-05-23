@@ -14,7 +14,8 @@ export class StripeCheckoutController extends Controller {
     const result = await new StripeCheckoutService().createCheckoutSession(
       sessionInput.lineItems,
       sessionInput.shopperId.shopperId,
-      sessionInput.origin
+      sessionInput.origin,
+      sessionInput.locale
     );
     if ('status' in result && result.status) {
       this.setStatus(result.status);

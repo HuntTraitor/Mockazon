@@ -26,8 +26,14 @@ export interface ShopperId {
   shopperId: UUID;
 }
 
+export enum Locale {
+  en = 'en',
+  es = 'es',
+}
+
 export interface SessionInput {
   lineItems: LineItem[];
   shopperId: ShopperId;
   origin: string;
+  locale: Locale;
 }

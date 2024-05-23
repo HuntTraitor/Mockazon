@@ -8,15 +8,23 @@ export class StripeCheckoutService {
   public async createCheckoutSession(
     lineItems: LineItem[],
     shopperId: UUID,
-    origin: string
+    origin: string,
+    locale: Stripe.Checkout.SessionCreateParams.Locale
   ): Promise<Session | Error> {
     try {
       // Create Checkout Sessions from body params.
+      let success_url = `${origin}/orders/success?sessionId={CHECKOUT_SESSION_ID}`;
+      let cancel_url = `${origin}/?canceled=true`;
+      if (locale === 'es') {
+        success_url = `${origin}/es/orders/success?sessionId={CHECKOUT_SESSION_ID}`;
+        cancel_url = `${origin}/es/?canceled=true`;
+      }
       const session = await checkoutSessions.checkout.sessions.create({
         line_items: lineItems,
         mode: 'payment',
-        success_url: `${origin}/orders/success?sessionId={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/?canceled=true`,
+        success_url: success_url,
+        cancel_url: cancel_url,
+        locale: locale,
       });
       return { id: session.id, url: session.url as string };
     } catch (err) {
