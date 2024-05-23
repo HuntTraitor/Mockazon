@@ -30,15 +30,15 @@ export class ProductData {
   @Field()
     brand?: string;
   @Field()
-    name?: string;
+    name!: string;
   @Field()
     rating?: string;
   @Field()
-    price?: number;
+    price!: number;
   @Field()
-    deliveryDate?: string;
+    deliveryDate!: string;
   @Field()
-    image?: string;
+    image!: string;
 }
 
 @ArgsType()

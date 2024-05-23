@@ -35,7 +35,11 @@ const convertDate = (dateString: string): string => {
   return formattedDate;
 };
 
-export default function ProductCard({ product }: Product) {
+interface ProductProps {
+  product: Product;
+}
+
+export default function ProductCard({ product }: ProductProps) {
   const price = product.data.price.toString();
   let beforeDot, afterDot: string;
   const dotIndex = price.indexOf('.');
