@@ -24,33 +24,7 @@ import { useRouter } from 'next/router';
 const { basePath } = getConfig().publicRuntimeConfig;
 import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
-
-interface Product {
-  id: string;
-  quantity: string;
-  data: {
-    getProduct: {
-      data: {
-        brand?: string;
-        name?: string;
-        rating?: string;
-        price?: number;
-        deliveryDate?: string;
-        image?: string;
-      };
-    };
-  };
-}
-
-interface ProductFromFetch {
-  id: string;
-  product_id: string;
-  shopper_id: string;
-  vendor_id: string;
-  data: {
-    quantity: string;
-  };
-}
+import { Product, ProductFromFetch } from '../../types';
 
 const namespaces = [
   'products',
@@ -83,7 +57,7 @@ const Cart = ({ locale }: { locale: string }) => {
   // https://chatgpt.com/share/018e08ea-be97-49b5-a207-a8ade89baf92
   useEffect(() => {
     if (JSON.stringify(user) === '{}') {
-      router.push('/login');
+      // router.push('/login');
       return;
     }
     const query = {

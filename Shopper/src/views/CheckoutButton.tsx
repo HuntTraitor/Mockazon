@@ -5,27 +5,11 @@ import PropTypes from 'prop-types';
 import Subtotal from '@/views/Subtotal';
 import getConfig from 'next/config';
 import { useTranslation } from 'next-i18next';
+import { Product } from '../../types';
 
 enum Locale {
   en = 'en',
   es = 'es',
-}
-
-interface Product {
-  id: string;
-  quantity: string;
-  data: {
-    getProduct: {
-      data: {
-        brand?: string;
-        name?: string;
-        rating?: string;
-        price?: number;
-        deliveryDate?: string;
-        image?: string;
-      };
-    };
-  };
 }
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid recreating the `Stripe` object on every render.
@@ -66,12 +50,13 @@ export default function CheckoutButton({
     }));
 
     const query = `
-      mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!) {
+      mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!, $metadata: MetaData!) {
         createStripeCheckoutSession(
         lineItems: $lineItems, 
         shopperId: $shopperId, 
         origin: $origin,
-        locale: $locale
+        locale: $locale,
+        metadata: $metadata
         ) {
           id
           url
@@ -80,12 +65,13 @@ export default function CheckoutButton({
     `;
 
     const variables = {
-      lineItems: lineItems, // ensure this is an array of objects matching LineItemInput
+      lineItems: lineItems,
       shopperId: { shopperId },
       origin: window.location.origin,
       locale: Locale[locale as keyof typeof Locale],
+      metadata: { itemIds: productsWithContent.map(p => p.data.getProduct.id) },
     };
-
+    console.log('metadata is: ', variables.metadata);
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
