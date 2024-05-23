@@ -185,7 +185,6 @@ const Index = () => {
     console.log(products);
     return (
       <>
-        <TopNav />
         <Container style={{ marginTop: '20px', maxWidth: '100%' }}>
           <Box sx={{ flexGrow: 1 }}>
             <Grid

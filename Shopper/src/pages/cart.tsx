@@ -17,12 +17,13 @@ import Link from 'next/link';
 import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { useAppContext } from '@/contexts/AppContext';
-import TopNav from '@/views/TopNav';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import getConfig from 'next/config';
 import CheckoutButton from '@/views/CheckoutButton';
 import Subtotal from '@/views/Subtotal';
 const { basePath } = getConfig().publicRuntimeConfig;
+import { ReactElement } from 'react';
+import Layout from '@/components/Layout';
 
 interface Product {
   id: string;
@@ -172,7 +173,6 @@ const Cart = () => {
   return (
     <>
       {error && <p>{error}</p>}
-      <TopNav />
       <Container className={styles.container}>
         <Grid container spacing={10}>
           <Grid id={'cart'} className={styles.topDivider} item xs={12} md={8}>
@@ -280,6 +280,10 @@ const Cart = () => {
       />
     </>
   );
+};
+
+Cart.getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>;
 };
 
 export default Cart;

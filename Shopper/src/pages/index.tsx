@@ -5,6 +5,8 @@ import Products from '@/pages/products';
 import { ThemeProvider } from '@mui/material';
 import { mainTheme } from '@/styles/themes';
 import '@fontsource/open-sans';
+import Layout from '@/components/Layout';
+import type { ReactElement } from 'react';
 
 const namespaces = [
   'common',
@@ -27,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
  * Index page
  * @constructor
  */
-export default function Index() {
+const Index = () => {
   // const { t } = useTranslation('common');
   // ok to hardcode as it's publicly accessible
   // const OAUTH_CLIENT_ID =
@@ -37,9 +39,13 @@ export default function Index() {
     <ThemeProvider theme={mainTheme}>
       <Fragment>
         <Products />
-        {/*LanguageSwitcher />*/}
-        {/*<Content />*/}
       </Fragment>
     </ThemeProvider>
   );
-}
+};
+
+Index.getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>;
+};
+
+export default Index;
