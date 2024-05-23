@@ -95,11 +95,12 @@ test('Create Stripe Checkout Session', async () => {
     .post('/api/graphql')
     .send({
       query: `
-          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!) {
+          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!) {
             createStripeCheckoutSession(
               lineItems: $lineItems, 
               shopperId: $shopperId, 
-              origin: $origin
+              origin: $origin,
+              locale: $locale
             ) {
               id
               url
@@ -110,6 +111,7 @@ test('Create Stripe Checkout Session', async () => {
         lineItems,
         shopperId,
         origin,
+        locale: 'en',
       },
     });
   expect(result.body.data.createStripeCheckoutSession.id).toBeDefined();
@@ -122,11 +124,12 @@ test('Create Stripe Checkout Session with error', async () => {
     .post('/api/graphql')
     .send({
       query: `
-          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!) {
+          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!) {
             createStripeCheckoutSession(
               lineItems: $lineItems, 
               shopperId: $shopperId, 
-              origin: $origin
+              origin: $origin,
+              locale: $locale
             ) {
               id
               url
@@ -137,6 +140,7 @@ test('Create Stripe Checkout Session with error', async () => {
         lineItems,
         shopperId,
         origin,
+        locale: 'en',
       },
     });
 
@@ -150,11 +154,12 @@ test('Create Stripe Checkout Session fails with invalid input', async () => {
     .post('/api/graphql')
     .send({
       query: `
-          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!) {
+          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!) {
             createStripeCheckoutSession(
               lineItems: $lineItems, 
               shopperId: $shopperId, 
               origin: $origin
+              locale: $locale
             ) {
               id
               url

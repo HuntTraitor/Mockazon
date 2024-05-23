@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import http from 'http';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
-import { AppContext, useAppContext } from '@/contexts/AppContext';
+import { AppContext } from '@/contexts/AppContext';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { loadStripe } from '@stripe/stripe-js';
@@ -19,13 +19,13 @@ let server: http.Server<
   typeof http.ServerResponse
 >;
 
-let errorInFetchProduct = false;
-let errorInShoppingCart = false;
+let errorInCreateSession = false;
+// let errorInShoppingCart = false;
 
 const handlers = [
   graphql.mutation('CreateStripeCheckoutSession', () => {
-    if (errorInFetchProduct) {
-      return HttpResponse.json({}, { status: 400 });
+    if (errorInCreateSession) {
+      return HttpResponse.json({errors: [{ message: 'Fetch error' }]}, { status: 400 });
     } else {
       return HttpResponse.json(
         {
@@ -52,8 +52,8 @@ beforeAll(async () => {
 
 beforeEach(() => {
   microServices.resetHandlers();
-  errorInFetchProduct = false;
-  errorInShoppingCart = false;
+  errorInCreateSession = false;
+  // errorInShoppingCart = false;
 });
 
 afterAll(done => {
@@ -121,7 +121,7 @@ const products = [
           brand: 'test',
           name: 'test name',
           rating: 'test',
-          price: '100',
+          price: 100,
           deliveryDate: 'test',
           image: 'test',
         },
@@ -156,14 +156,43 @@ it('Clicks checkout button and redirects successfully', async () => {
           productsWithContent={products}
           shopperId={'123'}
           subtotal={100}
+          locale={'en'}
         />
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
-  fireEvent.click(screen.getByText('Proceed to checkout'));
+  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
 });
 
-// TODO fix this test - it's failing because the module can't be remocked from within the test
+it('Clicks checkout button and encounters error creating session', async () => {
+  jest.mock('@stripe/stripe-js', () => {
+    return {
+      __esModule: true,
+      ...jest.requireActual('@stripe/stripe-js'),
+      loadStripe: jest.fn().mockResolvedValue({
+        redirectToCheckout: jest.fn().mockResolvedValue({ error: null }),
+      }),
+    };
+  });
+
+  errorInCreateSession = true;
+
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <CheckoutButton
+          productsWithContent={products}
+          shopperId={'123'}
+          subtotal={100}
+          locale={'en'}
+        />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
+});
+
+// TODO fix this test - it's not covering what it's intended to because the module can't be remocked from within the test
 it('Clicks checkout button and encounters error during redirect', async () => {
   jest.resetAllMocks();
   const mockStripe = {
@@ -180,9 +209,37 @@ it('Clicks checkout button and encounters error during redirect', async () => {
           productsWithContent={products}
           shopperId={'123'}
           subtotal={100}
+          locale={'en'}
         />
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
-  fireEvent.click(screen.getByText('Proceed to checkout'));
+  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
+});
+
+// TODO fix this test - it's not covering what it's intended to because the module can't be remocked from within the test
+it('Clicks checkout button and encounters error redirecting to checkout', async () => {
+  jest.mock('@stripe/stripe-js', () => {
+    return {
+      __esModule: true,
+      ...jest.requireActual('@stripe/stripe-js'),
+      loadStripe: jest.fn().mockResolvedValue({
+        redirectToCheckout: jest.fn().mockResolvedValue({ error: "error message" }),
+      }),
+    };
+  });
+
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <CheckoutButton
+          productsWithContent={products}
+          shopperId={'123'}
+          subtotal={100}
+          locale={'en'}
+        />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
 });
