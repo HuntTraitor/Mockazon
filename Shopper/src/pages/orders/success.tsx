@@ -37,6 +37,7 @@ const CheckoutSuccessPage = () => {
         aria-label={'backdrop'}
         open={backDropOpen}
         className={styles.backdrop}
+        style={{ zIndex: 1, position: 'fixed' }}
         onClick={() => setBackDropOpen(false)}
       />
     </>
