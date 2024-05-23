@@ -3,7 +3,15 @@
 }
 
 .productName {
-  font-weight: 600;
+  color: black;
+}
+
+.productName:hover {
+  color: #e69c2e;
+}
+
+.productImage:hover {
+  background-color: initial;
 }
 
 .middlePrice {

@@ -10,6 +10,7 @@ import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { Product } from '@/graphql/types';
+import { Link } from '@mui/material';
 
 const convertDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -98,20 +99,23 @@ export default function ProductCard({ product }: ProductProps) {
   return (
     <Card
       sx={{
+        height: 650,
         minWidth: 275,
       }}
     >
       <CardContent>
-        <Image
-          src={product.data.image}
-          alt="Product image"
-          width={250}
-          height={250}
-        />
-        <Typography variant="h6" component="div">
+        <Button href={`/products/${product.id}`} className={styles.productImage}>
+          <Image
+            src={product.data.image}
+            alt="Product image"
+            width={250}
+            height={350}
+          />
+        </Button>
+        <Link variant="h6" href={`/products/${product.id}`} className={styles.productName} underline='none'>
           {product.data.name}
-        </Typography>
-        <Typography variant="body2">
+        </Link>
+        <Typography variant="body2" >
           <span>$</span>
           <span className={styles.middlePrice}>{beforeDot}</span>
           <span>{afterDot}</span>
