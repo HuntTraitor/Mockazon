@@ -4,32 +4,46 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
-import styles from '@/styles/ProductCard.module.css'
+import styles from '@/styles/ProductCard.module.css';
 import { enqueueSnackbar } from 'notistack';
 import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import { Product } from '@/graphql/product/schema';
 
 const convertDate = (dateString: string): string => {
   const date = new Date(dateString);
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const dayOfWeek = days[date.getDay()];
   const month = months[date.getMonth()];
   const dayOfMonth = date.getDate();
   const formattedDate = `${dayOfWeek}, ${month} ${dayOfMonth}`;
-  return formattedDate
-}
+  return formattedDate;
+};
 
-export default function ProductCard({product}: any) {
-  const price = product.data.price.toString()
+export default function ProductCard({ product }: Product) {
+  const price = product.data.price.toString();
   let beforeDot, afterDot: string;
-  const dotIndex = price.indexOf('.')
+  const dotIndex = price.indexOf('.');
   if (dotIndex === -1) {
-    beforeDot = price
-    afterDot = '00'
+    beforeDot = price;
+    afterDot = '00';
   } else {
-    beforeDot = price.slice(0, dotIndex)
+    beforeDot = price.slice(0, dotIndex);
     afterDot = afterDot = price.slice(dotIndex + 1);
   }
   const { user } = React.useContext(LoggedInContext);
@@ -78,15 +92,17 @@ export default function ProductCard({product}: any) {
   };
 
   return (
-    <Card sx={{ 
-      minWidth: 275,
-      }}>
+    <Card
+      sx={{
+        minWidth: 275,
+      }}
+    >
       <CardContent>
-        <Image 
-          src={product.data.image} 
-          alt='Product image'
+        <Image
+          src={product.data.image}
+          alt="Product image"
           width={250}
-          height={250} 
+          height={250}
         />
         <Typography variant="h6" component="div">
           {product.data.name}
@@ -98,18 +114,28 @@ export default function ProductCard({product}: any) {
         </Typography>
         <Typography sx={{ mb: 1.5 }} className={styles.primeLogo}>
           <span>
-            <Image 
-              src='/prime_logo.jpg'
-              alt='Prime logo'
+            <Image
+              src="/prime_logo.jpg"
+              alt="Prime logo"
               width={70}
               height={21.5}
             />
           </span>
         </Typography>
         <Typography variant="body2">
-          FREE delivery <span className={styles.deliveryDate}>{convertDate(product.data.deliveryDate)}</span>
+          FREE delivery{' '}
+          <span className={styles.deliveryDate}>
+            {convertDate(product.data.deliveryDate)}
+          </span>
         </Typography>
-        <Button size="small" className={styles.addToCart} onClick={() => addToShoppingCart(product.id)} aria-label='Add to cart button'>Add to cart</Button>
+        <Button
+          size="small"
+          className={styles.addToCart}
+          onClick={() => addToShoppingCart(product.id)}
+          aria-label="Add to cart button"
+        >
+          Add to cart
+        </Button>
       </CardContent>
     </Card>
   );

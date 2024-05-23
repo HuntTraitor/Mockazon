@@ -26,9 +26,9 @@ const handlers = [
         errors: [
           {
             message: 'Some Error',
-          }
-        ]
-      })
+          },
+        ],
+      });
     }
     return HttpResponse.json(
       {
@@ -47,7 +47,7 @@ const handlers = [
       },
       { status: 200 }
     );
-  })
+  }),
 ];
 
 const microServices = setupServer(...handlers);
@@ -86,55 +86,55 @@ jest.mock('next-i18next/serverSideTranslations', () => ({
 const mockProduct = {
   id: 'bfb2e5a9-f2d5-40a0-975d-85ac58902147',
   data: {
-    brand: "Test Brand",
-    name: "Test product name",
-    rating: "4 stars",
+    brand: 'Test Brand',
+    name: 'Test product name',
+    rating: '4 stars',
     price: 12.99,
-    deliveryDate: "2020-06-15",
-    image: "http://some-image.jpg"
-  }
-}
+    deliveryDate: '2020-06-15',
+    image: 'http://some-image.jpg',
+  },
+};
 
-it('Renders ProductCard successfully', async() => {
-  render(<ProductCard product={mockProduct}/>)
+it('Renders ProductCard successfully', async () => {
+  render(<ProductCard product={mockProduct} />);
   expect(screen.getByText(mockProduct.data.name)).toBeDefined();
-  expect(screen.getByText("$")).toBeDefined();
-  expect(screen.getByText("12")).toBeDefined();
-  expect(screen.getByText("99")).toBeDefined();
-  expect(screen.getByText("Sun, Jun 14")).toBeDefined();
-})
+  expect(screen.getByText('$')).toBeDefined();
+  expect(screen.getByText('12')).toBeDefined();
+  expect(screen.getByText('99')).toBeDefined();
+  expect(screen.getByText('Sun, Jun 14')).toBeDefined();
+});
 
-it('Renders ProductCard with a weird price successful', async() => {
-  const newProduct = mockProduct
-  newProduct.data.price = 12
-  console.log(newProduct)
-  render(<ProductCard product={newProduct}/>)
-  expect(screen.getByText("$")).toBeDefined();
-  expect(screen.getByText("12")).toBeDefined();
-  expect(screen.getByText("00")).toBeDefined();
-})
+it('Renders ProductCard with a weird price successful', async () => {
+  const newProduct = mockProduct;
+  newProduct.data.price = 12;
+  console.log(newProduct);
+  render(<ProductCard product={newProduct} />);
+  expect(screen.getByText('$')).toBeDefined();
+  expect(screen.getByText('12')).toBeDefined();
+  expect(screen.getByText('00')).toBeDefined();
+});
 
-it('Clicks on add to shopping cart', async() => {
+it('Clicks on add to shopping cart', async () => {
   render(
     <SnackbarProvider>
-      <ProductCard product={mockProduct}/>
+      <ProductCard product={mockProduct} />
     </SnackbarProvider>
-  )
-  fireEvent.click(screen.getByLabelText('Add to cart button'))
+  );
+  fireEvent.click(screen.getByLabelText('Add to cart button'));
   await waitFor(() => {
-    expect(screen.getByText('Added to shopping cart')).toBeDefined()
-  })
-})
+    expect(screen.getByText('Added to shopping cart')).toBeDefined();
+  });
+});
 
-it('Clicks on add to shopping cart error', async() => {
-  returnError = true
+it('Clicks on add to shopping cart error', async () => {
+  returnError = true;
   render(
     <SnackbarProvider>
-      <ProductCard product={mockProduct}/>
+      <ProductCard product={mockProduct} />
     </SnackbarProvider>
-  )
-  fireEvent.click(screen.getByLabelText('Add to cart button'))
+  );
+  fireEvent.click(screen.getByLabelText('Add to cart button'));
   await waitFor(() => {
-    expect(screen.getByText('Could not add product to cart')).toBeDefined()
-  })
-})
+    expect(screen.getByText('Could not add product to cart')).toBeDefined();
+  });
+});
