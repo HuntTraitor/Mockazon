@@ -1,5 +1,9 @@
 import { UUID } from '../types';
 
+export interface MetaData {
+  itemIds: UUID[];
+}
+
 export interface LineItem {
   price_data: {
     currency: string;
@@ -36,4 +40,5 @@ export interface SessionInput {
   shopperId: ShopperId;
   origin: string;
   locale: Locale;
+  metadata: MetaData;
 }
