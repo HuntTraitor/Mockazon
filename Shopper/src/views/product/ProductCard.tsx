@@ -9,7 +9,7 @@ import { enqueueSnackbar } from 'notistack';
 import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
-import { Product } from '@/graphql/product/schema';
+import { Product } from '@/graphql/types';
 
 const convertDate = (dateString: string): string => {
   const date = new Date(dateString);

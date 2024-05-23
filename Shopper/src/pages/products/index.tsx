@@ -22,20 +22,9 @@ import getConfig from 'next/config';
 import { useSnackbar } from 'notistack';
 import Image from 'next/image';
 import ProductCard from '@/views/product/ProductCard';
+import { Product } from '@/graphql/types';
 
 const { basePath } = getConfig().publicRuntimeConfig;
-
-interface Product {
-  id: number;
-  data: {
-    brand?: string;
-    name?: string;
-    rating?: string;
-    price?: number;
-    deliveryDate?: string;
-    image?: string;
-  };
-}
 
 const namespaces = [
   'products',
