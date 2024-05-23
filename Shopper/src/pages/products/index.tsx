@@ -14,7 +14,6 @@ import TopNav from '@/views/TopNav';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
-import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { useAppContext } from '@/contexts/AppContext';
 import { useRouter } from 'next/router';
@@ -183,9 +182,7 @@ const Index = () => {
       <>
         <Container style={{ marginTop: '20px', maxWidth: '100%' }}>
           <Box sx={{ flexGrow: 1 }}>
-            <Grid
-              container spacing={1}
-            >
+            <Grid container spacing={1}>
               {products.map((product, index) => (
                 <Grid item key={index}>
                   <ProductCard product={product} />

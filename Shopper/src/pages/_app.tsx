@@ -7,7 +7,6 @@ import { SnackbarProvider } from 'notistack';
 import Head from 'next/head';
 import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
-import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 
 // eslint-disable-next-line
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {

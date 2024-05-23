@@ -43,7 +43,7 @@ export const LoggedInUserProvider = ({
   const [location, setLocation] = useState('login');
   const [locale, setLocale] = useState('en');
   const [user, setUser] = useState({} as User);
-  useLoadLocalStorageUser(setUser, setAccessToken)
+  useLoadLocalStorageUser(setUser, setAccessToken);
 
   return (
     <LoggedInContext.Provider

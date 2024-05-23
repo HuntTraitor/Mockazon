@@ -15,9 +15,7 @@ import AddToCartButton from '@/views/product/AddToCartButton';
 import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
 import getConfig from 'next/config';
-import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 const { basePath } = getConfig().publicRuntimeConfig;
-import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 const ProductPage = () => {
   const router = useRouter();
@@ -25,7 +23,6 @@ const ProductPage = () => {
   // const { t } = useTranslation(['products', 'viewProduct']);
   const [product, setProduct] = useState({} as Product);
   const [error, setError] = useState('');
-  const { setUser, setAccessToken } = React.useContext(LoggedInContext);
   // const { backDropOpen, setBackDropOpen } = useAppContext();
   useEffect(() => {
     const query = {

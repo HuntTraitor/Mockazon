@@ -71,7 +71,7 @@ const Login = () => {
           alert(data.errors[0].message);
           return;
         }
-        setUser(data.data.login)
+        setUser(data.data.login);
         localStorage.setItem('user', JSON.stringify(data.data.login));
         setAccessToken(data.data.login.accessToken);
         await router.push('/');
@@ -112,7 +112,7 @@ const Login = () => {
           alert(data.errors[0].message);
           return;
         }
-        setUser(data.data.login)
+        setUser(data.data.login);
         localStorage.setItem('user', JSON.stringify(data.data.login));
         setAccessToken(data.data.login.accessToken);
         await router.push('/');

@@ -1,11 +1,11 @@
-import { Typography } from "@mui/material";
+import { Typography } from '@mui/material';
 import styles from '@/styles/ProductCard.module.css';
 
 interface PriceProps {
   price: string;
 }
 
-export default function Price({price}: PriceProps) {
+export default function Price({ price }: PriceProps) {
   let beforeDot, afterDot: string;
   const dotIndex = price.indexOf('.');
   if (dotIndex === -1) {
@@ -17,10 +17,10 @@ export default function Price({price}: PriceProps) {
   }
 
   return (
-    <Typography variant="body2" >
-    <span>$</span>
-    <span className={styles.middlePrice}>{beforeDot}</span>
-    <span>{afterDot}</span>
+    <Typography variant="body2">
+      <span>$</span>
+      <span className={styles.middlePrice}>{beforeDot}</span>
+      <span>{afterDot}</span>
     </Typography>
-  )
+  );
 }
