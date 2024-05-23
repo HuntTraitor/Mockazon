@@ -1,0 +1,37 @@
+.wrapper {
+  background-color: red;
+}
+
+.productName {
+  font-weight: 600;
+}
+
+.middlePrice {
+  font-weight: bold;
+  font-size: 2rem;
+  position: relative;
+  top: 0.8rem;
+}
+
+.deliveryDate {
+  font-weight: bold;
+}
+
+.addToCart {
+  text-transform: capitalize;
+  background-color: #ffDA00;
+  color: #0f1111;
+  margin-top: 9px;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.primeLogo {
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+.shippingSpeed {
+  margin-left: 2px;
+}
