@@ -13,7 +13,7 @@ let server: http.Server<
   typeof http.ServerResponse
 >;
 
-let getPasses = true;
+const getPasses = true;
 let postPasses = true;
 
 const handlers = [

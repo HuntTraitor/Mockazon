@@ -25,7 +25,10 @@ let errorInCreateSession = false;
 const handlers = [
   graphql.mutation('CreateStripeCheckoutSession', () => {
     if (errorInCreateSession) {
-      return HttpResponse.json({errors: [{ message: 'Fetch error' }]}, { status: 400 });
+      return HttpResponse.json(
+        { errors: [{ message: 'Fetch error' }] },
+        { status: 400 }
+      );
     } else {
       return HttpResponse.json(
         {
@@ -224,7 +227,9 @@ it('Clicks checkout button and encounters error redirecting to checkout', async 
       __esModule: true,
       ...jest.requireActual('@stripe/stripe-js'),
       loadStripe: jest.fn().mockResolvedValue({
-        redirectToCheckout: jest.fn().mockResolvedValue({ error: "error message" }),
+        redirectToCheckout: jest
+          .fn()
+          .mockResolvedValue({ error: 'error message' }),
       }),
     };
   });
