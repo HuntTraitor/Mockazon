@@ -12,15 +12,14 @@ export class StripeCheckoutService {
     shopperId: UUID,
     origin: string,
     locale: Stripe.Checkout.SessionCreateParams.Locale,
-
     metadata: MetaData
   ): Promise<Session | Error> {
     // prepare metadata for transfer by serializing it
     const preparedMetadata = {
-      itemIds: 'serializedIds',
+      items: 'items',
       shopperId: 'shopperId',
     };
-    preparedMetadata.itemIds = JSON.stringify(metadata.itemIds);
+    preparedMetadata.items = JSON.stringify(metadata.items);
     preparedMetadata.shopperId = shopperId;
     try {
       // Create Checkout Sessions from body params.

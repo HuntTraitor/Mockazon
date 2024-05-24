@@ -1,7 +1,10 @@
 import { UUID } from '../types';
 
 export interface MetaData {
-  itemIds: UUID[];
+  items: {
+    productId: UUID;
+    vendorId: UUID;
+  }[];
 }
 
 export interface LineItem {
