@@ -84,12 +84,20 @@ const Cart = ({ locale }: { locale: string }) => {
         return response.json();
       })
       .then(shoppingCartProducts => {
+        if (
+          shoppingCartProducts.errors &&
+          shoppingCartProducts.errors.length > 0
+        ) {
+          setError(shoppingCartProducts.errors[0].message);
+          return;
+        }
         const fetchPromises = shoppingCartProducts.data.getShoppingCart.map(
-          (product: ProductFromFetch) => {
+          async (product: ProductFromFetch) => {
             const query = {
               query: `query GetProduct {
               getProduct(productId: "${product.product_id}") {
                 id
+                vendor_id
                 data {
                   brand
                   name
@@ -101,27 +109,24 @@ const Cart = ({ locale }: { locale: string }) => {
               }
             }`,
             };
-            return fetch(`${basePath}/api/graphql`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(query),
-            })
-              .then(response => {
-                if (!response.ok) {
-                  throw response;
-                }
-                return response.json();
-              })
-              .then(productData => {
-                return {
-                  ...productData,
-                  quantity: product.data.quantity,
-                };
-              })
-              .catch(err => {
-                console.log('Error fetching product:', err);
-                setError('Could not fetch product');
+            try {
+              const response = await fetch(`${basePath}/api/graphql`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(query),
               });
+              if (!response.ok) {
+                throw response;
+              }
+              const productData = await response.json();
+              return {
+                ...productData,
+                quantity: product.data.quantity,
+              };
+            } catch (err) {
+              console.log('Error fetching product:', err);
+              setError('Could not fetch product');
+            }
           }
         );
         Promise.all(fetchPromises)

@@ -4,6 +4,7 @@ export interface Product {
   data: {
     getProduct: {
       id: string;
+      vendor_id: string;
       data: {
         brand?: string;
         name?: string;
