@@ -6,38 +6,20 @@ import { setupServer } from 'msw/node';
 
 import requestHandler from '../requestHandler';
 
+// these are in multiple files due to mocking only working once per file
+// if you can fix it, then we can consolidate files
+// but harrison recommended this if not
+
 let server: http.Server<
   typeof http.IncomingMessage,
   typeof http.ServerResponse
 >;
 
-const getPasses = true;
 const postPasses = true;
 
 const handlers = [
-  rest.get(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
-    async () => {
-      if (getPasses) {
-        return HttpResponse.json(
-          [
-            {
-              id: '123',
-              product_id: '123',
-              shopper_id: '123',
-              vendor_id: '123',
-              data: { quantity: '5' },
-            },
-          ],
-          { status: 200 }
-        );
-      } else {
-        return HttpResponse.json({ message: 'Login error' }, { status: 500 });
-      }
-    }
-  ),
   rest.post(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/stripeCheckout`,
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order?`,
     async () => {
       if (postPasses) {
         return HttpResponse.json(
@@ -48,7 +30,10 @@ const handlers = [
           { status: 200 }
         );
       } else {
-        return HttpResponse.json({ message: 'Login error' }, { status: 500 });
+        return HttpResponse.json(
+          { message: 'Create order error' },
+          { status: 500 }
+        );
       }
     }
   ),
@@ -85,14 +70,23 @@ jest.mock('stripe', () => {
       webhooks: {
         constructEvent: jest.fn().mockReturnValue({
           id: 'mock-event-id',
-          type: 'checkout.session.default',
+          type: 'checkout.session.completed',
           object: 'event',
           created: Date.now(),
           data: {
             object: {
               id: '123',
               metadata: {
-                itemIds: JSON.stringify([1, 2, 3]),
+                items: [
+                  {
+                    productId: '123',
+                    vendorId: '123',
+                  },
+                  {
+                    productId: '123',
+                    vendorId: '123',
+                  },
+                ],
                 shopperId: '12345',
               },
             },
@@ -101,9 +95,12 @@ jest.mock('stripe', () => {
       },
       checkout: {
         sessions: {
-          listLineItems: jest
-            .fn()
-            .mockResolvedValue([{ id: 'item-1' }, { id: 'item-2' }]),
+          listLineItems: jest.fn().mockResolvedValue({
+            data: [
+              { id: 'item-1', quantity: 1 },
+              { id: 'item-2', quantity: 1 },
+            ],
+          }),
         },
       },
     };
@@ -115,13 +112,11 @@ describe('/api/stripe_webhooks', () => {
     jest.clearAllMocks();
   });
 
-  describe('/api/stripe_webhooks', () => {
-    test('should return 200 for a non checkout webhook event', async () => {
-      await supertest(server)
-        .post('/api/stripe_webhooks')
-        .set('stripe-signature', 'test-signature')
-        .send('test-body')
-        .expect(200);
-    });
+  test('invalid metadata JSON 400', async () => {
+    await supertest(server)
+      .post('/api/stripe_webhooks')
+      .set('stripe-signature', 'test-signature')
+      .send('test-body')
+      .expect(400);
   });
 });
