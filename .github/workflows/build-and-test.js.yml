@@ -13,6 +13,7 @@ env:
   MASTER_SECRET: ${{ secrets.MASTER_SECRET }}
   STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+  STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

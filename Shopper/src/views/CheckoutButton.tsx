@@ -69,7 +69,14 @@ export default function CheckoutButton({
       shopperId: { shopperId },
       origin: window.location.origin,
       locale: Locale[locale as keyof typeof Locale],
-      metadata: { itemIds: productsWithContent.map(p => p.data.getProduct.id) },
+      metadata: {
+        items: productsWithContent.map(p => {
+          return {
+            productId: p.data.getProduct.id,
+            vendorId: p.data.getProduct.vendor_id,
+          };
+        }),
+      },
     };
     console.log('metadata is: ', variables.metadata);
     fetch(`${basePath}/api/graphql`, {

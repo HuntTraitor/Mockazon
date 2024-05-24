@@ -22,10 +22,17 @@ let server: http.Server<
 
 let errorInFetchProduct = false;
 let errorInShoppingCart = false;
+let errorInGraphQLShoppingCart = false;
 
 const handlers = [
   graphql.query('GetShoppingCart', () => {
     if (errorInShoppingCart) {
+      if (errorInGraphQLShoppingCart) {
+        return HttpResponse.json(
+          { errors: [{ message: 'error' }] },
+          { status: 200 }
+        );
+      }
       return HttpResponse.json({}, { status: 400 });
     } else {
       return HttpResponse.json(
@@ -195,6 +202,18 @@ it('should fetch server side props with translations without locale', async () =
 
 it('Renders with error in fetch shopping cart items', async () => {
   errorInShoppingCart = true;
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart locale={'en'} />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders with error in graphQL fetch shopping cart items', async () => {
+  errorInShoppingCart = true;
+  errorInGraphQLShoppingCart = true;
   render(
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>

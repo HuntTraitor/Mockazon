@@ -114,7 +114,12 @@ test('Create Stripe Checkout Session', async () => {
         origin,
         locale: 'en',
         metadata: {
-          itemIds: ['123'],
+          items: [
+            {
+              productId: '123',
+              vendorId: '123',
+            },
+          ],
         },
       },
     });
@@ -147,7 +152,7 @@ test('Create Stripe Checkout Session with error', async () => {
         origin,
         locale: 'en',
         metadata: {
-          itemIds: ['123'],
+          items: [{ productId: '123', vendorId: '123' }],
         },
       },
     });

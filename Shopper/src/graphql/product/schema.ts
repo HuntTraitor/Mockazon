@@ -51,6 +51,8 @@ export class ProductId {
 export class Product {
   @Field(() => UUID)
     id!: string;
+  @Field(() => UUID)
+    vendor_id!: string;
   @Field(() => ProductData)
     data!: ProductData;
 }

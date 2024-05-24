@@ -60,9 +60,20 @@ export class Session {
 }
 
 @InputType()
+export class Item {
+  @IsUUID()
+  @Field(() => UUID)
+    productId!: string;
+
+  @IsUUID()
+  @Field(() => UUID)
+    vendorId!: string;
+}
+
+@InputType()
 export class MetaData {
-  @Field(() => [UUID])
-    itemIds!: string[];
+  @Field(() => [Item])
+    items!: Item[];
 }
 
 @ArgsType()
