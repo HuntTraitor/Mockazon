@@ -8,11 +8,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: '2024-04-10',
 });
 
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 // https://chatgpt.com/share/6e1f30f1-eb7a-4212-a34e-89be3c97e662
 // most likely can't be converted to graphql because we don't call this endpoint, only Stripe does
