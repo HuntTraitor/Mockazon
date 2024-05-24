@@ -22,9 +22,9 @@ const convertDate = (dateString: string): string => {
     'Dec',
   ];
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const dayOfWeek = days[date.getDay()];
-  const month = months[date.getMonth()];
-  const dayOfMonth = date.getDate();
+  const dayOfWeek = days[date.getUTCDay()];
+  const month = months[date.getUTCMonth()];
+  const dayOfMonth = date.getUTCDate();
   const formattedDate = `${dayOfWeek}, ${month} ${dayOfMonth}`;
   return formattedDate;
 };

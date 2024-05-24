@@ -1,7 +1,8 @@
 import { CreateUserInput, LoginInput, ShippingAddress, Order } from ".";
+import { SessionUser, Account } from "../types";
 import { pool } from "../db";
 import * as jwt from "jsonwebtoken";
-import { Decoded } from "./index";
+
 export class ShopperService {
   // sub stands for subject and is the unique google identifier
   public async login(loginInput: LoginInput) {
@@ -53,7 +54,7 @@ export class ShopperService {
     const select = `SELECT * FROM shopper WHERE data->>'email' = $1`;
     const { rows: existingUsers } = await pool.query(select, [email]);
     if (existingUsers[0]) {
-      return undefined; // user already exists
+      return undefined;
     }
 
     const insert = `
@@ -95,18 +96,32 @@ export class ShopperService {
     };
   }
 
-  public async getShippingInfo(
-    accessToken: string,
-  ): Promise<string[] | undefined> {
-    try {
-      const decoded = jwt.verify(accessToken, `${process.env.MASTER_SECRET}`, {
-        algorithms: ["HS256"],
-      }) as Decoded;
+  public async check(accessToken: string): Promise<SessionUser> {
+    return new Promise((resolve, reject) => {
+      try {
+        jwt.verify(
+          accessToken,
+          `${process.env.MASTER_SECRET}`,
+          (err: jwt.VerifyErrors | null, decoded?: object | string) => {
+            if (err) {
+              reject(err);
+            }
+            const account = decoded as Account;
+            resolve({ id: account.id, role: account.role });
+          },
+        );
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
 
+  public async getShippingInfo(userId: string): Promise<string[] | undefined> {
+    try {
       const select = `SELECT * FROM shopper WHERE id = $1`;
       const query = {
         text: select,
-        values: [decoded.id],
+        values: [`${userId}`],
       };
       const { rows } = await pool.query(query);
       if (rows[0].data.shippingInfo) {
@@ -120,20 +135,15 @@ export class ShopperService {
   }
 
   public async createShippingInfo(data: {
-    accessToken: string;
+    userId: string;
     shippingInfo: ShippingAddress;
   }): Promise<string[]> {
     try {
-      const decoded = jwt.verify(
-        data.accessToken,
-        `${process.env.MASTER_SECRET}`,
-        {
-          algorithms: ["HS256"],
-        },
-      ) as Decoded;
-
       const select = `SELECT * FROM shopper WHERE id = $1`;
-      const { rows } = await pool.query({ text: select, values: [decoded.id] });
+      const { rows } = await pool.query({
+        text: select,
+        values: [`${data.userId}`],
+      });
 
       const currentShippingInfo = rows[0]?.data.shippingInfo || [];
 
@@ -142,7 +152,7 @@ export class ShopperService {
       const update = `UPDATE shopper SET data = jsonb_set(data, '{shippingInfo}', $1::jsonb) WHERE id = $2 RETURNING *`;
       const query = {
         text: update,
-        values: [JSON.stringify(updatedShippingInfo), decoded.id],
+        values: [JSON.stringify(updatedShippingInfo), `${data.userId}`],
       };
       const { rows: updatedRows } = await pool.query(query);
       return updatedRows[0].data.shippingInfo;
@@ -151,17 +161,12 @@ export class ShopperService {
     }
   }
 
-  public async getOrderHistory(
-    accessToken: string,
-  ): Promise<string[] | undefined> {
+  public async getOrderHistory(userId: string): Promise<string[] | undefined> {
     try {
-      const decoded = jwt.verify(accessToken, `${process.env.MASTER_SECRET}`, {
-        algorithms: ["HS256"],
-      }) as Decoded;
       const select = `SELECT * FROM shopper WHERE id = $1`;
       const query = {
         text: select,
-        values: [decoded.id],
+        values: [`${userId}`],
       };
       const { rows } = await pool.query(query);
 
@@ -176,20 +181,15 @@ export class ShopperService {
   }
 
   public async createOrderHistory(data: {
-    accessToken: string;
+    userId: string;
     order: Order;
   }): Promise<string[]> {
     try {
-      const decoded = jwt.verify(
-        data.accessToken,
-        `${process.env.MASTER_SECRET}`,
-        {
-          algorithms: ["HS256"],
-        },
-      ) as Decoded;
-
       const select = `SELECT * FROM shopper WHERE id = $1`;
-      const { rows } = await pool.query({ text: select, values: [decoded.id] });
+      const { rows } = await pool.query({
+        text: select,
+        values: [`${data.userId}`],
+      });
       const currentOrderHistory = rows[0]?.data.orderHistory || [];
 
       const updatedOrderHistory = [...currentOrderHistory, data.order];
@@ -197,7 +197,7 @@ export class ShopperService {
       const update = `UPDATE shopper SET data = jsonb_set(data, '{orderHistory}', $1::jsonb) WHERE id = $2 RETURNING *`;
       const query = {
         text: update,
-        values: [JSON.stringify(updatedOrderHistory), decoded.id],
+        values: [JSON.stringify(updatedOrderHistory), `${data.userId}`],
       };
       const { rows: updatedRows } = await pool.query(query);
 

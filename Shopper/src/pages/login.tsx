@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { accessToken, setAccessToken } = useContext(LoggedInContext);
+  const { accessToken, setAccessToken, setUser } = useContext(LoggedInContext);
   const { t, i18n } = useTranslation(['common', 'login']);
   const router = useRouter();
 
@@ -71,6 +71,7 @@ const Login = () => {
           alert(data.errors[0].message);
           return;
         }
+        setUser(data.data.login);
         localStorage.setItem('user', JSON.stringify(data.data.login));
         setAccessToken(data.data.login.accessToken);
         await router.push('/');
@@ -111,6 +112,7 @@ const Login = () => {
           alert(data.errors[0].message);
           return;
         }
+        setUser(data.data.login);
         localStorage.setItem('user', JSON.stringify(data.data.login));
         setAccessToken(data.data.login.accessToken);
         await router.push('/');

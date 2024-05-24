@@ -6,6 +6,7 @@ import {
   registerEnumType,
 } from 'type-graphql';
 import { IsUUID } from 'class-validator';
+import UUID from '@/graphql/types/uuidScalar';
 
 export enum Locale {
   en = 'en',
@@ -58,6 +59,12 @@ export class Session {
     url!: string;
 }
 
+@InputType()
+export class MetaData {
+  @Field(() => [UUID])
+    itemIds!: string[];
+}
+
 @ArgsType()
 export class CheckoutSessionInput {
   @Field(() => [LineItem])
@@ -68,6 +75,8 @@ export class CheckoutSessionInput {
     origin!: string;
   @Field(() => Locale)
     locale!: Locale;
+  @Field(() => MetaData)
+    metadata!: MetaData;
 }
 
 @ObjectType()

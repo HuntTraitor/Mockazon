@@ -65,11 +65,12 @@ export class VendorController extends Controller {
         async (
           account: SessionUser | undefined,
         ): Promise<SessionUser | undefined> => {
-          if (!account) {
-            this.setStatus(401);
-          }
           return account;
         },
-      );
+      )
+      .catch(() => {
+        this.setStatus(401);
+        return undefined;
+      });
   }
 }

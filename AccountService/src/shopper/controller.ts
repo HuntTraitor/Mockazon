@@ -1,7 +1,8 @@
-import { Controller, Route, Post, Body, Header, Get } from "tsoa";
+import { Controller, Route, Post, Body, Get, Query, Response } from "tsoa";
 
 import { ShopperService } from "./service";
 import { CreateUserInput, LoginInput, ShippingAddress, Order } from ".";
+import { SessionUser } from "../types";
 
 @Route("shopper")
 export class ShopperController extends Controller {
@@ -40,9 +41,30 @@ export class ShopperController extends Controller {
     return { id: user.id, accessToken: user.accessToken, ...user.data };
   }
 
+  @Get("check")
+  @Response("401", "Unauthorized")
+  public async check(
+    @Query() accessToken: string,
+  ): Promise<SessionUser | undefined> {
+    console.log(accessToken);
+    return new ShopperService()
+      .check(accessToken)
+      .then(
+        async (
+          account: SessionUser | undefined,
+        ): Promise<SessionUser | undefined> => {
+          return account;
+        },
+      )
+      .catch(() => {
+        this.setStatus(401);
+        return undefined;
+      });
+  }
+
   @Get("shippinginfo")
-  public async getShippingInfo(@Header("authorization") accessToken: string) {
-    const userData = await new ShopperService().getShippingInfo(accessToken);
+  public async getShippingInfo(@Query() userId: string) {
+    const userData = await new ShopperService().getShippingInfo(userId);
     if (!userData) {
       this.setStatus(404);
     }
@@ -51,12 +73,12 @@ export class ShopperController extends Controller {
 
   @Post("shippinginfo")
   public async createShippingInfo(
-    @Header("authorization") accessToken: string,
+    @Query() userId: string,
     @Body() shippingInfo: ShippingAddress,
   ) {
     try {
       const userData = await new ShopperService().createShippingInfo({
-        accessToken,
+        userId,
         shippingInfo,
       });
       return userData;
@@ -66,8 +88,8 @@ export class ShopperController extends Controller {
   }
 
   @Get("orderhistory")
-  public async getOrderHistory(@Header("authorization") accessToken: string) {
-    const userData = await new ShopperService().getOrderHistory(accessToken);
+  public async getOrderHistory(@Query() userId: string) {
+    const userData = await new ShopperService().getOrderHistory(userId);
     if (!userData) {
       this.setStatus(404);
     }
@@ -76,12 +98,12 @@ export class ShopperController extends Controller {
 
   @Post("orderhistory")
   public async createOrderHistory(
-    @Header("authorization") accessToken: string,
+    @Query() userId: string,
     @Body() order: Order,
   ) {
     try {
       const userData = await new ShopperService().createOrderHistory({
-        accessToken,
+        userId,
         order,
       });
       return userData;

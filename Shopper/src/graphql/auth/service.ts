@@ -100,15 +100,45 @@ export class AuthService {
     return result;
   }
 
-  // FIXME: This function is not implemented
-  public async check(
-    authHeader?: string,
-    scopes?: string[]
-  ): Promise<SessionUser> {
-    console.log(authHeader);
-    console.log(scopes);
-    return new Promise(resolve => {
-      resolve({ id: '123' });
+  public async check(authHeader?: string): Promise<SessionUser> {
+    return new Promise((resolve, reject) => {
+      if (!authHeader) {
+        // console.error('No Authorization header provided');
+        reject(new GraphQLError('Unauthorized'));
+      } else {
+        const tokens = authHeader.split(' ');
+        if (tokens.length != 2 || tokens[0] !== 'Bearer') {
+          console.error('Invalid Authorization header format');
+          reject(new GraphQLError('Unauthorized'));
+        } else {
+          fetch(
+            `http://localhost:3014/api/v0/shopper/check?accessToken=${tokens[1]}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+            .then(async res => {
+              if (!res.ok) {
+                console.error('Response not OK:', res.status);
+                throw new GraphQLError(await res.text());
+              }
+              const sessionUser = await res.json();
+              console.log('Session user fetched:', sessionUser);
+              return sessionUser;
+            })
+            .then(sessionUser => {
+              console.log('Resolved session user:', sessionUser);
+              resolve({ id: sessionUser.id });
+            })
+            .catch(error => {
+              console.error('Fetch error:', error);
+              reject(new GraphQLError('Unauthorized'));
+            });
+        }
+      }
     });
   }
 }

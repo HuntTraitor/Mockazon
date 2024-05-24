@@ -10,7 +10,7 @@
     "test-frontend": "jest test/views --runInBand --detectOpenHandles --forceExit",
     "test-backend": "jest test/api --runInBand --detectOpenHandles --forceExit",
     "test-e2e": "jest e2e --testTimeout=10000 --runInBand --verbose --forceExit --detectOpenHandles --coverage=false --config=e2e/jest.config.ts",
-    "test": "jest --testTimeout=10000 --runInBand --verbose --forceExit --detectOpenHandles --testPathIgnorePatterns=e2e",
+    "test": "jest --testTimeout=10000 --runInBand --verbose --forceExit --detectOpenHandles",
     "test:silent": "npm test -- --silent",
     "test:watch": "npm test -- --watchAll"
   },
@@ -33,6 +33,7 @@
     "i18next": "^22.4.10",
     "jsonwebtoken": "*",
     "jwt-decode": "^4.0.0",
+    "micro": "^10.0.1",
     "next": "*",
     "next-i18next": "^13.2.2",
     "notistack": "^3.0.1",

@@ -23,6 +23,7 @@ export default function ProductCard({ product }: ProductProps) {
       sx={{
         height: 650,
         minWidth: 275,
+        maxWidth: 275,
       }}
     >
       <CardContent>

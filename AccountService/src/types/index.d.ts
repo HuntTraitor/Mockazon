@@ -35,3 +35,9 @@ export type SessionUser = {
   id: string;
   role: string;
 };
+
+export type Account = {
+  id: string;
+  name: string;
+  role: string;
+};

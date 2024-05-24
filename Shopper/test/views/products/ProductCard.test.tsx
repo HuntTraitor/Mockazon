@@ -90,7 +90,7 @@ const mockProduct = {
     name: 'Test product name',
     rating: '4 stars',
     price: 12.99,
-    deliveryDate: '2020-06-15',
+    deliveryDate: '2024-05-20',
     image: 'http://some-image.jpg',
   },
 };
@@ -101,7 +101,7 @@ it('Renders ProductCard successfully', async () => {
   expect(screen.getByText('$')).toBeDefined();
   expect(screen.getByText('12')).toBeDefined();
   expect(screen.getByText('99')).toBeDefined();
-  expect(screen.getByText('Sun, Jun 14')).toBeDefined();
+  expect(screen.getByText('Mon, May 20')).toBeDefined();
 });
 
 it('Renders ProductCard with a weird price successful', async () => {

@@ -14,7 +14,6 @@ import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
-import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { useAppContext } from '@/contexts/AppContext';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
@@ -25,33 +24,7 @@ import { useRouter } from 'next/router';
 const { basePath } = getConfig().publicRuntimeConfig;
 import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
-
-interface Product {
-  id: string;
-  quantity: string;
-  data: {
-    getProduct: {
-      data: {
-        brand?: string;
-        name?: string;
-        rating?: string;
-        price?: number;
-        deliveryDate?: string;
-        image?: string;
-      };
-    };
-  };
-}
-
-interface ProductFromFetch {
-  id: string;
-  product_id: string;
-  shopper_id: string;
-  vendor_id: string;
-  data: {
-    quantity: string;
-  };
-}
+import { Product, ProductFromFetch } from '../../types';
 
 const namespaces = [
   'products',
@@ -74,11 +47,9 @@ const Cart = ({ locale }: { locale: string }) => {
   const { t } = useTranslation(['products', 'cart']);
   const [error, setError] = useState('');
   const [subtotal, setSubtotal] = useState(0.0);
-  const { user, setUser, setAccessToken } = useContext(LoggedInContext);
+  const { user } = useContext(LoggedInContext);
   const { backDropOpen, setBackDropOpen } = useAppContext();
   const router = useRouter();
-
-  useLoadLocalStorageUser(setUser, setAccessToken);
 
   // https://chat.openai.com/share/66cd884d-cc95-4e82-8b4f-a4d035f844af
   // https://chat.openai.com/share/86f158f1-110e-4905-ac4a-85ae8282f2c2
@@ -86,7 +57,7 @@ const Cart = ({ locale }: { locale: string }) => {
   // https://chatgpt.com/share/018e08ea-be97-49b5-a207-a8ade89baf92
   useEffect(() => {
     if (JSON.stringify(user) === '{}') {
-      router.push('/login');
+      // router.push('/login');
       return;
     }
     const query = {

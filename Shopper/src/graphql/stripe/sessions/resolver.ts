@@ -1,13 +1,16 @@
 import { Args, Mutation, Resolver } from 'type-graphql';
-import { CheckoutSessionInput, LineItem, Session, ShopperId } from './schema';
+import {
+  CheckoutSessionInput,
+  LineItem,
+  MetaData,
+  Session,
+  ShopperId,
+} from './schema';
 import { StripeService } from '@/graphql/stripe/sessions/service';
 import { Locale } from '@/graphql/stripe/sessions/schema';
 
 @Resolver()
 export class StripeCheckoutResolver {
-  // TODO fix this error
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   @Mutation(() => Session)
   async createStripeCheckoutSession(
     @Args() input: CheckoutSessionInput
@@ -17,17 +20,20 @@ export class StripeCheckoutResolver {
       shopperId,
       origin,
       locale,
+      metadata,
     }: {
       lineItems: LineItem[];
       shopperId: ShopperId;
       origin: string;
       locale: Locale;
+      metadata: MetaData;
     } = input;
     return new StripeService().createCheckoutSession(
       lineItems,
       shopperId,
       origin,
-      locale
+      locale,
+      metadata
     );
   }
 }

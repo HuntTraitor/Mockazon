@@ -303,9 +303,8 @@ describe("API TEST (SHOPPER) - Signup", () => {
   });
 });
 
-describe("API TEST (SHOPPER) - Shipping Info", () => {
+describe("API TEST (SHOPPER) - Check", () => {
   let token: string;
-  let otherToken: string;
 
   beforeAll(async () => {
     await supertest(server)
@@ -315,7 +314,50 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
         password: "pass",
       })
       .then((res) => {
+        expect(res.body.accessToken).toBeDefined();
         token = res.body.accessToken;
+      });
+  });
+
+  test("GET /api/v0/shopper/check (authorized)", async () => {
+    await supertest(server)
+      .get(`/api/v0/shopper/check?accessToken=${token}`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+      });
+  });
+
+  test("GET /api/v0/shopper/check (unauthorized)", async () => {
+    await supertest(server)
+      .get("/api/v0/shopper/check?accessToken=invalid")
+      .then((res) => {
+        expect(res.status).toBe(401);
+      });
+  });
+
+  test("GET /api/v0/shopper/check (invalid input)", async () => {
+    await supertest(server)
+      .get("/api/v0/shopper/check")
+      .then((res) => {
+        expect(res.status).toBe(400);
+      });
+  });
+});
+
+describe("API TEST (SHOPPER) - Shipping Info", () => {
+  let id: string;
+  let otherId: string;
+
+  beforeAll(async () => {
+    await supertest(server)
+      .post("/api/v0/shopper/login")
+      .send({
+        email: "testuser@gmail.com",
+        password: "pass",
+      })
+      .then((res) => {
+        expect(res.body.id).toBeDefined();
+        id = res.body.id;
       });
 
     await supertest(server)
@@ -325,14 +367,14 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
         password: "shirlyshopper",
       })
       .then((res) => {
-        otherToken = res.body.accessToken;
+        expect(res.body.id).toBeDefined();
+        otherId = res.body.id;
       });
   });
 
   test("GET /api/v0/shopper/shippinginfo (unauthorized)", async () => {
     await supertest(server)
-      .get("/api/v0/shopper/shippinginfo")
-      .set("authorization", "invalid")
+      .get(`/api/v0/shopper/shippinginfo?userId=invalid`)
       .then((res) => {
         expect(res.status).toBe(404);
       });
@@ -340,8 +382,7 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
 
   test("GET /api/v0/shopper/shippinginfo (authorized)", async () => {
     await supertest(server)
-      .get("/api/v0/shopper/shippinginfo")
-      .set("authorization", token)
+      .get(`/api/v0/shopper/shippinginfo?userId=${id}`)
       .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body).toBeDefined();
@@ -350,8 +391,7 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
 
   test("GET /api/v0/shopper/shippinginfo (authorized) (other user)", async () => {
     await supertest(server)
-      .get("/api/v0/shopper/shippinginfo")
-      .set("authorization", otherToken)
+      .get(`/api/v0/shopper/shippinginfo?userId=${otherId}`)
       .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body).toBeDefined();
@@ -361,7 +401,6 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
   test("POST /api/v0/shopper/shippinginfo (unauthorized) (invalid input)", async () => {
     await supertest(server)
       .post("/api/v0/shopper/shippinginfo")
-      .set("authorization", "invalid")
       .send({ shippingInfo: "test" })
       .then((res) => {
         expect(res.status).toBe(400);
@@ -371,7 +410,6 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
   test("POST /api/v0/shopper/shippinginfo (unauthorized) (valid input)", async () => {
     await supertest(server)
       .post("/api/v0/shopper/shippinginfo")
-      .set("authorization", "invalid")
       .send({ shippingInfo: exampleShippingInfo[0] })
       .then((res) => {
         expect(res.status).toBe(400);
@@ -380,9 +418,9 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
 
   test("POST /api/v0/shopper/shippinginfo (authorized) (valid input)", async () => {
     const shippingInfo = await supertest(server)
-      .get("/api/v0/shopper/shippinginfo")
-      .set("authorization", token)
+      .get(`/api/v0/shopper/shippinginfo?userId=${id}`)
       .then((res) => {
+        expect(res.status).toBe(200);
         return res.body;
       });
 
@@ -391,8 +429,7 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
     }
 
     await supertest(server)
-      .post("/api/v0/shopper/shippinginfo")
-      .set("authorization", token)
+      .post(`/api/v0/shopper/shippinginfo?userId=${id}`)
       .send(exampleShippingInfo[0])
       .then((res) => {
         expect(res.status).toBe(200);
@@ -400,9 +437,9 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
       });
 
     const newShippingInfo = await supertest(server)
-      .get("/api/v0/shopper/shippinginfo")
-      .set("authorization", token)
+      .get(`/api/v0/shopper/shippinginfo?userId=${id}`)
       .then((res) => {
+        expect(res.status).toBe(200);
         return res.body;
       });
 
@@ -419,8 +456,7 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
 
   test("POST /api/v0/shopper/shippinginfo (authorized) (other user)", async () => {
     await supertest(server)
-      .post("/api/v0/shopper/shippinginfo")
-      .set("authorization", otherToken)
+      .post(`/api/v0/shopper/shippinginfo?userId=${otherId}`)
       .send(exampleShippingInfo[1])
       .then((res) => {
         expect(res.status).toBe(200);
@@ -428,8 +464,7 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
       });
 
     const newShippingInfo = await supertest(server)
-      .get("/api/v0/shopper/shippinginfo")
-      .set("authorization", otherToken)
+      .get(`/api/v0/shopper/shippinginfo?userId=${otherId}`)
       .then((res) => {
         return res.body;
       });
@@ -444,27 +479,24 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
 
   test("POST /api/v0/shopper/shippinginfo (authorized) (invalid input)", async () => {
     await supertest(server)
-      .post("/api/v0/shopper/shippinginfo")
-      .set("authorization", token)
+      .post(`/api/v0/shopper/shippinginfo?userId=${id}`)
       .send({ shippingInfo: "test" })
       .then((res) => {
         expect(res.status).toBe(400);
       });
   });
 
-  test("Handles error in getShippingInfo (invalid token)", async () => {
+  test("Handles error in getShippingInfo (invalid userId)", async () => {
     await supertest(server)
-      .get("/api/v0/shopper/shippinginfo")
-      .set("authorization", "invalid_token")
+      .get("/api/v0/shopper/shippinginfo?userId=invalid_userid")
       .then((res) => {
         expect(res.status).toBe(404);
       });
   });
 
-  test("Handles error in createShippingInfo (invalid token)", async () => {
+  test("Handles error in createShippingInfo (invalid userId)", async () => {
     await supertest(server)
-      .post("/api/v0/shopper/shippinginfo")
-      .set("authorization", "invalid_token")
+      .post("/api/v0/shopper/shippinginfo?userId=invalid_userid")
       .send(exampleShippingInfo[0])
       .then((res) => {
         expect(res.status).toBe(404);
@@ -473,8 +505,8 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
 });
 
 describe("API TEST (SHOPPER) - Order History", () => {
-  let token: string;
-  let otherToken: string;
+  let id: string;
+  let otherId: string;
 
   beforeAll(async () => {
     await supertest(server)
@@ -484,7 +516,8 @@ describe("API TEST (SHOPPER) - Order History", () => {
         password: "pass",
       })
       .then((res) => {
-        token = res.body.accessToken;
+        expect(res.body.id).toBeDefined();
+        id = res.body.id;
       });
 
     await supertest(server)
@@ -494,14 +527,14 @@ describe("API TEST (SHOPPER) - Order History", () => {
         password: "shirlyshopper",
       })
       .then((res) => {
-        otherToken = res.body.accessToken;
+        expect(res.body.id).toBeDefined();
+        otherId = res.body.id;
       });
   });
 
   test("GET /api/v0/shopper/orderhistory (unauthorized)", async () => {
     await supertest(server)
-      .get("/api/v0/shopper/orderhistory")
-      .set("authorization", "invalid")
+      .get("/api/v0/shopper/orderhistory?userId=invalid")
       .then((res) => {
         expect(res.status).toBe(404);
       });
@@ -509,8 +542,7 @@ describe("API TEST (SHOPPER) - Order History", () => {
 
   test("GET /api/v0/shopper/orderhistory (authorized)", async () => {
     await supertest(server)
-      .get("/api/v0/shopper/orderhistory")
-      .set("authorization", token)
+      .get(`/api/v0/shopper/orderhistory?userId=${id}`)
       .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body).toBeDefined();
@@ -519,8 +551,7 @@ describe("API TEST (SHOPPER) - Order History", () => {
 
   test("GET /api/v0/shopper/orderhistory (authorized) (other user)", async () => {
     await supertest(server)
-      .get("/api/v0/shopper/orderhistory")
-      .set("authorization", otherToken)
+      .get(`/api/v0/shopper/orderhistory?userId=${otherId}`)
       .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body).toBeDefined();
@@ -529,8 +560,7 @@ describe("API TEST (SHOPPER) - Order History", () => {
 
   test("POST /api/v0/shopper/orderhistory (unauthorized)", async () => {
     await supertest(server)
-      .post("/api/v0/shopper/orderhistory")
-      .set("authorization", "invalid")
+      .post("/api/v0/shopper/orderhistory?userId=invalid")
       .send({ orderHistory: "test" })
       .then((res) => {
         expect(res.status).toBe(400);
@@ -539,8 +569,7 @@ describe("API TEST (SHOPPER) - Order History", () => {
 
   test("POST /api/v0/shopper/orderhistory (authorized)", async () => {
     const orderhistory = await supertest(server)
-      .get("/api/v0/shopper/orderhistory")
-      .set("authorization", token)
+      .get(`/api/v0/shopper/orderhistory?userId=${id}`)
       .then((res) => {
         return res.body;
       });
@@ -548,8 +577,7 @@ describe("API TEST (SHOPPER) - Order History", () => {
       validateOrder(orderhistory[i]);
     }
     await supertest(server)
-      .post("/api/v0/shopper/orderhistory")
-      .set("authorization", token)
+      .post(`/api/v0/shopper/orderhistory?userId=${id}`)
       .send(exampleOrders[0])
       .then((res) => {
         expect(res.status).toBe(200);
@@ -557,8 +585,7 @@ describe("API TEST (SHOPPER) - Order History", () => {
       });
 
     const newOrderhistory = await supertest(server)
-      .get("/api/v0/shopper/orderhistory")
-      .set("authorization", token)
+      .get(`/api/v0/shopper/orderhistory?userId=${id}`)
       .then((res) => {
         return res.body;
       });
@@ -573,8 +600,7 @@ describe("API TEST (SHOPPER) - Order History", () => {
 
   test("POST /api/v0/shopper/orderhistory (authorized) other user", async () => {
     await supertest(server)
-      .post("/api/v0/shopper/orderhistory")
-      .set("authorization", otherToken)
+      .post(`/api/v0/shopper/orderhistory?userId=${otherId}`)
       .send(exampleOrders[1])
       .then((res) => {
         expect(res.status).toBe(200);
@@ -582,8 +608,7 @@ describe("API TEST (SHOPPER) - Order History", () => {
       });
 
     const newOrderhistory = await supertest(server)
-      .get("/api/v0/shopper/orderhistory")
-      .set("authorization", otherToken)
+      .get(`/api/v0/shopper/orderhistory?userId=${otherId}`)
       .then((res) => {
         return res.body;
       });
@@ -596,19 +621,17 @@ describe("API TEST (SHOPPER) - Order History", () => {
     compareOrder(newOrderhistory[0], exampleOrders[1]);
   });
 
-  test("Handles error in getOrderHistory (invalid token)", async () => {
+  test("Handles error in getOrderHistory (invalid userId)", async () => {
     await supertest(server)
-      .get("/api/v0/shopper/orderhistory")
-      .set("authorization", "invalid_token")
+      .get("/api/v0/shopper/orderhistory?userId=invalid")
       .then((res) => {
         expect(res.status).toBe(404);
       });
   });
 
-  test("Handles error in createOrderHistory (invalid token)", async () => {
+  test("Handles error in createOrderHistory (invalid userId)", async () => {
     await supertest(server)
-      .post("/api/v0/shopper/orderhistory")
-      .set("authorization", "invalid_token")
+      .post("/api/v0/shopper/orderhistory?userId=invalid")
       .send(exampleOrders[0])
       .then((res) => {
         expect(res.status).toBe(404);

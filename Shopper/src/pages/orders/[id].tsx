@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Backdrop, useMediaQuery, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useAppContext } from '@/contexts/AppContext';
-import { LoggedInContext } from '@/contexts/LoggedInUserContext';
-import useLoadLocalStorageUser from '@/views/useLoadUserFromLocalStorage';
 import TopNav from '@/views/TopNav';
 import OrderDetails from '@/views/order/OrderDetails';
 import OrderCard from './ordercard';
@@ -56,10 +54,8 @@ const OrderView: React.FC = () => {
   const { id } = router.query;
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  const { setUser, setAccessToken } = useContext(LoggedInContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  useLoadLocalStorageUser(setUser, setAccessToken);
 
   useEffect(() => {
     if (id) {

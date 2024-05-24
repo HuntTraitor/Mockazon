@@ -2,13 +2,7 @@ import { pool } from "../db";
 import { Authenticated, Credentials } from "../types";
 import * as jwt from "jsonwebtoken";
 import { CreateVendor } from "./index";
-import { SessionUser } from "../types";
-
-interface Account {
-  id: string;
-  name: string;
-  role: string;
-}
+import { SessionUser, Account } from "../types";
 
 export class VendorService {
   public async exists(email: string): Promise<boolean> {
@@ -81,6 +75,7 @@ export class VendorService {
   }
 
   public async check(accessToken: string): Promise<SessionUser> {
+    console.log(accessToken);
     return new Promise((resolve, reject) => {
       try {
         jwt.verify(

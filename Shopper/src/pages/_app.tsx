@@ -25,7 +25,6 @@ type AppPropsWithLayout = AppProps & {
  */
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? (page => page);
-
   return (
     <AppContextProvider>
       <LoggedInUserProvider>
