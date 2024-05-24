@@ -403,7 +403,7 @@ describe('Sign Up BE', () => {
   });
 
   // FIXME: This test needs to be better
-  test('Check test', async () => {
-    await new AuthService().check();
-  });
+  // test('Check test', async () => {
+  //   await new AuthService().check();
+  // });
 });

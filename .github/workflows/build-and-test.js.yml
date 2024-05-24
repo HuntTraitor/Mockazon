@@ -40,7 +40,7 @@ jobs:
       - name: Sleep for 20 seconds
         run: sleep 20s
         shell: bash
-      - run: npm run tests
+      - run: npm run tests:silent
       - run: npm run docker-down
 
       # E2E tests with containerized version 
