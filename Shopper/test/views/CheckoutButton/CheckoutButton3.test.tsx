@@ -6,8 +6,7 @@ import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { AppContext } from '@/contexts/AppContext';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { loadStripe } from '@stripe/stripe-js';
-import requestHandler from '../api/requestHandler';
+import requestHandler from '../../api/requestHandler';
 import CheckoutButton from '@/views/CheckoutButton';
 
 jest.mock('next/config', () => () => ({
@@ -137,106 +136,10 @@ const products = [
 
 jest.mock('@stripe/stripe-js', () => ({
   __esModule: true,
-  loadStripe: jest.fn().mockResolvedValue({
-    redirectToCheckout: jest.fn().mockResolvedValue({ error: null }),
-  }),
+  loadStripe: jest.fn().mockResolvedValue(null),
 }));
 
-it('Clicks checkout button and redirects successfully', async () => {
-  jest.mock('@stripe/stripe-js', () => {
-    return {
-      __esModule: true,
-      ...jest.requireActual('@stripe/stripe-js'),
-      loadStripe: jest.fn().mockResolvedValue({
-        redirectToCheckout: jest.fn().mockResolvedValue({ error: null }),
-      }),
-    };
-  });
-
-  render(
-    <AppContext.Provider value={AppContextProps}>
-      <LoggedInContext.Provider value={newLoggedInContextProps}>
-        <CheckoutButton
-          productsWithContent={products}
-          shopperId={'123'}
-          subtotal={100}
-          locale={'en'}
-        />
-      </LoggedInContext.Provider>
-    </AppContext.Provider>
-  );
-  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
-});
-
-it('Clicks checkout button and encounters error creating session', async () => {
-  jest.mock('@stripe/stripe-js', () => {
-    return {
-      __esModule: true,
-      ...jest.requireActual('@stripe/stripe-js'),
-      loadStripe: jest.fn().mockResolvedValue({
-        redirectToCheckout: jest.fn().mockResolvedValue({ error: null }),
-      }),
-    };
-  });
-
-  errorInCreateSession = true;
-
-  render(
-    <AppContext.Provider value={AppContextProps}>
-      <LoggedInContext.Provider value={newLoggedInContextProps}>
-        <CheckoutButton
-          productsWithContent={products}
-          shopperId={'123'}
-          subtotal={100}
-          locale={'en'}
-        />
-      </LoggedInContext.Provider>
-    </AppContext.Provider>
-  );
-  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
-});
-
-// TODO fix this test - it's not covering what it's intended to because the module can't be remocked from within the test
-// TODO create a new file in order to test this
-it('Clicks checkout button and encounters error during redirect', async () => {
-  jest.resetAllMocks();
-  const mockStripe = {
-    redirectToCheckout: jest
-      .fn()
-      .mockResolvedValue({ error: { message: 'Mock error' } }),
-  };
-  (loadStripe as jest.Mock).mockResolvedValue(mockStripe);
-
-  render(
-    <AppContext.Provider value={AppContextProps}>
-      <LoggedInContext.Provider value={newLoggedInContextProps}>
-        <CheckoutButton
-          productsWithContent={products}
-          shopperId={'123'}
-          subtotal={100}
-          locale={'en'}
-        />
-      </LoggedInContext.Provider>
-    </AppContext.Provider>
-  );
-  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
-});
-
-// TODO fix this test - it's not covering what it's intended to because the module can't be remocked from within the test
-// TODO create a new file in order to test this
-it('Clicks checkout button and encounters error redirecting to checkout', async () => {
-  jest.mock('@stripe/stripe-js', () => {
-    return {
-      __esModule: true,
-      ...jest.requireActual('@stripe/stripe-js'),
-      loadStripe: jest.fn().mockResolvedValue({
-        redirectToCheckout: jest
-          .fn()
-          .mockResolvedValue({ error: 'error message' }),
-      }),
-    };
-  });
-
+it('Clicks checkout button and fails in loadStripe', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>

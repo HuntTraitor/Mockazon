@@ -8,13 +8,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: '2024-04-10',
 });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
 
 // https://chatgpt.com/share/6e1f30f1-eb7a-4212-a34e-89be3c97e662
+// most likely can't be converted to graphql because we don't call this endpoint, only Stripe does
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     const buf = await buffer(req);
@@ -29,12 +30,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         process.env.STRIPE_WEBHOOK_SECRET as string
       );
     } catch (err) {
-      if (err instanceof Error) {
-        console.log(`❌ Error message: ${err.message}`);
-        res.status(400).send(`Webhook Error: ${err.message}`);
-      } else {
-        res.status(400).send('Webhook Error: Unknown error');
-      }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const msg = err.message;
+      console.log(`❌ Error message: ${msg}`);
+      res.status(400).send(`Webhook Error: ${msg}`);
       return;
     }
     let session;
@@ -48,7 +48,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           session.id
         );
         console.log(`Checkout Session was successful!`, lineItems);
-        if (session.metadata === null) return;
+        if (session.metadata === null) {
+          res.status(400).send(`Metadata not included`);
+          return;
+        }
 
         // send an email to user
         const shopperId = session.metadata.shopperId;
@@ -61,11 +64,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // remove item from shopping cart
         console.log(idsOfProductsPurchased, shopperId);
       } catch (err) {
-        if (err instanceof Error) {
-          console.log(`❌ Error retrieving line items: ${err.message}`);
-        } else {
-          console.log('❌ Error retrieving line items: Unknown error');
-        }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const msg = err.message;
+        res.status(400).send(`❌ Error retrieving line items: ${msg}`);
+        console.log(`❌ Error retrieving line items: ${msg}`);
+        return;
       }
       break;
     default:

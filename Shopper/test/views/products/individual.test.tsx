@@ -25,13 +25,16 @@ jest.mock('next/config', () => () => ({
 const handlers = [
   graphql.query('getProduct', () => {
     if (returnError) {
-      return HttpResponse.json({
-        errors: [
-          {
-            message: 'Some Error',
-          },
-        ],
-      });
+      return HttpResponse.json(
+        {
+          errors: [
+            {
+              message: 'Some Error',
+            },
+          ],
+        },
+        { status: 400 }
+      );
     }
     return HttpResponse.json({
       data: {
