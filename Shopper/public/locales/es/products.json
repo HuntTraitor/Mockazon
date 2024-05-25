@@ -6,5 +6,6 @@
   "returnsAndOrders": "Devoluciones y pedidos",
   "rating": "Clasificación",
   "price": "Precio",
-  "deliveryDate": "Fecha de entrega"
+  "deliveryDate": "Fecha de entrega",
+  "quantity": "Cantidad"
 }
