@@ -12,6 +12,9 @@ env:
   MASTER_SECRET: ${{ secrets.MASTER_SECRET }}
   MICROSERVICE_URL: ${{ vars.MICROSERVICE_URL }}
   ENVIRONMENT: production
+  STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+  STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
 jobs:
   build:
@@ -30,6 +33,9 @@ jobs:
         echo MASTER_SECRET=${{ secrets.MASTER_SECRET }} >> .env
         echo MICROSERVICE_URL=${{ vars.MICROSERVICE_URL }} >> .env
         echo ENVIRONMENT=production >> .env
+        echo STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }} >> .env
+        echo NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }} >> .env
+        echo STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }} >> .env
       
     - name: Login to DockerHub
       run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
