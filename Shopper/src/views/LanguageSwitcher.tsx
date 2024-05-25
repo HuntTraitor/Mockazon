@@ -27,10 +27,20 @@ const LanguageSwitcher = () => {
               variant="body2"
               aria-label="Language Text"
               className={styles.languageText}
+              sx={{ display: 'flex', alignItems: 'center' }}
             >
-              <span aria-label="flag icon" className={flagIcon}></span>{' '}
+              <span
+                aria-label="flag icon"
+                className={flagIcon}
+                style={{
+                  marginRight: '5px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  marginBottom: '2px',
+                }}
+              ></span>
               {languageText}
-              <ExpandMoreIcon className={styles.dropdownIcon} />
+              <ExpandMoreIcon className={styles.dropdownIcon} sx={{ display: 'inline-flex', alignItems: 'center' }} />
             </Typography>
           </Box>
         }
