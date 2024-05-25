@@ -43,7 +43,12 @@ const ProductPage = () => {
   // const { t } = useTranslation(['products', 'viewProduct']);
   const [product, setProduct] = useState({} as Product);
   const [error, setError] = useState('');
-  // const { backDropOpen, setBackDropOpen } = useAppContext();
+  const [quantity, setQuantity] = useState('1');
+  const numbers = Array.from({ length: 5 }, (_, index) => index + 1);
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuantity(event.target.value)
+  }
+  console.log(quantity)
   useEffect(() => {
     const query = {
       query: `query getProduct{getProduct(
@@ -106,14 +111,15 @@ const ProductPage = () => {
                   select
                   label="Quantity"
                   defaultValue="1"
+                  onChange={handleQuantityChange}
                 >
-                  {currencies.map((option, index) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {index + 1}
+                  {numbers.map((number) => (
+                    <MenuItem key={number} value={number}>
+                      {number}
                     </MenuItem>
                   ))}
                 </TextField>
-                <AddToCartButton product={product} />
+                <AddToCartButton product={product} quantity={quantity}/>
                 <Box className={styles.checkoutMoreInformation}>
                   <Box>
                     <Typography variant="caption" display="block" className={styles.checkoutMoreInformationCaption}>Ships from</Typography>
