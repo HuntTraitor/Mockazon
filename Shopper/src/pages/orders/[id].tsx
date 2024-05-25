@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Backdrop, useMediaQuery, useTheme } from '@mui/material';
+import { Container, useMediaQuery, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useAppContext } from '@/contexts/AppContext';
 import TopNav from '@/views/TopNav';
 import OrderDetails from '@/views/order/OrderDetails';
 import OrderCard from './ordercard';
 import styles from '@/styles/OrderView.module.css';
 import { Order } from '@/graphql/types';
+import AppBackDrop from '@/components/AppBackdrop';
 import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -107,7 +107,6 @@ const fetchOrderById = async (id: string, accessToken: string) => {
 };
 
 const OrderView: React.FC = () => {
-  const { backDropOpen, setBackDropOpen } = useAppContext();
   const router = useRouter();
   const { id } = router.query;
   const [order, setOrder] = useState<Order | null>(null);
@@ -142,12 +141,7 @@ const OrderView: React.FC = () => {
         <OrderDetails order={order} />
       </Container>
       <OrderCard />
-      <Backdrop
-        aria-label={'backdrop'}
-        open={backDropOpen}
-        className={styles.backdrop}
-        onClick={() => setBackDropOpen(false)}
-      />
+      <AppBackDrop />
     </>
   );
 };

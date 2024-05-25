@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Backdrop,
   Box,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
@@ -15,13 +14,13 @@ import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
-import { useAppContext } from '@/contexts/AppContext';
 import { useRouter } from 'next/router';
 import getConfig from 'next/config';
 import { useSnackbar } from 'notistack';
 import Image from 'next/image';
 import ProductCard from '@/views/product/ProductCard';
 import { Product } from '@/graphql/types';
+import AppBackDrop from '@/components/AppBackdrop';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -49,7 +48,6 @@ const Index = () => {
   const [error, setError] = useState('');
   const { user } = useContext(LoggedInContext);
 
-  const { backDropOpen, setBackDropOpen } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -192,12 +190,7 @@ const Index = () => {
           </Box>
         </Container>
         <MockazonMenuDrawer />
-        <Backdrop
-          aria-label={'backdrop'}
-          open={backDropOpen}
-          style={{ zIndex: 1, position: 'fixed' }}
-          onClick={() => setBackDropOpen(false)}
-        />
+        <AppBackDrop />
       </>
     );
   }
@@ -288,11 +281,7 @@ const Index = () => {
         </Grid>
       </Container>
       <MockazonMenuDrawer />
-      <Backdrop
-        open={backDropOpen}
-        style={{ zIndex: 1, position: 'fixed' }}
-        onClick={() => setBackDropOpen(false)}
-      />
+      <AppBackDrop />
     </>
   );
 };

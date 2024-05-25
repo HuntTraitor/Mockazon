@@ -7,10 +7,9 @@ import useSWR from 'swr';
 import styles from '@/styles/success.module.css';
 import TopNav from '@/views/TopNav';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
-import { Backdrop } from '@mui/material';
-import { useAppContext } from '@/contexts/AppContext';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'; // Assuming you have a CSS module file
+import AppBackDrop from '@/components/AppBackdrop';
 
 // TODO this entire page needs to be converted to graphQL
 
@@ -44,7 +43,6 @@ const CheckoutSuccessPage = () => {
     query: { sessionId },
   } = useRouter();
   const URL = sessionId ? `/api/stripe/sessions/${sessionId}` : null;
-  const { backDropOpen, setBackDropOpen } = useAppContext();
 
   const { data: checkoutSession, error } = useSWR(URL, fetcher);
 
@@ -202,13 +200,7 @@ const CheckoutSuccessPage = () => {
         </div>
       </div>
       <MockazonMenuDrawer />
-      <Backdrop
-        aria-label={'backdrop'}
-        open={backDropOpen}
-        className={styles.backdrop}
-        style={{ zIndex: 1, position: 'fixed' }}
-        onClick={() => setBackDropOpen(false)}
-      />
+      <AppBackDrop />
     </>
   );
 };
