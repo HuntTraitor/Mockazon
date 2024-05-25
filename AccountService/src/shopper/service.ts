@@ -35,7 +35,7 @@ export class ShopperService {
         },
         `${process.env.MASTER_SECRET}`,
         {
-          expiresIn: "30m",
+          expiresIn: "1d",
           algorithm: "HS256",
         },
       );
@@ -86,7 +86,7 @@ export class ShopperService {
       },
       `${process.env.MASTER_SECRET}`,
       {
-        expiresIn: "30m",
+        expiresIn: "1d",
         algorithm: "HS256",
       },
     );
@@ -158,7 +158,7 @@ export class ShopperService {
       const { rows: updatedRows } = await pool.query(query);
       return updatedRows[0].data.shippingInfo;
     } catch (error) {
-      throw new Error("Invalid token");
+      throw new Error("Failed to add shipping info");
     }
   }
 
@@ -194,17 +194,15 @@ export class ShopperService {
       const currentOrderHistory = rows[0]?.data.orderHistory || [];
 
       const updatedOrderHistory = [...currentOrderHistory, data.order];
-
       const update = `UPDATE shopper SET data = jsonb_set(data, '{orderHistory}', $1::jsonb) WHERE id = $2 RETURNING *`;
       const query = {
         text: update,
         values: [JSON.stringify(updatedOrderHistory), `${data.userId}`],
       };
       const { rows: updatedRows } = await pool.query(query);
-
       return updatedRows[0].data.orderHistory;
     } catch (error) {
-      throw new Error("Invalid token");
+      throw new Error("Failed to add order history");
     }
   }
 }

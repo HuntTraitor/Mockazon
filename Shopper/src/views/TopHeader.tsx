@@ -52,15 +52,15 @@ const CustomTextField = styled(TextField)(() => ({
     },
   },
   '& .MuiInputBase-input::placeholder': {
-    fontWeight: '700',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
+    fontWeight: 'bold',
+    opacity: 0.6,
   },
   '& .MuiInputBase-input': {
     padding: '8px 12px',
     fontSize: '14px',
+    display: 'flex',
+    transform: 'translateY(-20%)',
+
   },
   '& .MuiInputBase-input:focus': {
     outline: 'none',
@@ -228,6 +228,7 @@ const TopHeader = () => {
           getOptionLabel={option => option}
           noOptionsText={''}
           loading={loading}
+          open={Boolean(search)}
           renderInput={params => (
             <CustomTextField
               {...params}

@@ -65,6 +65,26 @@ const handlers = [
       }
     }
   ),
+  rest.get(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/suggestions`,
+    async () => {
+      return HttpResponse.json(
+        [
+          'name1',
+          'name2',
+          'name3',
+          'name4',
+          'name5',
+          'name6',
+          'name7',
+          'name8',
+          'name9',
+          'name10',
+        ],
+        { status: 200 }
+      );
+    }
+  ),
 ];
 
 const microServices = setupServer(...handlers);
@@ -210,3 +230,24 @@ test('Gets products with parameters', async () => {
   expect(result.body.data.getProducts[0].data.deliveryDate).toBe('5');
   expect(result.body.data.getProducts[0].data.image).toBe('image');
 });
+
+// test('Gets search suggestions', async () => {
+//   const result = await supertest(server)
+//     .post('/api/graphql')
+//     .send({
+//       query: `{getSearchSuggestions(search: "search")}`,
+//     });
+//   expect(result.body.data).toBeDefined();
+//   expect(result.body.data.getSearchSuggestions).toEqual([
+//     'name1',
+//     'name2',
+//     'name3',
+//     'name4',
+//     'name5',
+//     'name6',
+//     'name7',
+//     'name8',
+//     'name9',
+//     'name10',
+//   ]);
+// });

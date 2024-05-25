@@ -9,7 +9,6 @@ export async function authChecker(
 ): Promise<boolean> {
   try {
     context.user = await new AuthService().check(authHeader);
-    console.log(context.user);
   } catch (err) {
     return false;
   }

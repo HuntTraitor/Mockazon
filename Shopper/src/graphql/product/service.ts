@@ -64,4 +64,26 @@ export class ProductService {
       throw new GraphQLError('Internal Server Error');
     }
   }
+
+  public async getSearchSuggestions(search: string): Promise<string[]> {
+    const url = `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/suggestions?search=${search}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching search suggestions');
+      }
+
+      return await response.json();
+    } catch (err) {
+      console.error(err);
+      throw new GraphQLError('Internal Server Error');
+    }
+  }
 }

@@ -121,19 +121,15 @@ export class AuthService {
           )
             .then(async res => {
               if (!res.ok) {
-                console.error('Response not OK:', res.status);
                 throw new GraphQLError(await res.text());
               }
               const sessionUser = await res.json();
-              console.log('Session user fetched:', sessionUser);
               return sessionUser;
             })
             .then(sessionUser => {
-              console.log('Resolved session user:', sessionUser);
               resolve({ id: sessionUser.id });
             })
-            .catch(error => {
-              console.error('Fetch error:', error);
+            .catch(() => {
               reject(new GraphQLError('Unauthorized'));
             });
         }
