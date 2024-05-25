@@ -8,6 +8,7 @@ import { ShoppingCartResolver } from '@/graphql/shoppingCart/resolver';
 import { ProductResolver } from '@/graphql/product/resolver';
 import { StripeCheckoutResolver } from '@/graphql/stripe/sessions/resolver';
 import { AccountResolver } from '@/graphql/account/resolver';
+import { OrderResolver } from '@/graphql/order/resolver';
 
 const schema = buildSchemaSync({
   resolvers: [
@@ -16,6 +17,7 @@ const schema = buildSchemaSync({
     ProductResolver,
     StripeCheckoutResolver,
     AccountResolver,
+    OrderResolver,
   ],
   validate: true,
   authChecker: nextAuthChecker,

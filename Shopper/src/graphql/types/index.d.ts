@@ -18,6 +18,7 @@ export type Order = {
     country: string;
   };
   paymentMethod: string;
+  paymentDigits: number;
   subtotal: number;
   totalBeforeTax: number;
   tax: number;
@@ -40,7 +41,7 @@ export interface Product {
     name: string;
     rating?: string;
     price: number;
-    deliveryDate: string;
+    deliveryDate: string; //FIXME: This can't be static
     image: string;
     description: string;
   };
