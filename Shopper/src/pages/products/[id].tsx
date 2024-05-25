@@ -59,6 +59,10 @@ const ProductPage = () => {
         } else {
           setProduct(product.data.getProduct);
         }
+      })
+      .catch(error => {
+        console.error('Error fetching product:', error);
+        setError('Could not fetch product');
       });
   }, [id]);
 

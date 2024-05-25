@@ -140,7 +140,8 @@ const Cart = ({ locale }: { locale: string }) => {
               },
               0
             );
-            setSubtotal(subtotal);
+            // round to two decimal places
+            setSubtotal(Math.round(subtotal * 100) / 100);
           })
           .catch(err => {
             console.log('Error fetching shoppingCartProducts:', err);
