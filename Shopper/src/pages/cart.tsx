@@ -235,7 +235,7 @@ const Cart = ({ locale }: { locale: string }) => {
                   <Link
                     aria-label={`product-link-${product.id}`}
                     className={styles.productLink}
-                    href={`/products/${product.id}`}
+                    href={`/products/${product.data.getProduct.id}`}
                   >
                     <Typography
                       variant="h6"
