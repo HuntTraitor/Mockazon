@@ -12,13 +12,13 @@ interface ProductProps {
 }
 
 export default function AddToCartButton({ product }: ProductProps) {
-  const { user } = React.useContext(LoggedInContext);
+  const { user, accessToken } = React.useContext(LoggedInContext);
 
   const addToShoppingCart = (productId: string) => {
     console.log(user);
     const query = {
       query: `mutation AddToShoppingCart {
-        addToShoppingCart(productId: "${productId}", shopperId: "${user.id}", quantity: "1") {
+        addToShoppingCart(productId: "${productId}", quantity: "1") {
           id
           product_id
           shopper_id
@@ -31,7 +31,10 @@ export default function AddToCartButton({ product }: ProductProps) {
 
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
       body: JSON.stringify(query),
     })
       .then(response => response.json())
