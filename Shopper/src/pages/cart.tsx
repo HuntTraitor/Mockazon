@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Backdrop,
   Box,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
@@ -15,7 +14,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
-import { useAppContext } from '@/contexts/AppContext';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import getConfig from 'next/config';
 import CheckoutButton from '@/views/CheckoutButton';
@@ -25,6 +23,7 @@ const { basePath } = getConfig().publicRuntimeConfig;
 import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
 import { Product, ProductFromFetch } from '../../types';
+import AppBackDrop from '@/components/AppBackdrop';
 
 const namespaces = [
   'products',
@@ -48,7 +47,6 @@ const Cart = ({ locale }: { locale: string }) => {
   const [error, setError] = useState('');
   const [subtotal, setSubtotal] = useState(0.0);
   const { user, accessToken } = useContext(LoggedInContext);
-  const { backDropOpen, setBackDropOpen } = useAppContext();
   const router = useRouter();
 
   // https://chat.openai.com/share/66cd884d-cc95-4e82-8b4f-a4d035f844af
@@ -264,12 +262,7 @@ const Cart = ({ locale }: { locale: string }) => {
         </Grid>
       </Container>
       <MockazonMenuDrawer />
-      <Backdrop
-        open={backDropOpen}
-        className={styles.backdrop}
-        style={{ zIndex: 1, position: 'fixed' }}
-        onClick={() => setBackDropOpen(false)}
-      />
+      <AppBackDrop />
     </>
   );
 };

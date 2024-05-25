@@ -4,7 +4,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-// import { useAppContext } from '@/contexts/AppContext';
 import * as React from 'react';
 import styles from '@/styles/ProductPage.module.css';
 import Image from 'next/image';
@@ -16,6 +15,7 @@ import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
 import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
+import AppBackDrop from '@/components/AppBackdrop';
 
 const ProductPage = () => {
   const router = useRouter();
@@ -23,7 +23,6 @@ const ProductPage = () => {
   // const { t } = useTranslation(['products', 'viewProduct']);
   const [product, setProduct] = useState({} as Product);
   const [error, setError] = useState('');
-  // const { backDropOpen, setBackDropOpen } = useAppContext();
   useEffect(() => {
     const query = {
       query: `query getProduct{getProduct(
@@ -83,6 +82,7 @@ const ProductPage = () => {
             </Box>
           </Box>
         </Card>
+        <AppBackDrop />
       </>
     );
   } else {
