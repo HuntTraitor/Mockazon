@@ -36,7 +36,7 @@ test('Delete successful order 200', async () => {
 });
 
 test('Deletes order not found 404', async () => {
-  const orderId = crypto.randomUUID();
+  const orderId = randomUUID();
   await supertest(server).delete(`/api/v0/order/${orderId}`).expect(404);
 });
 

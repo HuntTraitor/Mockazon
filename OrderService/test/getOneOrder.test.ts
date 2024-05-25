@@ -35,7 +35,7 @@ test('Gets successful order 200', async () => {
 });
 
 test('Gets order not found 404', async () => {
-  const orderId = crypto.randomUUID();
+  const orderId = randomUUID();
   await supertest(server).get(`/api/v0/order/${orderId}`).expect(404);
 });
 

@@ -82,7 +82,7 @@ test('Updates with an unknown query parameter', async () => {
 });
 
 test('Updates unknown Order ID 404', async () => {
-  const orderId = crypto.randomUUID();
+  const orderId = randomUUID();
   await supertest(server)
     .put(`/api/v0/order/${orderId}?quantity=4&shipped=true&delivered=true`)
     .expect(404);
