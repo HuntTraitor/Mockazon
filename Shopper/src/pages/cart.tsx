@@ -191,8 +191,7 @@ const Cart = ({ locale }: { locale: string }) => {
         const subtotal: number = products.reduce(
           (accumulator: number, currentValue: Product) => {
             return (
-              accumulator +
-              (currentValue.data.getProduct.data.price as number)
+              accumulator + (currentValue.data.getProduct.data.price as number)
             );
           },
           0
@@ -203,7 +202,7 @@ const Cart = ({ locale }: { locale: string }) => {
         console.log('Error removing product:', err);
         setError('Could not remove product');
       });
-  }
+  };
 
   return (
     <>

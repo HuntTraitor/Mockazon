@@ -41,6 +41,11 @@ export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
+    if (JSON.stringify(user) === '{}') {
+      router.push('/login');
+      return;
+    }
+
     fetchOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -83,11 +88,6 @@ export default function Index() {
       });
   };
 
-  if (JSON.stringify(user) === '{}') {
-    router.push('/login');
-    return null;
-  }
-
   return (
     <>
       <TopNav />
@@ -118,14 +118,14 @@ export default function Index() {
                   <Search style={{ color: 'black', marginRight: '10px' }} />
                 ),
               }}
-              sx={{ 
+              sx={{
                 '& .MuiOutlinedInput-placeholder': { color: 'black' },
               }}
             />
-            <Button 
-              variant="contained" 
-              color="primary" 
-              style={{ 
+            <Button
+              variant="contained"
+              color="primary"
+              style={{
                 height: '50px',
                 width: '100px',
                 backgroundColor: '#000000',

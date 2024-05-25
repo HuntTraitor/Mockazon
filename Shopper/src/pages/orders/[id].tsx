@@ -118,7 +118,8 @@ const OrderView: React.FC = () => {
   useEffect(() => {
     if (id) {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
-      if (!user.accessToken) { // FIXME: This needs to be handled globally, think back on the Authenticated Routes example
+      if (!user.accessToken) {
+        // FIXME: This needs to be handled globally, think back on the Authenticated Routes example
         window.location.href = '/login';
         return;
       }

@@ -28,6 +28,9 @@ export class ShoppingCartResolver {
     @Args() item: RemoveItem,
     @Ctx() request: NextApiRequest
   ): Promise<RemoveItem> {
-    return new ShoppingCartService().removeFromShoppingCart(item, request.user.id);
+    return new ShoppingCartService().removeFromShoppingCart(
+      item,
+      request.user.id
+    );
   }
 }
