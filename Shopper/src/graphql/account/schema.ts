@@ -3,7 +3,7 @@ import { ObjectType, Field, Float, InputType } from 'type-graphql';
 @InputType()
 export class ShippingAddressInput {
   @Field()
-    name!: string;
+    name?: string;
 
   @Field()
     addressLine1!: string;
@@ -24,7 +24,7 @@ export class ShippingAddressInput {
 @ObjectType()
 export class ShippingAddress {
   @Field()
-    name!: string;
+    name?: string;
 
   @Field()
     addressLine1!: string;
@@ -44,6 +44,9 @@ export class ShippingAddress {
 
 @InputType()
 export class OrderInput {
+  @Field()
+    id!: string;
+
   @Field()
     createdAt!: string;
 
@@ -69,26 +72,26 @@ export class OrderInput {
 @ObjectType()
 export class Order {
   @Field()
-    id!: string;
+    id?: string;
 
   @Field()
-    createdAt!: string;
+    createdAt?: string;
 
   @Field(() => ShippingAddress)
-    shippingAddress!: ShippingAddress;
+    shippingAddress?: ShippingAddress;
 
   @Field()
-    paymentMethod!: string;
+    paymentMethod?: string;
 
   @Field(() => Float)
-    subtotal!: number;
+    subtotal?: number;
 
   @Field(() => Float)
-    totalBeforeTax!: number;
+    totalBeforeTax?: number;
 
   @Field(() => Float)
-    tax!: number;
+    tax?: number;
 
   @Field(() => Float)
-    total!: number;
+    total?: number;
 }

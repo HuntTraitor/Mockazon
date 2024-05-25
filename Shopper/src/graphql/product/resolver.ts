@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from 'type-graphql';
+import { Args, Arg, Query, Resolver } from 'type-graphql';
 import { Product, ProductId, GetProductsArgs } from './schema';
 import { ProductService } from '@/graphql/product/service';
 
@@ -24,5 +24,10 @@ export class ProductResolver {
       orderBy,
       descending
     );
+  }
+
+  @Query(() => [String])
+  async getSearchSuggestions(@Arg('search', () => String) search: string): Promise<string[]> {
+    return this.productService.getSearchSuggestions(search);
   }
 }

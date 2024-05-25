@@ -51,6 +51,30 @@ export class ProductController extends Controller {
     return product;
   }
 
+  @Get('suggestions')
+  @SuccessResponse('200', 'Suggestions Retrieved')
+  @Response('400', 'Bad Request')
+  @Response('404', 'No Suggestions Found')
+  public async getSearchSuggestions(
+    @Query() search: string
+  ): Promise<string[] | undefined> {
+    console.log(`Received search query: ${search}`);
+    if (!search) {
+      console.error('Search query is required');
+      this.setStatus(400);
+      return;
+    }
+    try {
+      const suggestions = await new ProductService().getSearchSuggestions(search);
+      console.log(`Suggestions found: ${suggestions}`);
+      return suggestions;
+    } catch (error) {
+      console.error('Error retrieving suggestions:', error);
+      this.setStatus(500);
+      return;
+    }
+  }
+
   @Post()
   @SuccessResponse('201', 'Product Created')
   public async createProduct(
