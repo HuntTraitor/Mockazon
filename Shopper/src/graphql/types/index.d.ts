@@ -22,6 +22,10 @@ export type Order = {
   subtotal: number;
   totalBeforeTax: number;
   tax: number;
+  shipped: boolean;
+  delivered: boolean;
+  deliveryTime: string;
+  products: Product[];
   total: number;
 };
 

@@ -136,7 +136,7 @@ const OrderView: React.FC = () => {
       >
         <OrderDetails order={order} />
       </Container>
-      <OrderCard />
+      <OrderCard order={order}/>
       <AppBackDrop />
     </>
   );
