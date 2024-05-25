@@ -30,4 +30,16 @@ export class ShoppingCartService {
     const { rows }: { rows: ShoppingCartItem[] } = await pool.query(query);
     return rows;
   }
+
+  public async removeFromShoppingCart(
+    itemID: UUID
+  ): Promise<ShoppingCartItem> {
+    const remove = `DELETE FROM shopping_cart_item WHERE id = $1 RETURNING *`;
+    const query = {
+      text: remove,
+      values: [`${itemID}`],
+    };
+    const { rows } = await pool.query(query);
+    return rows[0];
+  }
 }

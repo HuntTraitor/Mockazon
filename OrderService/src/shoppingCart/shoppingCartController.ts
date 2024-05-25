@@ -6,6 +6,7 @@ import {
   Query,
   Post,
   Get,
+  Delete,
 } from 'tsoa';
 
 import { ShoppingCart, ShoppingCartInput, ShoppingCartItem } from '.';
@@ -27,5 +28,13 @@ export class ShoppingCartController extends Controller {
     @Query() shopperId: UUID
   ): Promise<ShoppingCart | undefined> {
     return await new ShoppingCartService().getShoppingCart(shopperId);
+  }
+
+  @Delete('')
+  @SuccessResponse('201', 'Removed from Shopping Cart')
+  public async removeFromShoppingCart(
+    @Query() itemID: UUID
+  ): Promise<ShoppingCartItem | undefined> {
+    return await new ShoppingCartService().removeFromShoppingCart(itemID);
   }
 }

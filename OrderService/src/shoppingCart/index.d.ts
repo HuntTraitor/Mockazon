@@ -16,6 +16,10 @@ export interface ShoppingCartItem {
   };
 }
 
+export interface ShoppingCartItemID {
+  id: UUID;
+}
+
 export interface ShoppingCartInput {
   product_id: UUID;
   shopper_id: UUID;
