@@ -3,3 +3,9 @@ CREATE TABLE vendor_order(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), 
 
 DROP TABLE IF EXISTS shopping_cart_item CASCADE;
 CREATE TABLE shopping_cart_item(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), shopper_id UUID, product_id UUID, data jsonb);
+
+DROP TABLE IF EXISTS shopper_order CASCADE;
+CREATE TABLE shopper_order(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), shopper_id UUID, data jsonb);
+
+DROP TABLE IF EXISTS order_product CASCADE;
+CREATE TABLE order_product(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), order_id UUID REFERENCES shopper_order(id), product_id UUID);

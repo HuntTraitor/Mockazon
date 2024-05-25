@@ -26,6 +26,25 @@ export interface Order {
   };
 }
 
+export interface ShopperOrder {
+  id: UUID;
+  createdAt: Date;
+  paymentMethod: string;
+  paymentDigits: string;
+  subtotal: number;
+  tax: number;
+  total: number;
+  shippingAddress: {
+    name: string;
+    addressLine1: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  products: UUID[];
+}
+
 export interface UpdateOrder {
   quantity?: Quantity;
   shipped?: boolean;
