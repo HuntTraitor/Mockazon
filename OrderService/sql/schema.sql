@@ -8,4 +8,4 @@ DROP TABLE IF EXISTS shopper_order CASCADE;
 CREATE TABLE shopper_order(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), shopper_id UUID, data jsonb);
 
 DROP TABLE IF EXISTS order_product CASCADE;
-CREATE TABLE order_product(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), order_id UUID REFERENCES shopper_order(id), product_id UUID);
+CREATE TABLE order_product(id UUID UNIQUE DEFAULT gen_random_uuid(), order_id UUID REFERENCES shopper_order(id), product_id UUID, PRIMARY KEY (id, order_id, product_id));
