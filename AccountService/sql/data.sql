@@ -206,7 +206,7 @@ VALUES
 --- Shopper Data ---
 -- FIXME: We don't want order history as a table here. We have orders in the order service,
 -- so you can get the order history by querying that. You cannot store json for this type of data,
--- because you can imagine it's just going to grow and grow and become a mess. That's why you have 
+-- because you can imagine it's just going to grow and grow and become a mess. That's why you have
 -- relationals dbs with rows
 INSERT INTO
     shopper (data)
@@ -278,19 +278,3 @@ VALUES
         )
     )
 );
-
-INSERT INTO
-    shopper (id, data)
-VALUES
-    (
-        '89f5cbfb-40a9-470d-ac8f-99e0416c6234',
-        jsonb_build_object(
-        'email', 'lteixeir@ucsc.edu',
-        'pwhash', crypt('pass', '87'),
-        'sub', 'sub',
-        'name', 'Lukas Teixeira Döpcke',
-        'username', 'lteixeir',
-        'role', 'shopper',
-        'suspended', false
-        )
-    );
