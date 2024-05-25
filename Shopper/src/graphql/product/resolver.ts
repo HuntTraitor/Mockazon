@@ -27,9 +27,7 @@ export class ProductResolver {
   }
 
   @Query(() => [String])
-  async getSearchSuggestions(
-    @Arg('search', () => String) search: string
-  ): Promise<string[]> {
+  async getSearchSuggestions(@Arg('search', () => String) search: string): Promise<string[]> {
     return this.productService.getSearchSuggestions(search);
   }
 }
