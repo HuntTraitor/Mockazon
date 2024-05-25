@@ -12,7 +12,7 @@ import {
   Path,
 } from 'tsoa';
 
-import { Order, NewOrder, Quantity } from '.';
+import { Order, NewOrder, Quantity, ShopperOrder } from '.';
 import { OrderService } from './orderService';
 import { UUID } from '../types';
 
@@ -70,6 +70,17 @@ export class OrderController extends Controller {
       delivered: delivered,
     };
     const order = await new OrderService().updateOrder(orderId, updates);
+    return order ?? this.setStatus(404);
+  }
+
+  @Get('shopperOrder/{orderId}')
+  @Response('404', 'Not Found')
+  public async getShopperOrder(
+    @Path() orderId: UUID
+  ): Promise<ShopperOrder | undefined> {
+    console.log('Getting shopper order', orderId);
+    const order = await new OrderService().getShopperOrder(orderId);
+    console.log('Microservice response', order);
     return order ?? this.setStatus(404);
   }
 }

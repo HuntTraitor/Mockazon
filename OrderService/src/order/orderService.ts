@@ -1,5 +1,5 @@
 import { UUID } from 'src/types';
-import { NewOrder, Order, UpdateOrder } from '.';
+import { NewOrder, Order, UpdateOrder, ShopperOrder } from '.';
 import { pool } from '../db';
 
 export class OrderService {
@@ -100,5 +100,27 @@ export class OrderService {
     };
     const { rows } = await pool.query(query);
     return rows[0];
+  }
+
+  public async getShopperOrder(orderId: UUID): Promise<ShopperOrder> {
+    const select = `SELECT * FROM shopper_order WHERE id = $1`;
+    const query = {
+      text: select,
+      values: [`${orderId}`],
+    };
+    const { rows } = await pool.query(query);
+    let order = rows[0];
+
+    // Get the products in the order
+    const productSelect = `SELECT product_id AS id FROM order_product WHERE order_id = $1`;
+    const productQuery = {
+      text: productSelect,
+      values: [`${orderId}`],
+    };
+    const { rows: products } = await pool.query(productQuery);
+
+    if (products.length) order.products = products.map(product => product.id);
+    order = { ...order, ...order.data, data: undefined };
+    return order;
   }
 }
