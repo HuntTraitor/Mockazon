@@ -30,26 +30,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 
 const fetchOrderById = async (id: string, accessToken: string) => {
-  /*
-  console.log('Fetching order with id:', id);
-  return {
-    id,
-    createdAt: '2024-05-08T00:00:00Z',
-    shippingAddress: {
-      name: 'Lukas Teixeira Dopcke',
-      addressLine1: '114 PEACH TER',
-      city: 'SANTA CRUZ',
-      state: 'CA',
-      postalCode: '95060-3250',
-      country: 'United States',
-    },
-    paymentMethod: 'Mastercard ending in 2541',
-    subtotal: 110.99,
-    totalBeforeTax: 110.99,
-    tax: 10.27,
-    total: 121.26,
-  };
-  */
+  // FIXME: The deliveryDate field on product needs to just be like "7 days" or some representation of that
+  // However that field is not going to be used here. When placing an order, it needs to look at all the 
+  // products' deliveryDate (which is again just a number of days) and then get the MAX of them, and 
+  // make a timestamp of that into the future, and put it on deliveryTime. This is the time that will
+  // show up for delivery on an order.
   const query = {
     query: `query GetOrder($id: String!) {
       getOrder(id: $id) {
@@ -68,6 +53,9 @@ const fetchOrderById = async (id: string, accessToken: string) => {
         subtotal
         tax
         total
+        shipped
+        delivered
+        deliveryTime
         products {
           id
           vendor_id
@@ -111,10 +99,6 @@ const fetchOrderById = async (id: string, accessToken: string) => {
       return null;
     });
   console.log('Order:', order);
-
-  // FIXME: Loop through order.products (it's the id of each product)
-  // fetch each product and add it to the order object
-  // then pass each product to the OrderCard list later
   return order;
 };
 

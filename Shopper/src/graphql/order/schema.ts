@@ -35,6 +35,15 @@ export class ShopperOrder {
   @IsPositive()
     total!: number;
 
+  @Field(() => Boolean)
+    shipped!: boolean;
+  
+  @Field(() => Boolean)
+    delivered!: boolean;
+  
+  @Field(() => Date)
+    deliveryTime!: Date;
+
   @Field(() => [Product])
     products!: Product[];
 }
