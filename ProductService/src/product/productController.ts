@@ -65,9 +65,7 @@ export class ProductController extends Controller {
       return;
     }
     try {
-      const suggestions = await new ProductService().getSearchSuggestions(
-        search
-      );
+      const suggestions = await new ProductService().getSearchSuggestions(search);
       console.log(`Suggestions found: ${suggestions}`);
       return suggestions;
     } catch (error) {
