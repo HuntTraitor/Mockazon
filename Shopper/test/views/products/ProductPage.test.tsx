@@ -3,7 +3,7 @@ import {
   render,
   // waitFor
 } from '@testing-library/react';
-import { fireEvent, screen, waitFor } from '@testing-library/dom';
+import { screen, waitFor } from '@testing-library/dom';
 import http from 'http';
 
 import { HttpResponse, graphql } from 'msw';
@@ -11,6 +11,7 @@ import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import ProductPage from '@/pages/products/[id]';
 import userEvent from '@testing-library/user-event';
+import { AppContextProvider } from '@/contexts/AppContext';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -21,6 +22,7 @@ let returnError = false;
 
 const handlers = [
   graphql.query('getProduct', ({ query }) => {
+    console.log(query);
     if (returnError) {
       return HttpResponse.json({
         errors: [
@@ -86,7 +88,11 @@ const mockProduct = {
 };
 
 it('Renders ProductPage successfully', async () => {
-  render(<ProductPage />);
+  render(
+    <AppContextProvider>
+      <ProductPage />
+    </AppContextProvider>
+  );
   await waitFor(() => {
     expect(screen.getByText(mockProduct.data.name)).toBeDefined();
   });
@@ -94,14 +100,22 @@ it('Renders ProductPage successfully', async () => {
 
 it('Renders ProductPage with an error', async () => {
   returnError = true;
-  render(<ProductPage />);
+  render(
+    <AppContextProvider>
+      <ProductPage />
+    </AppContextProvider>
+  );
   await waitFor(() => {
     expect(screen.getByText('Could not fetch product')).toBeInTheDocument();
   });
 });
 
 it('Clicks on quantity on productPage', async () => {
-  render(<ProductPage />);
+  render(
+    <AppContextProvider>
+      <ProductPage />
+    </AppContextProvider>
+  );
   await waitFor(() => {
     const field = screen.getByLabelText('Quantity Selector');
     expect(field).toBeInTheDocument();
