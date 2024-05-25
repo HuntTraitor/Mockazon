@@ -62,9 +62,9 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
             },
           },
         ]}
-        sx={{ 
+        sx={{
           zIndex: theme => theme.zIndex.drawer + 1,
-          ...popperSX, 
+          ...popperSX,
         }}
       >
         <Box ref={bufferZoneRef} sx={{ pt: 1, pb: 1 }}>

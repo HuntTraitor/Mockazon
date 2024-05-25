@@ -32,16 +32,18 @@ interface Product {
 }
 
 const highlightMatch = (text: string, query: string) => {
-  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  if (!text.toLowerCase().startsWith(query.toLowerCase())) {
+    return <span style={{ fontWeight: 'bold' }}>{text}</span>;
+  }
+
+  const startIndex = query.length;
+  const matchingPart = text.slice(0, startIndex);
+  const remainingPart = text.slice(startIndex);
+
   return (
     <span>
-      {parts.map((part, index) =>
-        part.toLowerCase() === query.toLowerCase() ? (
-          <span key={index} style={{ fontWeight: 'normal' }}>{part}</span>
-        ) : (
-          <span key={index} style={{ fontWeight: 'bold' }}>{part}</span>
-        )
-      )}
+      <span style={{ fontWeight: 'normal' }}>{matchingPart}</span>
+      <span style={{ fontWeight: 'bold' }}>{remainingPart}</span>
     </span>
   );
 };
@@ -74,7 +76,6 @@ const CustomTextField = styled(TextField)(() => ({
     fontSize: '14px',
     display: 'flex',
     transform: 'translateY(-20%)',
-
   },
   '& .MuiInputBase-input:focus': {
     outline: 'none',
@@ -86,7 +87,6 @@ const TopHeader = () => {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState(false);
   const { setBackDropOpen } = useAppContext();
 
@@ -109,7 +109,6 @@ const TopHeader = () => {
         variables: { search: query },
       };
 
-      setLoading(true);
       try {
         const response = await fetch(`${basePath}/api/graphql`, {
           method: 'POST',
@@ -140,8 +139,6 @@ const TopHeader = () => {
         }
       } catch (error) {
         console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
       }
     }, 300),
     []
@@ -241,7 +238,6 @@ const TopHeader = () => {
           options={suggestions}
           getOptionLabel={option => option}
           noOptionsText={''}
-          loading={loading}
           open={Boolean(search)}
           renderInput={params => (
             <CustomTextField
