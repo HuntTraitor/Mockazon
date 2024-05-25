@@ -8,5 +8,6 @@
   "totalBeforeTax": "Total before tax:",
   "Estimated tax to be collected": "Estimated tax to be collected:",
   "grandTotal": "Grand Total:",
-  "tax": "Estimated tax to be collected:"
+  "tax": "Estimated tax to be collected:",
+  "endingIn": "ending in"
 }

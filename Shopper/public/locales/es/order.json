@@ -8,5 +8,6 @@
   "totalBeforeTax": "Total antes de impuestos:",
   "Estimated tax to be collected": "Impuestos:",
   "grandTotal": "Total (I.V.A. Incluido):",
-  "tax": "Impuestos:"
+  "tax": "Impuestos:",
+  "endingIn": "terminado en"
 }

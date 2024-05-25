@@ -34,16 +34,18 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
           </Typography>
         </Grid>
       </Grid>
+      {/* FIXME: Currently we don't have delivery fees so this looks weird (double)
       <Grid container>
         <Grid item xs={10} md={8}>
           <Typography variant="body2">{t('order:totalBeforeTax')}</Typography>
         </Grid>
         <Grid item xs={2} md={4}>
           <Typography align="right" variant="body2">
-            ${order.totalBeforeTax}
+            ${order.subtotal}
           </Typography>
         </Grid>
       </Grid>
+      */}
       <Grid container>
         <Grid item xs={10} md={8}>
           <Typography variant="body2">{t('order:tax')}</Typography>

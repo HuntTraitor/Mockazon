@@ -78,7 +78,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
             )}
             {section(
               t('order:paymentMethod'),
-              <PaymentMethod method={order.paymentMethod} />
+              <PaymentMethod method={order.paymentMethod} digits={order.paymentDigits} />
             )}
             {section(t('order:orderSummary'), <OrderSummary order={order} />)}
           </>
@@ -91,7 +91,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
               )}
               {section(
                 t('order:paymentMethod'),
-                <PaymentMethod method={order.paymentMethod} />
+                <PaymentMethod method={order.paymentMethod} digits={order.paymentDigits} />
               )}
               {section(t('order:orderSummary'), <OrderSummary order={order} />)}
             </Grid>
