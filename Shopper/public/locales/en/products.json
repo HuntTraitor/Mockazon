@@ -6,5 +6,6 @@
   "returnsAndOrders": "Returns & Orders",
   "rating": "Rating",
   "price": "Price",
-  "deliveryDate": "Delivery Date"
+  "deliveryDate": "Delivery Date",
+  "quantity": "Quantity"
 }

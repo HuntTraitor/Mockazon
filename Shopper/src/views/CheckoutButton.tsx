@@ -107,14 +107,13 @@ export default function CheckoutButton({
         console.error(err);
       });
   };
-
+  const productQuantity = productsWithContent
+    .map(p => parseInt(p.quantity))
+    .reduce((a, b) => a + b, 0);
   return (
     <form onSubmit={handleSubmit}>
       <section className={styles.section}>
-        <Subtotal
-          numberOfProducts={productsWithContent.length}
-          subtotal={subtotal}
-        />
+        <Subtotal numberOfProducts={productQuantity} subtotal={subtotal} />
         <button className={styles.checkoutButton} type="submit" role="link">
           {t('cart:proceedToCheckout')}
         </button>

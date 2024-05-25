@@ -135,7 +135,8 @@ const Cart = ({ locale }: { locale: string }) => {
               (accumulator: number, currentValue: Product) => {
                 return (
                   accumulator +
-                  (currentValue.data.getProduct.data.price as number)
+                  (currentValue.data.getProduct.data.price as number) *
+                    parseInt(currentValue.quantity)
                 );
               },
               0
@@ -268,6 +269,13 @@ const Cart = ({ locale }: { locale: string }) => {
                   >
                     {t('products:deliveryDate')}:{' '}
                     {product.data.getProduct.data.deliveryDate}
+                  </Typography>
+                  <Typography
+                    aria-label={`quantity is ${product.quantity}`}
+                    variant="subtitle1"
+                    component="p"
+                  >
+                    {t('products:quantity')}: {product.quantity}
                   </Typography>
                   <Link
                     aria-label={`add-shopping-cart-${product.id}`}

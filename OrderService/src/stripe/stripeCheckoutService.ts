@@ -24,10 +24,10 @@ export class StripeCheckoutService {
     try {
       // Create Checkout Sessions from body params.
       let success_url = `${origin}/orders/success?sessionId={CHECKOUT_SESSION_ID}`;
-      let cancel_url = `${origin}/?canceled=true`;
+      let cancel_url = `${origin}/cart?canceled=true`;
       if (locale === 'es') {
         success_url = `${origin}/es/orders/success?sessionId={CHECKOUT_SESSION_ID}`;
-        cancel_url = `${origin}/es/?canceled=true`;
+        cancel_url = `${origin}/es/cart?canceled=true`;
       }
       const session = await checkoutSessions.checkout.sessions.create({
         line_items: lineItems,
