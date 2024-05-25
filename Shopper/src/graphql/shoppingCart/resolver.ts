@@ -1,18 +1,24 @@
-import { Args, Mutation, Query, Resolver } from 'type-graphql';
-import { AddItem, ShopperId, ShoppingCartItem } from './schema';
+import { Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+import { AddItem, ShoppingCartItem } from './schema';
 import { ShoppingCartService } from '@/graphql/shoppingCart/service';
+import type { NextApiRequest } from 'next';
 
 @Resolver()
 export class ShoppingCartResolver {
+  @Authorized()
   @Query(() => [ShoppingCartItem])
   async getShoppingCart(
-    @Args() shopperId: ShopperId
+    @Ctx() request: NextApiRequest
   ): Promise<ShoppingCartItem[]> {
-    return new ShoppingCartService().getShoppingCart(shopperId);
+    return new ShoppingCartService().getShoppingCart(request.user.id);
   }
 
   @Mutation(() => ShoppingCartItem)
-  async addToShoppingCart(@Args() item: AddItem): Promise<ShoppingCartItem> {
-    return new ShoppingCartService().addToShoppingCart(item);
+  @Authorized()
+  async addToShoppingCart(
+    @Args() item: AddItem,
+    @Ctx() request: NextApiRequest
+  ): Promise<ShoppingCartItem> {
+    return new ShoppingCartService().addToShoppingCart(item, request.user.id);
   }
 }

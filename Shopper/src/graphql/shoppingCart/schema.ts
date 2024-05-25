@@ -19,9 +19,6 @@ export class AddItem {
   @IsUUID()
   @Field()
     productId!: string;
-  @IsUUID()
-  @Field()
-    shopperId!: string;
   @Field()
     quantity!: string;
 }

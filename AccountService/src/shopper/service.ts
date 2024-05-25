@@ -25,6 +25,7 @@ export class ShopperService {
     };
 
     const { rows } = await pool.query(query);
+    console.log(rows[0]);
     if (rows[0]) {
       const user = rows[0];
       const accessToken = jwt.sign(

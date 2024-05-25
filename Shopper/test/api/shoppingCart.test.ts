@@ -56,6 +56,12 @@ const handlers = [
       }
     }
   ),
+  rest.get(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/check`,
+    async () => {
+      return HttpResponse.json({ accessToken: '12345' }, { status: 200 });
+    }
+  ),
 ];
 
 const microServices = setupServer(...handlers);
@@ -75,14 +81,13 @@ afterAll(done => {
   server.close(done);
 });
 
-test('Gets shopping cart', async () => {
+test('Gets shopping cart success', async () => {
   getPasses = true;
   const result = await supertest(server)
     .post('/api/graphql')
+    .set('Authorization', 'Bearer ' + 123)
     .send({
-      query: `{getShoppingCart(
-        shopperId: "${randomUUID()}"
-      ) {
+      query: `{getShoppingCart {
                 id
                 product_id
                 shopper_id
@@ -103,10 +108,9 @@ test('Gets shopping cart with failure', async () => {
   getPasses = false;
   const result = await supertest(server)
     .post('/api/graphql')
+    .set('Authorization', 'Bearer ' + 123)
     .send({
-      query: `{getShoppingCart(
-        shopperId: "${randomUUID()}"
-      ) {
+      query: `{getShoppingCart {
                 id
                 product_id
                 shopper_id
@@ -124,10 +128,10 @@ test('Add item to shopping cart', async () => {
   postPasses = true;
   const result = await supertest(server)
     .post('/api/graphql')
+    .set('Authorization', 'Bearer ' + 123)
     .send({
       query: `mutation { addToShoppingCart(
       productId: "${randomUUID()}",
-      shopperId: "${randomUUID()}",
       quantity: "3")
     { id, product_id, shopper_id, data { quantity } }}`,
     });
@@ -143,10 +147,10 @@ test('Add item to shopping cart with failure', async () => {
   postPasses = false;
   const result = await supertest(server)
     .post('/api/graphql')
+    .set('Authorization', 'Bearer ' + 123)
     .send({
       query: `mutation { addToShoppingCart(
       productId: "${randomUUID()}",
-      shopperId: "${randomUUID()}",
       quantity: "3")
     { id, product_id, shopper_id, data { quantity } }}`,
     });

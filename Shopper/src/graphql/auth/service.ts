@@ -103,7 +103,6 @@ export class AuthService {
   public async check(authHeader?: string): Promise<SessionUser> {
     return new Promise((resolve, reject) => {
       if (!authHeader) {
-        // console.error('No Authorization header provided');
         reject(new GraphQLError('Unauthorized'));
       } else {
         const tokens = authHeader.split(' ');

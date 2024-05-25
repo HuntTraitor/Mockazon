@@ -47,7 +47,7 @@ const Cart = ({ locale }: { locale: string }) => {
   const { t } = useTranslation(['products', 'cart']);
   const [error, setError] = useState('');
   const [subtotal, setSubtotal] = useState(0.0);
-  const { user } = useContext(LoggedInContext);
+  const { user, accessToken } = useContext(LoggedInContext);
   const { backDropOpen, setBackDropOpen } = useAppContext();
   const router = useRouter();
 
@@ -57,12 +57,11 @@ const Cart = ({ locale }: { locale: string }) => {
   // https://chatgpt.com/share/018e08ea-be97-49b5-a207-a8ade89baf92
   useEffect(() => {
     if (JSON.stringify(user) === '{}') {
-      // router.push('/login');
       return;
     }
     const query = {
       query: `query GetShoppingCart {
-    getShoppingCart(shopperId: "${user.id}") {
+    getShoppingCart {
       id
       product_id
       shopper_id
@@ -74,7 +73,10 @@ const Cart = ({ locale }: { locale: string }) => {
     };
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
       body: JSON.stringify(query),
     })
       .then(response => {
@@ -153,7 +155,7 @@ const Cart = ({ locale }: { locale: string }) => {
         console.log('Error fetching shopping cart:', err);
         setError('Could not fetch shopping cart');
       });
-  }, [router, user]);
+  }, [router, user, accessToken]);
 
   // if(JSON.stringify(user) === '{}') {
   //   return null
