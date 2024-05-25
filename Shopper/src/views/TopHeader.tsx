@@ -60,6 +60,7 @@ const CustomTextField = styled(TextField)(() => ({
     fontSize: '14px',
     display: 'flex',
     transform: 'translateY(-20%)',
+
   },
   '& .MuiInputBase-input:focus': {
     outline: 'none',
