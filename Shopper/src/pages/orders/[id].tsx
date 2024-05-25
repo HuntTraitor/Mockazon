@@ -9,6 +9,8 @@ import OrderDetails from '@/views/order/OrderDetails';
 import OrderCard from './ordercard';
 import styles from '@/styles/OrderView.module.css';
 import { Order } from '@/graphql/types';
+import getConfig from 'next/config';
+const { basePath } = getConfig().publicRuntimeConfig;
 
 const namespaces = [
   'products',
@@ -27,7 +29,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-const fetchOrderById = async (id: string) => {
+const fetchOrderById = async (id: string, accessToken: string) => {
+  /*
   console.log('Fetching order with id:', id);
   return {
     id,
@@ -46,6 +49,61 @@ const fetchOrderById = async (id: string) => {
     tax: 10.27,
     total: 121.26,
   };
+  */
+  const query = {
+    query: `query GetOrder($id: String!) {
+      getOrder(id: $id) {
+        id
+        createdAt
+        shippingAddress {
+          name
+          addressLine1
+          city
+          state
+          postalCode
+          country
+        }
+        paymentMethod
+        paymentDigits
+        subtotal
+        tax
+        total
+        products
+      }
+    }`,
+    variables: { id },
+  };
+  const order = await fetch(`${basePath}/api/graphql`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(query),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw response;
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Data:', data);
+      if (data.errors) {
+        throw data.errors;
+      }
+      return data.data.getOrder;
+    })
+    .catch(err => {
+      console.error(err);
+      return null;
+    });
+  console.log('Order:', order);
+
+  // FIXME: Loop through order.products (it's the id of each product)
+  // fetch each product and add it to the order object
+  // then pass each product to the OrderCard list later
+  return order;
 };
 
 const OrderView: React.FC = () => {
@@ -60,11 +118,11 @@ const OrderView: React.FC = () => {
   useEffect(() => {
     if (id) {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
-      if (!user.accessToken) {
+      if (!user.accessToken) { // FIXME: This needs to be handled globally, think back on the Authenticated Routes example
         window.location.href = '/login';
         return;
       }
-      fetchOrderById(id as string).then(order => {
+      fetchOrderById(id as string, user.accessToken).then(order => {
         setOrder(order);
         setLoading(false);
       });
