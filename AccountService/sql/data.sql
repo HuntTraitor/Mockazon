@@ -219,53 +219,59 @@ VALUES
         'suspended', false,
         'shippingInfo', jsonb_build_array(
             jsonb_build_object(
-                'address', '1234 Elm St',
+                'name', 'Evan Metcalf',
+                'addressLine1', '1234 Elm St',
+                'country', 'USA',
                 'city', 'Santa Cruz',
                 'state', 'CA',
-                'zip', '95060'
+                'postalCode', '95060'
             ),
             jsonb_build_object(
-                'address', '5678 Oak St',
+                'name', 'Evan Metcalf',
+                'addressLine1', '5678 Oak St',
+                'country', 'USA',
                 'city', 'Santa Cruz',
                 'state', 'CA',
-                'zip', '95060'
+                'postalCode', '95060'
             )
         ),
         'orderHistory', jsonb_build_array(
             jsonb_build_object(
-                'orderId', 'ORD123',
-                'date', '2024-05-01',
-                'items', jsonb_build_array(
-                    jsonb_build_object(
-                        'productId', 'P001',
-                        'quantity', 2,
-                        'price', 19.99
-                    ),
-                    jsonb_build_object(
-                        'productId', 'P002',
-                        'quantity', 1,
-                        'price', 9.99
-                    )
+                'id', '1',
+                'createdAt', '2021-03-01T00:00:00Z',
+                'shippingAddress', jsonb_build_object(
+                    'name', 'Evan Metcalf',
+                    'addressLine1', '1234 Elm St',
+                    'country', 'USA',
+                    'city', 'Santa Cruz',
+                    'state', 'CA',
+                    'postalCode', '95060'
                 ),
+                'paymentMethod', 'Credit Card',
+                'subtotal', 49.97,
+                'totalBeforeTax', 49.97,
+                'tax', 0,
                 'total', 49.97
+
             ),
             jsonb_build_object(
-                'orderId', 'ORD124',
-                'date', '2024-05-15',
-                'items', jsonb_build_array(
-                    jsonb_build_object(
-                        'productId', 'P003',
-                        'quantity', 1,
-                        'price', 29.99
-                    ),
-                    jsonb_build_object(
-                        'productId', 'P004',
-                        'quantity', 3,
-                        'price', 15.99
-                    )
+                'id', '2',
+                'createdAt', '2021-03-15T00:00:00Z',
+                'shippingAddress', jsonb_build_object(
+                    'name', 'Evan Metcalf',
+                    'addressLine1', '5678 Oak St',
+                    'country', 'USA',
+                    'city', 'Santa Cruz',
+                    'state', 'CA',
+                    'postalCode', '95060'
                 ),
+                'paymentMethod', 'PayPal',
+                'subtotal', 77.96,
+                'totalBeforeTax', 77.96,
+                'tax', 0,
                 'total', 77.96
             )
         )
     )
 );
+
