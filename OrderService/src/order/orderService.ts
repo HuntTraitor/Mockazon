@@ -111,7 +111,7 @@ export class OrderService {
     const { rows } = await pool.query(query);
     let order = rows[0];
 
-    // Get the products in the order
+    // Get the product ids in the order
     const productSelect = `SELECT product_id AS id FROM order_product WHERE order_id = $1`;
     const productQuery = {
       text: productSelect,

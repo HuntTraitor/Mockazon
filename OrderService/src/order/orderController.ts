@@ -78,9 +78,7 @@ export class OrderController extends Controller {
   public async getShopperOrder(
     @Path() orderId: UUID
   ): Promise<ShopperOrder | undefined> {
-    console.log('Getting shopper order', orderId);
     const order = await new OrderService().getShopperOrder(orderId);
-    console.log('Microservice response', order);
     return order ?? this.setStatus(404);
   }
 }

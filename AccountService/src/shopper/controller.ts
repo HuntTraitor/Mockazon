@@ -46,7 +46,6 @@ export class ShopperController extends Controller {
   public async check(
     @Query() accessToken: string,
   ): Promise<SessionUser | undefined> {
-    console.log(accessToken);
     return new ShopperService()
       .check(accessToken)
       .then(
