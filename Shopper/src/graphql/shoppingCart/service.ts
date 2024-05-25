@@ -1,12 +1,11 @@
-import { AddItem, ShopperId, ShoppingCartItem } from './schema';
+import { UUID } from '../types';
+import { AddItem, ShoppingCartItem } from './schema';
 import { GraphQLError } from 'graphql/error';
 
 export class ShoppingCartService {
-  public async getShoppingCart(
-    shopperId: ShopperId
-  ): Promise<ShoppingCartItem[]> {
+  public async getShoppingCart(shopperId: UUID): Promise<ShoppingCartItem[]> {
     const result = await fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?shopperId=${shopperId.shopperId}`,
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?shopperId=${shopperId}`,
       {
         method: 'GET',
         headers: {
@@ -30,7 +29,10 @@ export class ShoppingCartService {
     return result;
   }
 
-  public async addToShoppingCart(item: AddItem): Promise<ShoppingCartItem> {
+  public async addToShoppingCart(
+    item: AddItem,
+    shopperId: UUID
+  ): Promise<ShoppingCartItem> {
     const result = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
       {
@@ -39,7 +41,7 @@ export class ShoppingCartService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          shopper_id: item.shopperId,
+          shopper_id: shopperId,
           product_id: item.productId,
           quantity: item.quantity,
         }),
