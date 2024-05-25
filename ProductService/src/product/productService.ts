@@ -209,19 +209,7 @@ export class ProductService {
     };
 
     const { rows } = await pool.query(query);
-    let suggestions: string[] = rows.map(row => row.name);
-
-    if (suggestions?.length < 10) {
-      const select = `SELECT DISTINCT data->>'name' FROM product WHERE data->>'name' ILIKE $1::TEXT LIMIT 10`;
-      const query = {
-        text: select,
-        values: [`%${search}%`],
-      };
-      const { rows } = await pool.query(query);
-      suggestions.push(...rows.map(row => row.name));
-      suggestions = suggestions.filter((value, index, self) => self.indexOf(value) === index);
-      suggestions = suggestions.slice(0, 10);
-    }
+    const suggestions: string[] = rows.map(row => row.name);
 
     return suggestions;
   }

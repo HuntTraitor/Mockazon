@@ -40,7 +40,10 @@ const LanguageSwitcher = () => {
                 }}
               ></span>
               {languageText}
-              <ExpandMoreIcon className={styles.dropdownIcon} sx={{ display: 'inline-flex', alignItems: 'center' }} />
+              <ExpandMoreIcon
+                className={styles.dropdownIcon}
+                sx={{ display: 'inline-flex', alignItems: 'center' }}
+              />
             </Typography>
           </Box>
         }

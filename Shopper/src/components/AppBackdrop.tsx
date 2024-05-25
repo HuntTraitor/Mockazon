@@ -15,7 +15,7 @@ const AppBackDrop = () => {
       style={{ zIndex: 1, position: 'fixed' }}
       onClick={() => setBackDropOpen(false)}
     />
-  )
-}
+  );
+};
 
 export default AppBackDrop;
