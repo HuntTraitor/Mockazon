@@ -1,5 +1,5 @@
 import { Args, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql';
-import { AddItem, ShoppingCartItem } from './schema';
+import { AddItem, RemoveItem, ShoppingCartItem } from './schema';
 import { ShoppingCartService } from '@/graphql/shoppingCart/service';
 import type { NextApiRequest } from 'next';
 
@@ -20,5 +20,13 @@ export class ShoppingCartResolver {
     @Ctx() request: NextApiRequest
   ): Promise<ShoppingCartItem> {
     return new ShoppingCartService().addToShoppingCart(item, request.user.id);
+  }
+
+  @Authorized()
+  @Mutation(() => ShoppingCartItem)
+  async removeFromShoppingCart(
+    @Args() item: RemoveItem,
+  ): Promise<ShoppingCartItem> {
+    return new ShoppingCartService().removeFromShoppingCart(item);
   }
 }

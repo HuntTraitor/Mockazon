@@ -1,5 +1,5 @@
 import { UUID } from '../types';
-import { AddItem, ShoppingCartItem } from './schema';
+import { AddItem, RemoveItem, ShoppingCartItem } from './schema';
 import { GraphQLError } from 'graphql/error';
 
 export class ShoppingCartService {
@@ -45,6 +45,34 @@ export class ShoppingCartService {
           product_id: item.productId,
           quantity: item.quantity,
         }),
+      }
+    )
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(authenticated => {
+        return authenticated;
+      })
+      .catch(err => {
+        console.log(err);
+        throw new GraphQLError('Internal Server Error');
+      });
+    return result;
+  }
+
+  public async removeFromShoppingCart(
+    item: RemoveItem,
+  ): Promise<ShoppingCartItem> {
+    const result = await fetch(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?itemID=${item.itemId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
     )
       .then(response => {

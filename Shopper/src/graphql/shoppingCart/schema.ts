@@ -23,6 +23,13 @@ export class AddItem {
     quantity!: string;
 }
 
+@ArgsType()
+export class RemoveItem {
+  @IsUUID()
+  @Field()
+    itemId!: string;
+}
+
 @ObjectType()
 export class ShoppingCartItem {
   @IsUUID()
