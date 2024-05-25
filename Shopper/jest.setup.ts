@@ -13,3 +13,5 @@ global.TextEncoder = TextEncoder;
 jest.mock('next/config', () => () => ({
   publicRuntimeConfig: { basePath: '' },
 }));
+
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));

@@ -19,6 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           expand: ['payment_intent', 'line_items.data.price.product'],
         }
       );
+
       return res.status(200).json(checkoutSession);
     } catch (err) {
       const errorMessage =

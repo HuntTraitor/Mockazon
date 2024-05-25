@@ -39,6 +39,8 @@ export class ProductData {
     deliveryDate!: string;
   @Field()
     image!: string;
+  @Field()
+    description!: string;
 }
 
 @ArgsType()

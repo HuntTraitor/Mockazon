@@ -9,16 +9,17 @@ import { Product } from '@/graphql/types';
 
 interface ProductProps {
   product: Product;
+  quantity: string;
 }
 
-export default function AddToCartButton({ product }: ProductProps) {
+export default function AddToCartButton({ product, quantity }: ProductProps) {
   const { user, accessToken } = React.useContext(LoggedInContext);
 
   const addToShoppingCart = (productId: string) => {
     console.log(user);
     const query = {
       query: `mutation AddToShoppingCart {
-        addToShoppingCart(productId: "${productId}", quantity: "1") {
+        addToShoppingCart(productId: "${productId}", quantity: "${quantity}") {
           id
           product_id
           shopper_id

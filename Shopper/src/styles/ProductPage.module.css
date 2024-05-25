@@ -1,6 +1,79 @@
 .wrapper {
   display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+  justify-content: space-between;
+  align-items: stretch;
+  margin-left: 5%;
+  margin-right: 5%;
+  padding: 20px;
+  gap: 25px;
+}
 
+.checkoutWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 20px;
+  border: 1px solid grey;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.checkoutMoreInformation {
+  display: flex;
+  justify-content: space-between;
+}
+
+.checkoutCenter {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.checkoutMoreInformationCaption {
+  color: 	#909090;
+}
+
+.productImage {
+  position: relative;
+  flex: 1; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 400px; 
+  max-height: 400px;
+}
+
+.productImage img {
+  width: 100%;
+  height: auto;
+  object-fit: contain; 
+}
+
+.checkoutCenter, .checkoutWrapper {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+}
+
+.productName {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.brandName {
+  color: #909090;
+}
+
+.productDescription {
+  font-size: 0.9rem;
+}
+
+.cardWrapper {
+  margin: 1%;
+}
+
+.centerContainer {
+  display: flex;
+  justify-content: center;
 }

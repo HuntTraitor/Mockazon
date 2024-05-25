@@ -219,7 +219,9 @@ export class ProductService {
       };
       const { rows } = await pool.query(query);
       suggestions.push(...rows.map(row => row.name));
-      suggestions = suggestions.filter((value, index, self) => self.indexOf(value) === index);
+      suggestions = suggestions.filter(
+        (value, index, self) => self.indexOf(value) === index
+      );
       suggestions = suggestions.slice(0, 10);
     }
 

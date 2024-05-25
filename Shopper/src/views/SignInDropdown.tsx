@@ -35,9 +35,12 @@ const SignInDropdown = () => {
             alignItems="center"
             className={styles.accountBox}
           >
-            <Typography className={styles.buttonText} sx={{
-              marginBottom: '12px',
-            }}>
+            <Typography
+              className={styles.buttonText}
+              sx={{
+                marginBottom: '12px',
+              }}
+            >
               <span className={styles.caption}>
                 {`${t('hello')} ${user.name ? user.name : t('signInText')}`}
               </span>
