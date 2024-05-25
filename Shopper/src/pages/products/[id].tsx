@@ -17,26 +17,6 @@ import Layout from '@/components/Layout';
 import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
 
-
-const currencies = [
-  {
-    value: 'USD',
-    label: '$',
-  },
-  {
-    value: 'EUR',
-    label: '€',
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-  },
-];
-
 const ProductPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -53,7 +33,7 @@ const ProductPage = () => {
     const query = {
       query: `query getProduct{getProduct(
         productId: "${id}"
-      ) {id data {brand name rating price deliveryDate image}}}`,
+      ) {id data {brand name rating price deliveryDate image description}}}`,
     };
 
     fetch(`${basePath}/api/graphql`, {
@@ -100,7 +80,7 @@ const ProductPage = () => {
                 <Price price={product.data.price.toString()}/>
               </div>
               <Divider />
-              <Typography className={styles.productDescription} >🎁【2024 Fathers Day Gifts For Dad】Our glass with funny saying "To Dad from The Reasons You Drink", it's could be as a Father's Day gifts for dad, men, father, grandpa, husband and friend.Whether at home or on birthday party. The glass not just suitable for beer,also wonderful drinking glasses for wine, whiskey, cocktail, soda water,cola and other drinks.</Typography>
+              <Typography className={styles.productDescription} >{product.data.description}</Typography>
             </Box>
             <Box>
               <div className={styles.checkoutWrapper}>

@@ -42,5 +42,6 @@ export interface Product {
     price: number;
     deliveryDate: string;
     image: string;
+    description: string;
   };
 }
