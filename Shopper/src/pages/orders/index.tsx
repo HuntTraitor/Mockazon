@@ -88,6 +88,58 @@ export default function Index() {
       });
   };
 
+  const [Orders, setOrders] = useState([] as Order[]);
+  const { accessToken, user } = useContext(LoggedInContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchOrders = () => {
+    // this could be altered to take arguments for filtering in the future
+    const query = `{
+      getOrderHistory {
+        createdAt
+        id
+        paymentMethod
+        shippingAddress {
+          addressLine1
+          city
+          country
+          name
+          postalCode
+          state
+        }
+        subtotal
+        total
+        tax
+        totalBeforeTax
+      }
+    }`;
+    fetch('/api/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ query }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        setOrders(data.data.getOrderHistory);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
+  if (JSON.stringify(user) === '{}') {
+    router.push('/login');
+    return null;
+  }
+
   return (
     <>
       <TopNav />
