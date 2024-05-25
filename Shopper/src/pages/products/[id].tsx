@@ -1,4 +1,11 @@
-import { Card, Typography, Box, Divider, Button, TextField, MenuItem } from '@mui/material';
+import {
+  Card,
+  Typography,
+  Box,
+  Divider,
+  TextField,
+  MenuItem,
+} from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // import { useTranslation } from 'next-i18next';
@@ -26,9 +33,8 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState('1');
   const numbers = Array.from({ length: 5 }, (_, index) => index + 1);
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuantity(event.target.value)
-  }
-  console.log(quantity)
+    setQuantity(event.target.value);
+  };
   useEffect(() => {
     const query = {
       query: `query getProduct{getProduct(
@@ -44,25 +50,25 @@ const ProductPage = () => {
       body: JSON.stringify(query),
     })
       .then(response => {
-        console.log(response);
-        if (!response.ok) {
-          throw response;
-        }
         return response.json();
       })
       .then(product => {
-        setProduct(product.data.getProduct);
-      })
-      .catch(err => {
-        console.error('Error fetching product:', err);
-        setError('Could not fetch products');
+        if (product.errors) {
+          console.error('Error fetching product:', product);
+          setError('Could not fetch product');
+        } else {
+          setProduct(product.data.getProduct);
+        }
       });
   }, [id]);
 
   if (product && product.data) {
     return (
       <Box className={styles.centerContainer}>
-        <Card sx={{maxWidth: 1500, minWidth: 175 }} className={styles.cardWrapper}>
+        <Card
+          sx={{ maxWidth: 1500, minWidth: 175 }}
+          className={styles.cardWrapper}
+        >
           <Box className={styles.wrapper}>
             <Box className={styles.productImage}>
               <Image
@@ -73,43 +79,79 @@ const ProductPage = () => {
               />
             </Box>
             <Box className={styles.checkoutCenter}>
-              <Typography className={styles.productName}>{product.data.name}</Typography>
-              <Typography className={styles.brandName}>Brand: {product.data.brand}</Typography>
+              <Typography className={styles.productName}>
+                {product.data.name}
+              </Typography>
+              <Typography className={styles.brandName}>
+                Brand: {product.data.brand}
+              </Typography>
               <Divider />
-              <div style={{marginBottom: '10px'}}>
-                <Price price={product.data.price.toString()}/>
+              <div style={{ marginBottom: '10px' }}>
+                <Price price={product.data.price.toString()} />
               </div>
               <Divider />
-              <Typography className={styles.productDescription} >{product.data.description}</Typography>
+              <Typography className={styles.productDescription}>
+                {product.data.description}
+              </Typography>
             </Box>
             <Box>
               <div className={styles.checkoutWrapper}>
                 <Price price={product.data.price.toString()} />
                 <DeliveryText deliveryDate={product.data.deliveryDate} />
                 <TextField
-                  id="outlined-select-currency"
+                  id="Quantity Selector"
                   select
                   label="Quantity"
                   defaultValue="1"
                   onChange={handleQuantityChange}
+                  aria-label="Quantity Selector"
+                  data-testid="Quantity Selector"
                 >
-                  {numbers.map((number) => (
-                    <MenuItem key={number} value={number}>
+                  {numbers.map(number => (
+                    <MenuItem
+                      key={number}
+                      value={number}
+                      aria-label="Quantity number"
+                    >
                       {number}
                     </MenuItem>
                   ))}
                 </TextField>
-                <AddToCartButton product={product} quantity={quantity}/>
+                <AddToCartButton product={product} quantity={quantity} />
                 <Box className={styles.checkoutMoreInformation}>
                   <Box>
-                    <Typography variant="caption" display="block" className={styles.checkoutMoreInformationCaption}>Ships from</Typography>
-                    <Typography variant="caption" display="block" className={styles.checkoutMoreInformationCaption}>Sold by</Typography>
-                    <Typography variant="caption" display="block" className={styles.checkoutMoreInformationCaption}>Customer</Typography>
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      className={styles.checkoutMoreInformationCaption}
+                    >
+                      Ships from
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      className={styles.checkoutMoreInformationCaption}
+                    >
+                      Sold by
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      className={styles.checkoutMoreInformationCaption}
+                    >
+                      Customer
+                    </Typography>
                   </Box>
                   <Box>
-                    <Typography variant="caption" display="block">Mockazon</Typography>
-                    <Typography variant="caption" display="block">{product.data.brand}</Typography>
-                    <Typography variant="caption" display="block">User</Typography>
+                    <Typography variant="caption" display="block">
+                      Mockazon
+                    </Typography>
+                    <Typography variant="caption" display="block">
+                      {product.data.brand}
+                    </Typography>
+                    <Typography variant="caption" display="block">
+                      User
+                    </Typography>
                   </Box>
                 </Box>
               </div>

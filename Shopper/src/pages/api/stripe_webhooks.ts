@@ -75,7 +75,7 @@ async function createOrdersFromPurchase(orders: Order[], shopperId: string) {
 
 // most likely can't be converted to graphql because we don't call this endpoint, only Stripe does
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("triggered")
+  console.log('triggered');
   if (req.method === 'POST') {
     const buf = await buffer(req);
     const sig = req.headers['stripe-signature'] as string;

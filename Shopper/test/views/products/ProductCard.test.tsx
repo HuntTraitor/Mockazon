@@ -92,6 +92,7 @@ const mockProduct = {
     price: 12.99,
     deliveryDate: '2024-05-20',
     image: 'http://some-image.jpg',
+    description: 'test description',
   },
 };
 

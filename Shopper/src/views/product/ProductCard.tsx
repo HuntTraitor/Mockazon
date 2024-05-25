@@ -60,7 +60,7 @@ export default function ProductCard({ product }: ProductProps) {
           </span>
         </Typography>
         <DeliveryText deliveryDate={product.data.deliveryDate} />
-        <AddToCartButton product={product} quantity={"1"} />
+        <AddToCartButton product={product} quantity={'1'} />
       </CardContent>
     </Card>
   );
