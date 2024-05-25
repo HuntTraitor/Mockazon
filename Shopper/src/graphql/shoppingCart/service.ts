@@ -51,6 +51,7 @@ export class ShoppingCartService {
         if (!response.ok) {
           throw response;
         }
+        console.log(JSON.stringify(response));
         return response.json();
       })
       .then(authenticated => {
@@ -65,14 +66,19 @@ export class ShoppingCartService {
 
   public async removeFromShoppingCart(
     item: RemoveItem,
-  ): Promise<ShoppingCartItem> {
+    shopper_id: UUID
+  ): Promise<RemoveItem> {
     const result = await fetch(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart?itemID=${item.itemId}`,
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
       {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          shopper_id: shopper_id,
+          product_id: item.productId,
+        }),
       }
     )
       .then(response => {

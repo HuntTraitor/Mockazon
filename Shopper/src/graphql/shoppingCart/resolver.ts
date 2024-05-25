@@ -26,7 +26,8 @@ export class ShoppingCartResolver {
   @Mutation(() => ShoppingCartItem)
   async removeFromShoppingCart(
     @Args() item: RemoveItem,
-  ): Promise<ShoppingCartItem> {
-    return new ShoppingCartService().removeFromShoppingCart(item);
+    @Ctx() request: NextApiRequest
+  ): Promise<RemoveItem> {
+    return new ShoppingCartService().removeFromShoppingCart(item, request.user.id);
   }
 }

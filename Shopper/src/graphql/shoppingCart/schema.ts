@@ -27,7 +27,7 @@ export class AddItem {
 export class RemoveItem {
   @IsUUID()
   @Field()
-    itemId!: string;
+    productId!: string;
 }
 
 @ObjectType()
