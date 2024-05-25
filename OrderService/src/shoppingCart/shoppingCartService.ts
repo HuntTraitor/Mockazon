@@ -1,5 +1,5 @@
 import { UUID } from 'src/types';
-import { ShoppingCart, ShoppingCartItem } from '.';
+import { ShoppingCart, ShoppingCartItem, ShoppingCartRemoveInput } from '.';
 import { pool } from '../db';
 import { NewOrder } from '../order';
 
@@ -32,14 +32,14 @@ export class ShoppingCartService {
   }
 
   public async removeFromShoppingCart(
-    itemID: UUID
-  ): Promise<ShoppingCartItem> {
-    const remove = `DELETE FROM shopping_cart_item WHERE id = $1 RETURNING *`;
+    NewOrder: ShoppingCartRemoveInput
+  ): Promise<ShoppingCartRemoveInput> {
+    const remove = `DELETE FROM shopping_cart_item WHERE shopper_id = $1 AND product_id = $2 RETURNING *`;
     const query = {
       text: remove,
-      values: [`${itemID}`],
+      values: [`${NewOrder.shopper_id}`, `${NewOrder.product_id}`],
     };
     const { rows } = await pool.query(query);
-    return rows[0];
+    return {product_id: rows[0].product_id, shopper_id: rows[0].shopper_id};
   }
 }

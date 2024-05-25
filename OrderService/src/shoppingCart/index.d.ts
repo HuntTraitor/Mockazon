@@ -26,4 +26,9 @@ export interface ShoppingCartInput {
   quantity: Quantity;
 }
 
+export interface ShoppingCartRemoveInput {
+  product_id: UUID;
+  shopper_id: UUID;
+}
+
 export type ShoppingCart = ShoppingCartItem[];

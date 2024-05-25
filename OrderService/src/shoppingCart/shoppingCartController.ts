@@ -9,7 +9,7 @@ import {
   Delete,
 } from 'tsoa';
 
-import { ShoppingCart, ShoppingCartInput, ShoppingCartItem } from '.';
+import { ShoppingCart, ShoppingCartInput, ShoppingCartItem, ShoppingCartRemoveInput } from '.';
 import { ShoppingCartService } from './shoppingCartService';
 import { UUID } from '../types';
 
@@ -33,8 +33,8 @@ export class ShoppingCartController extends Controller {
   @Delete('')
   @SuccessResponse('201', 'Removed from Shopping Cart')
   public async removeFromShoppingCart(
-    @Query() itemID: UUID
-  ): Promise<ShoppingCartItem | undefined> {
-    return await new ShoppingCartService().removeFromShoppingCart(itemID);
+    @Body() order: ShoppingCartRemoveInput
+  ): Promise<ShoppingCartRemoveInput | undefined> {
+    return await new ShoppingCartService().removeFromShoppingCart(order);
   }
 }
