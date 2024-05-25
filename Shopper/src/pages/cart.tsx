@@ -126,7 +126,6 @@ const Cart = ({ locale }: { locale: string }) => {
                 quantity: product.data.quantity,
               };
             } catch (err) {
-              console.log('Error fetching product:', err);
               setError('Could not fetch product');
             }
           }
@@ -144,7 +143,6 @@ const Cart = ({ locale }: { locale: string }) => {
               0
             );
             setSubtotal(subtotal);
-            console.log(productsWithContent);
           })
           .catch(err => {
             console.log('Error fetching shoppingCartProducts:', err);
@@ -160,6 +158,52 @@ const Cart = ({ locale }: { locale: string }) => {
   // if(JSON.stringify(user) === '{}') {
   //   return null
   // }
+
+  const handleRemove = (productId: string) => {
+    const query = {
+      query: `mutation RemoveFromShoppingCart {
+    removeFromShoppingCart(productId: "${productId}") {
+      product_id
+      shopper_id
+    }
+  }`,
+    };
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(query),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(removedProduct => {
+        if (removedProduct.errors && removedProduct.errors.length > 0) {
+          setError(removedProduct.errors[0].message);
+          return;
+        }
+        setProducts(products.filter(product => product.id !== productId));
+        const subtotal: number = products.reduce(
+          (accumulator: number, currentValue: Product) => {
+            return (
+              accumulator +
+              (currentValue.data.getProduct.data.price as number)
+            );
+          },
+          0
+        );
+        setSubtotal(subtotal);
+      })
+      .catch(err => {
+        console.log('Error removing product:', err);
+        setError('Could not remove product');
+      });
+  }
 
   return (
     <>
@@ -230,9 +274,13 @@ const Cart = ({ locale }: { locale: string }) => {
                   <Link
                     aria-label={`add-shopping-cart-${product.id}`}
                     className={styles.deleteLink}
-                    href={`/shoppingCart`}
+                    href={`/cart`}
                   >
-                    <Typography component="p" className={styles.removeText}>
+                    <Typography
+                      component="p"
+                      className={styles.removeText}
+                      onClick={() => handleRemove(product.data.getProduct.id)}
+                    >
                       {t('cart:remove')}
                     </Typography>
                   </Link>
