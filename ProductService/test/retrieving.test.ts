@@ -168,3 +168,31 @@ describe('Getting reviews', () => {
       .expect(404);
   });
 });
+
+// test('Should retrieve search suggestions', async () => {
+//   const suggestions = await supertest(server)
+//     .get('/api/v0/product/suggestions')
+//     .query({ search: 'Gatsby' })
+//     .expect(200);
+
+//   expect(suggestions.body).toHaveLength(1);
+//   expect(suggestions.body[0]).toContain('Gatsby');
+// });
+
+// test('Should retrieve search suggestions for a partial search', async () => {
+//   const suggestions = await supertest(server)
+//     .get('/api/v0/product/suggestions?search="G"')
+//     .expect(200);
+
+//   expect(suggestions.body).toHaveLength(1);
+//   expect(suggestions.body[0]).toContain('Gatsby');
+// });
+
+// test('Should return an empty array for no search suggestions', async () => {
+//   const suggestions = await supertest(server)
+//     .get('/api/v0/product/suggestions')
+//     .query({ search: 'Z' })
+//     .expect(200);
+
+//   expect(suggestions.body).toHaveLength(0);
+// });
