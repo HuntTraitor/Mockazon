@@ -33,7 +33,7 @@ export class AccountService {
   public async addOrderHistory(
     id: string,
     orderInput: OrderInput
-  ): Promise<Order | undefined> {
+  ): Promise<Order[] | undefined> {
     try {
       const response = await fetch(
         `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/orderhistory?userId=${id}`,
@@ -45,13 +45,13 @@ export class AccountService {
           body: JSON.stringify(orderInput),
         }
       );
-
       if (!response.ok) {
         throw new GraphQLError('Failed to add order history');
       }
 
       const data = await response.json();
-      return data as Order;
+      console.log(data);
+      return data as Order[];
     } catch (error) {
       return undefined;
     }
@@ -83,7 +83,7 @@ export class AccountService {
   public async addShippingInfo(
     id: string,
     shippingInfoInput: ShippingAddressInput
-  ): Promise<ShippingAddress | undefined> {
+  ): Promise<ShippingAddress[] | undefined> {
     try {
       const response = await fetch(
         `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/shippinginfo?userId=${id}`,
@@ -101,7 +101,7 @@ export class AccountService {
       }
 
       const data = await response.json();
-      return data as ShippingAddress;
+      return data as ShippingAddress[];
     } catch (error) {
       return undefined;
     }
