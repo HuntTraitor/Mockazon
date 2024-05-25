@@ -5,11 +5,17 @@ import { useAppContext } from '@/contexts/AppContext';
 interface CustomPopperProps {
   children: React.ReactNode;
   buttonContent: React.ReactNode;
+  buttonSX?: React.CSSProperties;
+  popperSX?: React.CSSProperties;
+  offset?: [number, number];
 }
 
 const CustomPopper: React.FC<CustomPopperProps> = ({
   children,
   buttonContent,
+  buttonSX,
+  popperSX,
+  offset = [0, -4],
 }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -37,6 +43,7 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
           color: 'white',
           textTransform: 'none',
           textAlign: 'left',
+          ...buttonSX,
         }}
       >
         {buttonContent}
@@ -51,11 +58,14 @@ const CustomPopper: React.FC<CustomPopperProps> = ({
           {
             name: 'offset',
             options: {
-              offset: [0, -4],
+              offset: offset,
             },
           },
         ]}
-        sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}
+        sx={{ 
+          zIndex: theme => theme.zIndex.drawer + 1,
+          ...popperSX, 
+        }}
       >
         <Box ref={bufferZoneRef} sx={{ pt: 1, pb: 1 }}>
           <div ref={popperRef}>

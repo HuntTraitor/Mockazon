@@ -46,8 +46,11 @@ const SignInDropdown = () => {
             <ExpandMoreIcon className={styles.dropdownIcon} />
           </Box>
         }
+        offset={[0, -14]}
       >
-        <Paper elevation={5} className={styles.dropDownPaper}>
+        <Paper elevation={5} className={styles.dropDownPaper} sx={{
+          padding: '10px',
+        }}>
           {user.name ? (
             <Box>
               <Button

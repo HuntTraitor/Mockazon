@@ -5,7 +5,6 @@ import {
   TextField,
   Typography,
   Autocomplete,
-  CircularProgress,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
@@ -31,6 +30,21 @@ interface Product {
     name: string;
   };
 }
+
+const highlightMatch = (text: string, query: string) => {
+  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  return (
+    <span>
+      {parts.map((part, index) =>
+        part.toLowerCase() === query.toLowerCase() ? (
+          <span key={index} style={{ fontWeight: 'normal' }}>{part}</span>
+        ) : (
+          <span key={index} style={{ fontWeight: 'bold' }}>{part}</span>
+        )
+      )}
+    </span>
+  );
+};
 
 const CustomTextField = styled(TextField)(() => ({
   '& .MuiOutlinedInput-root': {
@@ -224,7 +238,7 @@ const TopHeader = () => {
         <Autocomplete
           className={styles.searchInputContainer}
           forcePopupIcon={false}
-          options={[search, ...suggestions]}
+          options={suggestions}
           getOptionLabel={option => option}
           noOptionsText={''}
           loading={loading}
@@ -235,14 +249,6 @@ const TopHeader = () => {
               placeholder={t('searchPlaceholder') as string}
               InputProps={{
                 ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {loading ? (
-                      <CircularProgress color="inherit" size={15} />
-                    ) : null}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
                 onKeyDown: handleKeyDown,
               }}
               value={search}
@@ -250,6 +256,17 @@ const TopHeader = () => {
               onFocus={handleFocus}
               onBlur={handleBlur}
             />
+          )}
+          renderOption={(props, option) => (
+            <li {...props}>
+              <SearchIcon
+                style={{
+                  marginRight: '5px',
+                  color: 'rgba(0, 0, 0, 0.54)',
+                }}
+              />
+              {highlightMatch(option, search)}
+            </li>
           )}
           style={{ width: '100%' }}
           classes={{
