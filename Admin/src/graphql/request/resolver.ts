@@ -5,7 +5,7 @@ import { RequestService } from './service';
 
 @Resolver()
 export class RequestResolver {
-  @Authorized("admin")
+  @Authorized('admin')
   @Query(() => [Request])
   async request(): Promise<Request[]> {
     // console.log(`User requesting Accounts List is: ${request.user.id})`);

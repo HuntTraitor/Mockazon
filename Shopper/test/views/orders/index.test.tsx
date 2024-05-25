@@ -1,4 +1,3 @@
-
 import http from 'http';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
@@ -10,8 +9,8 @@ jest.mock('next/config', () => () => ({
 }));
 
 let server: http.Server<
-    typeof http.IncomingMessage,
-    typeof http.ServerResponse
+  typeof http.IncomingMessage,
+  typeof http.ServerResponse
 >;
 
 let errorInFetchProduct = false;
@@ -23,29 +22,29 @@ const handlers = [
     if (errorInShoppingCart) {
       if (errorInGraphQLShoppingCart) {
         return HttpResponse.json(
-            { errors: [{ message: 'error' }] },
-            { status: 200 }
+          { errors: [{ message: 'error' }] },
+          { status: 200 }
         );
       }
       return HttpResponse.json({}, { status: 400 });
     } else {
       return HttpResponse.json(
-          {
-            data: {
-              getShoppingCart: [
-                {
-                  id: '123',
-                  product_id: '123',
-                  shopper_id: '123',
-                  vendor_id: '123',
-                  data: {
-                    quantity: '3',
-                  },
+        {
+          data: {
+            getShoppingCart: [
+              {
+                id: '123',
+                product_id: '123',
+                shopper_id: '123',
+                vendor_id: '123',
+                data: {
+                  quantity: '3',
                 },
-              ],
-            },
+              },
+            ],
           },
-          { status: 200 }
+        },
+        { status: 200 }
       );
     }
   }),
@@ -54,24 +53,24 @@ const handlers = [
       return HttpResponse.json({}, { status: 400 });
     } else {
       return HttpResponse.json(
-          {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            id: '123',
-            data: {
-              getProduct: {
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  image: 'test',
-                },
+        {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          id: '123',
+          data: {
+            getProduct: {
+              data: {
+                brand: 'test',
+                name: 'test name',
+                rating: 'test',
+                price: 1,
+                deliveryDate: 'test',
+                image: 'test',
               },
             },
           },
-          { status: 200 }
+        },
+        { status: 200 }
       );
     }
   }),
@@ -127,4 +126,3 @@ jest.mock('next/router', () => ({
 it('Renders successfully', async () => {
   expect(true).toBe(true);
 });
-

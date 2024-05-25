@@ -40,6 +40,6 @@ export class ShoppingCartService {
       values: [`${NewOrder.shopper_id}`, `${NewOrder.product_id}`],
     };
     const { rows } = await pool.query(query);
-    return {product_id: rows[0].product_id, shopper_id: rows[0].shopper_id};
+    return { product_id: rows[0].product_id, shopper_id: rows[0].shopper_id };
   }
 }
