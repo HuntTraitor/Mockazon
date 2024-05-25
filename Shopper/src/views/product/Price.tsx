@@ -17,7 +17,7 @@ export default function Price({ price }: PriceProps) {
   }
 
   return (
-    <Typography variant="body2">
+    <Typography variant="body2" className={styles.priceContainer}>
       <span>$</span>
       <span className={styles.middlePrice}>{beforeDot}</span>
       <span>{afterDot}</span>

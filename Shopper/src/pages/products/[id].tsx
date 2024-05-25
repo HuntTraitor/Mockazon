@@ -1,4 +1,4 @@
-import { Card, Typography, Box, Divider } from '@mui/material';
+import { Card, Typography, Box, Divider, Button, TextField, MenuItem } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // import { useTranslation } from 'next-i18next';
@@ -16,6 +16,26 @@ import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
 import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
+
+
+const currencies = [
+  {
+    value: 'USD',
+    label: '$',
+  },
+  {
+    value: 'EUR',
+    label: '€',
+  },
+  {
+    value: 'BTC',
+    label: '฿',
+  },
+  {
+    value: 'JPY',
+    label: '¥',
+  },
+];
 
 const ProductPage = () => {
   const router = useRouter();
@@ -56,34 +76,61 @@ const ProductPage = () => {
 
   if (product && product.data) {
     return (
-      <>
-        <Card sx={{ minWidth: 275 }}>
+      <Box className={styles.centerContainer}>
+        <Card sx={{maxWidth: 1500, minWidth: 175 }} className={styles.cardWrapper}>
           <Box className={styles.wrapper}>
-            <Box>
+            <Box className={styles.productImage}>
               <Image
                 src={product.data.image}
                 alt="product image"
-                height={400}
-                width={400}
+                fill
                 priority
               />
             </Box>
-            <Box>
-              <Typography>{product.data.name}</Typography>
-              <Typography>{product.data.brand}</Typography>
+            <Box className={styles.checkoutCenter}>
+              <Typography className={styles.productName}>{product.data.name}</Typography>
+              <Typography className={styles.brandName}>Brand: {product.data.brand}</Typography>
               <Divider />
-              <Price price={product.data.price.toString()} />
+              <div style={{marginBottom: '10px'}}>
+                <Price price={product.data.price.toString()}/>
+              </div>
+              <Divider />
+              <Typography className={styles.productDescription} >🎁【2024 Fathers Day Gifts For Dad】Our glass with funny saying "To Dad from The Reasons You Drink", it's could be as a Father's Day gifts for dad, men, father, grandpa, husband and friend.Whether at home or on birthday party. The glass not just suitable for beer,also wonderful drinking glasses for wine, whiskey, cocktail, soda water,cola and other drinks.</Typography>
             </Box>
             <Box>
-              <div>
+              <div className={styles.checkoutWrapper}>
                 <Price price={product.data.price.toString()} />
                 <DeliveryText deliveryDate={product.data.deliveryDate} />
+                <TextField
+                  id="outlined-select-currency"
+                  select
+                  label="Quantity"
+                  defaultValue="1"
+                >
+                  {currencies.map((option, index) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {index + 1}
+                    </MenuItem>
+                  ))}
+                </TextField>
                 <AddToCartButton product={product} />
+                <Box className={styles.checkoutMoreInformation}>
+                  <Box>
+                    <Typography variant="caption" display="block" className={styles.checkoutMoreInformationCaption}>Ships from</Typography>
+                    <Typography variant="caption" display="block" className={styles.checkoutMoreInformationCaption}>Sold by</Typography>
+                    <Typography variant="caption" display="block" className={styles.checkoutMoreInformationCaption}>Customer</Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" display="block">Mockazon</Typography>
+                    <Typography variant="caption" display="block">{product.data.brand}</Typography>
+                    <Typography variant="caption" display="block">User</Typography>
+                  </Box>
+                </Box>
               </div>
             </Box>
           </Box>
         </Card>
-      </>
+      </Box>
     );
   } else {
     return <div>{error}</div>;
