@@ -2,6 +2,7 @@ import { Field, ObjectType, ID } from 'type-graphql';
 import { IsDate, IsPositive, IsUUID } from 'class-validator';
 import type { UUID } from '../types';
 import { ShippingAddress } from '@/graphql/account/schema';
+import { Product } from '@/graphql/product/schema';
 
 @ObjectType()
 export class ShopperOrder {
@@ -34,6 +35,6 @@ export class ShopperOrder {
   @IsPositive()
     total!: number;
 
-  @Field(() => [String])
-    products!: UUID[];
+  @Field(() => [Product])
+    products!: Product[];
 }

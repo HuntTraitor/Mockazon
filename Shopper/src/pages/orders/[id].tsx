@@ -68,7 +68,19 @@ const fetchOrderById = async (id: string, accessToken: string) => {
         subtotal
         tax
         total
-        products
+        products {
+          id
+          vendor_id
+          data {
+            name
+            brand
+            image
+            price
+            rating
+            description
+            deliveryDate
+          }
+        }
       }
     }`,
     variables: { id },
