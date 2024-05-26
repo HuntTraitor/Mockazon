@@ -16,10 +16,11 @@ let server: http.Server<
 >;
 
 let postPasses = true;
+let deletePasses = true;
 
 const handlers = [
   rest.post(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order?`,
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order`,
     async () => {
       if (postPasses) {
         return HttpResponse.json(
@@ -32,6 +33,25 @@ const handlers = [
       } else {
         return HttpResponse.json(
           { message: 'Create order error' },
+          { status: 500 }
+        );
+      }
+    }
+  ),
+  rest.delete(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
+    async () => {
+      if (deletePasses) {
+        return HttpResponse.json(
+          {
+            id: '123',
+            url: 'http://localhost:3000/checkout',
+          },
+          { status: 200 }
+        );
+      } else {
+        return HttpResponse.json(
+          { message: 'Delete shopping cart error' },
           { status: 500 }
         );
       }
@@ -117,7 +137,9 @@ describe('/api/stripe_webhooks', () => {
       .post('/api/stripe_webhooks')
       .set('stripe-signature', 'test-signature')
       .send('test-body')
-      .expect(200);
+      .expect(200, {
+        message: 'Checkout complete',
+      });
   });
 
   test('should return 500 for a failed create order', async () => {
@@ -126,7 +148,23 @@ describe('/api/stripe_webhooks', () => {
       .post('/api/stripe_webhooks')
       .set('stripe-signature', 'test-signature')
       .send('test-body')
-      .expect(500);
+      .expect(500)
+      .catch(err => {
+        expect(err.message).toBe('Create order error');
+      });
+  });
+
+  test('should return 500 for a failed create order', async () => {
+    deletePasses = false;
+    postPasses = true;
+    await supertest(server)
+      .post('/api/stripe_webhooks')
+      .set('stripe-signature', 'test-signature')
+      .send('test-body')
+      .expect(500)
+      .catch(err => {
+        expect(err.message).toBe('Delete shopping cart error');
+      });
   });
 
   test('should return 405 for non-POST requests', async () => {

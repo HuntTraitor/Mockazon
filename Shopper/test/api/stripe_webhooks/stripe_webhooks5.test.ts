@@ -19,7 +19,7 @@ const postPasses = true;
 
 const handlers = [
   rest.post(
-    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order?`,
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order`,
     async () => {
       if (postPasses) {
         return HttpResponse.json(
@@ -117,6 +117,11 @@ describe('/api/stripe_webhooks', () => {
       .post('/api/stripe_webhooks')
       .set('stripe-signature', 'test-signature')
       .send('test-body')
-      .expect(400);
+      .expect(400)
+      .then(response => {
+        expect(response.text).toEqual(
+          '{"message":"Error parsing metadata: Unexpected token \'o\', \\"[object Obj\\"... is not valid JSON"}'
+        );
+      });
   });
 });

@@ -118,7 +118,10 @@ describe('/api/stripe_webhooks', () => {
         .post('/api/stripe_webhooks')
         .set('stripe-signature', 'test-signature')
         .send('test-body')
-        .expect(400);
+        .expect(400)
+        .then(response => {
+          expect(response.text).toEqual('Metadata not included');
+        });
     });
   });
 });

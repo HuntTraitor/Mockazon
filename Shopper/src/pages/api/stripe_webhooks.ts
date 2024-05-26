@@ -46,6 +46,35 @@ function getOrders(
   return orders;
 }
 
+async function removeProductsFromShoppingCart(
+  orders: Order[],
+  shopperId: string
+) {
+  const promises = orders.map(async order => {
+    const res = await fetch(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
+      {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          shopper_id: shopperId,
+          product_id: order.product_id,
+        }),
+      }
+    );
+    if (!res.ok) {
+      throw new Error('Failed to remove product from shopping cart');
+    }
+    return await res.json();
+  });
+  return Promise.all(promises)
+    .then(shoppingCartItemsRemoved => shoppingCartItemsRemoved)
+    .catch(error => {
+      console.error(error);
+      throw new Error('Failed to remove products from shopping cart');
+    });
+}
+
 async function createOrdersFromPurchase(orders: Order[], shopperId: string) {
   const promises = orders.map(async order => {
     const res = await fetch(
@@ -75,7 +104,6 @@ async function createOrdersFromPurchase(orders: Order[], shopperId: string) {
 
 // most likely can't be converted to graphql because we don't call this endpoint, only Stripe does
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('triggered');
   if (req.method === 'POST') {
     const buf = await buffer(req);
     const sig = req.headers['stripe-signature'] as string;
@@ -130,7 +158,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const msg = err.message;
-        res.status(400).send(`Error parsing metadata: ${msg}`);
+        res.status(400).send({ message: `Error parsing metadata: ${msg}` });
         console.log(`Error parsing metadata: ${msg}`);
         return;
       }
@@ -152,11 +180,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
-      // TODO remove item from shopping cart
+      try {
+        // remove item from shopping cart
+        const removedCartItems = await removeProductsFromShoppingCart(
+          pendingOrders,
+          shopperId
+        );
+        console.log(removedCartItems);
+      } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const msg = err.message;
+        res.status(500).send(`Error removing shopping cart items: ${msg}`);
+        console.log(`Error removing shopping cart items: ${msg}`);
+        return;
+      }
 
       console.log(`Checkout Session was successful!`, lineItems);
+      res.status(200).json({ message: 'Checkout complete' });
+      return;
     }
-    res.status(200).json({});
+    res.status(200).json({ message: 'Non checkout session event complete' });
+    return;
   } else {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Method Not Allowed');
