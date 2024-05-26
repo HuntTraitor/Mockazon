@@ -54,6 +54,37 @@ export class OrderService {
     );
     order.products = products;
 
+    console.log(order)
+
     return order;
+  }
+
+  public async getAllOrders(shopperId: UUID): Promise<ShopperOrder[]> {
+    let arr: ShopperOrder[] = []
+    const orders = await fetch(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/shopperOrder?shopperId=${shopperId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+    .then(response => {
+      if (!response.ok) {
+        throw new GraphQLError(response.statusText);
+      }
+      return response.json();
+    })
+    .then(orders => {
+      return orders
+    });
+
+    const promises = orders.map(async (order: ShopperOrder) => {
+      const res = await this.getOrder(order.id)
+      arr.push(res)
+    })
+    await Promise.all(promises)
+    return arr    
   }
 }

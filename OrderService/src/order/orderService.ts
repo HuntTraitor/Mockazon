@@ -125,7 +125,7 @@ export class OrderService {
   }
 
   public async getAllShopperOrder(shopperId: UUID): Promise<ShopperOrder[]> {
-    let arr: any = []
+    let arr: ShopperOrder[] = []
     const select = `SELECT * FROM shopper_order WHERE shopper_id = $1`
     const query = {
       text: select,

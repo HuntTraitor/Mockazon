@@ -12,3 +12,10 @@ INSERT INTO shopper_order(id, shopper_id, data) VALUES ('4f993f63-2b6c-4628-9f51
 
 INSERT INTO order_product(order_id, product_id) VALUES ('3f993f63-2b6c-4628-9f51-b46425ca80f1', 'd1c689b1-b7a7-4100-8b2d-309908b444f5');
 INSERT INTO order_product(order_id, product_id) VALUES ('3f993f63-2b6c-4628-9f51-b46425ca80f1', '7064701e-dee7-46c8-a755-da5bf727539c');
+
+INSERT INTO order_product(order_id, product_id) VALUES ('4f993f63-2b6c-4628-9f51-b46425ca80f2', '7064701e-dee7-46c8-a755-da5bf727539c');
+
+INSERT INTO order_product(order_id, product_id) VALUES ('5f993f63-2b6c-4628-9f51-b46425ca80f3', '7064701e-dee7-46c8-a755-da5bf727539c');
+
+INSERT INTO order_product(order_id, product_id) VALUES ('6f993f63-2b6c-4628-9f51-b46425ca80f4', '7064701e-dee7-46c8-a755-da5bf727539c');
+INSERT INTO order_product(order_id, product_id) VALUES ('6f993f63-2b6c-4628-9f51-b46425ca80f4', '7064701e-dee7-46c8-a755-da5bf727539c');
