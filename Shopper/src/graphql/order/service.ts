@@ -52,8 +52,6 @@ export class OrderService {
           });
       })
     );
-
-    console.log('Products:', JSON.stringify(products, null, 2));
     order.products = products;
 
     return order;

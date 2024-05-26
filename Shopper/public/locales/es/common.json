@@ -3,5 +3,7 @@
   "change-locale": "Cambiar configuración regional a \"Inglés\"",
   "signInText": "Identifícate",
   "or": "O",
-  "order": "Pedido"
+  "order": "Pedido",
+  "delivered": "Entregado",
+  "arriving": "Llegando"
 }

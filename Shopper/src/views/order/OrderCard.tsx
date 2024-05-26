@@ -106,10 +106,10 @@ export default function OrderCard({ order }: { order: Order }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const formatDate = (date: string): string => {
+  const formatDate = (date: string, delivered: boolean): string => {
     // FIXME: This needs to be the order status, not just delivered. Find a smart way
     // to do this, instead of a bunch of else if
-    return `${t('common:delivered')} ${new Date(date).toLocaleDateString(
+    return `${delivered ? t('common:delivered') : t('common:arriving')} ${new Date(date).toLocaleDateString(
       i18n.language === 'en' ? 'en-US' : 'es-US',
       {
         year: 'numeric',
@@ -178,8 +178,8 @@ export default function OrderCard({ order }: { order: Order }) {
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <Paper elevation={3} className={isMobile ? styles.paperMobile : styles.paperWide}>
           <Card variant="outlined" className={styles.card}>
-            <Typography variant="h6" gutterBottom>
-              {formatDate(order.deliveryTime)}
+            <Typography variant="h6" gutterBottom className={styles.deliveryStatusText}>
+              {formatDate(order.deliveryTime, order.delivered)}
             </Typography>
             <Grid container spacing={2}
               justifyContent="space-between"

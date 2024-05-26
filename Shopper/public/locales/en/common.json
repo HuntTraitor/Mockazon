@@ -3,5 +3,7 @@
   "change-locale": "Change locale to \"Spanish\"",
   "signInText": "sign in",
   "or": "OR",
-  "order": "Order"
+  "order": "Order",
+  "delivered": "Delivered",
+  "arriving": "Arriving"
 }
