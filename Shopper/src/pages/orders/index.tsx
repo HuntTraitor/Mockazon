@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import TopNav from '@/views/TopNav';
 // import Search from '@mui/icons-material/Search';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
@@ -40,14 +40,7 @@ export default function Index() {
   const [Orders, setOrders] = useState([] as Order[]);
   const { accessToken, user } = useContext(LoggedInContext);
 
-  useEffect(() => {
-    if (JSON.stringify(user) === '{}') {
-      return;
-    }
-    fetchOrders();
-  }, [accessToken]);
-
-  const fetchOrders = () => {
+  const fetchOrders = useCallback(() => {
     // this could be altered to take arguments for filtering in the future
     const query = {
       query: `query getAllOrders {
@@ -82,13 +75,13 @@ export default function Index() {
             }
           }
           total
-      }}`
+      }}`,
     };
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(query),
     })
@@ -99,12 +92,14 @@ export default function Index() {
       .catch(error => {
         console.error('Error:', error);
       });
-  };
+  }, [accessToken]);
 
   useEffect(() => {
+    if (JSON.stringify(user) === '{}') {
+      return;
+    }
     fetchOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [accessToken, user, fetchOrders]);
 
   if (JSON.stringify(user) === '{}') {
     // router.push('/login');

@@ -42,11 +42,9 @@ export class OrderController extends Controller {
   }
 
   @Get('shopperOrder')
-  public async testing(
-    @Query() shopperId: UUID,
-  ): Promise<ShopperOrder[]> {
+  public async testing(@Query() shopperId: UUID): Promise<ShopperOrder[]> {
     const orders = await new OrderService().getAllShopperOrder(shopperId);
-    return orders
+    return orders;
   }
 
   @Get('{orderId}')

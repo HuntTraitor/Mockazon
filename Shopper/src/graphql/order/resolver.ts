@@ -4,7 +4,6 @@ import { OrderService } from '@/graphql/order/service';
 import type { UUID } from '@/graphql/types';
 import type { NextApiRequest } from 'next';
 
-
 @Resolver()
 export class OrderResolver {
   @Authorized()
@@ -19,10 +18,8 @@ export class OrderResolver {
 
   @Authorized()
   @Query(() => [ShopperOrder])
-  async getAllOrders(
-    @Ctx() request: NextApiRequest
-  ): Promise<ShopperOrder[]> {
-    const orders = await new OrderService().getAllOrders(request.user.id)
-    return orders
+  async getAllOrders(@Ctx() request: NextApiRequest): Promise<ShopperOrder[]> {
+    const orders = await new OrderService().getAllOrders(request.user.id);
+    return orders;
   }
 }
