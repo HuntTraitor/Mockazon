@@ -294,3 +294,19 @@ VALUES
         'suspended', false
         )
     );
+
+INSERT INTO
+    shopper (id, data)
+VALUES
+    (
+        'c3353dbe-1903-42a6-ac6f-ab8133f73c7a',
+        jsonb_build_object(
+        'email', 'hunterrrisatratar@gmail.com',
+        'pwhash', crypt('pass', '87'),
+        'sub', 'sub',
+        'name', 'Hunter J Tratar',
+        'username', 'htratar',
+        'role', 'shopper',
+        'suspended', false
+        )
+    );

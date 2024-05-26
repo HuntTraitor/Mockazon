@@ -12,6 +12,13 @@ INSERT INTO shopper_order(id, shopper_id, data) VALUES ('4f993f63-2b6c-4628-9f51
 INSERT INTO shopper_order(id, shopper_id, data) VALUES ('5f993f63-2b6c-4628-9f51-b46425ca80f3', '89f5cbfb-40a9-470d-ac8f-99e0416c6234', '{"createdAt": "2024-07-12T00:00:00Z", "paymentMethod": "Amex", "paymentDigits": "5678", "subtotal": "120.00", "tax": "24.80", "total": "144.80", "shippingAddress": {"name": "Evan Metcalf", "addressLine1": "1234 Elm St", "country": "USA", "city": "Santa Cruz", "state": "CA", "postalCode": "95060"}, "shipped": false, "delivered": false, "deliveryTime": "2024-07-30T02:15:01.123Z"}');
 INSERT INTO shopper_order(id, shopper_id, data) VALUES ('6f993f63-2b6c-4628-9f51-b46425ca80f4', '89f5cbfb-40a9-470d-ac8f-99e0416c6234', '{"createdAt": "2024-08-14T00:00:00Z", "paymentMethod": "Discover", "paymentDigits": "9012", "subtotal": "45.00", "tax": "9.30", "total": "54.30", "shippingAddress": {"name": "Evan Metcalf", "addressLine1": "1234 Elm St", "country": "USA", "city": "Santa Cruz", "state": "CA", "postalCode": "95060"}, "shipped": false, "delivered": false, "deliveryTime": "2024-07-30T02:15:01.123Z"}');
 
+--Order data for hunter
+INSERT INTO shopper_order(id, shopper_id, data) VALUES ('90a687ba-3d5f-4799-9961-054b547ce1c8', 'c3353dbe-1903-42a6-ac6f-ab8133f73c7a', '{"createdAt": "2024-08-14T00:00:00Z", "paymentMethod": "Discover", "paymentDigits": "9012", "subtotal": "45.00", "tax": "9.30", "total": "54.30", "shippingAddress": {"name": "Hunter Tratar", "addressLine1": "434 Dufour st", "country": "USA", "city": "Santa Cruz", "state": "CA", "postalCode": "95060"}, "shipped": false, "delivered": false, "deliveryTime": "2024-07-30T02:15:01.123Z"}');
+INSERT INTO order_product(order_id, product_id) VALUES ('90a687ba-3d5f-4799-9961-054b547ce1c8', '7064701e-dee7-46c8-a755-da5bf727539c');
+INSERT INTO order_product(order_id, product_id) VALUES ('90a687ba-3d5f-4799-9961-054b547ce1c8', 'd1c689b1-b7a7-4100-8b2d-309908b444f5');
+
+
+
 INSERT INTO order_product(order_id, product_id) VALUES ('3f993f63-2b6c-4628-9f51-b46425ca80f1', 'd1c689b1-b7a7-4100-8b2d-309908b444f5');
 INSERT INTO order_product(order_id, product_id) VALUES ('3f993f63-2b6c-4628-9f51-b46425ca80f1', '7064701e-dee7-46c8-a755-da5bf727539c');
 

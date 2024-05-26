@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Typography,
   Box,
@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 
 import getConfig from 'next/config';
+import { LoginContext } from '@/contexts/Login';
+import { RefetchContext } from '@/contexts/Refetch';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -25,14 +27,14 @@ interface Request {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const fetchRequests = async (setRequests: Function) => {
+const fetchRequests = async (setRequests: Function, accessToken: string) => {
   const query = {
     query: `query GetRequests {request {id name email role suspended}}`,
   };
 
   fetch(`${basePath}/api/graphql`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
     body: JSON.stringify(query),
   })
     .then(res => {
@@ -52,12 +54,16 @@ const fetchRequests = async (setRequests: Function) => {
  */
 export function AdminRequests() {
   const [requests, setRequests] = React.useState<Request[]>([]);
+  const {accessToken} = useContext(LoginContext);
+  const {refetch, setRefetch} = useContext(RefetchContext);
 
   React.useEffect(() => {
-    fetchRequests(setRequests);
-  }, []);
+    console.log("hit?")
+    fetchRequests(setRequests, accessToken);
+    setRefetch(false)
+  }, [accessToken, refetch]);
 
-  const handleApproveRequest = (vendorId: number) => {
+  const handleApproveRequest = (vendorId: number, accessToken: string, setRefetch: Function) => {
     console.log(vendorId);
     const query = {
       query: `mutation approveVendor{approveVendor(VendorId: "${vendorId}") {
@@ -71,6 +77,7 @@ export function AdminRequests() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
       },
       body: JSON.stringify(query),
     })
@@ -82,6 +89,7 @@ export function AdminRequests() {
           throw new Error(json.errors[0].message);
         } else {
           console.log(json);
+          setRefetch(true);
         }
       })
       .catch(e => {
@@ -124,7 +132,7 @@ export function AdminRequests() {
                       variant="outlined"
                       color="primary"
                       data-testid={`approve-request-${request.id}`}
-                      onClick={() => handleApproveRequest(request.id)}
+                      onClick={() => handleApproveRequest(request.id, accessToken, setRefetch)}
                       style={{ marginRight: '8px' }}
                     >
                       Approve

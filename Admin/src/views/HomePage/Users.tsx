@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Typography,
   Box,
@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 
 import getConfig from 'next/config';
+import { LoginContext } from '@/contexts/Login';
+import { RefetchContext } from '@/contexts/Refetch';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -25,20 +27,21 @@ interface User {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const fetchAccounts = async (setAccounts: Function) => {
+const fetchAccounts = async (setAccounts: Function, accessToken: string) => {
   const query = {
     query: `query GetAccounts {account {id, name, email}}`,
   };
 
   fetch(`${basePath}/api/graphql`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
     body: JSON.stringify(query),
   })
     .then(res => {
       return res.json();
     })
     .then(json => {
+      console.log(json)
       setAccounts(json.data.account);
     })
     .catch(err => {
@@ -52,10 +55,13 @@ const fetchAccounts = async (setAccounts: Function) => {
  */
 export function Users() {
   const [accounts, setAccounts] = useState<User[]>([]);
+  const {accessToken} = useContext(LoginContext);
+  const {refetch, setRefetch} = useContext(RefetchContext)
 
   React.useEffect(() => {
-    fetchAccounts(setAccounts);
-  }, []);
+    fetchAccounts(setAccounts, accessToken);
+    setRefetch(false);
+  }, [accessToken, refetch]);
 
   const handleDeleteUser = (userId: number) => {
     console.log(`Deleting user with ID: ${userId}`);
