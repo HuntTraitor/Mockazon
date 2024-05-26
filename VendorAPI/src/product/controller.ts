@@ -11,7 +11,6 @@ import {
   Security,
 } from 'tsoa';
 import { NewProduct, Product } from '.';
-import { UUID } from '../types';
 import { ProductService } from './service';
 import * as express from 'express';
 

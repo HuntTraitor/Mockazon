@@ -33,7 +33,7 @@ export interface Product {
     rating: string;
     description: string;
     deliveryDate: string;
-  }
+  };
 }
 
 export interface Review {
