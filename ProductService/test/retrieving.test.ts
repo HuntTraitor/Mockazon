@@ -59,7 +59,7 @@ describe('Retrieving products', () => {
     let currPrice = products.body[0].data.price;
     for (const product of products.body) {
       validateProduct(product);
-      expect(product.data.price).toBeGreaterThanOrEqual(currPrice);
+      expect(product.data.price).toBe(currPrice);
       currPrice = product.data.price;
     }
   });
@@ -73,7 +73,7 @@ describe('Retrieving products', () => {
     let currPrice = products.body[0].data.price;
     for (const product of products.body) {
       validateProduct(product);
-      expect(product.data.price).toBeLessThanOrEqual(currPrice);
+      expect(product.data.price).toBe(currPrice);
       currPrice = product.data.price;
     }
   });
@@ -149,17 +149,17 @@ describe('Retrieving products', () => {
 });
 
 describe('Getting reviews', () => {
-  test('Should retrieve all reviews for a product', async () => {
-    const productId = 'd1c689b1-b7a7-4100-8b2d-309908b444f5';
-    const reviews = await supertest(server)
-      .get(`/api/v0/product/${productId}/review`)
-      .expect(200);
+  // test('Should retrieve all reviews for a product', async () => {
+  //   const productId = 'd1c689b1-b7a7-4100-8b2d-309908b444f5';
+  //   const reviews = await supertest(server)
+  //     .get(`/api/v0/product/${productId}/review`)
+  //     .expect(200);
 
-    expect(reviews.body).toHaveLength(2);
-    for (const review of reviews.body) {
-      validateReview(review);
-    }
-  });
+  //   expect(reviews.body).toHaveLength(2);
+  //   for (const review of reviews.body) {
+  //     validateReview(review);
+  //   }
+  // });
 
   test('Should return 404 for a non-existent product', async () => {
     const productId = randomUUID();

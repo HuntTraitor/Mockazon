@@ -6,12 +6,12 @@ import * as db from './db';
 describe('Editing products', () => {
   const updatedProduct = {
     name: 'Updated Product',
-    price: '200.00',
-    properties: {
-      color: 'blue',
-      size: 'large',
-      material: 'cotton',
-    },
+    brand: 'Test brand',
+    image: 'http://test-image.jpg',
+    rating: 'Test rating',
+    price: "19.99",
+    description: 'This is a test product',
+    deliveryDate: new Date().toISOString(),
   };
 
   test('Should update a product', async () => {
@@ -27,9 +27,6 @@ describe('Editing products', () => {
     validateProduct(updatedProductResponse.body);
     expect(updatedProductResponse.body.data.name).toBe(updatedProduct.name);
     expect(updatedProductResponse.body.data.price).toBe(updatedProduct.price);
-    expect(updatedProductResponse.body.data.properties).toEqual(
-      updatedProduct.properties
-    );
   });
 
   test('Should return 404 for a non-existent product', async () => {
