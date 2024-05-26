@@ -116,6 +116,9 @@ describe('/api/stripe_webhooks', () => {
       .post('/api/stripe_webhooks')
       .set('stripe-signature', 'test-signature')
       .send('test-body')
-      .expect(400);
+      .expect(400)
+      .catch(err => {
+        expect(err.message).toBe('Webhook signature verification failed');
+      });
   });
 });

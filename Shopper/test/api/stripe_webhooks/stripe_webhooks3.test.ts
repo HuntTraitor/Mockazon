@@ -121,7 +121,7 @@ describe('/api/stripe_webhooks', () => {
         .post('/api/stripe_webhooks')
         .set('stripe-signature', 'test-signature')
         .send('test-body')
-        .expect(200);
+        .expect(200, { message: 'Non checkout session event complete' });
     });
   });
 });

@@ -187,7 +187,10 @@ const Cart = ({ locale }: { locale: string }) => {
           setError(removedProduct.errors[0].message);
           return;
         }
-        setProducts(products.filter(product => product.id !== productId));
+        const listsOfProductsToKeep = products.filter(
+          product => product.data.getProduct.id !== productId
+        );
+        setProducts(listsOfProductsToKeep);
         const subtotal: number = products.reduce(
           (accumulator: number, currentValue: Product) => {
             return (
