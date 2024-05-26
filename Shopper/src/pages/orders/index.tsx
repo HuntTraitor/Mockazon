@@ -1,4 +1,4 @@
-import OrderCard from './ordercard';
+import OrderCard from '../../views/order/OrderCard';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Order } from '@/graphql/types';
@@ -167,7 +167,7 @@ export default function Index() {
         <Grid container spacing={2}>
           {Orders.map(order => (
             <Grid item key={order.id} xs={12}>
-              <OrderCard /> {/* pass order as prop or something */}
+              <OrderCard order={order}/> {/* pass order as prop or something */}
             </Grid>
           ))}
         </Grid>

@@ -9,5 +9,8 @@
   "Estimated tax to be collected": "Estimated tax to be collected:",
   "grandTotal": "Grand Total:",
   "tax": "Estimated tax to be collected:",
-  "endingIn": "ending in"
+  "endingIn": "ending in",
+  "shipmentDetails": "Shipment Details",
+  "soldBy": "Sold by",
+  "buyItAgain": "Buy it again"
 }

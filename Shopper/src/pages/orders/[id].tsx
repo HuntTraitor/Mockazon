@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import TopNav from '@/views/TopNav';
 import OrderDetails from '@/views/order/OrderDetails';
-import OrderCard from './ordercard';
+import OrderCard from '@/views/order/OrderCard';
 import styles from '@/styles/OrderView.module.css';
 import { Order } from '@/graphql/types';
 import AppBackDrop from '@/components/AppBackdrop';
@@ -34,7 +34,7 @@ const fetchOrderById = async (id: string, accessToken: string) => {
   // However that field is not going to be used here. When placing an order, it needs to look at all the 
   // products' deliveryDate (which is again just a number of days) and then get the MAX of them, and 
   // make a timestamp of that into the future, and put it on deliveryTime. This is the time that will
-  // show up for delivery on an order.
+  // show up for delivery on an order. All this needs to be done in the backend.
   const query = {
     query: `query GetOrder($id: String!) {
       getOrder(id: $id) {
@@ -58,7 +58,6 @@ const fetchOrderById = async (id: string, accessToken: string) => {
         deliveryTime
         products {
           id
-          vendor_id
           data {
             name
             brand
@@ -111,7 +110,7 @@ const OrderView: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    if (id) {
+    if (id && !order) {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
       if (!user.accessToken) {
         // FIXME: This needs to be handled globally, think back on the Authenticated Routes example
@@ -119,13 +118,17 @@ const OrderView: React.FC = () => {
         return;
       }
       fetchOrderById(id as string, user.accessToken).then(order => {
+        if (!order) {
+          router.push('/orders');
+          return;
+        }
         setOrder(order);
         setLoading(false);
       });
     }
-  }, [id]);
+  }, [id, order, router]);
 
-  if (loading) return <TopNav />;
+  if (loading || !order) return <TopNav />;
 
   return (
     <>
@@ -136,7 +139,7 @@ const OrderView: React.FC = () => {
       >
         <OrderDetails order={order} />
       </Container>
-      <OrderCard />
+      <OrderCard order={order}/>
       <AppBackDrop />
     </>
   );

@@ -9,5 +9,8 @@
   "Estimated tax to be collected": "Impuestos:",
   "grandTotal": "Total (I.V.A. Incluido):",
   "tax": "Impuestos:",
-  "endingIn": "terminado en"
+  "endingIn": "terminado en",
+  "shipmentDetails": "Detalles del envío",
+  "soldBy": "Vendido por",
+  "buyItAgain": "Volver a comprar"
 }

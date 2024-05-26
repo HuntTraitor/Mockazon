@@ -1,51 +1,77 @@
-.cardHeader {
-  padding: 15px;
-  background-color: #e8e8e8;
-}
+.card {  
+  padding: 16px;  
+  border: 0px solid #e0e0e0;  
+  margin-bottom: 10px;
+}  
+  
+.productImage {  
+  width: 130px;  
+  height: 130px; 
+  margin-top: 0.2rem; 
+  object-fit: cover;  
+}  
+  
+.productDetails {  
+  flex-grow: 1;  
+  flex-direction: column;
+  justify-content: flex-start;
+}  
+  
+.productName {  
+  color: #1976d2;  
+  margin-bottom: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}  
+  
+.productBrand {  
+  display: block;  
+  font-size: 0.875rem;  
+  color: #757575;  
+  margin-bottom: 4px;  
+}  
+  
+.productPrice {  
+  color: #b12755;  
+  font-size: 0.75rem;  
+  margin-bottom: 8px;  
+}  
+  
+.actionButtons {  
+  text-transform: capitalize;
+}  
 
-.contentWrapper {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-}
-
-.content {
-  display: flex;
-  justify-content: space-between;
-}
-
-.purchaseButtons {
-  display: flex;
-  gap: 5px;
-  margin: 5px;
-}
-
-.buttonStyle {
-  background-color: white;
-  color: black;
+.buyAgain {
+  background-color: #ffd814;
+  color: #0f1112;
   text-transform: capitalize;
 }
 
-.buttonStyle:hover {
-  background-color: #e8e8e8;
+.buyAgain:hover {
+  background-color: #f7ca00;
 }
 
 .buyAgainIcon {
-  background-color: #ffda00;
-  color: black;
-  text-transform: capitalize;
+  max-width: 24px;
+  max-height: 24px;
 }
 
-.buyAgainIcon:hover {
-  background-color: #f3cf05;
+.paperWide {
+  margin-right: 1rem;
+  margin-top: 10px;
+  max-width: 57rem;
+  width: 100%;
 }
 
-.buttonList {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+.paperMobile {
+  margin-top: 10px;
+  max-width: 57rem;
+  width: 92%;
 }
 
-.archive {
-  text-transform: capitalize;
+.sectionTitle {
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-left: 1rem;
 }
