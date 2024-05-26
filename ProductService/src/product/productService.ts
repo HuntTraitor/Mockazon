@@ -43,13 +43,27 @@ export class ProductService {
       UPDATE product 
       SET data = jsonb_build_object(
         'name', $1::TEXT, 
-        'price', $2::TEXT,
-      ) WHERE id = $3::UUID 
+        'brand', $2::TEXT,
+        'price', $3::TEXT,
+        'deliveryDate', $4::TEXT,
+        'rating', $5::TEXT,
+        'image', $6::TEXT,
+        'description', $7::TEXT
+      ) WHERE id = $8::UUID 
       RETURNING *
     `;
     const query = {
       text: update,
-      values: [`${product.name}`, `${product.price}`, `${productId}`],
+      values: [
+        `${product.name}`,
+        `${product.brand}`,
+        `${product.price}`,
+        `${product.deliveryDate}`,
+        `${product.rating}`,
+        `${product.image}`,
+        `${product.description}`,
+        `${productId}`
+      ],
     };
     const { rows } = await pool.query(query);
     return rows[0];
