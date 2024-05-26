@@ -18,14 +18,18 @@ export interface NewProduct {
 export interface Product {
   id: UUID;
   vendor_id: UUID;
+  active: boolean;
+  created: Date;
+  posted: Date;
   data: {
     name: string;
-    price: Price;
-    properties: {
-      [key: string]: string;
-    };
-  };
-  // FIXME: Add more product properties
+    brand: string;
+    image: string;
+    price: string;
+    rating: string;
+    description: string;
+    deliveryDate: string;
+  }
 }
 
 export interface NewReview {

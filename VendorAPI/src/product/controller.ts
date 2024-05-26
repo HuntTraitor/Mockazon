@@ -2,14 +2,12 @@ import {
   Body,
   Controller,
   Get,
-  Put,
   Post,
   Query,
   Request,
   Response,
   Route,
   SuccessResponse,
-  Path,
   Security,
 } from 'tsoa';
 import { NewProduct, Product } from '.';
@@ -20,9 +18,10 @@ import * as express from 'express';
 @Route('product')
 export class ProductController extends Controller {
   @Get()
+  @Security('ApiKeyAuth')
   @SuccessResponse('200', 'Products Retrieved')
   public async getProducts(
-    @Query() vendorId?: UUID,
+    @Request() request: express.Request,
     @Query() active?: boolean,
     @Query() page?: number,
     @Query() pageSize?: number,
@@ -31,7 +30,7 @@ export class ProductController extends Controller {
     @Query() descending?: boolean
   ): Promise<Product[] | undefined> {
     return await new ProductService().getProducts(
-      vendorId,
+      request.user?.id,
       active,
       page,
       pageSize,

@@ -28,7 +28,7 @@ export class ProductService {
         `${product.deliveryDate}`,
         `${product.rating}`,
         `${product.image}`,
-        `${product.description}`
+        `${product.description}`,
       ],
     };
     const { rows } = await pool.query(query);
@@ -49,11 +49,7 @@ export class ProductService {
     `;
     const query = {
       text: update,
-      values: [
-        `${product.name}`,
-        `${product.price}`,
-        `${productId}`,
-      ],
+      values: [`${product.name}`, `${product.price}`, `${productId}`],
     };
     const { rows } = await pool.query(query);
     return rows[0];
