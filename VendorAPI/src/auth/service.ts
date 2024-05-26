@@ -39,8 +39,7 @@ export class AuthService {
         reject(new Error('Unauthorized'));
       } else {
         fetch(
-          `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/validate?apiKey=` +
-            apiKey,
+          `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/validate?apiKey=${apiKey}`,
           {
             method: 'GET',
             headers: {

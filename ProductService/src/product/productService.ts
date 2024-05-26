@@ -7,20 +7,28 @@ export class ProductService {
     product: NewProduct,
     vendor_id: UUID
   ): Promise<Product | undefined> {
-    const insert = `INSERT INTO product(vendor_id, data) VALUES (
+    const insert = `INSERT INTO product(vendor_id, data, active) VALUES (
       $1::UUID, jsonb_build_object(
         'name', $2::TEXT, 
-        'price', $3::TEXT,
-        'properties', $4::JSONB
-      )
+        'brand', $3::TEXT,
+        'price', $4::TEXT,
+        'deliveryDate', $5::TEXT,
+        'rating', $6::TEXT,
+        'image', $7::TEXT,
+        'description', $8::TEXT
+      ), true
     ) RETURNING *`;
     const query = {
       text: insert,
       values: [
         `${vendor_id}`,
         `${product.name}`,
+        `${product.brand}`,
         `${product.price}`,
-        JSON.stringify(product.properties),
+        `${product.deliveryDate}`,
+        `${product.rating}`,
+        `${product.image}`,
+        `${product.description}`
       ],
     };
     const { rows } = await pool.query(query);
@@ -36,7 +44,6 @@ export class ProductService {
       SET data = jsonb_build_object(
         'name', $1::TEXT, 
         'price', $2::TEXT,
-        'properties', $4::JSONB
       ) WHERE id = $3::UUID 
       RETURNING *
     `;
@@ -46,7 +53,6 @@ export class ProductService {
         `${product.name}`,
         `${product.price}`,
         `${productId}`,
-        JSON.stringify(product.properties),
       ],
     };
     const { rows } = await pool.query(query);

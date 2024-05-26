@@ -22,12 +22,6 @@ export class KeyController extends Controller {
     return key;
   }
 
-  @Get('{vendorId}')
-  public async getKeys(@Path() vendorId: UUID): Promise<KeyObj[]> {
-    const keys = await new KeyService().getAll(vendorId);
-    return keys;
-  }
-
   @Get('validate')
   @Response('404', 'Not Found')
   public async get(@Query() apiKey: UUID): Promise<SessionUser | undefined> {
@@ -37,6 +31,13 @@ export class KeyController extends Controller {
     }
     return user;
   }
+
+  @Get('{vendorId}')
+  public async getKeys(@Path() vendorId: UUID): Promise<KeyObj[]> {
+    const keys = await new KeyService().getAll(vendorId);
+    return keys;
+  }
+
   @Put('{apiKey}/active')
   @Response('409', 'Error Setting Status')
   public async setActiveStatus(@Path() apiKey: UUID): Promise<Key | undefined> {

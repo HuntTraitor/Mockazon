@@ -12,10 +12,12 @@ import { UUID } from '../types';
 type Price = string;
 export interface NewProduct {
   name: string;
+  brand: string;
+  image: string;
+  rating: string;
   price: Price;
-  properties: {
-    [key: string]: string;
-  };
+  description: string;
+  deliveryDate: Date;
 }
 export interface Product {
   id: UUID;
