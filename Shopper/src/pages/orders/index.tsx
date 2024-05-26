@@ -16,7 +16,8 @@ import TopNav from '@/views/TopNav';
 // import Search from '@mui/icons-material/Search';
 import React, { useState, useEffect, useContext } from 'react';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
-import { useRouter } from 'next/router';
+import getConfig from 'next/config';
+const { basePath } = getConfig().publicRuntimeConfig;
 
 const namespaces = [
   'products',
@@ -38,50 +39,62 @@ export const getServerSideProps: GetServerSideProps = async context => {
 export default function Index() {
   const [Orders, setOrders] = useState([] as Order[]);
   const { accessToken, user } = useContext(LoggedInContext);
-  const router = useRouter();
 
   useEffect(() => {
     if (JSON.stringify(user) === '{}') {
-      router.push('/login');
       return;
     }
-
     fetchOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [accessToken]);
 
   const fetchOrders = () => {
     // this could be altered to take arguments for filtering in the future
-    const query = `{
-      getOrderHistory {
-        createdAt
-        id
-        paymentMethod
-        shippingAddress {
-          addressLine1
-          city
-          country
-          name
-          postalCode
-          state
-        }
-        subtotal
-        total
-        tax
-        totalBeforeTax
-      }
-    }`;
-    fetch('/api/graphql', {
+    const query = {
+      query: `query getAllOrders {
+        getAllOrders {
+          id
+          createdAt
+          shippingAddress {
+            name
+            addressLine1
+            city
+            state
+            postalCode
+            country
+          }
+          paymentMethod
+          paymentDigits
+          subtotal
+          tax
+          shipped
+          delivered
+          deliveryTime
+          products {
+            id
+            data {
+              brand
+              name
+              rating
+              price
+              deliveryDate
+              image
+              description
+            }
+          }
+          total
+      }}`
+    };
+    fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify(query),
     })
       .then(response => response.json())
       .then(data => {
-        setOrders(data.data.getOrderHistory);
+        setOrders(data.data.getAllOrders);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -94,7 +107,7 @@ export default function Index() {
   }, []);
 
   if (JSON.stringify(user) === '{}') {
-    router.push('/login');
+    // router.push('/login');
     return null;
   }
 

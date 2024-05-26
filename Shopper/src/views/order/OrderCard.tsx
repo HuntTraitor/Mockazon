@@ -202,11 +202,11 @@ export default function OrderCard({ order }: { order: Order }) {
               alignItems="center"
               className={styles.gridContainer}
             >
-              {order.products.map((product: Product) => (
+              {order.products.map((product: Product, index) => (
                 <Grid
                   item
                   xs={12}
-                  key={product.id}
+                  key={index}
                   className={styles.productItem}
                 >
                   <Grid container spacing={2} alignItems="flex-start">
