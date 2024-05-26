@@ -167,7 +167,8 @@ export default function Index() {
         <Grid container spacing={2}>
           {Orders.map(order => (
             <Grid item key={order.id} xs={12}>
-              <OrderCard order={order}/> {/* pass order as prop or something */}
+              <OrderCard order={order} />{' '}
+              {/* pass order as prop or something */}
             </Grid>
           ))}
         </Grid>

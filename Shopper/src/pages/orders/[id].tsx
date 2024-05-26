@@ -31,8 +31,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
 const fetchOrderById = async (id: string, accessToken: string) => {
   // FIXME: The deliveryDate field on product needs to just be like "7 days" or some representation of that
-  // However that field is not going to be used here. When placing an order, it needs to look at all the 
-  // products' deliveryDate (which is again just a number of days) and then get the MAX of them, and 
+  // However that field is not going to be used here. When placing an order, it needs to look at all the
+  // products' deliveryDate (which is again just a number of days) and then get the MAX of them, and
   // make a timestamp of that into the future, and put it on deliveryTime. This is the time that will
   // show up for delivery on an order. All this needs to be done in the backend.
   const query = {
@@ -139,7 +139,7 @@ const OrderView: React.FC = () => {
       >
         <OrderDetails order={order} />
       </Container>
-      <OrderCard order={order}/>
+      <OrderCard order={order} />
       <AppBackDrop />
     </>
   );

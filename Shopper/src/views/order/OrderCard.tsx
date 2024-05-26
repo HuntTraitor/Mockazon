@@ -11,6 +11,7 @@ import { enqueueSnackbar } from 'notistack';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useRouter } from 'next/router';
 
 /*
 const card = (
@@ -105,18 +106,18 @@ export default function OrderCard({ order }: { order: Order }) {
   const { user, accessToken } = useContext(LoggedInContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const router = useRouter();
 
   const formatDate = (date: string, delivered: boolean): string => {
     // FIXME: This needs to be the order status, not just delivered. Find a smart way
     // to do this, instead of a bunch of else if
-    return `${delivered ? t('common:delivered') : t('common:arriving')} ${new Date(date).toLocaleDateString(
-      i18n.language === 'en' ? 'en-US' : 'es-US',
-      {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }
-    )}`;
+    return `${delivered ? t('common:delivered') : t('common:arriving')} ${new Date(
+      date
+    ).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })}`;
   };
 
   // FIXME: This function is duplicated, export it to a shared location or something.
@@ -175,18 +176,39 @@ export default function OrderCard({ order }: { order: Order }) {
           {t('order:shipmentDetails')}
         </Typography>
       )}
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <Paper elevation={3} className={isMobile ? styles.paperMobile : styles.paperWide}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Paper
+          elevation={3}
+          className={isMobile ? styles.paperMobile : styles.paperWide}
+        >
           <Card variant="outlined" className={styles.card}>
-            <Typography variant="h6" gutterBottom className={styles.deliveryStatusText}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              className={styles.deliveryStatusText}
+            >
               {formatDate(order.deliveryTime, order.delivered)}
             </Typography>
-            <Grid container spacing={2}
+            <Grid
+              container
+              spacing={2}
               justifyContent="space-between"
               alignItems="center"
-              className={styles.gridContainer}>
+              className={styles.gridContainer}
+            >
               {order.products.map((product: Product) => (
-                <Grid item xs={12} key={product.id} className={styles.productItem}>
+                <Grid
+                  item
+                  xs={12}
+                  key={product.id}
+                  className={styles.productItem}
+                >
                   <Grid container spacing={2} alignItems="flex-start">
                     <Grid item>
                       <CardMedia
@@ -194,6 +216,7 @@ export default function OrderCard({ order }: { order: Order }) {
                         image={product.data.image}
                         alt={product.data.name}
                         className={styles.productImage}
+                        onClick={() => router.push(`/products/${product.id}`)}
                       />
                     </Grid>
                     <Grid item xs className={styles.productDetails}>
@@ -209,12 +232,18 @@ export default function OrderCard({ order }: { order: Order }) {
                         </Typography>
                       </Link>
                       {product.data.brand && (
-                        <Typography variant="body2" className={styles.productBrand}>
+                        <Typography
+                          variant="body2"
+                          className={styles.productBrand}
+                        >
                           {t('order:soldBy')} {product.data.brand}
                         </Typography>
                       )}
-                      <Typography variant="body2" className={styles.productPrice}>
-                  ${product.data.price.toFixed(2)}
+                      <Typography
+                        variant="body2"
+                        className={styles.productPrice}
+                      >
+                        ${product.data.price.toFixed(2)}
                       </Typography>
                       <Box className={styles.actionButtons}>
                         <Button
@@ -223,14 +252,13 @@ export default function OrderCard({ order }: { order: Order }) {
                           color="warning"
                           sx={{ mr: 1 }}
                           startIcon={
-                          // eslint-disable-next-line @next/next/no-img-element
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src="https://m.media-amazon.com/images/S/sash/7uhR68oBHEcdiIr.png"
                               alt="BuyAgain"
                               className={styles.buyAgainIcon}
                             />
                           }
-                          // FIXME: Implement this onclick, also consider a snackbar notification
                           onClick={() => addToShoppingCart(product.id, 1)}
                         >
                           {t('order:buyItAgain')}

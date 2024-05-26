@@ -7,9 +7,7 @@ import type { UUID } from '@/graphql/types';
 export class OrderResolver {
   @Authorized()
   @Query(() => ShopperOrder)
-  async getOrder(
-    @Arg('id', () => String) id: UUID
-  ): Promise<ShopperOrder> {
+  async getOrder(@Arg('id', () => String) id: UUID): Promise<ShopperOrder> {
     const order = await new OrderService().getOrder(id);
     if (!order) {
       throw new Error('Order not found');

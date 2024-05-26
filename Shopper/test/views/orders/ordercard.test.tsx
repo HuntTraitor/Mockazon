@@ -2,7 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import OrderCard from '../../../src/views/order/OrderCard';
 
-
 const mockProducts = [
   {
     id: '1',
@@ -11,10 +10,12 @@ const mockProducts = [
       name: 'iPhone 12',
       price: 1099.99,
       rating: '4 stars',
-      description: 'A14 Bionic chip, the fastest chip ever in a smartphone. Pro camera system for next-level low-light photography. It’s a beautiful leap forward.',
+      description:
+        'A14 Bionic chip, the fastest chip ever in a smartphone. Pro camera system for next-level low-light photography. It’s a beautiful leap forward.',
       deliveryDate: '2024-05-05',
-      image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-family-hero?wid=940&hei=1112&fmt=jpeg&qlt=80&.v=1604021662000',
-    }
+      image:
+        'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-family-hero?wid=940&hei=1112&fmt=jpeg&qlt=80&.v=1604021662000',
+    },
   },
 ];
 
@@ -43,6 +44,6 @@ const mockOrder = {
 
 describe('OrderCard', () => {
   it('should display order information', () => {
-    render(<OrderCard order={mockOrder}/>);
+    render(<OrderCard order={mockOrder} />);
   });
 });

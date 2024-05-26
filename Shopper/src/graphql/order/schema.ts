@@ -37,10 +37,10 @@ export class ShopperOrder {
 
   @Field(() => Boolean)
     shipped!: boolean;
-  
+
   @Field(() => Boolean)
     delivered!: boolean;
-  
+
   @Field(() => Date)
     deliveryTime!: Date;
 
