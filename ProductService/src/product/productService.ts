@@ -62,7 +62,7 @@ export class ProductService {
         `${product.rating}`,
         `${product.image}`,
         `${product.description}`,
-        `${productId}`
+        `${productId}`,
       ],
     };
     const { rows } = await pool.query(query);
@@ -218,7 +218,7 @@ export class ProductService {
   }
 
   public async getSearchSuggestions(search: string): Promise<string[]> {
-    const select = `SELECT DISTINCT data->>'name' FROM product WHERE data->>'name' ILIKE $1::TEXT LIMIT 10`;
+    const select = `SELECT DISTINCT data->>'name' AS name FROM product WHERE data->>'name' ILIKE $1::TEXT LIMIT 10`;
     const query = {
       text: select,
       values: [`${search}%`],
@@ -226,7 +226,7 @@ export class ProductService {
 
     const { rows } = await pool.query(query);
     const suggestions: string[] = rows.map(row => row.name);
-
+    console.log(suggestions);
     return suggestions;
   }
 }

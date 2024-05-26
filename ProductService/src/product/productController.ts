@@ -38,19 +38,6 @@ export class ProductController extends Controller {
     );
   }
 
-  @Get('{productId}')
-  @SuccessResponse('200', 'Product Retrieved')
-  @Response('404', 'Product Not Found')
-  public async getProduct(
-    @Path() productId: UUID
-  ): Promise<Product | undefined> {
-    const product = await new ProductService().getOne(productId);
-    if (!product) {
-      this.setStatus(404);
-    }
-    return product;
-  }
-
   @Get('suggestions')
   @SuccessResponse('200', 'Suggestions Retrieved')
   @Response('400', 'Bad Request')
@@ -75,6 +62,19 @@ export class ProductController extends Controller {
       this.setStatus(500);
       return;
     }
+  }
+
+  @Get('{productId}')
+  @SuccessResponse('200', 'Product Retrieved')
+  @Response('404', 'Product Not Found')
+  public async getProduct(
+    @Path() productId: UUID
+  ): Promise<Product | undefined> {
+    const product = await new ProductService().getOne(productId);
+    if (!product) {
+      this.setStatus(404);
+    }
+    return product;
   }
 
   @Post()

@@ -9,7 +9,7 @@ describe('Editing products', () => {
     brand: 'Test brand',
     image: 'http://test-image.jpg',
     rating: 'Test rating',
-    price: "19.99",
+    price: '19.99',
     description: 'This is a test product',
     deliveryDate: new Date().toISOString(),
   };

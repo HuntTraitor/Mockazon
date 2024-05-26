@@ -149,17 +149,17 @@ describe('Retrieving products', () => {
 });
 
 describe('Getting reviews', () => {
-  // test('Should retrieve all reviews for a product', async () => {
-  //   const productId = 'd1c689b1-b7a7-4100-8b2d-309908b444f5';
-  //   const reviews = await supertest(server)
-  //     .get(`/api/v0/product/${productId}/review`)
-  //     .expect(200);
+  test('Should retrieve all reviews for a product', async () => {
+    const productId = 'd1c689b1-b7a7-4100-8b2d-309908b444f5';
+    const reviews = await supertest(server)
+      .get(`/api/v0/product/${productId}/review`)
+      .expect(200);
 
-  //   expect(reviews.body).toHaveLength(2);
-  //   for (const review of reviews.body) {
-  //     validateReview(review);
-  //   }
-  // });
+    expect(reviews.body).toHaveLength(2);
+    for (const review of reviews.body) {
+      validateReview(review);
+    }
+  });
 
   test('Should return 404 for a non-existent product', async () => {
     const productId = randomUUID();
@@ -169,30 +169,32 @@ describe('Getting reviews', () => {
   });
 });
 
-// test('Should retrieve search suggestions', async () => {
-//   const suggestions = await supertest(server)
-//     .get('/api/v0/product/suggestions')
-//     .query({ search: 'Gatsby' })
-//     .expect(200);
+test('Should retrieve search suggestions', async () => {
+  const suggestions = await supertest(server)
+    .get('/api/v0/product/suggestions')
+    .query({ search: 'Gatsby' })
+    .expect(200);
 
-//   expect(suggestions.body).toHaveLength(1);
-//   expect(suggestions.body[0]).toContain('Gatsby');
-// });
+  expect(suggestions.body).toHaveLength(1);
+  expect(suggestions.body[0]).toContain('Gatsby');
+});
 
-// test('Should retrieve search suggestions for a partial search', async () => {
-//   const suggestions = await supertest(server)
-//     .get('/api/v0/product/suggestions?search="G"')
-//     .expect(200);
+test('Should retrieve search suggestions for a partial search', async () => {
+  const suggestions = await supertest(server)
+    .get('/api/v0/product/suggestions')
+    .query({ search: 'G' })
+    .expect(200);
 
-//   expect(suggestions.body).toHaveLength(1);
-//   expect(suggestions.body[0]).toContain('Gatsby');
-// });
+  console.log(suggestions.body);
+  expect(suggestions.body).toHaveLength(1);
+  expect(suggestions.body[0]).toContain('Gatsby');
+});
 
-// test('Should return an empty array for no search suggestions', async () => {
-//   const suggestions = await supertest(server)
-//     .get('/api/v0/product/suggestions')
-//     .query({ search: 'Z' })
-//     .expect(200);
+test('Should return an empty array for no search suggestions', async () => {
+  const suggestions = await supertest(server)
+    .get('/api/v0/product/suggestions')
+    .query({ search: 'Z' })
+    .expect(200);
 
-//   expect(suggestions.body).toHaveLength(0);
-// });
+  expect(suggestions.body).toHaveLength(0);
+});
