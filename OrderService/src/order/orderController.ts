@@ -41,6 +41,14 @@ export class OrderController extends Controller {
     return await new OrderService().create(order, vendorId);
   }
 
+  @Get('shopperOrder')
+  public async testing(
+    @Query() shopperId: UUID,
+  ): Promise<ShopperOrder[]> {
+    const orders = await new OrderService().getAllShopperOrder(shopperId);
+    return orders
+  }
+
   @Get('{orderId}')
   @Response('404', 'Not Found')
   public async getOrder(@Path() orderId: UUID): Promise<Order | undefined> {

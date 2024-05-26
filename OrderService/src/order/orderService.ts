@@ -123,4 +123,21 @@ export class OrderService {
     order = { ...order, ...order.data, data: undefined };
     return order;
   }
+
+  public async getAllShopperOrder(shopperId: UUID): Promise<ShopperOrder[]> {
+    let arr: any = []
+    const select = `SELECT * FROM shopper_order WHERE shopper_id = $1`
+    const query = {
+      text: select,
+      values: [`${shopperId}`]
+    }
+    const {rows} = await pool.query(query)
+
+    const promises = rows.map(async order => {
+      const res = await this.getShopperOrder(order.id)
+      arr.push(res)
+    })
+    await Promise.all(promises)
+    return arr
+  }
 }
