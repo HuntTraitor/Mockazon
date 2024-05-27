@@ -71,7 +71,7 @@ const handlers = [
                 name: 'test name',
                 rating: 'test',
                 price: 1,
-                deliveryDate: 'test',
+                deliveryDate: new Date().toUTCString(),
                 image: 'test',
               },
             },

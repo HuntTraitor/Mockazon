@@ -22,6 +22,7 @@ const mockProducts = [
 const mockOrder = {
   id: '1',
   createdAt: '2024-05-05',
+  quantities: [1, 1],
   shippingAddress: {
     name: 'Naomi Tratar',
     addressLine1: '6019 W. 74th st.',
