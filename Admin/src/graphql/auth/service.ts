@@ -35,7 +35,7 @@ export class AuthService {
           resolve(authenticated);
         })
         .catch(err => {
-          console.log(err);
+          console.error(err);
           reject(new Error('Unauthorised'));
         });
     });

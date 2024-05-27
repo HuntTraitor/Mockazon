@@ -108,7 +108,7 @@ export function AdminRequests() {
   };
 
   const handleRejectRequest = (requestId: number) => {
-    console.log(`Rejecting request with ID: ${requestId}`);
+    console.log(`Rejecting request with ID: ${requestId}`); // FIXME: what is this
   };
 
   return (

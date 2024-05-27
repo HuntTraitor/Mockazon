@@ -62,4 +62,45 @@ export class AuthService {
       }
     });
   }
+
+  public async checkOwnership(
+    vendor_id?: UUID,
+    order_id?: UUID
+  ): Promise<boolean> {
+    console.log('vendor_id', vendor_id);
+    return new Promise((resolve, reject) => {
+      if (!vendor_id || !order_id) {
+        reject(new Error('Unauthorized'));
+      } else {
+        fetch(
+          `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/${order_id}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+          .then(res => {
+            if (!res.ok) {
+              console.log('res', res);
+              throw res;
+            }
+            return res.json();
+          })
+          .then(data => {
+            console.log(
+              'Passed',
+              vendor_id,
+              data.vendor_id,
+              data.vendor_id === vendor_id
+            );
+            resolve(data.vendor_id === vendor_id);
+          })
+          .catch(() => {
+            reject(new Error('Unauthorized'));
+          });
+      }
+    });
+  }
 }

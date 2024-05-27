@@ -16,8 +16,8 @@ export class OrderService {
           }
           return res.json();
         })
-        .then(authenticated => {
-          resolve(authenticated);
+        .then(data => {
+          resolve(data);
         })
         .catch(err => {
           console.log(err);
@@ -44,8 +44,8 @@ export class OrderService {
           }
           return res.json();
         })
-        .then(authenticated => {
-          resolve(authenticated);
+        .then(data => {
+          resolve(data);
         })
         .catch(err => {
           console.log(err);
@@ -78,8 +78,62 @@ export class OrderService {
           }
           return res.json();
         })
-        .then(authenticated => {
-          resolve(authenticated);
+        .then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+
+  async setShipped(orderId: UUID, shipped: boolean): Promise<Order> {
+    return new Promise((resolve, reject) => {
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/${orderId}/shipped?shipped=${shipped}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+        .then(res => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+
+  async setDelivered(orderId: UUID, delivered: boolean): Promise<Order> {
+    return new Promise((resolve, reject) => {
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/${orderId}/delivered?delivered=${delivered}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+        .then(res => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then(data => {
+          resolve(data);
         })
         .catch(err => {
           console.log(err);
