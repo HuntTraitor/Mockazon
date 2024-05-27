@@ -41,7 +41,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-
 const ProductPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -96,7 +95,7 @@ const ProductPage = () => {
             <Box className={styles.productImage}>
               <Image
                 src={product.data.image}
-                alt="product image"
+                alt={t('productImageAlt')}
                 fill
                 priority
               />
@@ -124,11 +123,10 @@ const ProductPage = () => {
                 <TextField
                   id="Quantity Selector"
                   select
-                  label="Quantity"
+                  label={t('quantity')}
                   defaultValue="1"
                   onChange={handleQuantityChange}
-                  aria-label="Quantity Selector"
-                  data-testid="Quantity Selector"
+                  aria-label={t('quantitySelector') ?? ''}
                 >
                   {numbers.map(number => (
                     <MenuItem

@@ -14,5 +14,8 @@
   "customer": "Customer",
   "addToCart": "Add to Cart",
   "productAddedToCart": "Product added to cart",
-  "productNotAddedToCart": "Product not added to cart"
+  "productNotAddedToCart": "Product not added to cart",
+  "productImageAlt": "Product Image",
+  "quantity": "Quantity",
+  "quantitySelector": "Quantity Selector"
 }

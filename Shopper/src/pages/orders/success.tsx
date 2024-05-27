@@ -38,7 +38,7 @@ const namespaces = [
   'common',
   'signInDropdown',
   'successOrder',
-  'viewProduct',  
+  'viewProduct',
 ];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
@@ -142,7 +142,9 @@ const CheckoutSuccessPage = () => {
                     <Typography>{product.description}</Typography>
                     {product.description ? (
                       <Typography>
-                        <strong>{t('productDetails.productDescription')}: </strong>
+                        <strong>
+                          {t('productDetails.productDescription')}:{' '}
+                        </strong>
                         {product.description}
                       </Typography>
                     ) : null}
@@ -176,7 +178,9 @@ const CheckoutSuccessPage = () => {
                   <div>
                     <p>{payment.card.wallet}</p>
                     <p>{payment.card.brand.toUpperCase()}</p>
-                    <p>{t('paymentDetails.endingWith')} `{payment.card.last4}`</p>
+                    <p>
+                      {t('paymentDetails.endingWith')} `{payment.card.last4}`
+                    </p>
                     <p>
                       {t('paymentDetails.expiresOn')} {payment.card.exp_month} /{' '}
                       {payment.card.exp_year}

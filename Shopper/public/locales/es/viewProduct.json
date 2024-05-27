@@ -14,5 +14,8 @@
   "customer": "Cliente",
   "addToCart": "Añadir al carrito",
   "productAddedToCart": "Producto añadido al carrito",
-  "productNotAddedToCart": "No se pudo añadir el producto al carrito"
+  "productNotAddedToCart": "No se pudo añadir el producto al carrito",
+  "productImageAlt": "Imagen del producto",
+  "quantity": "Cantidad",
+  "quantitySelector": "Selector de cantidad"
 }

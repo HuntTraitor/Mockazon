@@ -10,7 +10,7 @@ import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import ProductCard from '@/views/product/ProductCard';
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import { SnackbarProvider} from 'notistack';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -123,7 +123,7 @@ it('Clicks on add to shopping cart', async () => {
   );
   fireEvent.click(screen.getByLabelText('Add to cart button'));
   await waitFor(() => {
-    expect(screen.getByText('Added to shopping cart')).toBeDefined();
+    expect(screen.getByText('productAddedToCart')).toBeDefined();
   });
 });
 
@@ -136,6 +136,6 @@ it('Clicks on add to shopping cart error', async () => {
   );
   fireEvent.click(screen.getByLabelText('Add to cart button'));
   await waitFor(() => {
-    expect(screen.getByText('Could not add product to cart')).toBeDefined();
+    expect(screen.getByText('productNotAddedToCart')).toBeDefined();
   });
 });
