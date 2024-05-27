@@ -35,7 +35,7 @@ export class StripeService {
         return authenticated;
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
         throw new GraphQLError('Internal Server Error');
       });
     return result;

@@ -75,7 +75,6 @@ export class VendorService {
   }
 
   public async check(accessToken: string): Promise<SessionUser> {
-    console.log(accessToken);
     return new Promise((resolve, reject) => {
       try {
         jwt.verify(

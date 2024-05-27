@@ -54,8 +54,6 @@ export class OrderService {
     );
     order.products = products;
 
-    console.log(order);
-
     return order;
   }
 
