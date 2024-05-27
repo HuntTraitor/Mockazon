@@ -1,9 +1,6 @@
 import React from 'react';
-import { Box, AppBar, Toolbar, Button, Avatar, Typography } from '@mui/material';
+import { Box, AppBar, Toolbar, Button } from '@mui/material';
 import { LoginContext } from '@/contexts/Login';
-import getConfig from 'next/config';
-
-const { basePath } = getConfig().publicRuntimeConfig;
 
 /**
  * defines the AppBar

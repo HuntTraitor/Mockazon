@@ -13,11 +13,6 @@ it('Renders', async () => {
   });
 });
 
-it('Renders Avatar', async () => {
-  render(<MyAppBar />);
-  await screen.findByAltText('User Avatar');
-});
-
 it('Sign Out button is clickable', async () => {
   render(<MyAppBar />);
   const signOut = await screen.findByText('Sign Out', {
