@@ -6,6 +6,8 @@ import Subtotal from '@/views/Subtotal';
 import getConfig from 'next/config';
 import { useTranslation } from 'next-i18next';
 import { Product } from '../../types';
+import { enqueueSnackbar } from 'notistack';
+
 
 enum Locale {
   en = 'en',
@@ -105,6 +107,12 @@ export default function CheckoutButton({
       })
       .catch(err => {
         console.error(err);
+        enqueueSnackbar(t('cart:errorCreatingCheckoutSession'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
       });
   };
   const productQuantity = productsWithContent
