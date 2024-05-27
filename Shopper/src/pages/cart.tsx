@@ -271,7 +271,15 @@ const Cart = ({ locale }: { locale: string }) => {
                     component="p"
                   >
                     {t('products:deliveryDate')}:{' '}
-                    {new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'short', day: 'numeric' }).format(new Date(product.data.getProduct.data.deliveryDate as string))}
+                    {new Intl.DateTimeFormat('en-US', {
+                      weekday: 'long',
+                      month: 'short',
+                      day: 'numeric',
+                    }).format(
+                      new Date(
+                        product.data.getProduct.data.deliveryDate as string
+                      )
+                    )}
                   </Typography>
                   <Typography
                     aria-label={`quantity is ${product.quantity}`}
