@@ -1,8 +1,6 @@
 import { Query, Mutation, Resolver, Arg, Ctx, Authorized } from 'type-graphql';
 import {
-  Order,
   ShippingAddress,
-  OrderInput,
   ShippingAddressInput,
 } from './schema';
 import { AccountService } from './service';
@@ -10,21 +8,6 @@ import type { NextApiRequest } from 'next';
 
 @Resolver()
 export class AccountResolver {
-  @Authorized('shopper')
-  @Query(() => [Order])
-  async getOrderHistory(@Ctx() request: NextApiRequest): Promise<Order[]> {
-    return new AccountService().getOrderHistory(request.user.id);
-  }
-
-  @Authorized('shopper')
-  @Mutation(() => [Order])
-  async addOrderHistory(
-    @Ctx() request: NextApiRequest,
-    @Arg('order') order: OrderInput
-  ): Promise<Order[] | undefined> {
-    return new AccountService().addOrderHistory(request.user.id, order);
-  }
-
   @Authorized('shopper')
   @Query(() => [ShippingAddress])
   async getShippingInfo(
