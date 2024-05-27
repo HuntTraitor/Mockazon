@@ -206,6 +206,12 @@ const Cart = ({ locale }: { locale: string }) => {
       });
   };
 
+  const handleQuantityChange = (productId: string, quantity: string) => {
+    // Update the quantity of the product with the given productId
+    // You can update the state or send an API request here
+    console.log(`Updating quantity for product ${productId} to ${quantity}`);
+  };
+
   return (
     <div className={styles.exterior}>
       {error && <p>{error}</p>}
@@ -280,26 +286,48 @@ const Cart = ({ locale }: { locale: string }) => {
                               new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
                             )}
                           </Typography>
-                          <Typography
+                          {/* <Typography
                             style={{ fontSize: '0.8rem' }}
                             aria-label={`quantity is ${product.quantity}`}
                           >
                             {t('products:quantity')}: {product.quantity}
-                          </Typography>
+                          </Typography> */}
                           <Link
                             aria-label={`add-shopping-cart-${product.id}`}
                             className={styles.deleteLink}
                             href={`/cart`}
                           >
-                            <Typography
-                              style={{ fontSize: '0.8rem' }}
-                              className={styles.removeText}
-                              onClick={() =>
-                                handleRemove(product.data.getProduct.id)
-                              }
-                            >
-                              {t('cart:Delete')}
-                            </Typography>
+                            <Box className={styles.cardToolbar}>
+                              <select
+                                className={styles.quantityDropdown}
+                                value={product.quantity}
+                                onChange={e =>
+                                  handleQuantityChange(
+                                    product.data.getProduct.id,
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                {Array.from({ length: 10 }, (_, i) => (
+                                  <option key={i + 1} value={i + 1}>
+                                    Qty: {i + 1}
+                                  </option>
+                                ))}
+                              </select>
+                              <Divider orientation="vertical" flexItem />
+                              <Typography
+                                style={{
+                                  fontSize: '0.8rem',
+                                  marginLeft: '0.5rem',
+                                }}
+                                className={styles.removeText}
+                                onClick={() =>
+                                  handleRemove(product.data.getProduct.id)
+                                }
+                              >
+                                {t('cart:Delete')}
+                              </Typography>
+                            </Box>
                           </Link>
                         </Box>
                         <Box
