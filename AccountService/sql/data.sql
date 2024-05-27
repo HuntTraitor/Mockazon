@@ -203,11 +203,7 @@ VALUES
         )
     );
 
---- Shopper Data ---
--- FIXME: We don't want order history as a table here. We have orders in the order service,
--- so you can get the order history by querying that. You cannot store json for this type of data,
--- because you can imagine it's just going to grow and grow and become a mess. That's why you have
--- relationals dbs with rows
+
 INSERT INTO
     shopper (data)
 VALUES
@@ -239,43 +235,6 @@ VALUES
                 'postalCode', '95060'
             )
         ),
-        'orderHistory', jsonb_build_array(
-            jsonb_build_object(
-                'id', '1',
-                'createdAt', '2021-03-01T00:00:00Z',
-                'shippingAddress', jsonb_build_object(
-                    'name', 'Evan Metcalf',
-                    'addressLine1', '1234 Elm St',
-                    'country', 'USA',
-                    'city', 'Santa Cruz',
-                    'state', 'CA',
-                    'postalCode', '95060'
-                ),
-                'paymentMethod', 'Credit Card',
-                'subtotal', 49.97,
-                'totalBeforeTax', 49.97,
-                'tax', 0,
-                'total', 49.97
-
-            ),
-            jsonb_build_object(
-                'id', '2',
-                'createdAt', '2021-03-15T00:00:00Z',
-                'shippingAddress', jsonb_build_object(
-                    'name', 'Evan Metcalf',
-                    'addressLine1', '5678 Oak St',
-                    'country', 'USA',
-                    'city', 'Santa Cruz',
-                    'state', 'CA',
-                    'postalCode', '95060'
-                ),
-                'paymentMethod', 'PayPal',
-                'subtotal', 77.96,
-                'totalBeforeTax', 77.96,
-                'tax', 0,
-                'total', 77.96
-            )
-        )
     )
 );
 
