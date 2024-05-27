@@ -67,9 +67,9 @@ export function Users() {
     // eslint-disable-next-line
   }, [accessToken, refetch]);
 
-  const handleDeleteUser = (userId: number) => {
-    console.log(`Deleting user with ID: ${userId}`);
-  };
+  // const handleDeleteUser = (userId: number) => {
+  //   console.log(`Deleting user with ID: ${userId}`);
+  // };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', padding: 3 }}>
@@ -89,7 +89,7 @@ export function Users() {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Action</TableCell>
+                {/* <TableCell>Action</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -98,14 +98,14 @@ export function Users() {
                   <TableCell>{account.name}</TableCell>
                   <TableCell>{account.email}</TableCell>
                   <TableCell>
-                    <Button
+                    {/* <Button
                       variant="outlined"
                       color="error"
                       data-testid={`delete-account-${account.id}`}
                       onClick={() => handleDeleteUser(account.id)}
                     >
                       Delete
-                    </Button>
+                    </Button> */}
                   </TableCell>
                 </TableRow>
               ))}

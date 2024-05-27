@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, AppBar, Toolbar, Button, Avatar } from '@mui/material';
+import { Box, AppBar, Toolbar, Button, Avatar, Typography } from '@mui/material';
 import { LoginContext } from '@/contexts/Login';
 import getConfig from 'next/config';
 
@@ -22,6 +22,7 @@ export function MyAppBar() {
       <Toolbar>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <Typography sx={{color: 'black'}}>Admin</Typography>
           <Button
             variant="outlined"
             color="primary"
@@ -36,7 +37,6 @@ export function MyAppBar() {
           >
             Sign Out
           </Button>
-          <Avatar alt="User Avatar" src={`${basePath}/avatar.png`} />
         </Box>
       </Toolbar>
     </AppBar>
