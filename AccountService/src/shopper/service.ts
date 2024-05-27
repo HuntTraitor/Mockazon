@@ -1,4 +1,4 @@
-import { CreateUserInput, LoginInput, ShippingAddress, Order } from ".";
+import { CreateUserInput, LoginInput, ShippingAddress } from ".";
 import { SessionUser, Account } from "../types";
 import { pool } from "../db";
 import * as jwt from "jsonwebtoken";
@@ -159,50 +159,6 @@ export class ShopperService {
       return updatedRows[0].data.shippingInfo;
     } catch (error) {
       throw new Error("Failed to add shipping info");
-    }
-  }
-
-  public async getOrderHistory(userId: string): Promise<string[] | undefined> {
-    try {
-      const select = `SELECT * FROM shopper WHERE id = $1`;
-      const query = {
-        text: select,
-        values: [`${userId}`],
-      };
-      const { rows } = await pool.query(query);
-
-      if (rows[0].data.orderHistory) {
-        return rows[0].data.orderHistory;
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return undefined;
-    }
-  }
-
-  public async createOrderHistory(data: {
-    userId: string;
-    order: Order;
-  }): Promise<string[]> {
-    try {
-      const select = `SELECT * FROM shopper WHERE id = $1`;
-      const { rows } = await pool.query({
-        text: select,
-        values: [`${data.userId}`],
-      });
-      const currentOrderHistory = rows[0]?.data.orderHistory || [];
-
-      const updatedOrderHistory = [...currentOrderHistory, data.order];
-      const update = `UPDATE shopper SET data = jsonb_set(data, '{orderHistory}', $1::jsonb) WHERE id = $2 RETURNING *`;
-      const query = {
-        text: update,
-        values: [JSON.stringify(updatedOrderHistory), `${data.userId}`],
-      };
-      const { rows: updatedRows } = await pool.query(query);
-      return updatedRows[0].data.orderHistory;
-    } catch (error) {
-      throw new Error("Failed to add order history");
     }
   }
 }

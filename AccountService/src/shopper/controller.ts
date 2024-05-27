@@ -1,7 +1,7 @@
 import { Controller, Route, Post, Body, Get, Query, Response } from "tsoa";
 
 import { ShopperService } from "./service";
-import { CreateUserInput, LoginInput, ShippingAddress, Order } from ".";
+import { CreateUserInput, LoginInput, ShippingAddress } from ".";
 import { SessionUser } from "../types";
 
 @Route("shopper")
@@ -79,31 +79,6 @@ export class ShopperController extends Controller {
       const userData = await new ShopperService().createShippingInfo({
         userId,
         shippingInfo,
-      });
-      return userData;
-    } catch (error) {
-      this.setStatus(404);
-    }
-  }
-
-  @Get("orderhistory")
-  public async getOrderHistory(@Query() userId: string) {
-    const userData = await new ShopperService().getOrderHistory(userId);
-    if (!userData) {
-      this.setStatus(404);
-    }
-    return userData;
-  }
-
-  @Post("orderhistory")
-  public async createOrderHistory(
-    @Query() userId: string,
-    @Body() order: Order,
-  ) {
-    try {
-      const userData = await new ShopperService().createOrderHistory({
-        userId,
-        order,
       });
       return userData;
     } catch (error) {

@@ -33,14 +33,3 @@ export interface ShippingAddress {
   postalCode: string;
   country: string;
 }
-
-export interface Order {
-  id: string;
-  createdAt: string;
-  shippingAddress: ShippingAddress;
-  paymentMethod: string;
-  subtotal: number;
-  totalBeforeTax: number;
-  tax: number;
-  total: number;
-}
