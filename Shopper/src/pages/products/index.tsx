@@ -103,6 +103,9 @@ const Index = () => {
           console.error('Error fetching products:', data.errors);
           enqueueSnackbar(t('errorFetchingProducts'), {
             variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
           });
           return;
         }
@@ -112,6 +115,9 @@ const Index = () => {
         console.error('Error fetching products:', error);
         enqueueSnackbar(t('errorFetchingProducts'), {
           variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       });
   };
