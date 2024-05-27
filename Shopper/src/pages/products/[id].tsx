@@ -23,6 +23,7 @@ import Layout from '@/components/Layout';
 import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
 import AppBackDrop from '@/components/AppBackdrop';
+import { enqueueSnackbar } from 'notistack';
 
 const namespaces = [
   'products',
@@ -80,9 +81,14 @@ const ProductPage = () => {
       })
       .catch(error => {
         console.error('Error fetching product:', error);
-        setError('Could not fetch product');
+        enqueueSnackbar(t('errorFetchingProduct'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
       });
-  }, [id]);
+  }, [id, t]);
 
   if (product && product.data) {
     return (
