@@ -39,7 +39,7 @@ app.use('/v0', router);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  res.status(err.status).json({
+  res.status(500).json({
     message: err.message,
     errors: err.errors,
     status: err.status,

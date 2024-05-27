@@ -6,11 +6,15 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import styles from '@/styles/success.module.css';
 import TopNav from '@/views/TopNav';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
+import Image from 'next/image';
+import { Typography, List, ListItem, Stack, Link } from '@mui/material';
+// import { useAppContext } from '@/contexts/AppContext';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'; // Assuming you have a CSS module file
 import AppBackDrop from '@/components/AppBackdrop';
-
+import { useTranslation } from 'next-i18next';
 // TODO this entire page needs to be converted to graphQL
 
 const fetcher = async (url: RequestInfo, init?: RequestInit) => {
@@ -28,17 +32,26 @@ interface Product {
   quantity: number;
 }
 
-const namespaces = ['products', 'topHeader', 'common', 'signInDropdown'];
+const namespaces = [
+  'products',
+  'topHeader',
+  'common',
+  'signInDropdown',
+  'successOrder',
+  'viewProduct',
+];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale ?? 'en', namespaces)),
+      locale: context.locale ?? 'en',
     },
   };
 };
 
 // https://chatgpt.com/share/89b19118-0745-4848-aee9-44d975221970
 const CheckoutSuccessPage = () => {
+  const { t } = useTranslation('successOrder');
   const {
     query: { sessionId },
   } = useRouter();
@@ -46,7 +59,8 @@ const CheckoutSuccessPage = () => {
 
   const { data: checkoutSession, error } = useSWR(URL, fetcher);
 
-  if (error) return <div>Failed to load the session</div>;
+  if (error)
+    return <Typography variant="h2">Failed to load the session</Typography>;
 
   const {
     customer_details: customer,
@@ -76,67 +90,99 @@ const CheckoutSuccessPage = () => {
       <TopNav />
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1>Payment Successful</h1>
-          <p>Thank you for your order.</p>
-          <p>
-            We appreciate your business and are currently processing your order.
-            You will receive a confirmation soon!
-          </p>
+          <Typography variant="h2">
+            {t('successStatus')}{' '}
+            {
+              <CheckCircleIcon
+                sx={{ width: '40px', height: '40px' }}
+                color="success"
+              />
+            }
+          </Typography>
+          <Typography variant="h6">{t('thanks')}</Typography>
+          <Typography variant="h6">{t('appreciative')}</Typography>
         </div>
 
         <div className={styles.orderInfo}>
-          <strong>Order Number:</strong> <span>{payment_intent?.id}</span>
+          <Typography variant="h4">
+            {t('orderNumber')}: {payment_intent?.id}
+          </Typography>
         </div>
 
         <div className={styles.orderDetails}>
-          <h2>Your Order</h2>
-          <h3>Items</h3>
-          {products?.map((product: Product) => (
-            <div key={product.id} className={styles.product}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={product.images[0]}
-                alt={product.description}
-                height={200}
-                width={200}
-                className={styles.productImage}
-              />
-              <div className={styles.productDetails}>
-                <h4>
-                  <a href={product.url} className={styles.productLink}>
-                    {product.name}
-                  </a>
-                </h4>
-                <p>{product.description}</p>
-                <div>
-                  <strong>Quantity:</strong> <span>{product.quantity}</span>
-                </div>
-                <div>
-                  <strong>Price:</strong>{' '}
-                  <span>
-                    {(product.price / 100).toLocaleString('en-CA', {
-                      style: 'currency',
-                      currency: 'CAD',
-                    })}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-
+          <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+            {t('orderDetails')}
+          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+            {t('items')}
+          </Typography>
+          <List>
+            {products?.map((product: Product) => {
+              return (
+                <ListItem
+                  key={product.id}
+                  sx={{
+                    border: '1px solid black',
+                    borderRadius: '10px',
+                    justifyItems: 'space-between',
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <Image
+                    className={styles.productImage}
+                    width={200}
+                    height={200}
+                    alt={product.description}
+                    src={product.images[0]}
+                  />
+                  <Stack>
+                    <Link variant="h5" href={product.url} underline="none">
+                      {product.name}
+                    </Link>
+                    <Typography>{product.description}</Typography>
+                    {product.description ? (
+                      <Typography>
+                        <strong>
+                          {t('productDetails.productDescription')}:{' '}
+                        </strong>
+                        {product.description}
+                      </Typography>
+                    ) : null}
+                    <Typography>
+                      <strong>{t('productDetails.quantity')}: </strong>
+                      {product.quantity}{' '}
+                    </Typography>
+                    <Typography>
+                      <strong>{t('productDetails.price')}: </strong>
+                      {(product.price / 100).toLocaleString('en-CA', {
+                        style: 'currency',
+                        currency: 'CAD',
+                      })}
+                    </Typography>
+                  </Stack>
+                </ListItem>
+              );
+            })}
+          </List>
           <div className={styles.customerInfo}>
-            <h3>Your Information</h3>
-            <h4>Payment</h4>
+            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+              {t('yourInfo')}
+            </Typography>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              {t('payment')}
+            </Typography>
             <div>
               {payment?.card && (
                 <div>
-                  <strong>Payment Information:</strong>
+                  <strong>{t('paymentDetails.paymentInfo')}:</strong>
                   <div>
                     <p>{payment.card.wallet}</p>
                     <p>{payment.card.brand.toUpperCase()}</p>
-                    <p>Ending with {payment.card.last4}</p>
                     <p>
-                      Expires on {payment.card.exp_month} /{' '}
+                      {t('paymentDetails.endingWith')} `{payment.card.last4}`
+                    </p>
+                    <p>
+                      {t('paymentDetails.expiresOn')} {payment.card.exp_month} /{' '}
                       {payment.card.exp_year}
                     </p>
                   </div>
@@ -144,23 +190,34 @@ const CheckoutSuccessPage = () => {
               )}
             </div>
             <div>
-              <strong>Billing Address:</strong>
+              <strong>{t('billing')}:</strong>
               <address>
-                <span>Name: {customer?.name}</span>
+                <span>
+                  {t('billingDetails.name')}: {customer?.name}
+                </span>
                 <br />
-                <span>Email: {customer?.email}</span>
+                <span>
+                  {t('billingDetails.email')}: {customer?.email}
+                </span>
                 <br />
-                <span>Country: {customer?.address.country}</span>
+                <span>
+                  {t('billingDetails.country')}: {customer?.address.country}
+                </span>
                 <br />
-                <span>Postal Code: {customer?.address.postal_code}</span>
+                <span>
+                  {t('billingDetails.postalCode')}:{' '}
+                  {customer?.address.postal_code}
+                </span>
               </address>
             </div>
           </div>
 
-          <h3>Summary</h3>
+          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+            {t('summary')}
+          </Typography>
           <div className={styles.summary}>
             <div>
-              <strong>Subtotal:</strong>{' '}
+              <strong>{t('summaryDetails.subtotal')}:</strong>{' '}
               <span>
                 {(amount_subtotal / 100).toLocaleString('en-CA', {
                   style: 'currency',
@@ -169,7 +226,7 @@ const CheckoutSuccessPage = () => {
               </span>
             </div>
             <div>
-              <strong>Discount:</strong>{' '}
+              <strong>{t('summaryDetails.discount')}:</strong>{' '}
               <span>
                 -
                 {(discount / 100).toLocaleString('en-CA', {
@@ -179,7 +236,7 @@ const CheckoutSuccessPage = () => {
               </span>
             </div>
             <div>
-              <strong>Tax:</strong>{' '}
+              <strong>{t('summaryDetails.tax')}:</strong>{' '}
               <span>
                 {(tax / 100).toLocaleString('en-CA', {
                   style: 'currency',
@@ -188,7 +245,7 @@ const CheckoutSuccessPage = () => {
               </span>
             </div>
             <div>
-              <strong>Total:</strong>{' '}
+              <strong>{t('summaryDetails.total')}:</strong>{' '}
               <span>
                 {(amount_total / 100).toLocaleString('en-CA', {
                   style: 'currency',

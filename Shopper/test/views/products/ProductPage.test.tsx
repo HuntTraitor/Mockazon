@@ -117,7 +117,7 @@ it('Clicks on quantity on productPage', async () => {
     </AppContextProvider>
   );
   await waitFor(() => {
-    const field = screen.getByLabelText('Quantity Selector');
+    const field = screen.getByLabelText('quantitySelector');
     expect(field).toBeInTheDocument();
   });
   await userEvent.click(screen.getByText('1'));

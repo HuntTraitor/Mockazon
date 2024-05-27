@@ -10,12 +10,14 @@ import { Link } from '@mui/material';
 import Price from './Price';
 import DeliveryText from './DeliveryText';
 import AddToCartButton from './AddToCartButton';
+import { useTranslation } from 'next-i18next';
 
 interface ProductProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductProps) {
+  const { t } = useTranslation('viewProduct');
   const price = product.data.price.toString();
 
   return (
@@ -33,7 +35,7 @@ export default function ProductCard({ product }: ProductProps) {
         >
           <Image
             src={product.data.image}
-            alt="Product image"
+            alt={t('productImageAlt')}
             width={250}
             height={350}
           />

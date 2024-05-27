@@ -13,7 +13,7 @@ const useLoadLocalStorageUser = (
 ) => {
   useEffect(() => {
     const item = localStorage.getItem('user');
-    if (item) {
+    if (item && item !== '{}') {
       const userData = JSON.parse(item);
       setUser(userData);
       setAccessToken(userData.accessToken);

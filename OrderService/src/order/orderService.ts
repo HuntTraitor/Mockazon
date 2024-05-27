@@ -4,9 +4,9 @@ import {
   Order,
   UpdateOrder,
   ShopperOrder,
-  ShopperOrderId,
   OrderProduct,
   OrderProductId,
+  ShopperOrderId,
 } from '.';
 import { pool } from '../db';
 
@@ -120,19 +120,23 @@ export class OrderService {
     let order = rows[0];
 
     // Get the product ids in the order
-    const productSelect = `SELECT product_id AS id FROM order_product WHERE order_id = $1`;
+    const productSelect = `SELECT product_id AS id, quantity FROM order_product WHERE order_id = $1`;
     const productQuery = {
       text: productSelect,
       values: [`${orderId}`],
     };
     const { rows: products } = await pool.query(productQuery);
 
-    if (products.length) order.products = products.map(product => product.id);
+    if (products.length)
+      order.products = products.map(product => ({
+        id: product.id,
+        quantity: product.quantity,
+      }));
     order = { ...order, ...order.data, data: undefined };
     return order;
   }
 
-  public async getAllShopperOrders(shopperId: UUID): Promise<ShopperOrder[]> {
+  public async getAllShopperOrder(shopperId: UUID): Promise<ShopperOrder[]> {
     const arr: ShopperOrder[] = [];
     const select = `SELECT * FROM shopper_order WHERE shopper_id = $1`;
     const query = {
@@ -167,14 +171,100 @@ export class OrderService {
   public async createOrderProduct(
     orderProduct: OrderProduct
   ): Promise<(OrderProduct & OrderProductId) | undefined> {
-    const insert = `INSERT INTO order_product(order_id, product_id) VALUES 
-    ($1, $2) RETURNING *`;
+    const insert = `INSERT INTO order_product(order_id, product_id, quantity) VALUES 
+    ($1, $2, $3) RETURNING *`;
 
     const query = {
       text: insert,
-      values: [orderProduct.shopper_order_id, orderProduct.product_id],
+      values: [
+        orderProduct.shopper_order_id,
+        orderProduct.product_id,
+        orderProduct.quantity,
+      ],
+    };
+    console.log("About the query a new order product")
+    const { rows } = await pool.query(query);
+    console.log("Successfully queried order product")
+    return rows[0];
+  }
+
+  public async setShipped(orderId: UUID, shipped: boolean): Promise<Order> {
+    // update the order
+    const update = `
+    UPDATE vendor_order
+    SET data = jsonb_set(data, '{shipped}', $1::jsonb)
+    WHERE id = $2
+    RETURNING *`;
+
+    const query = {
+      text: update,
+      values: [shipped, orderId],
     };
     const { rows } = await pool.query(query);
+
+    // get the shopper order's id
+    const select = `SELECT shopper_order_id FROM vendor_shopper_order WHERE vendor_order_id = $1`;
+    const selectQuery = {
+      text: select,
+      values: [`${orderId}`],
+    };
+    const { rows: orderProducts } = await pool.query(selectQuery);
+
+    // update the shopper order
+    const shopperUpdate = `UPDATE shopper_order
+    SET data = jsonb_set(data, '{shipped}', $1::jsonb)
+    WHERE id = $2
+    RETURNING *`;
+
+    const shopperQuery = {
+      text: shopperUpdate,
+      values: [shipped, orderProducts[0].shopper_order_id],
+    };
+    await pool.query(shopperQuery);
+    return rows[0];
+  }
+
+  public async setDelivered(orderId: UUID, delivered: boolean): Promise<Order> {
+    // update the order
+    const update = `
+      UPDATE vendor_order
+      SET data = data || jsonb_build_object(
+        'delivered', $1::jsonb, 
+        'deliveryTime', to_char(now() at time zone 'utc', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')
+      )
+      WHERE id = $2
+      RETURNING *`;
+
+    const query = {
+      text: update,
+      values: [delivered, orderId],
+    };
+    const { rows } = await pool.query(query);
+
+    // get the shopper order's id
+    const select = `SELECT shopper_order_id FROM vendor_shopper_order WHERE vendor_order_id = $1`;
+    const selectQuery = {
+      text: select,
+      values: [`${orderId}`],
+    };
+    const { rows: orderProducts } = await pool.query(selectQuery);
+    console.log(orderProducts[0]);
+
+    // update the shopper order
+    const shopperUpdate = `
+      UPDATE shopper_order
+      SET data = data || jsonb_build_object(
+        'delivered', $1::jsonb, 
+        'deliveryTime', to_char(now() at time zone 'utc', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')
+      )
+      WHERE id = $2
+      RETURNING *`;
+
+    const shopperQuery = {
+      text: shopperUpdate,
+      values: [delivered, orderProducts[0].shopper_order_id],
+    };
+    await pool.query(shopperQuery);
     return rows[0];
   }
 }

@@ -43,7 +43,11 @@ const fetchAccounts = async (setAccounts: Function, accessToken: string) => {
       return res.json();
     })
     .then(json => {
-      console.log(json);
+      if (json.errors) {
+        if (json.errors[0].extensions.code === 'UNAUTHORIZED') {
+          localStorage.removeItem('user');
+        }
+      }
       setAccounts(json.data.account);
     })
     .catch(err => {

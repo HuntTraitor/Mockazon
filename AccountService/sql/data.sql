@@ -161,6 +161,27 @@ VALUES
         )
     );
 
+INSERT INTO
+    vendor (id, data)
+VALUES
+    (
+        '78b9467a-8029-4c1f-afd9-ea56932c3f45',
+        jsonb_build_object(
+            'email',
+            'supervendor@gmail.com',
+            'pwhash',
+            crypt('pass', '87'),
+            'name',
+            'Super Vendor',
+            'username',
+            'supervendor',
+            'role',
+            'vendor',
+            'suspended',
+            false
+        )
+    );
+
 -- Shopper Data --
 INSERT INTO
     shopper(data)
@@ -234,7 +255,7 @@ VALUES
                 'state', 'CA',
                 'postalCode', '95060'
             )
-        ),
+        )
     )
 );
 

@@ -14,7 +14,7 @@ export const config = {
   },
 };
 
-type VendorOrder = {
+type Order = {
   quantity: string;
   shopper_id: string;
   product_id: string;
@@ -27,7 +27,7 @@ function getOrders(
   lineItems: Stripe.ApiList<Stripe.LineItem>,
   shopperId: string,
   items: { vendorId: string; productId: string }[]
-): VendorOrder[] {
+): Order[] {
   const orders = [];
 
   // get orders from metadata and lineItems
@@ -45,7 +45,7 @@ function getOrders(
 }
 
 async function removeProductsFromShoppingCart(
-  orders: VendorOrder[],
+  orders: Order[],
   shopperId: string
 ) {
   const promises = orders.map(async order => {
@@ -74,7 +74,7 @@ async function removeProductsFromShoppingCart(
 }
 
 async function createVendorOrdersFromPurchase(
-  orders: VendorOrder[],
+  orders: Order[],
   shopperId: string
 ) {
   const promises = orders.map(async order => {
@@ -109,9 +109,10 @@ function getValue(input?: string | null): string {
 
 async function createOrderProducts(
   productIds: string[],
-  shopperOrderId: string
+  shopperOrderId: string,
+  quantities: number[]
 ) {
-  const promises = productIds.map(async productId => {
+  const promises = productIds.map(async (productId, index) => {
     const res = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/shopperOrder/orderProduct`,
       {
@@ -120,10 +121,12 @@ async function createOrderProducts(
         body: JSON.stringify({
           product_id: productId,
           shopper_order_id: shopperOrderId,
+          quantity: quantities[index],
         }),
       }
     );
     if (!res.ok) {
+      console.log(res)
       throw new Error('Failed to create order product');
     }
     return await res.json();
@@ -172,27 +175,25 @@ async function createShopperOrder(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        createdAt: dateCreated,
+        tax: tax,
+        total: total,
         shipped: true,
+        subtotal: subtotal,
+        createdAt: dateCreated,
         delivered: false,
         deliveryTime: new Date(
           new Date(dateCreated).getTime() + 7 * 24 * 60 * 60 * 1000
         ).toISOString(),
-        paymentMethod: paymentMethod.type.toString(),
         paymentDigits: last4,
+        paymentMethod: paymentMethod.type.toString(),
         shippingAddress: {
-          name: getValue(customerDetails?.name),
-          addressLine1: getValue(address?.line1),
           city: getValue(address?.city),
+          name: getValue(customerDetails?.name),
           state: getValue(address?.state),
-          postalCode: getValue(address?.postal_code),
           country: getValue(address?.country),
+          postalCode: getValue(address?.postal_code),
+          addressLine1: getValue(address?.line1),
         },
-        subtotal: subtotal,
-        totalBeforeTax: totalBeforeTax,
-        tax: tax,
-        total: total,
-        products: productIds,
       }),
     }
   );
@@ -308,11 +309,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
+      const productQuantities = lineItems.data.map(
+        item => item.quantity as number
+      );
+
       // create product_orders
       try {
         const createdProductOrders = await createOrderProducts(
           productIds,
-          createdShopperOrder.id
+          createdShopperOrder.id,
+          productQuantities
         );
         console.log(createdProductOrders);
       } catch (err) {

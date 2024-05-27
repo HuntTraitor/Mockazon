@@ -7,5 +7,15 @@
   "primeShipping": "Prime Shipping",
   "freeDelivery": "Free Delivery",
   "deliveryDate": "Delivery Date",
-  "deliverTo": "Deliver to"
+  "deliverTo": "Deliver to",
+  "soldBy": "Sold by",
+  "shipsFrom": "Ships from",
+  "brand": "Brand",
+  "customer": "Customer",
+  "addToCart": "Add to Cart",
+  "productAddedToCart": "Product added to cart",
+  "productNotAddedToCart": "Product not added to cart",
+  "productImageAlt": "Product Image",
+  "quantity": "Quantity",
+  "quantitySelector": "Quantity Selector"
 }

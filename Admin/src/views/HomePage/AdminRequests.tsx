@@ -44,6 +44,11 @@ const fetchRequests = async (setRequests: Function, accessToken: string) => {
       return res.json();
     })
     .then(json => {
+      if (json.errors) {
+        if (json.errors[0].extensions.code === 'UNAUTHORIZED') {
+          localStorage.removeItem('user');
+        }
+      }
       setRequests(json.data.request);
     })
     .catch(err => {
@@ -61,7 +66,6 @@ export function AdminRequests() {
   const { refetch, setRefetch } = useContext(RefetchContext);
 
   React.useEffect(() => {
-    console.log('hit?');
     fetchRequests(setRequests, accessToken);
     setRefetch(false);
 
@@ -73,14 +77,11 @@ export function AdminRequests() {
     accessToken: string,
     setRefetch: (refetch: boolean) => void
   ) => {
-    console.log(vendorId);
     const query = {
       query: `mutation approveVendor{approveVendor(VendorId: "${vendorId}") {
         id email name role suspended
       }}`,
     };
-
-    console.log(query);
 
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
@@ -107,7 +108,7 @@ export function AdminRequests() {
   };
 
   const handleRejectRequest = (requestId: number) => {
-    console.log(`Rejecting request with ID: ${requestId}`);
+    console.log(`Rejecting request with ID: ${requestId}`); // FIXME: what is this
   };
 
   return (

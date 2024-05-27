@@ -50,10 +50,8 @@ export class OrderController extends Controller {
   }
 
   @Get('shopperOrder')
-  public async getAllShopperOrders(
-    @Query() shopperId: UUID
-  ): Promise<ShopperOrder[]> {
-    const orders = await new OrderService().getAllShopperOrders(shopperId);
+  public async testing(@Query() shopperId: UUID): Promise<ShopperOrder[]> {
+    const orders = await new OrderService().getAllShopperOrder(shopperId);
     return orders;
   }
 
@@ -95,6 +93,28 @@ export class OrderController extends Controller {
     @Path() orderId: UUID
   ): Promise<ShopperOrder | undefined> {
     const order = await new OrderService().getShopperOrder(orderId);
+    return order ?? this.setStatus(404);
+  }
+
+  @Put('{orderId}/shipped')
+  @Response('404', 'Not Found')
+  @SuccessResponse('201', 'Updated')
+  public async setShipped(
+    @Path() orderId: UUID,
+    @Query() shipped: boolean
+  ): Promise<Order | undefined> {
+    const order = await new OrderService().setShipped(orderId, shipped);
+    return order ?? this.setStatus(404);
+  }
+
+  @Put('{orderId}/delivered')
+  @Response('404', 'Not Found')
+  @SuccessResponse('201', 'Updated')
+  public async setDelivered(
+    @Path() orderId: UUID,
+    @Query() delivered: boolean
+  ): Promise<Order | undefined> {
+    const order = await new OrderService().setDelivered(orderId, delivered);
     return order ?? this.setStatus(404);
   }
 

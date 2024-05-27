@@ -71,7 +71,7 @@ const handlers = [
                 name: 'test name',
                 rating: 'test',
                 price: 1,
-                deliveryDate: 'test',
+                deliveryDate: new Date().toUTCString(),
                 image: 'test',
               },
             },
@@ -127,6 +127,11 @@ jest.mock('next/router', () => ({
     back: jest.fn(),
     prefetch: jest.fn(),
     beforePopState: jest.fn(),
+    events: {
+      on: jest.fn(),
+      off: jest.fn(),
+      emit: jest.fn(),
+    },
   }),
 }));
 

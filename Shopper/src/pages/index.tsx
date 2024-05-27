@@ -16,6 +16,7 @@ const namespaces = [
   'topHeader',
   'subHeader',
   'signInDropdown',
+  'viewProduct',
 ];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {

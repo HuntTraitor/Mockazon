@@ -1,0 +1,34 @@
+{
+  "successStatus": "Pago Exitoso",
+  "thanks": "Gracias por su pedido.",
+  "appreciative": "Apreciamos su negocio y actualmente estamos procesando su pedido. Recibirás una confirmación pronto!",
+  "orderNumber": "Número de pedido",
+  "orderDetails": "Detalles de tu pedido",
+  "items": "Artículos",
+  "productDetails": {
+    "productDescription": "Descripción del Producto",
+    "quantity": "Cantidad",
+    "price": "Precio"
+  },
+  "yourInfo": "Tu Información",
+  "payment": "Pago",
+  "paymentDetails": {
+    "paymentInfo": "Información de Pago",
+    "endingWith": "Terminando en",
+    "expiresOn": "Expira en"
+  },
+  "billing": "Dirección de Envio",
+  "billingDetails": {
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "country": "País",
+    "postalCode": "Código Postal"
+  },
+  "summary": "Resumen",
+  "summaryDetails": {
+    "subtotal": "Total Parcial",
+    "discount": "Descuento",
+    "tax": "Impuesto",
+    "total": "Gran Total"
+  }
+}

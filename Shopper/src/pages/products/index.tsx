@@ -1,23 +1,12 @@
-import {
-  Container,
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-} from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { Container, Grid, Box } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import TopNav from '@/views/TopNav';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
-import { useTranslation } from 'next-i18next';
-import Link from 'next/link';
-import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+// import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import getConfig from 'next/config';
-import { useSnackbar } from 'notistack';
-import Image from 'next/image';
 import ProductCard from '@/views/product/ProductCard';
 import { Product } from '@/graphql/types';
 import AppBackDrop from '@/components/AppBackdrop';
@@ -30,6 +19,7 @@ const namespaces = [
   'subHeader',
   'common',
   'signInDropdown',
+  'viewProduct',
 ];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
@@ -44,11 +34,8 @@ const Index = () => {
   const router = useRouter();
   const { vendorId, active, page, pageSize, search, orderBy, descending } =
     router.query;
-  const { t } = useTranslation('products');
+  // const { t } = useTranslation('products');
   const [error, setError] = useState('');
-  const { user } = useContext(LoggedInContext);
-
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetchProducts();
@@ -125,48 +112,6 @@ const Index = () => {
       });
   };
 
-  const addToShoppingCart = (productId: string) => {
-    const query = {
-      query: `mutation AddToShoppingCart {
-        addToShoppingCart(productId: "${productId}", shopperId: "${user.id}", quantity: "1") {
-          id
-          product_id
-          shopper_id
-          data { 
-            quantity
-          }
-        }
-      }`,
-    };
-
-    fetch(`${basePath}/api/graphql`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(query),
-    })
-      .then(response => response.json())
-      .then(shoppingCart => {
-        if (shoppingCart.errors && shoppingCart.errors.length > 0) {
-          throw new Error(shoppingCart.errors[0].message);
-        }
-        enqueueSnackbar('Added to shopping cart', {
-          variant: 'success',
-          persist: false,
-          autoHideDuration: 3000,
-          anchorOrigin: { horizontal: 'center', vertical: 'top' },
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        enqueueSnackbar('Could not add product to cart', {
-          variant: 'error',
-          persist: false,
-          autoHideDuration: 3000,
-          anchorOrigin: { horizontal: 'center', vertical: 'top' },
-        });
-      });
-  };
-
   if (
     !vendorId &&
     !active &&
@@ -199,85 +144,13 @@ const Index = () => {
     <>
       {error && <p>{error}</p>}
       <TopNav />
-      <Container style={{ marginTop: '20px' }}>
-        <Typography style={{ color: 'blue' }} variant="h4" align="center">
-          Products
-        </Typography>
-        <Grid container spacing={3}>
-          {products.length > 0 ? (
-            products.map(
-              product =>
-                product.data && (
-                  <Grid item key={product.id} xs={12}>
-                    <Card style={{ display: 'flex' }}>
-                      <Image
-                        src={product.data.image || '/no-image.png'}
-                        alt={product.data.name || 'No Image'}
-                        width={200}
-                        height={200}
-                        objectFit="cover"
-                      />
-                      <CardContent style={{ flex: 1 }}>
-                        <Link
-                          aria-label={`product-link-${product.id}`}
-                          style={{ color: 'blue' }}
-                          href={`/products/${product.id}`}
-                        >
-                          <Typography
-                            variant="h6"
-                            component="h2"
-                            style={{ fontWeight: 'bold' }}
-                          >
-                            {product.data.brand}
-                          </Typography>
-                        </Link>
-                        <Typography variant="h6" component="h2">
-                          {product.data.name}
-                        </Typography>
-                        <Typography
-                          aria-label={`rating is ${product.data.rating}`}
-                          variant="subtitle1"
-                          component="p"
-                        >
-                          {t('rating')}: {product.data.rating}
-                        </Typography>
-                        <Typography
-                          aria-label={`price is ${product.data.price}`}
-                          variant="subtitle1"
-                          component="p"
-                        >
-                          {t('price')}: ${product.data.price}
-                        </Typography>
-                        <Typography
-                          aria-label={`deliveryDate is ${product.data.deliveryDate}`}
-                          variant="subtitle1"
-                          component="p"
-                        >
-                          {t('deliveryDate')}: {product.data.deliveryDate}
-                        </Typography>
-                        <Link
-                          aria-label={`add-shopping-cart-${product.id}`}
-                          style={{ color: 'blue' }}
-                          href={`/`}
-                          onClick={() => addToShoppingCart(`${product.id}`)}
-                        >
-                          <Typography
-                            component="p"
-                            style={{ fontWeight: 'bold' }}
-                          >
-                            Add to Shopping Cart
-                          </Typography>
-                        </Link>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                )
-            )
-          ) : (
-            <Typography variant="h6" align="center">
-              No products found
-            </Typography>
-          )}
+      <Container style={{ marginTop: '20px', maxWidth: '100%' }}>
+        <Grid container spacing={1}>
+          {products.map((product, index) => (
+            <Grid item key={index}>
+              <ProductCard product={product} />
+            </Grid>
+          ))}
         </Grid>
       </Container>
       <MockazonMenuDrawer />

@@ -30,7 +30,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
         </Grid>
         <Grid item xs={2} md={4}>
           <Typography align="right" variant="body2">
-            ${order.subtotal}
+            ${Number(order.subtotal).toFixed(2)}
           </Typography>
         </Grid>
       </Grid>
@@ -52,7 +52,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
         </Grid>
         <Grid item xs={2} md={4}>
           <Typography align="right" variant="body2">
-            ${order.tax}
+            ${Number(order.tax).toFixed(2)}
           </Typography>
         </Grid>
       </Grid>
@@ -68,7 +68,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
             variant="body2"
             className={styles.grandTotal}
           >
-            ${order.total}
+            ${Number(order.total).toFixed(2)}
           </Typography>
         </Grid>
       </Grid>

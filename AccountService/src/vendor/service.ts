@@ -38,7 +38,7 @@ export class VendorService {
         },
         `${process.env.MASTER_SECRET}`,
         {
-          expiresIn: "30m",
+          expiresIn: "1d",
           algorithm: "HS256",
         },
       );
@@ -75,7 +75,6 @@ export class VendorService {
   }
 
   public async check(accessToken: string): Promise<SessionUser> {
-    console.log(accessToken);
     return new Promise((resolve, reject) => {
       try {
         jwt.verify(

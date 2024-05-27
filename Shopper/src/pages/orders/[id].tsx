@@ -19,6 +19,7 @@ const namespaces = [
   'common',
   'signInDropdown',
   'order',
+  'viewProduct',
 ];
 
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -87,7 +88,6 @@ const fetchOrderById = async (id: string, accessToken: string) => {
       return response.json();
     })
     .then(data => {
-      console.log('Data:', data);
       if (data.errors) {
         throw data.errors;
       }

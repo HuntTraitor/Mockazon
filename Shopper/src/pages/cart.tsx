@@ -34,6 +34,7 @@ const namespaces = [
   'common',
   'signInDropdown',
   'cart',
+  'viewProduct',
 ];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
@@ -147,12 +148,12 @@ const Cart = ({ locale }: { locale: string }) => {
             setSubtotal(Math.round(subtotal * 100) / 100);
           })
           .catch(err => {
-            console.log('Error fetching shoppingCartProducts:', err);
+            console.error('Error fetching shoppingCartProducts:', err);
             setError('Could not fetch shoppingCartProducts');
           });
       })
       .catch(err => {
-        console.log('Error fetching shopping cart:', err);
+        console.error('Error fetching shopping cart:', err);
         setError('Could not fetch shopping cart');
       });
   }, [router, user, accessToken]);
@@ -200,7 +201,7 @@ const Cart = ({ locale }: { locale: string }) => {
         setSubtotal(subtotal);
       })
       .catch(err => {
-        console.log('Error removing product:', err);
+        console.error('Error removing product:', err);
         setError('Could not remove product');
       });
   };
@@ -271,7 +272,15 @@ const Cart = ({ locale }: { locale: string }) => {
                             aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
                           >
                             {t('products:deliveryDate')}:{' '}
-                            {product.data.getProduct.data.deliveryDate}
+                            {new Intl.DateTimeFormat('en-US', {
+                      weekday: 'long',
+                      month: 'short',
+                      day: 'numeric',
+                    }).format(
+                      new Date(
+                        product.data.getProduct.data.deliveryDate as string
+                      )
+                    )}
                           </Typography>
                           <Typography
                             style={{ fontSize: '0.8rem' }}

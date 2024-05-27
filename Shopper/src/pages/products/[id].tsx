@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-// import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -24,10 +24,27 @@ import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
 import AppBackDrop from '@/components/AppBackdrop';
 
+const namespaces = [
+  'products',
+  'topHeader',
+  'subHeader',
+  'common',
+  'signInDropdown',
+  'viewProduct',
+];
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale ?? 'en', namespaces)),
+    },
+  };
+};
+
 const ProductPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  // const { t } = useTranslation(['products', 'viewProduct']);
+  const { t } = useTranslation('viewProduct');
   const [product, setProduct] = useState({} as Product);
   const [error, setError] = useState('');
   const [quantity, setQuantity] = useState('1');
@@ -35,6 +52,7 @@ const ProductPage = () => {
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
   };
+
   useEffect(() => {
     const query = {
       query: `query getProduct{getProduct(
@@ -77,7 +95,7 @@ const ProductPage = () => {
             <Box className={styles.productImage}>
               <Image
                 src={product.data.image}
-                alt="product image"
+                alt={t('productImageAlt')}
                 fill
                 priority
               />
@@ -87,7 +105,7 @@ const ProductPage = () => {
                 {product.data.name}
               </Typography>
               <Typography className={styles.brandName}>
-                Brand: {product.data.brand}
+                {t('brand')}: {product.data.brand}
               </Typography>
               <Divider />
               <div style={{ marginBottom: '10px' }}>
@@ -105,11 +123,10 @@ const ProductPage = () => {
                 <TextField
                   id="Quantity Selector"
                   select
-                  label="Quantity"
+                  label={t('quantity')}
                   defaultValue="1"
                   onChange={handleQuantityChange}
-                  aria-label="Quantity Selector"
-                  data-testid="Quantity Selector"
+                  aria-label={t('quantitySelector') ?? ''}
                 >
                   {numbers.map(number => (
                     <MenuItem
@@ -129,21 +146,21 @@ const ProductPage = () => {
                       display="block"
                       className={styles.checkoutMoreInformationCaption}
                     >
-                      Ships from
+                      {t('shipsFrom')}
                     </Typography>
                     <Typography
                       variant="caption"
                       display="block"
                       className={styles.checkoutMoreInformationCaption}
                     >
-                      Sold by
+                      {t('soldBy')}
                     </Typography>
                     <Typography
                       variant="caption"
                       display="block"
                       className={styles.checkoutMoreInformationCaption}
                     >
-                      Customer
+                      {t('customer')}
                     </Typography>
                   </Box>
                   <Box>
@@ -168,23 +185,6 @@ const ProductPage = () => {
   } else {
     return <div>{error}</div>;
   }
-};
-
-const namespaces = [
-  'products',
-  'topHeader',
-  'subHeader',
-  'common',
-  'signInDropdown',
-  'order',
-];
-
-export const getServerSideProps: GetServerSideProps = async context => {
-  return {
-    props: {
-      ...(await serverSideTranslations(context.locale ?? 'en', namespaces)),
-    },
-  };
 };
 
 ProductPage.getLayout = (page: ReactElement) => {

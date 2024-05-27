@@ -1,8 +1,5 @@
 import { Query, Mutation, Resolver, Arg, Ctx, Authorized } from 'type-graphql';
-import {
-  ShippingAddress,
-  ShippingAddressInput,
-} from './schema';
+import { ShippingAddress, ShippingAddressInput } from './schema';
 import { AccountService } from './service';
 import type { NextApiRequest } from 'next';
 

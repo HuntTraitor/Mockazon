@@ -23,7 +23,7 @@ export class ShoppingCartService {
         return authenticated;
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
         throw new GraphQLError('Internal Server Error');
       });
     return result;
@@ -51,14 +51,13 @@ export class ShoppingCartService {
         if (!response.ok) {
           throw response;
         }
-        console.log(JSON.stringify(response));
         return response.json();
       })
       .then(authenticated => {
         return authenticated;
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
         throw new GraphQLError('Internal Server Error');
       });
     return result;
@@ -91,7 +90,7 @@ export class ShoppingCartService {
         return authenticated;
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
         throw new GraphQLError('Internal Server Error');
       });
     return result;

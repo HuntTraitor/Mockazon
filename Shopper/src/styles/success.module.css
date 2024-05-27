@@ -37,7 +37,6 @@
 
 .productImage {
   margin-right: 20px;
-  border: 1px solid #ddd;
   border-radius: 5px;
 }
 
@@ -63,10 +62,6 @@
 }
 
 .customerInfo {
-  margin: 0;
-}
-
-.customerInfo {
   margin: 0 0 10px 0;
 }
 
@@ -85,8 +80,4 @@
   clear: left;
   width: 150px;
   font-weight: bold;
-}
-
-.summary {
-  margin: 0 0 10px 160px;
 }
