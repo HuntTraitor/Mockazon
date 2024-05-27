@@ -154,7 +154,7 @@ const TopHeader = () => {
       handleSearch();
       setSuggestionClicked(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [suggestionClicked, search]);
 
   const handleFocus = () => {
@@ -173,7 +173,7 @@ const TopHeader = () => {
       pageSize: '20',
       search,
     }).toString();
-    
+
     router.push(`/products?${queryParams}`);
   };
 
@@ -279,10 +279,7 @@ const TopHeader = () => {
             />
           )}
           renderOption={(props, option) => (
-            <li
-              {...props}
-              onClick={() => handleSuggestionClick(option)}
-            >
+            <li {...props} onClick={() => handleSuggestionClick(option)}>
               <SearchIcon
                 style={{
                   marginRight: '5px',
