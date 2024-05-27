@@ -1,28 +1,76 @@
 /*
 https://chatgpt.com/share/872a5a3a-b9fa-4b65-aff1-7267086d14ce
 */
+.exterior {
+  display: flex;
+  background-color: #eaeded;
+  padding-bottom: 1rem;
+  min-height: 100vh;
+}
+
 .container {
-  margin-top: 100px;
+  display: flex;
+  max-width: 75%;
+  background-color: #eaeded;
+}
+
+.cart {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 1rem;
 }
 
 .topDivider {
-  margin-top: 50px !important;
+  margin-top: 20px !important;
 }
 
 .heading {
   text-align: left;
-  margin-bottom: 15px !important;
+  margin-bottom: 0px !important;
 }
 
 .card {
   display: flex;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  border: none;
+  box-shadow: none;
+}
+
+.cartHeader{
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.cardImageBorder {
+  padding: 1%;
+}
+
+.cardImage {
+  outline: 2px solid #f0eeee; /* Add this line */
+}
+
+.priceHeader {
+  text-align: right;
+}
+
+.cartSubtotal {
+  text-align: right;
+  margin-top: 0.5rem;
 }
 
 .productImage {
   width: 180px;
   height: 180px;
   object-fit: contain;
+}
+
+.productName {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
 }
 
 .productLink {
@@ -40,21 +88,20 @@ https://chatgpt.com/share/872a5a3a-b9fa-4b65-aff1-7267086d14ce
 }
 
 .removeText {
-  margin-top: 1rem;
+  color: #007185;
+  cursor: pointer;
 }
 
-.checkoutBox {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: center;
+.removeText:hover {
+  text-decoration: underline;
 }
 
 .buyAgainBox {
   margin-top: 1rem;
   padding: 1rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  height: calc(100% - 4rem); /* Adjust based on the desired layout */
+  background-color: #ffffff;
+  border-radius: 4px;
+  height: 400px;
 }
 
 .backdrop {
@@ -63,12 +110,20 @@ https://chatgpt.com/share/872a5a3a-b9fa-4b65-aff1-7267086d14ce
 }
 
 .subtotal {
-  font-family: "Amazon Ember", Arial, sans-serif;
+  font-family: 'Amazon Ember', Arial, sans-serif;
   font-size: 18px;
-  line-height: 24px;
 }
 
-section .section{
+.checkoutBox {
+  background-color: #ffffff;
+  padding: 20px;
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  flex-direction: column;
+}
+
+section .section {
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -78,22 +133,22 @@ section .section{
   justify-content: space-between;
 }
 
-button.checkoutButton{
-  width: 400px;
-  height: 36px;
+button.checkoutButton {
+  width: 100%;
+  height: 35px;
   background: #ffd814;
-  border-radius: 30px;
+  border-radius: 10px;
   color: black;
   border: 0;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
   font-size: 13px;
-  line-height: 29px;
-  margin-top: 25px
+  margin-top: 25px;
 }
-button:hover .checkoutButton{
-  opacity: 0.8;
+
+.checkoutButton:hover {
+  background-color: #d8b229;
 }
 
 h1.h1 {

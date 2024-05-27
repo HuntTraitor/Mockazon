@@ -7,6 +7,8 @@ import {
   CardContent,
   Typography,
   Box,
+  CardActionArea,
+  Divider,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
@@ -24,6 +26,7 @@ import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
 import { Product, ProductFromFetch } from '../../types';
 import AppBackDrop from '@/components/AppBackdrop';
+import Image from 'next/image';
 
 const namespaces = [
   'products',
@@ -141,7 +144,6 @@ const Cart = ({ locale }: { locale: string }) => {
               },
               0
             );
-            // round to two decimal places
             setSubtotal(Math.round(subtotal * 100) / 100);
           })
           .catch(err => {
@@ -154,10 +156,6 @@ const Cart = ({ locale }: { locale: string }) => {
         setError('Could not fetch shopping cart');
       });
   }, [router, user, accessToken]);
-
-  // if(JSON.stringify(user) === '{}') {
-  //   return null
-  // }
 
   const handleRemove = (productId: string) => {
     const query = {
@@ -208,121 +206,143 @@ const Cart = ({ locale }: { locale: string }) => {
   };
 
   return (
-    <>
+    <div className={styles.exterior}>
       {error && <p>{error}</p>}
       <Container className={styles.container}>
-        <Grid container spacing={10}>
-          <Grid id={'cart'} className={styles.topDivider} item xs={12} md={8}>
-            <Typography
-              className={`${styles.heading} ${styles.h1}`}
-              variant="h1"
-            >
-              {t('cart:title')}
-            </Typography>
-            {products.map((product, index) => (
-              <Card
-                className={styles.card}
-                key={product.id + '_index_' + index}
-                variant={'outlined'}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={product.data.getProduct.data.image}
-                  alt={product.data.getProduct.data.name}
-                  className={styles.productImage}
-                  width={'180px'}
-                  height={'180px'}
+        <Grid container spacing={2}>
+          <Grid id={'cart'} className={styles.topDivider} item xs={12} md={9}>
+            <div className={styles.cart}>
+              <div className={styles.cartHeader}>
+                <Typography className={`${styles.h1}`} variant="h1">
+                  {t('cart:title')}
+                </Typography>
+                <div className={styles.priceHeader}>
+                  <Typography
+                    style={{ fontSize: '0.8rem' }}
+                  >{`Price`}</Typography>
+                </div>
+                <Divider />
+              </div>
+              {products.map((product, index) => (
+                <Box key={product.id + '_index_' + index}>
+                  <Card className={styles.card} variant={'outlined'}>
+                    <Box className={styles.cardImageBorder}>
+                      <Link
+                        aria-label={`product-link-${product.id}`}
+                        className={styles.productLink}
+                        href={`/products/${product.data.getProduct.id}`}
+                      >
+                        <CardActionArea>
+                          <Image
+                            style={{ outline: '2px solid #f0eeee' }}
+                            src={`${product.data.getProduct.data.image}`}
+                            alt="Product image"
+                            width={180}
+                            height={180}
+                          />
+                        </CardActionArea>
+                      </Link>
+                    </Box>
+                    <CardContent sx={{ flex: '1 0 auto' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <Link
+                            aria-label={`product-link-${product.id}`}
+                            className={styles.productLink}
+                            href={`/products/${product.data.getProduct.id}`}
+                          >
+                            <Typography className={styles.productName}>
+                              {`${product.data.getProduct.data.brand} ${product.data.getProduct.data.name}`}
+                            </Typography>
+                          </Link>
+                          <Typography
+                            style={{ fontSize: '0.8rem' }}
+                            aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
+                          >
+                            {t('products:deliveryDate')}:{' '}
+                            {product.data.getProduct.data.deliveryDate}
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: '0.8rem' }}
+                            aria-label={`quantity is ${product.quantity}`}
+                          >
+                            {t('products:quantity')}: {product.quantity}
+                          </Typography>
+                          <Link
+                            aria-label={`add-shopping-cart-${product.id}`}
+                            className={styles.deleteLink}
+                            href={`/cart`}
+                          >
+                            <Typography
+                              style={{ fontSize: '0.8rem' }}
+                              className={styles.removeText}
+                              onClick={() =>
+                                handleRemove(product.data.getProduct.id)
+                              }
+                            >
+                              {t('cart:Delete')}
+                            </Typography>
+                          </Link>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                          }}
+                        >
+                          <Typography
+                            style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                            aria-label={`price is ${product.data.getProduct.data.price}`}
+                          >
+                            {`$${Number(product.data.getProduct.data.price).toFixed(2)}`}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                  {<Divider />}
+                </Box>
+              ))}
+              <div className={styles.cartSubtotal}>
+                <Subtotal
+                  numberOfProducts={products.length}
+                  subtotal={subtotal}
                 />
-                <CardContent style={{ flex: 1 }}>
-                  <Link
-                    aria-label={`product-link-${product.id}`}
-                    className={styles.productLink}
-                    href={`/products/${product.data.getProduct.id}`}
-                  >
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      className={styles.productBrand}
-                    >
-                      {product.data.getProduct.data.brand}
-                    </Typography>
-                  </Link>
-                  <Typography variant="h6" component="h2">
-                    {product.data.getProduct.data.name}
-                  </Typography>
-                  <Typography
-                    aria-label={`rating is ${product.data.getProduct.data.rating}`}
-                    variant="subtitle1"
-                    component="p"
-                  >
-                    {t('products:rating')}:{' '}
-                    {product.data.getProduct.data.rating}
-                  </Typography>
-                  <Typography
-                    aria-label={`price is ${product.data.getProduct.data.price}`}
-                    variant="subtitle1"
-                    component="p"
-                  >
-                    {t('products:price')}: ${product.data.getProduct.data.price}
-                  </Typography>
-                  <Typography
-                    aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
-                    variant="subtitle1"
-                    component="p"
-                  >
-                    {t('products:deliveryDate')}:{' '}
-                    {product.data.getProduct.data.deliveryDate}
-                  </Typography>
-                  <Typography
-                    aria-label={`quantity is ${product.quantity}`}
-                    variant="subtitle1"
-                    component="p"
-                  >
-                    {t('products:quantity')}: {product.quantity}
-                  </Typography>
-                  <Link
-                    aria-label={`add-shopping-cart-${product.id}`}
-                    className={styles.deleteLink}
-                    href={`/cart`}
-                  >
-                    <Typography
-                      component="p"
-                      className={styles.removeText}
-                      onClick={() => handleRemove(product.data.getProduct.id)}
-                    >
-                      {t('cart:remove')}
-                    </Typography>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-            <Subtotal numberOfProducts={products.length} subtotal={subtotal} />
+              </div>
+            </div>
           </Grid>
           <Grid
             id={'buyItNow'}
             className={styles.topDivider}
             item
             xs={12}
-            md={4}
+            md={3}
           >
-            <Box className={styles.checkoutBox}>
+            <div>
               <CheckoutButton
                 subtotal={subtotal}
                 productsWithContent={products}
                 shopperId={user.id}
                 locale={locale}
               />
-            </Box>
-            <Box className={styles.buyAgainBox}>
-              {/*<Typography variant="h6">Buy It Again</Typography>*/}
-              {}
-            </Box>
+            </div>
+            <Card className={styles.buyAgainBox}>{}</Card>
           </Grid>
         </Grid>
       </Container>
       <MockazonMenuDrawer />
       <AppBackDrop />
-    </>
+    </div>
   );
 };
 

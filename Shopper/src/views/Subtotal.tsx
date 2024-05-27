@@ -14,7 +14,8 @@ export default function Subtotal({
   return (
     <span className={styles.subtotal}>
       {t('cart:subtotal')}: ({numberOfProducts}{' '}
-      {numberOfProducts > 1 ? t('cart:items') : t('cart:item')}): ${subtotal}
+      {numberOfProducts > 1 ? t('cart:items') : t('cart:item')}):{' '}
+      <strong>${subtotal}</strong>
     </span>
   );
 }

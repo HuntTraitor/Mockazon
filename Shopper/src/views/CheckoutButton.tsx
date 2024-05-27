@@ -112,12 +112,12 @@ export default function CheckoutButton({
     .reduce((a, b) => a + b, 0);
   return (
     <form onSubmit={handleSubmit}>
-      <section className={styles.section}>
+      <div className={styles.checkoutBox}>
         <Subtotal numberOfProducts={productQuantity} subtotal={subtotal} />
         <button className={styles.checkoutButton} type="submit" role="link">
           {t('cart:proceedToCheckout')}
         </button>
-      </section>
+      </div>
     </form>
   );
 }
