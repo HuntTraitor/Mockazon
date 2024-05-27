@@ -182,7 +182,9 @@ export class OrderService {
         orderProduct.quantity,
       ],
     };
+    console.log("About the query a new order product")
     const { rows } = await pool.query(query);
+    console.log("Successfully queried order product")
     return rows[0];
   }
 

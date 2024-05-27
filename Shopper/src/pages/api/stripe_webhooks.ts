@@ -126,6 +126,7 @@ async function createOrderProducts(
       }
     );
     if (!res.ok) {
+      console.log(res)
       throw new Error('Failed to create order product');
     }
     return await res.json();
