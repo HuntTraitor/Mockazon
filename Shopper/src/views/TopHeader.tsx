@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Box,
   Button,
@@ -11,7 +11,6 @@ import Image from 'next/image';
 import styles from '@/styles/TopHeader.module.css';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
-// import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import 'flag-icons/css/flag-icons.min.css';
 import SignInDropdown from '@/views/SignInDropdown';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
@@ -85,10 +84,13 @@ const CustomTextField = styled(TextField)(() => ({
 const TopHeader = () => {
   const { t } = useTranslation('topHeader');
   const router = useRouter();
-  const [search, setSearch] = useState('');
+  const initialSearch = router.query.search as string;
+  const [search, setSearch] = useState(initialSearch || '');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [focused, setFocused] = useState(false);
+  const [suggestionClicked, setSuggestionClicked] = useState(false);
   const { setBackDropOpen } = useAppContext();
+  const inputRef = useRef<HTMLInputElement>(null); // Reference for the input element
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchSuggestions = useCallback(
@@ -133,7 +135,6 @@ const TopHeader = () => {
               name.toLowerCase().startsWith(query.toLowerCase())
             );
           setSuggestions(filteredSuggestions);
-          console.log('Suggestions:', filteredSuggestions);
         } else {
           setSuggestions([]);
         }
@@ -148,6 +149,14 @@ const TopHeader = () => {
     fetchSuggestions(search);
   }, [search, fetchSuggestions]);
 
+  useEffect(() => {
+    if (suggestionClicked) {
+      handleSearch();
+      setSuggestionClicked(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [suggestionClicked, search]);
+
   const handleFocus = () => {
     setFocused(true);
     setBackDropOpen(true);
@@ -157,32 +166,44 @@ const TopHeader = () => {
     setFocused(false);
     setBackDropOpen(false);
   };
+
   const handleSearch = () => {
     const queryParams = new URLSearchParams({
       page: '1',
       pageSize: '20',
       search,
     }).toString();
-
+    
     router.push(`/products?${queryParams}`);
   };
 
-  const handleSuggestionChange = (
-    event: React.ChangeEvent<unknown>,
-    value: string | null
-  ) => {
-    if (value !== null) {
-      setSearch(value);
-    }
+  const handleSuggestionClick = (option: string) => {
+    setSearch(option);
+    setSuggestionClicked(true);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
       handleSearch();
     }
   };
 
-  console.log(search);
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setFocused(false);
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <Box className={styles.container}>
@@ -236,16 +257,19 @@ const TopHeader = () => {
         <Autocomplete
           className={styles.searchInputContainer}
           forcePopupIcon={false}
-          options={suggestions}
+          options={suggestions.slice(0, 10)}
           getOptionLabel={option => option}
           noOptionsText={''}
-          open={Boolean(search)}
+          value={search}
+          open={Boolean(search) && focused}
           renderInput={params => (
             <CustomTextField
               {...params}
+              inputRef={inputRef}
               placeholder={t('searchPlaceholder') as string}
               InputProps={{
                 ...params.InputProps,
+                onChange: e => setSearch(e.target.value),
                 onKeyDown: handleKeyDown,
               }}
               value={search}
@@ -255,7 +279,10 @@ const TopHeader = () => {
             />
           )}
           renderOption={(props, option) => (
-            <li {...props} onClick={() => handleSearch()}>
+            <li
+              {...props}
+              onClick={() => handleSuggestionClick(option)}
+            >
               <SearchIcon
                 style={{
                   marginRight: '5px',
@@ -270,7 +297,7 @@ const TopHeader = () => {
             paper: styles.suggestionsPaper,
             option: styles.suggestionOption,
           }}
-          onChange={handleSuggestionChange}
+          disableClearable
         />
         <Button
           aria-label="Search Button"
