@@ -75,7 +75,7 @@ export function MyDrawer() {
           width={40}
           height={30}
         />
-        <Typography variant="h6">Mockazon</Typography>
+        <Typography variant="h6">Mockazon Admin App</Typography>
       </Box>
       <Divider />
       <List>

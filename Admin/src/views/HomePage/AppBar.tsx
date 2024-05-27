@@ -22,7 +22,6 @@ export function MyAppBar() {
       <Toolbar>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <Typography sx={{color: 'black'}}>Admin</Typography>
           <Button
             variant="outlined"
             color="primary"
