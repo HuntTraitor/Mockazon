@@ -109,9 +109,10 @@ function getValue(input?: string | null): string {
 
 async function createOrderProducts(
   productIds: string[],
-  shopperOrderId: string
+  shopperOrderId: string,
+  quantities: number[]
 ) {
-  const promises = productIds.map(async productId => {
+  const promises = productIds.map(async (productId, index) => {
     const res = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/shopperOrder/orderProduct`,
       {
@@ -120,6 +121,7 @@ async function createOrderProducts(
         body: JSON.stringify({
           product_id: productId,
           shopper_order_id: shopperOrderId,
+          quantity: quantities[index],
         }),
       }
     );
@@ -162,9 +164,6 @@ async function createShopperOrder(
   const tax = lineItemsData.reduce((sum, item) => sum + item.amount_tax, 0);
   const total = totalBeforeTax + tax;
   const paymentDigits = paymentMethod.card;
-  const productQuantities = lineItemsData.map(
-    item => item.quantity ?? (1 as number)
-  );
   let last4 = '';
   if (paymentDigits) {
     last4 = paymentDigits.last4.toString();
@@ -175,30 +174,25 @@ async function createShopperOrder(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        createdAt: dateCreated,
+        tax: tax,
+        total: total,
         shipped: true,
+        subtotal: subtotal,
+        createdAt: dateCreated,
         delivered: false,
         deliveryTime: new Date(
           new Date(dateCreated).getTime() + 7 * 24 * 60 * 60 * 1000
         ).toISOString(),
-        paymentMethod: paymentMethod.type.toString(),
         paymentDigits: last4,
+        paymentMethod: paymentMethod.type.toString(),
         shippingAddress: {
-          name: getValue(customerDetails?.name),
-          addressLine1: getValue(address?.line1),
           city: getValue(address?.city),
+          name: getValue(customerDetails?.name),
           state: getValue(address?.state),
-          postalCode: getValue(address?.postal_code),
           country: getValue(address?.country),
+          postalCode: getValue(address?.postal_code),
+          addressLine1: getValue(address?.line1),
         },
-        subtotal: subtotal,
-        totalBeforeTax: totalBeforeTax,
-        tax: tax,
-        total: total,
-        products: productIds,
-        quantities: productQuantities,
-        // products and quantities are in sync
-        // each index in product corresponds to an index in quantity
       }),
     }
   );
@@ -314,11 +308,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
+      const productQuantities = lineItems.data.map(
+        item => item.quantity as number
+      );
+
       // create product_orders
       try {
         const createdProductOrders = await createOrderProducts(
           productIds,
-          createdShopperOrder.id
+          createdShopperOrder.id,
+          productQuantities
         );
         console.log(createdProductOrders);
       } catch (err) {

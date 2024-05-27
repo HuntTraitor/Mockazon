@@ -146,12 +146,12 @@ const Cart = ({ locale }: { locale: string }) => {
             setSubtotal(Math.round(subtotal * 100) / 100);
           })
           .catch(err => {
-            console.log('Error fetching shoppingCartProducts:', err);
+            console.error('Error fetching shoppingCartProducts:', err);
             setError('Could not fetch shoppingCartProducts');
           });
       })
       .catch(err => {
-        console.log('Error fetching shopping cart:', err);
+        console.error('Error fetching shopping cart:', err);
         setError('Could not fetch shopping cart');
       });
   }, [router, user, accessToken]);
@@ -203,7 +203,7 @@ const Cart = ({ locale }: { locale: string }) => {
         setSubtotal(subtotal);
       })
       .catch(err => {
-        console.log('Error removing product:', err);
+        console.error('Error removing product:', err);
         setError('Could not remove product');
       });
   };

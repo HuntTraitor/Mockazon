@@ -66,9 +66,9 @@ export default function Index() {
           shipped
           delivered
           deliveryTime
-          quantities
           products {
             id
+            quantity
             data {
               brand
               name

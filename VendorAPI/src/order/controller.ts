@@ -8,9 +8,11 @@ import {
   Put,
   Get,
   Security,
+  Query,
 } from 'tsoa';
 import { Order, UpdateOrder } from '.';
 import { OrderService } from './service';
+import { AuthService } from '../auth/service';
 
 @Route('order')
 export class OrderController extends Controller {
@@ -41,8 +43,54 @@ export class OrderController extends Controller {
   @SuccessResponse('201', 'Order Updated')
   public async updateOrder(
     orderId: string,
-    @Body() order: UpdateOrder
+    @Body() order: UpdateOrder,
+    @Request() request: Express.Request
   ): Promise<Order | undefined> {
+    if (
+      (await new AuthService().checkOwnership(request.user!.id, orderId)) ===
+      false
+    ) {
+      this.setStatus(404);
+      return undefined;
+    }
     return await new OrderService().update(orderId, order);
+  }
+
+  @Put('{orderId}/shipped')
+  @Response('401', 'Unauthorized')
+  @Security('ApiKeyAuth')
+  @SuccessResponse('201', 'Order Shipping Status Updated')
+  public async setShipped(
+    orderId: string,
+    @Query() shipped: boolean,
+    @Request() request: Express.Request
+  ): Promise<Order | undefined> {
+    if (
+      (await new AuthService().checkOwnership(request.user!.id, orderId)) ===
+      false
+    ) {
+      this.setStatus(404);
+      return undefined;
+    }
+    return await new OrderService().setShipped(orderId, shipped);
+  }
+
+  @Put('{orderId}/delivered')
+  @Response('401', 'Unauthorized')
+  @Security('ApiKeyAuth')
+  @SuccessResponse('201', 'Order Delivery Status Updated')
+  public async setDelivered(
+    orderId: string,
+    @Query() delivered: boolean,
+    @Request() request: Express.Request
+  ): Promise<Order | undefined> {
+    if (
+      (await new AuthService().checkOwnership(request.user!.id, orderId)) ===
+      false
+    ) {
+      this.setStatus(404);
+      return undefined;
+    }
+    return await new OrderService().setDelivered(orderId, delivered);
   }
 }
