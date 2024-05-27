@@ -40,7 +40,7 @@ export class AuthService {
 
   public async login(credentials: Credentials): Promise<Authenticated> {
     return new Promise((resolve, reject) => {
-      fetch('http://localhost:3014/api/v0/vendor/login', {
+      fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/login`, {
         method: 'POST',
         body: JSON.stringify(credentials),
         headers: {
@@ -72,7 +72,7 @@ export class AuthService {
           reject(new GraphQLError('Unauthorized'));
         } else {
           fetch(
-            'http://localhost:3014/api/v0/vendor/check?accessToken=' +
+            `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/check?accessToken=` +
               tokens[1],
             {
               method: 'GET',
