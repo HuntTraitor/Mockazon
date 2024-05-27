@@ -7,6 +7,7 @@ import {
   OrderProduct,
   OrderProductId,
   ShopperOrderId,
+  VendorShopperOrder,
 } from '.';
 import { pool } from '../db';
 
@@ -182,9 +183,24 @@ export class OrderService {
         orderProduct.quantity,
       ],
     };
-    console.log("About the query a new order product")
     const { rows } = await pool.query(query);
-    console.log("Successfully queried order product")
+    return rows[0];
+  }
+
+  public async createVendorShopperOrder(
+    vendorShopperOrder: VendorShopperOrder
+  ): Promise<VendorShopperOrder> {
+    const insert = `INSERT INTO vendor_shopper_order(shopper_order_id, vendor_order_id) VALUES
+    ($1, $2) RETURNING *`;
+
+    const query = {
+      text: insert,
+      values: [
+        `${vendorShopperOrder.shopper_id}`,
+        `${vendorShopperOrder.vendor_id}`,
+      ],
+    };
+    const { rows } = await pool.query(query);
     return rows[0];
   }
 

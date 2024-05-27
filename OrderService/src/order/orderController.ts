@@ -20,6 +20,7 @@ import {
   ShopperOrderId,
   OrderProduct,
   OrderProductId,
+  VendorShopperOrder,
 } from '.';
 import { OrderService } from './orderService';
 import { UUID } from '../types';
@@ -133,5 +134,15 @@ export class OrderController extends Controller {
     @Body() orderProduct: OrderProduct
   ): Promise<(OrderProduct & OrderProductId) | undefined> {
     return await new OrderService().createOrderProduct(orderProduct);
+  }
+
+  @Post('VendorShopperOrder')
+  @SuccessResponse('201', 'Vendor Shopper Order Created')
+  public async createVendorShopperOrder(
+    @Body() vendorShopperOrder: VendorShopperOrder
+  ): Promise<VendorShopperOrder> {
+    return await new OrderService().createVendorShopperOrder(
+      vendorShopperOrder
+    );
   }
 }
