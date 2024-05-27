@@ -247,7 +247,7 @@ export default function OrderCard({ order }: { order: Order }) {
                         variant="body2"
                         className={styles.productPrice}
                       >
-                        $
+                        Total: $
                         {(
                           Math.round(
                             order.quantities[index] *
