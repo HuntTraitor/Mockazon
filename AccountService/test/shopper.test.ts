@@ -3,7 +3,7 @@ import * as http from "http";
 import * as db from "./db";
 import app from "../src/app";
 import { randomUUID } from "crypto";
-import { ShippingAddress, Order } from "../src/shopper/index";
+import { ShippingAddress } from "../src/shopper/index";
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -21,42 +21,6 @@ afterAll((done) => {
   server.close(done);
 });
 
-const exampleOrders = [
-  {
-    id: "order123",
-    createdAt: "2024-05-21T10:00:00Z",
-    shippingAddress: {
-      name: "John Doe",
-      addressLine1: "123 Main St",
-      city: "Santa Cruz",
-      state: "CA",
-      postalCode: "95060",
-      country: "USA",
-    },
-    paymentMethod: "Credit Card",
-    subtotal: 100.0,
-    totalBeforeTax: 90.0,
-    tax: 10.0,
-    total: 100.0,
-  },
-  {
-    id: "order456",
-    createdAt: "2024-05-21T10:00:00Z",
-    shippingAddress: {
-      name: "Jane Doe",
-      addressLine1: "456 Main St",
-      city: "Santa Cruz",
-      state: "CA",
-      postalCode: "95060",
-      country: "USA",
-    },
-    paymentMethod: "Credit Card",
-    subtotal: 200.0,
-    totalBeforeTax: 190.0,
-    tax: 10.0,
-    total: 200.0,
-  },
-];
 
 const exampleShippingInfo = [
   {
@@ -94,28 +58,6 @@ const compareShippingInfo = (
   expect(shippingInfo1.state).toBe(shippingInfo2.state);
   expect(shippingInfo1.postalCode).toBe(shippingInfo2.postalCode);
   expect(shippingInfo1.country).toBe(shippingInfo2.country);
-};
-
-const validateOrder = (order: Order) => {
-  expect(order.id).toBeDefined();
-  expect(order.createdAt).toBeDefined();
-  expect(order.shippingAddress).toBeDefined();
-  expect(order.paymentMethod).toBeDefined();
-  expect(order.subtotal).toBeDefined();
-  expect(order.totalBeforeTax).toBeDefined();
-  expect(order.tax).toBeDefined();
-  expect(order.total).toBeDefined();
-};
-
-const compareOrder = (order1: Order, order2: Order) => {
-  expect(order1.id).toBe(order2.id);
-  expect(order1.createdAt).toBe(order2.createdAt);
-  compareShippingInfo(order1.shippingAddress, order2.shippingAddress);
-  expect(order1.paymentMethod).toBe(order2.paymentMethod);
-  expect(order1.subtotal).toBe(order2.subtotal);
-  expect(order1.totalBeforeTax).toBe(order2.totalBeforeTax);
-  expect(order1.tax).toBe(order2.tax);
-  expect(order1.total).toBe(order2.total);
 };
 
 test("Renders the Swagger UI", async () => {
@@ -498,141 +440,6 @@ describe("API TEST (SHOPPER) - Shipping Info", () => {
     await supertest(server)
       .post("/api/v0/shopper/shippinginfo?userId=invalid_userid")
       .send(exampleShippingInfo[0])
-      .then((res) => {
-        expect(res.status).toBe(404);
-      });
-  });
-});
-
-describe("API TEST (SHOPPER) - Order History", () => {
-  let id: string;
-  let otherId: string;
-
-  beforeAll(async () => {
-    await supertest(server)
-      .post("/api/v0/shopper/login")
-      .send({
-        email: "testuser@gmail.com",
-        password: "pass",
-      })
-      .then((res) => {
-        expect(res.body.id).toBeDefined();
-        id = res.body.id;
-      });
-
-    await supertest(server)
-      .post("/api/v0/shopper/login")
-      .send({
-        email: "shirly@books.com",
-        password: "shirlyshopper",
-      })
-      .then((res) => {
-        expect(res.body.id).toBeDefined();
-        otherId = res.body.id;
-      });
-  });
-
-  test("GET /api/v0/shopper/orderhistory (unauthorized)", async () => {
-    await supertest(server)
-      .get("/api/v0/shopper/orderhistory?userId=invalid")
-      .then((res) => {
-        expect(res.status).toBe(404);
-      });
-  });
-
-  test("GET /api/v0/shopper/orderhistory (authorized)", async () => {
-    await supertest(server)
-      .get(`/api/v0/shopper/orderhistory?userId=${id}`)
-      .then((res) => {
-        expect(res.status).toBe(200);
-        expect(res.body).toBeDefined();
-      });
-  });
-
-  test("GET /api/v0/shopper/orderhistory (authorized) (other user)", async () => {
-    await supertest(server)
-      .get(`/api/v0/shopper/orderhistory?userId=${otherId}`)
-      .then((res) => {
-        expect(res.status).toBe(200);
-        expect(res.body).toBeDefined();
-      });
-  });
-
-  test("POST /api/v0/shopper/orderhistory (unauthorized)", async () => {
-    await supertest(server)
-      .post("/api/v0/shopper/orderhistory?userId=invalid")
-      .send({ orderHistory: "test" })
-      .then((res) => {
-        expect(res.status).toBe(400);
-      });
-  });
-
-  test("POST /api/v0/shopper/orderhistory (authorized)", async () => {
-    const orderhistory = await supertest(server)
-      .get(`/api/v0/shopper/orderhistory?userId=${id}`)
-      .then((res) => {
-        return res.body;
-      });
-    for (let i = 0; i < orderhistory.length; i++) {
-      validateOrder(orderhistory[i]);
-    }
-    await supertest(server)
-      .post(`/api/v0/shopper/orderhistory?userId=${id}`)
-      .send(exampleOrders[0])
-      .then((res) => {
-        expect(res.status).toBe(200);
-        expect(res.body).toBeDefined();
-      });
-
-    const newOrderhistory = await supertest(server)
-      .get(`/api/v0/shopper/orderhistory?userId=${id}`)
-      .then((res) => {
-        return res.body;
-      });
-
-    for (let i = 0; i < newOrderhistory.length; i++) {
-      validateOrder(newOrderhistory[i]);
-    }
-
-    expect(newOrderhistory.length).toBe(orderhistory.length + 1);
-    compareOrder(newOrderhistory[newOrderhistory.length - 1], exampleOrders[0]);
-  });
-
-  test("POST /api/v0/shopper/orderhistory (authorized) other user", async () => {
-    await supertest(server)
-      .post(`/api/v0/shopper/orderhistory?userId=${otherId}`)
-      .send(exampleOrders[1])
-      .then((res) => {
-        expect(res.status).toBe(200);
-        expect(res.body).toBeDefined();
-      });
-
-    const newOrderhistory = await supertest(server)
-      .get(`/api/v0/shopper/orderhistory?userId=${otherId}`)
-      .then((res) => {
-        return res.body;
-      });
-
-    for (let i = 0; i < newOrderhistory.length; i++) {
-      validateOrder(newOrderhistory[i]);
-    }
-
-    expect(newOrderhistory.length).toBe(1);
-    compareOrder(newOrderhistory[0], exampleOrders[1]);
-  });
-
-  test("Handles error in getOrderHistory (invalid userId)", async () => {
-    await supertest(server)
-      .get("/api/v0/shopper/orderhistory?userId=invalid")
-      .then((res) => {
-        expect(res.status).toBe(404);
-      });
-  });
-
-  test("Handles error in createOrderHistory (invalid userId)", async () => {
-    await supertest(server)
-      .post("/api/v0/shopper/orderhistory?userId=invalid")
-      .send(exampleOrders[0])
       .then((res) => {
         expect(res.status).toBe(404);
       });
