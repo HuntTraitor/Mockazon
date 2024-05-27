@@ -7,6 +7,7 @@ import {
   Request,
   Put,
   Get,
+  Security,
 } from 'tsoa';
 import { Order, UpdateOrder } from '.';
 import { OrderService } from './service';
@@ -15,11 +16,13 @@ import { OrderService } from './service';
 export class OrderController extends Controller {
   @Get()
   @Response('401', 'Unauthorized')
+  @Security('ApiKeyAuth')
   @SuccessResponse('200', 'Orders Found')
   public async getOrders(
     @Request() request: Express.Request
   ): Promise<Order[] | undefined> {
-    return await new OrderService().getOrders(request.user?.id);
+    console.log('request.user!.id', request.user!.id);
+    return await new OrderService().getOrders(request.user!.id);
   }
 
   // @Post()
@@ -34,6 +37,7 @@ export class OrderController extends Controller {
 
   @Put('{orderId}')
   @Response('401', 'Unauthorized')
+  @Security('ApiKeyAuth')
   @SuccessResponse('201', 'Order Updated')
   public async updateOrder(
     orderId: string,

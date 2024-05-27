@@ -35,39 +35,14 @@ export class OrderService {
     return rows[0];
   }
 
-  public async getAllOrders(
-    productId?: UUID,
-    shopperId?: UUID,
-    vendorId?: UUID
+  public async getAllVendorOrder(
+    vendorId: UUID
   ): Promise<Order[]> {
-    let select = `SELECT * FROM vendor_order`;
-    const values = [];
-    const conditions = [];
-
-    if (productId) {
-      conditions.push(`product_id = $${values.length + 1}`);
-      values.push(productId);
-    }
-
-    if (shopperId) {
-      conditions.push(`shopper_id = $${values.length + 1}`);
-      values.push(shopperId);
-    }
-
-    if (vendorId) {
-      conditions.push(`vendor_id = $${values.length + 1}`);
-      values.push(vendorId);
-    }
-
-    if (conditions.length > 0) {
-      select += ' WHERE ';
-    }
-
-    select += conditions.join(' AND ');
+    const select = `SELECT * FROM vendor_order WHERE vendor_id = $1`;
 
     const query = {
       text: select,
-      values: values,
+      values: [`${vendorId}`],
     };
     const { rows } = await pool.query(query);
     return rows;
