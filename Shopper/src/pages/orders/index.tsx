@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 export default function Index() {
   const [Orders, setOrders] = useState([] as Order[]);
   const { accessToken, user } = useContext(LoggedInContext);
-
+  // TODO add quantity field
   const fetchOrders = useCallback(() => {
     // this could be altered to take arguments for filtering in the future
     const query = {
