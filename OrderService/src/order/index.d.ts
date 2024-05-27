@@ -13,6 +13,15 @@ export interface NewOrder {
   quantity: Quantity;
 }
 
+export interface OrderProduct {
+  product_id: UUID;
+  shopper_order_id: UUID;
+}
+
+export interface OrderProductId {
+  id: UUID;
+}
+
 export interface Order {
   id: UUID;
   product_id: UUID;
@@ -27,11 +36,13 @@ export interface Order {
 }
 
 export interface ShopperOrder {
-  id: UUID;
   createdAt: Date;
   paymentMethod: string;
   paymentDigits: string;
+  shipped: boolean;
   subtotal: number;
+  deliveryTime: string;
+  delivered: boolean;
   tax: number;
   total: number;
   shippingAddress: {
@@ -42,7 +53,12 @@ export interface ShopperOrder {
     postalCode: string;
     country: string;
   };
+  totalBeforeTax: string;
   products: UUID[];
+}
+
+export interface ShopperOrderId {
+  id: UUID;
 }
 
 export interface UpdateOrder {
