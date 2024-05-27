@@ -9,3 +9,6 @@ CREATE TABLE shopper_order(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(),
 
 DROP TABLE IF EXISTS order_product CASCADE;
 CREATE TABLE order_product(order_id UUID REFERENCES shopper_order(id), product_id UUID, quantity int, PRIMARY KEY (order_id, product_id));
+
+DROP TABLE IF EXISTS vendor_shopper_order CASCADE;
+CREATE TABLE vendor_shopper_order(shopper_order_id UUID REFERENCES shopper_order(id), vendor_order_id UUID REFERENCES vendor_order(id), PRIMARY KEY (shopper_order_id, vendor_order_id));

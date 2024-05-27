@@ -67,7 +67,6 @@ export class AuthService {
     vendor_id?: UUID,
     order_id?: UUID
   ): Promise<boolean> {
-    console.log('vendor_id', vendor_id);
     return new Promise((resolve, reject) => {
       if (!vendor_id || !order_id) {
         reject(new Error('Unauthorized'));
@@ -83,18 +82,11 @@ export class AuthService {
         )
           .then(res => {
             if (!res.ok) {
-              console.log('res', res);
               throw res;
             }
             return res.json();
           })
           .then(data => {
-            console.log(
-              'Passed',
-              vendor_id,
-              data.vendor_id,
-              data.vendor_id === vendor_id
-            );
             resolve(data.vendor_id === vendor_id);
           })
           .catch(() => {
