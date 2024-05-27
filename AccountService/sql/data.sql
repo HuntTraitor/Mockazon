@@ -216,25 +216,7 @@ VALUES
         'name', 'Evan Metcalf',
         'username', 'Nave Flactem',
         'role', 'shopper',
-        'suspended', false,
-        'shippingInfo', jsonb_build_array(
-            jsonb_build_object(
-                'name', 'Evan Metcalf',
-                'addressLine1', '1234 Elm St',
-                'country', 'USA',
-                'city', 'Santa Cruz',
-                'state', 'CA',
-                'postalCode', '95060'
-            ),
-            jsonb_build_object(
-                'name', 'Evan Metcalf',
-                'addressLine1', '5678 Oak St',
-                'country', 'USA',
-                'city', 'Santa Cruz',
-                'state', 'CA',
-                'postalCode', '95060'
-            )
-        ),
+        'suspended', false
     )
 );
 
