@@ -41,6 +41,7 @@ export type ShippingAddress = {
 
 export interface Product {
   id: string;
+  quantity: number;
   data: {
     brand?: string;
     name: string;

@@ -29,9 +29,15 @@ export class OrderController extends Controller {
   @Get('')
   @Response('404', 'Not Found')
   public async getOrders(
-    @Query('vendorId') vendorId: UUID
+    @Query('productId') productId?: UUID,
+    @Query('shopperId') shopperId?: UUID,
+    @Query('vendorId') vendorId?: UUID
   ): Promise<Order[] | undefined> {
-    return await new OrderService().getAllVendorOrder(vendorId);
+    return await new OrderService().getAllOrders(
+      productId,
+      shopperId,
+      vendorId
+    );
   }
 
   @Post('')
@@ -44,10 +50,8 @@ export class OrderController extends Controller {
   }
 
   @Get('shopperOrder')
-  public async getAllShopperOrders(
-    @Query() shopperId: UUID
-  ): Promise<ShopperOrder[]> {
-    const orders = await new OrderService().getAllShopperOrders(shopperId);
+  public async testing(@Query() shopperId: UUID): Promise<ShopperOrder[]> {
+    const orders = await new OrderService().getAllShopperOrder(shopperId);
     return orders;
   }
 

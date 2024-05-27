@@ -89,6 +89,11 @@ jest.mock('next/router', () => ({
     back: jest.fn(),
     prefetch: jest.fn(),
     beforePopState: jest.fn(),
+    events: {
+      on: jest.fn(),
+      off: jest.fn(),
+      emit: jest.fn(),
+    },
   }),
 }));
 
@@ -157,7 +162,16 @@ it('Clicks checkout button and redirects successfully', async () => {
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>
         <CheckoutButton
-          productsWithContent={products}
+          productsWithContent={products.map(product => ({
+            ...product,
+            data: {
+              ...product.data,
+              getProduct: {
+                ...product.data.getProduct,
+                vendor_id: 'vendor_id_value',
+              },
+            },
+          }))}
           shopperId={'123'}
           subtotal={100}
           locale={'en'}
@@ -185,7 +199,16 @@ it('Clicks checkout button and encounters error creating session', async () => {
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>
         <CheckoutButton
-          productsWithContent={products}
+          productsWithContent={products.map(product => ({
+            ...product,
+            data: {
+              ...product.data,
+              getProduct: {
+                ...product.data.getProduct,
+                vendor_id: 'vendor_id_value',
+              },
+            },
+          }))}
           shopperId={'123'}
           subtotal={100}
           locale={'en'}
@@ -209,7 +232,16 @@ it('Clicks checkout button and encounters error during redirect', async () => {
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>
         <CheckoutButton
-          productsWithContent={products}
+          productsWithContent={products.map(product => ({
+            ...product,
+            data: {
+              ...product.data,
+              getProduct: {
+                ...product.data.getProduct,
+                vendor_id: 'vendor_id_value',
+              },
+            },
+          }))}
           shopperId={'123'}
           subtotal={100}
           locale={'en'}
@@ -237,7 +269,16 @@ it('Clicks checkout button and encounters error redirecting to checkout', async 
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>
         <CheckoutButton
-          productsWithContent={products}
+          productsWithContent={products.map(product => ({
+            ...product,
+            data: {
+              ...product.data,
+              getProduct: {
+                ...product.data.getProduct,
+                vendor_id: 'vendor_id_value',
+              },
+            },
+          }))}
           shopperId={'123'}
           subtotal={100}
           locale={'en'}

@@ -1,6 +1,6 @@
 import { UUID } from '@/graphql/types';
 import { GraphQLError } from 'graphql/error';
-import { ShopperOrder } from './schema';
+import { ShopperOrder, ShopperOrderProduct } from './schema';
 import { Product } from '@/graphql/product/schema';
 
 export class OrderService {
@@ -25,9 +25,9 @@ export class OrderService {
       });
 
     const products = await Promise.all(
-      order.products.map(async (productId: UUID) => {
+      order.products.map(async (productBefore: ShopperOrderProduct) => {
         return await fetch(
-          `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${productId}`,
+          `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${productBefore.id}`,
           {
             method: 'GET',
             headers: {
@@ -46,6 +46,7 @@ export class OrderService {
             // such as active, created, posted.
             return {
               id: product.id,
+              quantity: productBefore.quantity,
               vendor_id: product.vendor_id,
               data: product.data,
             } as Product;

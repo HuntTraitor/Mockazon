@@ -38,7 +38,7 @@ export class VendorService {
         },
         `${process.env.MASTER_SECRET}`,
         {
-          expiresIn: "30m",
+          expiresIn: "1d",
           algorithm: "HS256",
         },
       );

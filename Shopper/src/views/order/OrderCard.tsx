@@ -108,6 +108,7 @@ export default function OrderCard({ order }: { order: Order }) {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
 
+
   const formatDate = (date: string, delivered: boolean): string => {
     // FIXME: This needs to be the order status, not just delivered. Find a smart way
     // to do this, instead of a bunch of else if
@@ -241,7 +242,7 @@ export default function OrderCard({ order }: { order: Order }) {
                         {/*products and quantities are in sync*/}
                         {/*each index in product corresponds to an index in quantity*/}
                         {/*FIXME: refactor this if there's time*/}
-                        {t('order:quantity')}: {order.quantities[index]}
+                        {t('order:quantity')}: {product.quantity}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -250,7 +251,7 @@ export default function OrderCard({ order }: { order: Order }) {
                         Total: $
                         {(
                           Math.round(
-                            order.quantities[index] *
+                            product.quantity *
                               parseFloat(product.data.price.toString()) *
                               100
                           ) / 100

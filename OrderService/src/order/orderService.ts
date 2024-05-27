@@ -1,13 +1,5 @@
 import { UUID } from 'src/types';
-import {
-  NewOrder,
-  Order,
-  UpdateOrder,
-  ShopperOrder,
-  ShopperOrderId,
-  OrderProduct,
-  OrderProductId,
-} from '.';
+import { NewOrder, Order, UpdateOrder, ShopperOrder, ShopperOrderId, OrderProduct, OrderProductId } from '.';
 import { pool } from '../db';
 
 export class OrderService {
@@ -35,12 +27,39 @@ export class OrderService {
     return rows[0];
   }
 
-  public async getAllVendorOrder(vendorId: UUID): Promise<Order[]> {
-    const select = `SELECT * FROM vendor_order WHERE vendor_id = $1`;
+  public async getAllOrders(
+    productId?: UUID,
+    shopperId?: UUID,
+    vendorId?: UUID
+  ): Promise<Order[]> {
+    let select = `SELECT * FROM vendor_order`;
+    const values = [];
+    const conditions = [];
+
+    if (productId) {
+      conditions.push(`product_id = $${values.length + 1}`);
+      values.push(productId);
+    }
+
+    if (shopperId) {
+      conditions.push(`shopper_id = $${values.length + 1}`);
+      values.push(shopperId);
+    }
+
+    if (vendorId) {
+      conditions.push(`vendor_id = $${values.length + 1}`);
+      values.push(vendorId);
+    }
+
+    if (conditions.length > 0) {
+      select += ' WHERE ';
+    }
+
+    select += conditions.join(' AND ');
 
     const query = {
       text: select,
-      values: [`${vendorId}`],
+      values: values,
     };
     const { rows } = await pool.query(query);
     return rows;
@@ -93,19 +112,19 @@ export class OrderService {
     let order = rows[0];
 
     // Get the product ids in the order
-    const productSelect = `SELECT product_id AS id FROM order_product WHERE order_id = $1`;
+    const productSelect = `SELECT product_id AS id, quantity FROM order_product WHERE order_id = $1`;
     const productQuery = {
       text: productSelect,
       values: [`${orderId}`],
     };
     const { rows: products } = await pool.query(productQuery);
 
-    if (products.length) order.products = products.map(product => product.id);
+    if (products.length) order.products = products.map(product => ({id: product.id, quantity: product.quantity}));
     order = { ...order, ...order.data, data: undefined };
     return order;
   }
 
-  public async getAllShopperOrders(shopperId: UUID): Promise<ShopperOrder[]> {
+  public async getAllShopperOrder(shopperId: UUID): Promise<ShopperOrder[]> {
     const arr: ShopperOrder[] = [];
     const select = `SELECT * FROM shopper_order WHERE shopper_id = $1`;
     const query = {

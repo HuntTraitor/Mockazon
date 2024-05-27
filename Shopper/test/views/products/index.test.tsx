@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  fireEvent,
-  render,
-  waitFor,
-  // waitFor
-} from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import { fireEvent, render } from '@testing-library/react';
 import Products from '@/pages/products';
 import { getServerSideProps } from '@/pages/products';
 import http from 'http';
@@ -154,6 +148,11 @@ jest.mock('next/router', () => ({
     back: jest.fn(),
     prefetch: jest.fn(),
     beforePopState: jest.fn(),
+    events: {
+      on: jest.fn(),
+      off: jest.fn(),
+      emit: jest.fn(),
+    },
   }),
 }));
 
