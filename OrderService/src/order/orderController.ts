@@ -12,7 +12,15 @@ import {
   Path,
 } from 'tsoa';
 
-import {Order, NewOrder, Quantity, ShopperOrder, ShopperOrderId, OrderProduct, OrderProductId} from '.';
+import {
+  Order,
+  NewOrder,
+  Quantity,
+  ShopperOrder,
+  ShopperOrderId,
+  OrderProduct,
+  OrderProductId,
+} from '.';
 import { OrderService } from './orderService';
 import { UUID } from '../types';
 
@@ -42,7 +50,9 @@ export class OrderController extends Controller {
   }
 
   @Get('shopperOrder')
-  public async getAllShopperOrders(@Query() shopperId: UUID): Promise<ShopperOrder[]> {
+  public async getAllShopperOrders(
+    @Query() shopperId: UUID
+  ): Promise<ShopperOrder[]> {
     const orders = await new OrderService().getAllShopperOrders(shopperId);
     return orders;
   }
@@ -91,17 +101,17 @@ export class OrderController extends Controller {
   @Post('shopperOrder')
   @SuccessResponse('201', 'Shopper Order Created')
   public async createShopperOrder(
-      @Body() order: ShopperOrder,
-      @Query() shopperId: UUID
-  ): Promise<ShopperOrder & ShopperOrderId | undefined> {
+    @Body() order: ShopperOrder,
+    @Query() shopperId: UUID
+  ): Promise<(ShopperOrder & ShopperOrderId) | undefined> {
     return await new OrderService().createShopperOrder(order, shopperId);
   }
 
   @Post('shopperOrder/orderProduct')
   @SuccessResponse('201', 'Shopper Order Created')
   public async createOrderProduct(
-      @Body() orderProduct: OrderProduct
-  ): Promise<OrderProduct & OrderProductId | undefined> {
+    @Body() orderProduct: OrderProduct
+  ): Promise<(OrderProduct & OrderProductId) | undefined> {
     return await new OrderService().createOrderProduct(orderProduct);
   }
 }

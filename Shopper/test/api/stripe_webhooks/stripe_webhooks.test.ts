@@ -114,7 +114,6 @@ const handlers = [
       }
     }
   ),
-
 ];
 
 const microServices = setupServer(...handlers);
@@ -195,7 +194,7 @@ jest.mock('stripe', () => {
           },
           type: 'card',
         }),
-      }
+      },
     };
   });
 });

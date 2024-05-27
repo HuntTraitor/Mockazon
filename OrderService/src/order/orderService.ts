@@ -1,5 +1,13 @@
 import { UUID } from 'src/types';
-import {NewOrder, Order, UpdateOrder, ShopperOrder, ShopperOrderId, OrderProduct, OrderProductId} from '.';
+import {
+  NewOrder,
+  Order,
+  UpdateOrder,
+  ShopperOrder,
+  ShopperOrderId,
+  OrderProduct,
+  OrderProductId,
+} from '.';
 import { pool } from '../db';
 
 export class OrderService {
@@ -141,31 +149,30 @@ export class OrderService {
     return arr;
   }
 
-  public async createShopperOrder(newOrder: ShopperOrder, shopperId: string): Promise<ShopperOrder & ShopperOrderId | undefined> {
+  public async createShopperOrder(
+    newOrder: ShopperOrder,
+    shopperId: string
+  ): Promise<(ShopperOrder & ShopperOrderId) | undefined> {
     const insert = `INSERT INTO shopper_order(shopper_id, data) VALUES 
     ($1, $2) RETURNING *`;
 
     const query = {
       text: insert,
-      values: [
-        `${shopperId}`,
-        newOrder,
-      ],
+      values: [`${shopperId}`, newOrder],
     };
     const { rows } = await pool.query(query);
     return rows[0];
   }
 
-  public async createOrderProduct(orderProduct: OrderProduct): Promise<OrderProduct & OrderProductId | undefined> {
+  public async createOrderProduct(
+    orderProduct: OrderProduct
+  ): Promise<(OrderProduct & OrderProductId) | undefined> {
     const insert = `INSERT INTO order_product(order_id, product_id) VALUES 
     ($1, $2) RETURNING *`;
 
     const query = {
       text: insert,
-      values: [
-        orderProduct.shopper_order_id,
-        orderProduct.product_id,
-      ],
+      values: [orderProduct.shopper_order_id, orderProduct.product_id],
     };
     const { rows } = await pool.query(query);
     return rows[0];

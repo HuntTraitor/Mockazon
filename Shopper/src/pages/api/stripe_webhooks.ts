@@ -73,7 +73,10 @@ async function removeProductsFromShoppingCart(
     });
 }
 
-async function createVendorOrdersFromPurchase(orders: VendorOrder[], shopperId: string) {
+async function createVendorOrdersFromPurchase(
+  orders: VendorOrder[],
+  shopperId: string
+) {
   const promises = orders.map(async order => {
     const res = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order?vendorId=${order.vendor_id}`,
@@ -104,7 +107,10 @@ function getValue(input?: string | null): string {
   return input ?? '';
 }
 
-async function createOrderProducts(productIds: string[], shopperOrderId: string) {
+async function createOrderProducts(
+  productIds: string[],
+  shopperOrderId: string
+) {
   const promises = productIds.map(async productId => {
     const res = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/shopperOrder/orderProduct`,
@@ -130,21 +136,34 @@ async function createOrderProducts(productIds: string[], shopperOrderId: string)
     });
 }
 
-async function createShopperOrder(lineItems: Stripe.ApiList<Stripe.LineItem>, productIds: string[], shopperId: string, session: Stripe.Checkout.Session) {
+async function createShopperOrder(
+  lineItems: Stripe.ApiList<Stripe.LineItem>,
+  productIds: string[],
+  shopperId: string,
+  session: Stripe.Checkout.Session
+) {
   const dateCreated = new Date().toISOString();
   const lineItemsData = lineItems.data;
   const customerDetails = session?.customer_details;
   const address = session?.customer_details?.address;
-  const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent as string);
-  const paymentMethod = await stripe.paymentMethods.retrieve(paymentIntent.payment_method as string);
-  const subtotal = lineItemsData.reduce((sum: number, item: { amount_subtotal: number; }) => sum + item.amount_subtotal, 0);
+  const paymentIntent = await stripe.paymentIntents.retrieve(
+    session.payment_intent as string
+  );
+  const paymentMethod = await stripe.paymentMethods.retrieve(
+    paymentIntent.payment_method as string
+  );
+  const subtotal = lineItemsData.reduce(
+    (sum: number, item: { amount_subtotal: number }) =>
+      sum + item.amount_subtotal,
+    0
+  );
   // TODO determine what total before tax is? -- maybe factoring in discount
   const totalBeforeTax = subtotal.toString();
   const tax = lineItemsData.reduce((sum, item) => sum + item.amount_tax, 0);
   const total = totalBeforeTax + tax;
   const paymentDigits = paymentMethod.card;
   let last4 = '';
-  if(paymentDigits) {
+  if (paymentDigits) {
     last4 = paymentDigits.last4.toString();
   }
   const res = await fetch(
@@ -156,10 +175,9 @@ async function createShopperOrder(lineItems: Stripe.ApiList<Stripe.LineItem>, pr
         createdAt: dateCreated,
         shipped: true,
         delivered: false,
-        deliveryTime:
-          new Date(
-            new Date(dateCreated).getTime() + 7 * 24 * 60 * 60 * 1000
-          ).toISOString(),
+        deliveryTime: new Date(
+          new Date(dateCreated).getTime() + 7 * 24 * 60 * 60 * 1000
+        ).toISOString(),
         paymentMethod: paymentMethod.type.toString(),
         paymentDigits: last4,
         shippingAddress: {
@@ -245,9 +263,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         console.log(`Error parsing metadata: ${msg}`);
         return;
       }
-      const productIds = itemsFromMetadata.map((item: { productId: string; vendorId: string; }) => item.productId);
+      const productIds = itemsFromMetadata.map(
+        (item: { productId: string; vendorId: string }) => item.productId
+      );
 
-      const pendingVendorOrders = getOrders(lineItems, shopperId, itemsFromMetadata);
+      const pendingVendorOrders = getOrders(
+        lineItems,
+        shopperId,
+        itemsFromMetadata
+      );
 
       // create vendor orders
       try {
@@ -267,10 +291,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       // create order history
       let createdShopperOrder;
-      try{
-        createdShopperOrder = await createShopperOrder(lineItems, productIds, shopperId, session);
+      try {
+        createdShopperOrder = await createShopperOrder(
+          lineItems,
+          productIds,
+          shopperId,
+          session
+        );
         console.log(createdShopperOrder);
-      }catch(err){
+      } catch (err) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const msg = err.message;
