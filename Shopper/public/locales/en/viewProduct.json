@@ -7,5 +7,9 @@
   "primeShipping": "Prime Shipping",
   "freeDelivery": "Free Delivery",
   "deliveryDate": "Delivery Date",
-  "deliverTo": "Deliver to"
+  "deliverTo": "Deliver to",
+  "soldBy": "Sold by",
+  "shipsFrom": "Ships from",
+  "brand": "Brand",
+  "customer": "Customer"
 }

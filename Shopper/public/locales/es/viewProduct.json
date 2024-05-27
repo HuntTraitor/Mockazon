@@ -7,5 +7,9 @@
   "primeShipping": "Envío Prime",
   "freeDelivery": "Entrega gratuita",
   "deliveryDate": "Fecha de entrega",
-  "deliverTo": "Entregar a"
+  "deliverTo": "Entregar a",
+  "soldBy": "Vendido por",
+  "shipsFrom": "Envío desde",
+  "brand": "Marca",
+  "customer": "Cliente"
 }
