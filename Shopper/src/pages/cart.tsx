@@ -271,16 +271,14 @@ const Cart = ({ locale }: { locale: string }) => {
                             style={{ fontSize: '0.8rem' }}
                             aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
                           >
-                            {t('products:deliveryDate')}:{' '}
+                            {t('FREE delivery')}:{' '}
                             {new Intl.DateTimeFormat('en-US', {
-                      weekday: 'long',
-                      month: 'short',
-                      day: 'numeric',
-                    }).format(
-                      new Date(
-                        product.data.getProduct.data.deliveryDate as string
-                      )
-                    )}
+                              weekday: 'long',
+                              month: 'short',
+                              day: 'numeric',
+                            }).format(
+                              new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                            )}
                           </Typography>
                           <Typography
                             style={{ fontSize: '0.8rem' }}
