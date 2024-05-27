@@ -11,6 +11,7 @@ import Price from './Price';
 import DeliveryText from './DeliveryText';
 import AddToCartButton from './AddToCartButton';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 
 interface ProductProps {
   product: Product;
@@ -19,6 +20,7 @@ interface ProductProps {
 export default function ProductCard({ product }: ProductProps) {
   const { t } = useTranslation('viewProduct');
   const price = product.data.price.toString();
+  const router = useRouter();
 
   return (
     <Card
@@ -30,7 +32,7 @@ export default function ProductCard({ product }: ProductProps) {
     >
       <CardContent>
         <Button
-          href={`/products/${product.id}`}
+          onClick={() => router.push(`/products/${product.id}`)}
           className={styles.productImage}
         >
           <Image
@@ -43,7 +45,7 @@ export default function ProductCard({ product }: ProductProps) {
         <div>
           <Link
             variant="h6"
-            href={`/products/${product.id}`}
+            onClick={() => router.push(`/products/${product.id}`)}
             className={styles.productName}
             underline="none"
           >

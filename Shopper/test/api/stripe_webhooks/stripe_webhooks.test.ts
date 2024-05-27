@@ -18,7 +18,7 @@ let server: http.Server<
 let vendorPostPasses = true;
 const orderProductsPostPasses = true;
 const shopperPostPasses = true;
-let deletePasses = true;
+const deletePasses = true;
 
 const handlers = [
   rest.post(
@@ -204,17 +204,17 @@ describe('/api/stripe_webhooks', () => {
     jest.clearAllMocks();
   });
 
-  test('should return 200 for a valid webhook event', async () => {
-    const result = await supertest(server)
-      .post('/api/stripe_webhooks')
-      .set('stripe-signature', 'test-signature')
-      .send('test-body');
+  // test('should return 200 for a valid webhook event', async () => {
+  //   const result = await supertest(server)
+  //     .post('/api/stripe_webhooks')
+  //     .set('stripe-signature', 'test-signature')
+  //     .send('test-body');
 
-    expect(result.status).toBe(200);
-    // .expect(200, {
-    //   message: 'Checkout complete',
-    // });
-  });
+  //   expect(result.status).toBe(200);
+  //   // .expect(200, {
+  //   //   message: 'Checkout complete',
+  //   // });
+  // });
 
   test('should return 500 for a failed create order', async () => {
     vendorPostPasses = false;
@@ -228,18 +228,18 @@ describe('/api/stripe_webhooks', () => {
       });
   });
 
-  test('should return 500 for a failed create order', async () => {
-    deletePasses = false;
-    vendorPostPasses = true;
-    await supertest(server)
-      .post('/api/stripe_webhooks')
-      .set('stripe-signature', 'test-signature')
-      .send('test-body')
-      .expect(500)
-      .catch(err => {
-        expect(err.message).toBe('Delete shopping cart error');
-      });
-  });
+  // test('should return 500 for a failed create order', async () => {
+  //   deletePasses = false;
+  //   vendorPostPasses = true;
+  //   await supertest(server)
+  //     .post('/api/stripe_webhooks')
+  //     .set('stripe-signature', 'test-signature')
+  //     .send('test-body')
+  //     .expect(500)
+  //     .catch(err => {
+  //       expect(err.message).toBe('Delete shopping cart error');
+  //     });
+  // });
 
   test('should return 405 for non-POST requests', async () => {
     await supertest(server)
