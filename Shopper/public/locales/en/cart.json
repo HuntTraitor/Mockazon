@@ -4,5 +4,7 @@
   "remove": "Remove",
   "items": "items",
   "item": "item",
-  "proceedToCheckout": "Proceed to Checkout"
+  "proceedToCheckout": "Proceed to Checkout",
+  "errorFetchingProducts": "Error fetching products",
+  "errorRemovingProduct": "Error removing product"
 }
