@@ -157,7 +157,6 @@ const TopHeader = () => {
     setFocused(false);
     setBackDropOpen(false);
   };
-
   const handleSearch = () => {
     const queryParams = new URLSearchParams({
       page: '1',
@@ -182,6 +181,8 @@ const TopHeader = () => {
       handleSearch();
     }
   };
+
+  console.log(search)
 
   return (
     <Box className={styles.container}>
@@ -245,7 +246,7 @@ const TopHeader = () => {
               placeholder={t('searchPlaceholder') as string}
               InputProps={{
                 ...params.InputProps,
-                onKeyDown: handleKeyDown,
+                onKeyDown: handleKeyDown
               }}
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -254,7 +255,7 @@ const TopHeader = () => {
             />
           )}
           renderOption={(props, option) => (
-            <li {...props}>
+            <li {...props} onClick={() => handleSearch()}>
               <SearchIcon
                 style={{
                   marginRight: '5px',
