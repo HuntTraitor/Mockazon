@@ -1,0 +1,24 @@
+{
+  "successStatus": "Payment Successful",
+  "thanks": "Thank you for your order.",
+  "appreciative": "We appreciate your business and are currently processing your order. You will receive a confirmation soon!",
+  "orderNumber": "Order Number",
+  "orderDetails": "Your Order Details",
+  "items": "Items",
+  "yourInfo": "Your Information",
+  "payment": "Payment",
+  "billing": "Billing Address",
+  "billingDetails": {
+    "name": "Name",
+    "email": "Email",
+    "country": "Country",
+    "postalCode": "Postal Code"
+  },
+  "summary": "Summary",
+  "summaryDetails": {
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "tax": "Tax",
+    "total": "Grand Total"
+  }
+}

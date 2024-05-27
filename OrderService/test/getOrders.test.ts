@@ -6,7 +6,7 @@ import { validateOrder, validateNewOrder, compareOrders } from './helper';
 
 let orders: Order[] = [];
 beforeAll(async () => {
-  const response = await supertest(server).get(`/api/v0/order`).expect(200);
+  const response = await supertest(server).get(`/api/v0/order?vendorId=${randomUUID()}`).expect(200);
   orders = response.body;
 });
 
