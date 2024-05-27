@@ -369,10 +369,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         await createVendorShopperOrder(vendorOrderIds, shopperOrderId);
       } catch (err) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         res
           .status(500)
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           .send(`Error create vendor shopper order: ${err.message}`);
       }
 
