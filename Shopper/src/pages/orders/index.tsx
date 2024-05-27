@@ -17,6 +17,7 @@ import TopNav from '@/views/TopNav';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import getConfig from 'next/config';
+import { useTranslation } from 'next-i18next';
 const { basePath } = getConfig().publicRuntimeConfig;
 
 const namespaces = [
@@ -26,6 +27,8 @@ const namespaces = [
   'common',
   'signInDropdown',
   'order',
+  'orderHistory',
+  'viewProduct',
 ];
 
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -38,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
 export default function Index() {
   const [Orders, setOrders] = useState([] as Order[]);
+  const { t } = useTranslation('orderHistory');
   const { accessToken, user } = useContext(LoggedInContext);
   // TODO add quantity field
   const fetchOrders = useCallback(() => {
@@ -121,7 +125,7 @@ export default function Index() {
           }}
         >
           <Typography variant="h4" align="center" style={{ marginTop: '20px' }}>
-            Your Orders
+            {t('yourOrders')}
           </Typography>
           {/* <Box>
             <TextField
@@ -170,7 +174,7 @@ export default function Index() {
             fontWeight: '700',
           }}
         >
-          {Orders.length} Orders {/* placed in */}
+          {Orders.length} {t('orders')} {/* placed in */}
         </Typography>
         {/* Time range selector if doable*/}
         <Grid container spacing={2}>

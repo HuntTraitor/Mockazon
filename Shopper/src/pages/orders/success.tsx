@@ -38,6 +38,7 @@ const namespaces = [
   'common',
   'signInDropdown',
   'successOrder',
+  'viewProduct',  
 ];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
@@ -141,16 +142,16 @@ const CheckoutSuccessPage = () => {
                     <Typography>{product.description}</Typography>
                     {product.description ? (
                       <Typography>
-                        <strong>Product Description: </strong>
+                        <strong>{t('productDetails.productDescription')}: </strong>
                         {product.description}
                       </Typography>
                     ) : null}
                     <Typography>
-                      <strong>Quantity:</strong>
+                      <strong>{t('productDetails.quantity')}: </strong>
                       {product.quantity}{' '}
                     </Typography>
                     <Typography>
-                      <strong>Price: </strong>
+                      <strong>{t('productDetails.price')}: </strong>
                       {(product.price / 100).toLocaleString('en-CA', {
                         style: 'currency',
                         currency: 'CAD',
@@ -171,13 +172,13 @@ const CheckoutSuccessPage = () => {
             <div>
               {payment?.card && (
                 <div>
-                  <strong>Payment Information:</strong>
+                  <strong>{t('paymentDetails.paymentInfo')}:</strong>
                   <div>
                     <p>{payment.card.wallet}</p>
                     <p>{payment.card.brand.toUpperCase()}</p>
-                    <p>Ending with `{payment.card.last4}`</p>
+                    <p>{t('paymentDetails.endingWith')} `{payment.card.last4}`</p>
                     <p>
-                      Expires on {payment.card.exp_month} /{' '}
+                      {t('paymentDetails.expiresOn')} {payment.card.exp_month} /{' '}
                       {payment.card.exp_year}
                     </p>
                   </div>

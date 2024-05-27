@@ -6,6 +6,7 @@ import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import * as React from 'react';
 import styles from '@/styles/ProductCard.module.css';
 import { Product } from '@/graphql/types';
+import { useTranslation } from 'next-i18next';
 
 interface ProductProps {
   product: Product;
@@ -14,6 +15,7 @@ interface ProductProps {
 
 export default function AddToCartButton({ product, quantity }: ProductProps) {
   const { user, accessToken } = React.useContext(LoggedInContext);
+  const { t } = useTranslation('viewProduct');
 
   const addToShoppingCart = (productId: string) => {
     console.log(user);
@@ -43,7 +45,7 @@ export default function AddToCartButton({ product, quantity }: ProductProps) {
         if (shoppingCart.errors && shoppingCart.errors.length > 0) {
           throw new Error(shoppingCart.errors[0].message);
         }
-        enqueueSnackbar('Added to shopping cart', {
+        enqueueSnackbar(t('productAddedToCart'), {
           variant: 'success',
           persist: false,
           autoHideDuration: 3000,
@@ -53,7 +55,7 @@ export default function AddToCartButton({ product, quantity }: ProductProps) {
       })
       .catch(err => {
         console.log(err);
-        enqueueSnackbar('Could not add product to cart', {
+        enqueueSnackbar(t('productNotAddedToCart'), {
           variant: 'error',
           persist: false,
           autoHideDuration: 3000,
@@ -69,7 +71,7 @@ export default function AddToCartButton({ product, quantity }: ProductProps) {
       onClick={() => addToShoppingCart(product.id)}
       aria-label="Add to cart button"
     >
-      Add to cart
+      {t('addToCart')}
     </Button>
   );
 }

@@ -1,6 +1,6 @@
 import styles from '@/styles/ProductCard.module.css';
 import { Typography } from '@mui/material';
-
+import { useTranslation } from 'next-i18next';
 interface DeliveryDateProps {
   deliveryDate: string;
 }
@@ -30,9 +30,10 @@ const convertDate = (dateString: string): string => {
 };
 
 export default function DeliveryText({ deliveryDate }: DeliveryDateProps) {
+  const { t } = useTranslation('viewProduct');
   return (
     <Typography variant="body2">
-      FREE delivery{' '}
+      {t('freeDelivery')}{' '}
       <span className={styles.deliveryDate}>{convertDate(deliveryDate)}</span>
     </Typography>
   );

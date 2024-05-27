@@ -19,6 +19,7 @@ const namespaces = [
   'common',
   'signInDropdown',
   'order',
+  'viewProduct',
 ];
 
 export const getServerSideProps: GetServerSideProps = async context => {
