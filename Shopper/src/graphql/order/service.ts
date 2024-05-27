@@ -25,9 +25,9 @@ export class OrderService {
       });
 
     const products = await Promise.all(
-      order.products.map(async (product: ShopperOrderProduct) => {
+      order.products.map(async (productBefore: ShopperOrderProduct) => {
         return await fetch(
-          `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${product.id}`,
+          `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/${productBefore.id}`,
           {
             method: 'GET',
             headers: {
@@ -46,6 +46,7 @@ export class OrderService {
             // such as active, created, posted.
             return {
               id: product.id,
+              quantity: productBefore.quantity,
               vendor_id: product.vendor_id,
               data: product.data,
             } as Product;
@@ -53,8 +54,6 @@ export class OrderService {
       })
     );
     order.products = products;
-
-    console.log(order);
 
     return order;
   }
