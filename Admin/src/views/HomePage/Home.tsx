@@ -16,6 +16,14 @@ export function Home() {
   const loginContext = React.useContext(LoginContext);
   const pageContext = React.useContext(PageContext);
 
+  React.useEffect(() => {
+    const user = localStorage.getItem('user')
+    if (user) {
+      const token = JSON.parse(user)
+      loginContext.setAccessToken(token.data.login.accessToken)
+    }
+  })
+
   return loginContext.accessToken.length > 0 ? (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />

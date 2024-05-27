@@ -28,7 +28,7 @@ const fetchKeys = (setKeys: (keys: Key[]) => void, accessToken: string) => {
     method: 'POST',
     body: JSON.stringify(query),
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
   })
@@ -37,6 +37,9 @@ const fetchKeys = (setKeys: (keys: Key[]) => void, accessToken: string) => {
     })
     .then(json => {
       if (json.errors) {
+        if (json.errors[0].extensions.code == "UNAUTHORIZED") {
+          localStorage.removeItem('accessToken')
+        }
         setKeys([]);
       } else {
         setKeys(json.data.keys);
@@ -79,6 +82,9 @@ const setActiveStatus = (
         }
         return;
       }
+    })
+    .catch(err => {
+      console.error(err)
     });
 };
 
