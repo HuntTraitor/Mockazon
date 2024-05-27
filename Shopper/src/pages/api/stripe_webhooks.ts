@@ -162,7 +162,7 @@ async function createShopperOrder(
   const tax = lineItemsData.reduce((sum, item) => sum + item.amount_tax, 0);
   const total = totalBeforeTax + tax;
   const paymentDigits = paymentMethod.card;
-  const productQuantities = lineItemsData.map(item => item.quantity as number);
+  const productQuantities = lineItemsData.map(item => item.quantity ?? 1 as number);
   let last4 = '';
   if (paymentDigits) {
     last4 = paymentDigits.last4.toString();
