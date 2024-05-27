@@ -5,6 +5,7 @@ import OrderCard from '../../../src/views/order/OrderCard';
 const mockProducts = [
   {
     id: '1',
+    quantity: 1,
     data: {
       brand: 'Apple',
       name: 'iPhone 12',

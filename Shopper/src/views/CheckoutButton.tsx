@@ -8,7 +8,6 @@ import { useTranslation } from 'next-i18next';
 import { Product } from '../../types';
 import { enqueueSnackbar } from 'notistack';
 
-
 enum Locale {
   en = 'en',
   es = 'es',
