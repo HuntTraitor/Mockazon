@@ -14,5 +14,7 @@
   "soldBy": "Vendido por",
   "buyItAgain": "Volver a comprar",
   "quantity": "Cantidad",
-  "errorFetchingOrder": "Error al obtener los detalles del pedido"
+  "errorFetchingOrder": "Error al obtener los detalles del pedido",
+  "addedToCart": "Añadido al carrito",
+  "errorAddingToCart": "Error al añadir al carrito"
 }

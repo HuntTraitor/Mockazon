@@ -14,5 +14,7 @@
   "soldBy": "Sold by",
   "buyItAgain": "Buy it again",
   "quantity": "Quantity",
-  "errorFetchingOrder": "Error fetching order"
+  "errorFetchingOrder": "Error fetching order",
+  "addedToCart": "Added to cart",
+  "errorAddingToCart": "Error adding to cart"
 }
