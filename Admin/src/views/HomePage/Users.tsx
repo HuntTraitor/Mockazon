@@ -35,7 +35,7 @@ const fetchAccounts = async (setAccounts: Function, accessToken: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      'Authorization': `Bearer ${accessToken}`,
     },
     body: JSON.stringify(query),
   })
@@ -43,6 +43,7 @@ const fetchAccounts = async (setAccounts: Function, accessToken: string) => {
       return res.json();
     })
     .then(json => {
+      console.log(json)
       if (json.errors) {
         if (json.errors[0].extensions.code === 'UNAUTHORIZED') {
           localStorage.removeItem('admin');
