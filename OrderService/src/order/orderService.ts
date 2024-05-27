@@ -1,5 +1,13 @@
 import { UUID } from 'src/types';
-import { NewOrder, Order, UpdateOrder, ShopperOrder, ShopperOrderId, OrderProduct, OrderProductId } from '.';
+import {
+  NewOrder,
+  Order,
+  UpdateOrder,
+  ShopperOrder,
+  ShopperOrderId,
+  OrderProduct,
+  OrderProductId,
+} from '.';
 import { pool } from '../db';
 
 export class OrderService {
@@ -119,7 +127,11 @@ export class OrderService {
     };
     const { rows: products } = await pool.query(productQuery);
 
-    if (products.length) order.products = products.map(product => ({id: product.id, quantity: product.quantity}));
+    if (products.length)
+      order.products = products.map(product => ({
+        id: product.id,
+        quantity: product.quantity,
+      }));
     order = { ...order, ...order.data, data: undefined };
     return order;
   }
@@ -183,7 +195,7 @@ export class OrderService {
       values: [shipped, orderId],
     };
     const { rows } = await pool.query(query);
-    
+
     // update the shopper order
     const shopperUpdate = `UPDATE shopper_order
     SET data = jsonb_set(data, '{shipped}', $1::jsonb)

@@ -63,7 +63,10 @@ export class AuthService {
     });
   }
 
-  public async checkOwnership(vendor_id?: UUID, order_id?: UUID): Promise<boolean> {
+  public async checkOwnership(
+    vendor_id?: UUID,
+    order_id?: UUID
+  ): Promise<boolean> {
     console.log('vendor_id', vendor_id);
     return new Promise((resolve, reject) => {
       if (!vendor_id || !order_id) {
@@ -85,8 +88,13 @@ export class AuthService {
             }
             return res.json();
           })
-          .then((data) => {
-            console.log('Passed', vendor_id, data.vendor_id, data.vendor_id === vendor_id);
+          .then(data => {
+            console.log(
+              'Passed',
+              vendor_id,
+              data.vendor_id,
+              data.vendor_id === vendor_id
+            );
             resolve(data.vendor_id === vendor_id);
           })
           .catch(() => {

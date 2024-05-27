@@ -46,7 +46,10 @@ export class OrderController extends Controller {
     @Body() order: UpdateOrder,
     @Request() request: Express.Request
   ): Promise<Order | undefined> {
-    if (await new AuthService().checkOwnership(request.user!.id, orderId) === false) {
+    if (
+      (await new AuthService().checkOwnership(request.user!.id, orderId)) ===
+      false
+    ) {
       this.setStatus(404);
       return undefined;
     }
@@ -62,7 +65,10 @@ export class OrderController extends Controller {
     @Query() shipped: boolean,
     @Request() request: Express.Request
   ): Promise<Order | undefined> {
-    if (await new AuthService().checkOwnership(request.user!.id, orderId) === false) {
+    if (
+      (await new AuthService().checkOwnership(request.user!.id, orderId)) ===
+      false
+    ) {
       this.setStatus(404);
       return undefined;
     }
@@ -78,7 +84,10 @@ export class OrderController extends Controller {
     @Query() delivered: boolean,
     @Request() request: Express.Request
   ): Promise<Order | undefined> {
-    if (await new AuthService().checkOwnership(request.user!.id, orderId) === false) {
+    if (
+      (await new AuthService().checkOwnership(request.user!.id, orderId)) ===
+      false
+    ) {
       this.setStatus(404);
       return undefined;
     }

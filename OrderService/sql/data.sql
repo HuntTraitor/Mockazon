@@ -11,3 +11,8 @@ INSERT INTO shopping_cart_item(product_id, shopper_id) VALUES ('d1c689b1-b7a7-41
 INSERT INTO shopper_order(id, shopper_id, data) VALUES ('90a687ba-3d5f-4799-9961-054b547ce1c8', 'c3353dbe-1903-42a6-ac6f-ab8133f73c7a', '{"createdAt": "2024-08-14T00:00:00Z", "paymentMethod": "Discover", "paymentDigits": "9012", "subtotal": "45.00", "tax": "9.30", "total": "54.30", "shippingAddress": {"name": "Hunter Tratar", "addressLine1": "434 Dufour st", "country": "USA", "city": "Santa Cruz", "state": "CA", "postalCode": "95060"}, "shipped": false, "delivered": false, "deliveryTime": "2024-07-30T02:15:01.123Z"}');
 INSERT INTO order_product(order_id, product_id, quantity) VALUES ('90a687ba-3d5f-4799-9961-054b547ce1c8', '7064701e-dee7-46c8-a755-da5bf727539c', 1);
 INSERT INTO order_product(order_id, product_id, quantity) VALUES ('90a687ba-3d5f-4799-9961-054b547ce1c8', 'd1c689b1-b7a7-4100-8b2d-309908b444f5', 2);
+
+--Order data for Lukas
+INSERT INTO shopper_order(id, shopper_id, data) VALUES ('610535dd-7df7-433a-9dc2-df2ff1e8422f', '89f5cbfb-40a9-470d-ac8f-99e0416c6234', '{"createdAt": "2024-08-14T00:00:00Z", "paymentMethod": "Discover", "paymentDigits": "9012", "subtotal": "45.00", "tax": "9.30", "total": "54.30", "shippingAddress": {"name": "Hunter Tratar", "addressLine1": "434 Dufour st", "country": "USA", "city": "Santa Cruz", "state": "CA", "postalCode": "95060"}, "shipped": false, "delivered": false, "deliveryTime": "2024-07-30T02:15:01.123Z"}');
+INSERT INTO order_product(order_id, product_id, quantity) VALUES ('610535dd-7df7-433a-9dc2-df2ff1e8422f', '7064701e-dee7-46c8-a755-da5bf727539c', 1);
+INSERT INTO order_product(order_id, product_id, quantity) VALUES ('610535dd-7df7-433a-9dc2-df2ff1e8422f', 'd1c689b1-b7a7-4100-8b2d-309908b444f5', 2);
