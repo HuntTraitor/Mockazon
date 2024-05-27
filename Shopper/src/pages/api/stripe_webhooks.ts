@@ -308,7 +308,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
-      const productQuantities = lineItems.data.map(item => item.quantity as number);
+      const productQuantities = lineItems.data.map(
+        item => item.quantity as number
+      );
 
       // create product_orders
       try {

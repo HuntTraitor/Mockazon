@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID, Int } from 'type-graphql';
+import { Field, ObjectType, ID } from 'type-graphql';
 import { IsDate, IsPositive, IsUUID } from 'class-validator';
 import type { UUID } from '../types';
 import { ShippingAddress } from '@/graphql/account/schema';
@@ -9,7 +9,7 @@ export class ShopperOrderProduct {
   @Field(() => ID)
   @IsUUID()
     id!: UUID;
-  
+
   @Field()
     quantity!: number;
 }

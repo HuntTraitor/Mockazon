@@ -108,7 +108,6 @@ export default function OrderCard({ order }: { order: Order }) {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
 
-
   const formatDate = (date: string, delivered: boolean): string => {
     // FIXME: This needs to be the order status, not just delivered. Find a smart way
     // to do this, instead of a bunch of else if

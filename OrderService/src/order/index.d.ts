@@ -37,8 +37,8 @@ export interface Order {
 }
 
 export interface ShopperOrderProduct {
-  id: UUID,
-  quantity: number,
+  id: UUID;
+  quantity: number;
 }
 
 export interface ShopperOrder {
