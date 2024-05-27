@@ -54,8 +54,6 @@ export interface ShopperOrder {
     country: string;
   };
   totalBeforeTax: string;
-  products: UUID[];
-  quantities: number[];
 }
 
 export interface ShopperOrderId {
