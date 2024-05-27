@@ -35,9 +35,7 @@ export class OrderService {
     return rows[0];
   }
 
-  public async getAllVendorOrder(
-    vendorId: UUID
-  ): Promise<Order[]> {
+  public async getAllVendorOrder(vendorId: UUID): Promise<Order[]> {
     const select = `SELECT * FROM vendor_order WHERE vendor_id = $1`;
 
     const query = {
@@ -150,6 +148,61 @@ export class OrderService {
       values: [orderProduct.shopper_order_id, orderProduct.product_id],
     };
     const { rows } = await pool.query(query);
+    return rows[0];
+  }
+
+  public async setShipped(orderId: UUID, shipped: boolean): Promise<Order> {
+    // update the order
+    const update = `
+    UPDATE vendor_order
+    SET data = jsonb_set(data, '{shipped}', $1::jsonb)
+    WHERE id = $2
+    RETURNING *`;
+
+    const query = {
+      text: update,
+      values: [shipped, orderId],
+    };
+    const { rows } = await pool.query(query);
+    
+    // update the shopper order
+    const shopperUpdate = `UPDATE shopper_order
+    SET data = jsonb_set(data, '{shipped}', $1::jsonb)
+    WHERE id = $2
+    RETURNING *`;
+
+    const shopperQuery = {
+      text: shopperUpdate,
+      values: [shipped, rows[0].shopper_order_id],
+    };
+    await pool.query(shopperQuery);
+    return rows[0];
+  }
+
+  public async setDelivered(orderId: UUID, delivered: boolean): Promise<Order> {
+    // update the order
+    const update = `UPDATE vendor_order
+    SET data = jsonb_set(data, '{delivered}', $1::jsonb)
+    WHERE id = $2
+    RETURNING *`;
+
+    const query = {
+      text: update,
+      values: [delivered, orderId],
+    };
+    const { rows } = await pool.query(query);
+
+    // update the shopper order
+    const shopperUpdate = `UPDATE shopper_order
+    SET data = jsonb_set(data, '{delivered}', $1::jsonb)
+    WHERE id = $2
+    RETURNING *`;
+
+    const shopperQuery = {
+      text: shopperUpdate,
+      values: [delivered, rows[0].shopper_order_id],
+    };
+    await pool.query(shopperQuery);
     return rows[0];
   }
 }
