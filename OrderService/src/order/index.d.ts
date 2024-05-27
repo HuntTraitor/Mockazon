@@ -19,6 +19,11 @@ export interface OrderProduct {
   quantity: number;
 }
 
+export interface VendorShopperOrder {
+  vendor_id: UUID;
+  shopper_id: UUID;
+}
+
 export interface OrderProductId {
   id: UUID;
 }

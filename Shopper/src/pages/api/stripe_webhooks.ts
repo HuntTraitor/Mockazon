@@ -21,6 +21,9 @@ type Order = {
   vendor_id: string;
 };
 
+let vendorOrderIds: string[]
+let shopperOrderId: string
+
 // https://chatgpt.com/share/6e1f30f1-eb7a-4212-a34e-89be3c97e662
 
 function getOrders(
@@ -203,6 +206,34 @@ async function createShopperOrder(
   return await res.json();
 }
 
+async function createVendorShopperOrder(
+  vendorOrderIds: string[],
+  shopperOrderId: string,
+) {
+  const promises = vendorOrderIds.map(async (vendorOrderId, index) => {
+    const res = await fetch(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/VendorShopperOrder`,
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          vendor_id: vendorOrderId,
+          shopper_id: shopperOrderId,
+        })
+      }
+    )
+    if (!res.ok) {
+      console.log(res)
+      throw new Error('Failed to create a vendor shopper order 😡😡😡😡😡😡😡😡😡')
+    }
+    return await res.json()
+  })
+  return await Promise.all(promises).catch(err => {
+    console.error(err)
+    throw new Error('Failed to create shopper order')
+  })
+}
+
 // most likely can't be converted to graphql because we don't call this endpoint, only Stripe does
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -280,7 +311,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           pendingVendorOrders,
           shopperId
         );
-        console.log(createdOrders);
+
+        // console.log(createdOrders);
+        vendorOrderIds = createdOrders.map(item => item.id)
       } catch (err) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -299,7 +332,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           shopperId,
           session
         );
-        console.log(createdShopperOrder);
+
+        shopperOrderId = createdShopperOrder.id
       } catch (err) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -328,6 +362,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(500).send(`Error creating product orders: ${msg}`);
         console.log(`Error creating product orders: ${msg}`);
         return;
+      }
+
+      try {
+        await createVendorShopperOrder(vendorOrderIds, shopperOrderId)
+      } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        res.status(500).send(`Error create vendor shopper order: ${err.message}`)
       }
 
       // Remove item from shopping cart
