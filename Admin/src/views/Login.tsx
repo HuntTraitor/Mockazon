@@ -57,7 +57,7 @@ const Login = () => {
       .then(json => {
         loginContext.setAccessToken(`${json.data.login.accessToken}`);
         loginContext.setId(`${json.data.login.id}`);
-        localStorage.setItem('user', JSON.stringify(json));
+        localStorage.setItem('admin', JSON.stringify(json));
       })
       .catch(() => {
         alert('Error logging in. Please try again.');

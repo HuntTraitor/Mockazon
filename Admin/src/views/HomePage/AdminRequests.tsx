@@ -46,7 +46,7 @@ const fetchRequests = async (setRequests: Function, accessToken: string) => {
     .then(json => {
       if (json.errors) {
         if (json.errors[0].extensions.code === 'UNAUTHORIZED') {
-          localStorage.removeItem('user');
+          localStorage.removeItem('admin');
         }
       }
       setRequests(json.data.request);

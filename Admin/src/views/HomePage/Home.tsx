@@ -17,7 +17,7 @@ export function Home() {
   const pageContext = React.useContext(PageContext);
 
   React.useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = localStorage.getItem('admin');
     if (user && user !== '{}') {
       const token = JSON.parse(user);
       loginContext.setAccessToken(token.data.login.accessToken);

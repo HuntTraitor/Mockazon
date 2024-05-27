@@ -45,7 +45,7 @@ const fetchAccounts = async (setAccounts: Function, accessToken: string) => {
     .then(json => {
       if (json.errors) {
         if (json.errors[0].extensions.code === 'UNAUTHORIZED') {
-          localStorage.removeItem('user');
+          localStorage.removeItem('admin');
         }
       }
       setAccounts(json.data.account);
