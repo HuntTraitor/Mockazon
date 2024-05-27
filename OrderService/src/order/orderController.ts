@@ -12,15 +12,7 @@ import {
   Path,
 } from 'tsoa';
 
-import {
-  Order,
-  NewOrder,
-  Quantity,
-  ShopperOrder,
-  ShopperOrderId,
-  OrderProduct,
-  OrderProductId,
-} from '.';
+import { Order, NewOrder, Quantity, ShopperOrder } from '.';
 import { OrderService } from './orderService';
 import { UUID } from '../types';
 
@@ -29,10 +21,14 @@ export class OrderController extends Controller {
   @Get('')
   @Response('404', 'Not Found')
   public async getOrders(
-    @Query('vendorId') vendorId: UUID
+    @Query('productId') productId?: UUID,
+    @Query('shopperId') shopperId?: UUID,
+    @Query('vendorId') vendorId?: UUID
   ): Promise<Order[] | undefined> {
-    return await new OrderService().getAllVendorOrder(
-      vendorId,
+    return await new OrderService().getAllOrders(
+      productId,
+      shopperId,
+      vendorId
     );
   }
 
@@ -46,10 +42,8 @@ export class OrderController extends Controller {
   }
 
   @Get('shopperOrder')
-  public async getAllShopperOrders(
-    @Query() shopperId: UUID
-  ): Promise<ShopperOrder[]> {
-    const orders = await new OrderService().getAllShopperOrders(shopperId);
+  public async testing(@Query() shopperId: UUID): Promise<ShopperOrder[]> {
+    const orders = await new OrderService().getAllShopperOrder(shopperId);
     return orders;
   }
 
@@ -92,22 +86,5 @@ export class OrderController extends Controller {
   ): Promise<ShopperOrder | undefined> {
     const order = await new OrderService().getShopperOrder(orderId);
     return order ?? this.setStatus(404);
-  }
-
-  @Post('shopperOrder')
-  @SuccessResponse('201', 'Shopper Order Created')
-  public async createShopperOrder(
-    @Body() order: ShopperOrder,
-    @Query() shopperId: UUID
-  ): Promise<(ShopperOrder & ShopperOrderId) | undefined> {
-    return await new OrderService().createShopperOrder(order, shopperId);
-  }
-
-  @Post('shopperOrder/orderProduct')
-  @SuccessResponse('201', 'Shopper Order Created')
-  public async createOrderProduct(
-    @Body() orderProduct: OrderProduct
-  ): Promise<(OrderProduct & OrderProductId) | undefined> {
-    return await new OrderService().createOrderProduct(orderProduct);
   }
 }
