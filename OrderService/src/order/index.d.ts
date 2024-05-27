@@ -55,6 +55,7 @@ export interface ShopperOrder {
   };
   totalBeforeTax: string;
   products: UUID[];
+  quantities: number[];
 }
 
 export interface ShopperOrderId {

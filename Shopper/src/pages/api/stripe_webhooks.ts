@@ -14,7 +14,7 @@ export const config = {
   },
 };
 
-type VendorOrder = {
+type Order = {
   quantity: string;
   shopper_id: string;
   product_id: string;
@@ -27,7 +27,7 @@ function getOrders(
   lineItems: Stripe.ApiList<Stripe.LineItem>,
   shopperId: string,
   items: { vendorId: string; productId: string }[]
-): VendorOrder[] {
+): Order[] {
   const orders = [];
 
   // get orders from metadata and lineItems
@@ -45,7 +45,7 @@ function getOrders(
 }
 
 async function removeProductsFromShoppingCart(
-  orders: VendorOrder[],
+  orders: Order[],
   shopperId: string
 ) {
   const promises = orders.map(async order => {
@@ -74,7 +74,7 @@ async function removeProductsFromShoppingCart(
 }
 
 async function createVendorOrdersFromPurchase(
-  orders: VendorOrder[],
+  orders: Order[],
   shopperId: string
 ) {
   const promises = orders.map(async order => {
@@ -162,6 +162,7 @@ async function createShopperOrder(
   const tax = lineItemsData.reduce((sum, item) => sum + item.amount_tax, 0);
   const total = totalBeforeTax + tax;
   const paymentDigits = paymentMethod.card;
+  const productQuantities = lineItemsData.map(item => item.quantity as number);
   let last4 = '';
   if (paymentDigits) {
     last4 = paymentDigits.last4.toString();
@@ -193,6 +194,9 @@ async function createShopperOrder(
         tax: tax,
         total: total,
         products: productIds,
+        quantities: productQuantities,
+        // products and quantities are in sync
+        // each index in product corresponds to an index in quantity
       }),
     }
   );

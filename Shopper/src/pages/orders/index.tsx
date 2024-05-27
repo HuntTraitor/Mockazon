@@ -62,6 +62,7 @@ export default function Index() {
           shipped
           delivered
           deliveryTime
+          quantities
           products {
             id
             data {
@@ -173,7 +174,7 @@ export default function Index() {
         </Typography>
         {/* Time range selector if doable*/}
         <Grid container spacing={2}>
-          {Orders.map(order => (
+          {Orders.map((order) => (
             <Grid item key={order.id} xs={12}>
               <OrderCard order={order} />{' '}
               {/* pass order as prop or something */}

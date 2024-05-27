@@ -12,5 +12,6 @@
   "endingIn": "terminado en",
   "shipmentDetails": "Detalles del envío",
   "soldBy": "Vendido por",
-  "buyItAgain": "Volver a comprar"
+  "buyItAgain": "Volver a comprar",
+  "quantity": "Cantidad"
 }

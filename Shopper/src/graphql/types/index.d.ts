@@ -26,6 +26,7 @@ export type Order = {
   delivered: boolean;
   deliveryTime: string;
   products: Product[];
+  quantities: number[];
   total: number;
 };
 

@@ -101,7 +101,7 @@ const card = (
 );
 */
 
-export default function OrderCard({ order }: { order: Order }) {
+export default function OrderCard({order}: { order: Order }) {
   const { t, i18n } = useTranslation(['order', 'common']);
   const { user, accessToken } = useContext(LoggedInContext);
   const theme = useTheme();
@@ -231,14 +231,23 @@ export default function OrderCard({ order }: { order: Order }) {
                           variant="body2"
                           className={styles.productBrand}
                         >
-                          {t('order:soldBy')} {product.data.brand}
+                          {t('order:soldBy')}: {product.data.brand}
                         </Typography>
                       )}
                       <Typography
                         variant="body2"
+                        className={styles.productBrand}
+                      >
+                        {/*products and quantities are in sync*/}
+                        {/*each index in product corresponds to an index in quantity*/}
+                        {/*FIXME: refactor this if there's time*/}
+                        {t('order:quantity')}: {order.quantities[index]}
+                      </Typography>
+                      <Typography
+                        variant="body2"
                         className={styles.productPrice}
                       >
-                        ${product.data.price.toFixed(2)}
+                        ${(Math.round(order.quantities[index] * parseFloat(product.data.price.toString()) * 100) / 100).toFixed(2)}
                       </Typography>
                       <Box className={styles.actionButtons}>
                         <Button
