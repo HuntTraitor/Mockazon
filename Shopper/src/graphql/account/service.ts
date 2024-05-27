@@ -1,7 +1,4 @@
-import {
-  ShippingAddress,
-  ShippingAddressInput,
-} from './schema';
+import { ShippingAddress, ShippingAddressInput } from './schema';
 import { GraphQLError } from 'graphql';
 
 export class AccountService {

@@ -21,7 +21,6 @@ afterAll((done) => {
   server.close(done);
 });
 
-
 const exampleShippingInfo = [
   {
     name: "John Doe",

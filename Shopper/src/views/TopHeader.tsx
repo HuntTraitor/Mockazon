@@ -182,7 +182,7 @@ const TopHeader = () => {
     }
   };
 
-  console.log(search)
+  console.log(search);
 
   return (
     <Box className={styles.container}>
@@ -246,7 +246,7 @@ const TopHeader = () => {
               placeholder={t('searchPlaceholder') as string}
               InputProps={{
                 ...params.InputProps,
-                onKeyDown: handleKeyDown
+                onKeyDown: handleKeyDown,
               }}
               value={search}
               onChange={e => setSearch(e.target.value)}

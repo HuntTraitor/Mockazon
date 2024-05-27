@@ -1,23 +1,12 @@
-import {
-  Container,
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-} from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { Container, Grid, Box } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import TopNav from '@/views/TopNav';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
-import { useTranslation } from 'next-i18next';
-import Link from 'next/link';
-import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+// import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import getConfig from 'next/config';
-import { useSnackbar } from 'notistack';
-import Image from 'next/image';
 import ProductCard from '@/views/product/ProductCard';
 import { Product } from '@/graphql/types';
 import AppBackDrop from '@/components/AppBackdrop';
@@ -44,11 +33,8 @@ const Index = () => {
   const router = useRouter();
   const { vendorId, active, page, pageSize, search, orderBy, descending } =
     router.query;
-  const { t } = useTranslation('products');
+  // const { t } = useTranslation('products');
   const [error, setError] = useState('');
-  const { user } = useContext(LoggedInContext);
-
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetchProducts();
@@ -122,48 +108,6 @@ const Index = () => {
       .catch(error => {
         console.error('Error fetching products:', error);
         setError('Could not fetch products');
-      });
-  };
-
-  const addToShoppingCart = (productId: string) => {
-    const query = {
-      query: `mutation AddToShoppingCart {
-        addToShoppingCart(productId: "${productId}", shopperId: "${user.id}", quantity: "1") {
-          id
-          product_id
-          shopper_id
-          data { 
-            quantity
-          }
-        }
-      }`,
-    };
-
-    fetch(`${basePath}/api/graphql`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(query),
-    })
-      .then(response => response.json())
-      .then(shoppingCart => {
-        if (shoppingCart.errors && shoppingCart.errors.length > 0) {
-          throw new Error(shoppingCart.errors[0].message);
-        }
-        enqueueSnackbar('Added to shopping cart', {
-          variant: 'success',
-          persist: false,
-          autoHideDuration: 3000,
-          anchorOrigin: { horizontal: 'center', vertical: 'top' },
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        enqueueSnackbar('Could not add product to cart', {
-          variant: 'error',
-          persist: false,
-          autoHideDuration: 3000,
-          anchorOrigin: { horizontal: 'center', vertical: 'top' },
-        });
       });
   };
 
