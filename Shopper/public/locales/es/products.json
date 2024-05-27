@@ -7,5 +7,6 @@
   "rating": "Clasificación",
   "price": "Precio",
   "deliveryDate": "Fecha de entrega",
-  "quantity": "Cantidad"
+  "quantity": "Cantidad",
+  "errorFetchingProducts": "Error al obtener productos"
 }

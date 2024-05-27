@@ -4,12 +4,13 @@ import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import TopNav from '@/views/TopNav';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
-// import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import getConfig from 'next/config';
 import ProductCard from '@/views/product/ProductCard';
 import { Product } from '@/graphql/types';
 import AppBackDrop from '@/components/AppBackdrop';
+import { enqueueSnackbar } from 'notistack';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -34,8 +35,7 @@ const Index = () => {
   const router = useRouter();
   const { vendorId, active, page, pageSize, search, orderBy, descending } =
     router.query;
-  // const { t } = useTranslation('products');
-  const [error, setError] = useState('');
+  const { t } = useTranslation('products');
 
   useEffect(() => {
     fetchProducts();
@@ -101,14 +101,18 @@ const Index = () => {
       .then(data => {
         if (data.errors && data.errors.length > 0) {
           console.error('Error fetching products:', data.errors);
-          setError('Could not fetch products');
+          enqueueSnackbar(t('errorFetchingProducts'), {
+            variant: 'error',
+          });
           return;
         }
         setProducts(data.data.getProducts);
       })
       .catch(error => {
         console.error('Error fetching products:', error);
-        setError('Could not fetch products');
+        enqueueSnackbar(t('errorFetchingProducts'), {
+          variant: 'error',
+        });
       });
   };
 
@@ -142,7 +146,6 @@ const Index = () => {
 
   return (
     <>
-      {error && <p>{error}</p>}
       <TopNav />
       <Container style={{ marginTop: '20px', maxWidth: '100%' }}>
         <Grid container spacing={1}>
