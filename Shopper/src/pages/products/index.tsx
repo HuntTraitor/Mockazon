@@ -1,5 +1,5 @@
 import { Container, Grid, Box, Typography, Pagination } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import TopNav from '@/views/TopNav';
@@ -11,6 +11,7 @@ import { Product } from '@/graphql/types';
 import AppBackDrop from '@/components/AppBackdrop';
 import styles from '@/styles/MainPage.module.css';
 import ProductCarousel from '../../views/ProductCarousel';
+import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -34,14 +35,17 @@ const itemsPerPage = 10;
 
 const Index = () => {
   const [products, setProducts] = useState([] as Product[]);
+  const [orders, setOrders] = useState([] as Product[]);
   const router = useRouter();
   const { vendorId, active, page, pageSize, search, orderBy, descending } =
     router.query;
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState('');
+  const { accessToken } = useContext(LoggedInContext);
 
   useEffect(() => {
     fetchProducts();
+    fetchAllOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vendorId, active, page, pageSize, search, orderBy, descending]);
 
@@ -124,6 +128,39 @@ const Index = () => {
       });
   };
 
+  const fetchAllOrders = () => {
+    const query = {
+      query: `query getAllOrders {
+        getAllOrders {
+          id
+          products {
+            id
+            data {
+              image
+            }
+          }
+          total
+      }}`,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(query),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('data:', data);
+        setOrders(data.data.getAllOrders);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
   if (
     !vendorId &&
     !active &&
@@ -142,7 +179,7 @@ const Index = () => {
           </Box>
           <div className={styles.carouselContainer}>
             <ProductCarousel title={`What's New`} products={products} />
-            <ProductCarousel title={`Buy Again`} products={products} />
+            <ProductCarousel title={`Buy Again`} products={orders} />
           </div>
           <Box className={styles.productList}>
             <div className={styles.productlistContent}>
