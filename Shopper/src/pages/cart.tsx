@@ -24,6 +24,7 @@ import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
 import { Product, ProductFromFetch } from '../../types';
 import AppBackDrop from '@/components/AppBackdrop';
+import { enqueueSnackbar } from 'notistack';
 
 const namespaces = [
   'products',
@@ -45,7 +46,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 const Cart = ({ locale }: { locale: string }) => {
   const [products, setProducts] = useState([] as Product[]);
   const { t } = useTranslation(['products', 'cart']);
-  const [error, setError] = useState('');
   const [subtotal, setSubtotal] = useState(0.0);
   const { user, accessToken } = useContext(LoggedInContext);
   const router = useRouter();
@@ -89,7 +89,13 @@ const Cart = ({ locale }: { locale: string }) => {
           shoppingCartProducts.errors &&
           shoppingCartProducts.errors.length > 0
         ) {
-          setError(shoppingCartProducts.errors[0].message);
+          enqueueSnackbar(t('cart:errorFetchingProducts'), {
+            variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          });
+          console.error(shoppingCartProducts.errors[0].message);
           return;
         }
         const fetchPromises = shoppingCartProducts.data.getShoppingCart.map(
@@ -125,7 +131,13 @@ const Cart = ({ locale }: { locale: string }) => {
                 quantity: product.data.quantity,
               };
             } catch (err) {
-              setError('Could not fetch product');
+              enqueueSnackbar(t('cart:errorFetchingProducts'), {
+                variant: 'error',
+                persist: false,
+                autoHideDuration: 3000,
+                anchorOrigin: { horizontal: 'center', vertical: 'top' },
+              });
+              console.error('Error fetching product:', err);
             }
           }
         );
@@ -146,15 +158,25 @@ const Cart = ({ locale }: { locale: string }) => {
             setSubtotal(Math.round(subtotal * 100) / 100);
           })
           .catch(err => {
+            enqueueSnackbar(t('cart:errorFetchingProducts'), {
+              variant: 'error',
+              persist: false,
+              autoHideDuration: 3000,
+              anchorOrigin: { horizontal: 'center', vertical: 'top' },
+            });
             console.error('Error fetching shoppingCartProducts:', err);
-            setError('Could not fetch shoppingCartProducts');
           });
       })
       .catch(err => {
+        enqueueSnackbar(t('cart:errorFetchingProducts'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
         console.error('Error fetching shopping cart:', err);
-        setError('Could not fetch shopping cart');
       });
-  }, [router, user, accessToken]);
+  }, [router, user, accessToken, t]);
 
   // if(JSON.stringify(user) === '{}') {
   //   return null
@@ -185,7 +207,13 @@ const Cart = ({ locale }: { locale: string }) => {
       })
       .then(removedProduct => {
         if (removedProduct.errors && removedProduct.errors.length > 0) {
-          setError(removedProduct.errors[0].message);
+          console.error(removedProduct.errors[0].message);
+          enqueueSnackbar(t('cart:errorRemovingProduct'), {
+            variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          });
           return;
         }
         const listsOfProductsToKeep = products.filter(
@@ -204,13 +232,17 @@ const Cart = ({ locale }: { locale: string }) => {
       })
       .catch(err => {
         console.error('Error removing product:', err);
-        setError('Could not remove product');
+        enqueueSnackbar(t('cart:errorRemovingProduct'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
       });
   };
 
   return (
     <>
-      {error && <p>{error}</p>}
       <Container className={styles.container}>
         <Grid container spacing={10}>
           <Grid id={'cart'} className={styles.topDivider} item xs={12} md={8}>
