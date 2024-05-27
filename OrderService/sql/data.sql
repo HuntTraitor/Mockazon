@@ -3,6 +3,7 @@ INSERT INTO vendor_order (product_id, shopper_id, vendor_id, data) VALUES ('4d8f
 INSERT INTO vendor_order (product_id, shopper_id, vendor_id, data) VALUES ('31ef4f4e-58d7-4b20-844b-e72aab928637', '4056d1a9-7ee4-4b5b-8f25-d5b471d05801', 'b4044c07-866c-4b5d-9b76-d4da0d1599b2', '{"purchaseDate": "2024-05-03", "quantity": "5", "shipped": false, "delivered": true}');
 INSERT INTO vendor_order (product_id, shopper_id, vendor_id, data) VALUES ('c337a8d1-c5b4-4b85-bc8f-668b2ec4e1fb', 'bbfe3405-aa1a-4859-b80f-936321aba8b8', '0c3778a7-d850-4dcc-a97b-87aac9f6e8f3', '{"purchaseDate": "2024-05-04", "quantity": "2", "shipped": true, "delivered": true}');
 INSERT INTO vendor_order (product_id, shopper_id, vendor_id, data) VALUES ('5f04d5e8-7e6c-46ef-aa5c-02acf4af2f21', 'f067f4e8-c8b7-44d5-97af-0996b04acb65', 'f8c316b1-7dcc-4fa7-8a49-a4e689abf637', '{"purchaseDate": "2024-05-05", "quantity": "8", "shipped": true, "delivered": false}');
+INSERT INTO vendor_order (product_id, shopper_id, vendor_id, data) VALUES ('9b6978e7-94f0-44a3-afe4-96c8ed6e179d', 'a43deae2-5f8f-4c91-abbf-6f77d6f5b078', '4f061f79-e0e8-48ff-a2ac-0a56a8ad5f0e', '{"purchaseDate": "2024-05-01", "quantity": "3", "shipped": false, "delivered": false}');
 
 INSERT INTO shopping_cart_item(product_id, shopper_id) VALUES ('d1c689b1-b7a7-4100-8b2d-309908b444f5', 'f067f4e8-c8b7-44d5-97af-0996b04acb65');
 
