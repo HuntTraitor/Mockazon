@@ -55,5 +55,5 @@ export class ShopperOrder {
     deliveryTime!: Date;
 
   @Field(() => [Product])
-    products!: ShopperOrderProduct[];
+    products!: Product[];
 }
