@@ -1,5 +1,5 @@
 import { UUID } from 'src/types';
-import { NewOrder, Order, UpdateOrder, ShopperOrder } from '.';
+import {NewOrder, Order, UpdateOrder, ShopperOrder, OrderProduct, OrderProductId, ShopperOrderId} from '.';
 import { pool } from '../db';
 
 export class OrderService {
@@ -139,5 +139,34 @@ export class OrderService {
     });
     await Promise.all(promises);
     return arr;
+  }
+
+  public async createShopperOrder(
+    newOrder: ShopperOrder,
+    shopperId: string
+  ): Promise<(ShopperOrder & ShopperOrderId) | undefined> {
+    const insert = `INSERT INTO shopper_order(shopper_id, data) VALUES 
+    ($1, $2) RETURNING *`;
+
+    const query = {
+      text: insert,
+      values: [`${shopperId}`, newOrder],
+    };
+    const { rows } = await pool.query(query);
+    return rows[0];
+  }
+
+  public async createOrderProduct(
+    orderProduct: OrderProduct
+  ): Promise<(OrderProduct & OrderProductId) | undefined> {
+    const insert = `INSERT INTO order_product(order_id, product_id, quantity) VALUES 
+    ($1, $2, $3) RETURNING *`;
+
+    const query = {
+      text: insert,
+      values: [orderProduct.shopper_order_id, orderProduct.product_id, orderProduct.quantity],
+    };
+    const { rows } = await pool.query(query);
+    return rows[0];
   }
 }
