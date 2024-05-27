@@ -18,7 +18,7 @@ export function Home() {
 
   React.useEffect(() => {
     const user = localStorage.getItem('user');
-    if (user) {
+    if (user && user !== '{}') {
       const token = JSON.parse(user);
       loginContext.setAccessToken(token.data.login.accessToken);
     }
