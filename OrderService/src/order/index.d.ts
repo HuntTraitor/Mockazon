@@ -35,6 +35,11 @@ export interface Order {
   };
 }
 
+export interface ShopperOrderProduct {
+  id: UUID,
+  quantity: number,
+}
+
 export interface ShopperOrder {
   createdAt: Date;
   paymentMethod: string;
@@ -54,6 +59,7 @@ export interface ShopperOrder {
     country: string;
   };
   totalBeforeTax: string;
+  products: ShopperOrderProduct[];
 }
 
 export interface ShopperOrderId {

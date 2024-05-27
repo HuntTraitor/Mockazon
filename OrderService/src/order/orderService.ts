@@ -112,14 +112,14 @@ export class OrderService {
     let order = rows[0];
 
     // Get the product ids in the order
-    const productSelect = `SELECT product_id AS id FROM order_product WHERE order_id = $1`;
+    const productSelect = `SELECT product_id AS id, quantity FROM order_product WHERE order_id = $1`;
     const productQuery = {
       text: productSelect,
       values: [`${orderId}`],
     };
     const { rows: products } = await pool.query(productQuery);
 
-    if (products.length) order.products = products.map(product => product.id);
+    if (products.length) order.products = products.map(product => ({id: product.id, quantity: product.quantity}));
     order = { ...order, ...order.data, data: undefined };
     return order;
   }

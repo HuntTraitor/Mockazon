@@ -5,6 +5,16 @@ import { ShippingAddress } from '@/graphql/account/schema';
 import { Product } from '@/graphql/product/schema';
 
 @ObjectType()
+export class ShopperOrderProduct {
+  @Field(() => ID)
+  @IsUUID()
+    id!: UUID;
+  
+  @Field()
+    quantity!: number;
+}
+
+@ObjectType()
 export class ShopperOrder {
   @Field(() => ID)
   @IsUUID()
@@ -45,8 +55,5 @@ export class ShopperOrder {
     deliveryTime!: Date;
 
   @Field(() => [Product])
-    products!: Product[];
-
-  @Field(() => [Int])
-    quantities!: number[];
+    products!: ShopperOrderProduct[];
 }
