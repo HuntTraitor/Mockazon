@@ -47,7 +47,6 @@ const ProductPage = () => {
   const { id } = router.query;
   const { t } = useTranslation('viewProduct');
   const [product, setProduct] = useState({} as Product);
-  const [error, setError] = useState('');
   const [quantity, setQuantity] = useState('1');
   const numbers = Array.from({ length: 5 }, (_, index) => index + 1);
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +73,12 @@ const ProductPage = () => {
       .then(product => {
         if (product.errors) {
           console.error('Error fetching product:', product);
-          setError('Could not fetch product');
+          enqueueSnackbar(t('errorFetchingProduct'), {
+            variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          });
         } else {
           setProduct(product.data.getProduct);
         }
@@ -189,7 +193,21 @@ const ProductPage = () => {
       </Box>
     );
   } else {
-    return <div>{error}</div>;
+    return (
+      <Box className={styles.centerContainer}>
+        <Card
+          sx={{ maxWidth: 1500, minWidth: 175 }}
+          className={styles.cardWrapper}
+        >
+          <Box className={styles.wrapper}>
+            <Typography className={styles.productName}>
+              {t('productNotFound')}
+            </Typography>
+          </Box>
+        </Card>
+        <AppBackDrop />
+      </Box>
+    );
   }
 };
 

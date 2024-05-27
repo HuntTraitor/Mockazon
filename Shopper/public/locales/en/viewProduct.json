@@ -18,5 +18,6 @@
   "productImageAlt": "Product Image",
   "quantity": "Quantity",
   "quantitySelector": "Quantity Selector",
-  "errorFetchingProduct": "Error fetching product"
+  "errorFetchingProduct": "Error fetching product",
+  "productNotFound": "Product not found"
 }
