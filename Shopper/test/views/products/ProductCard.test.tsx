@@ -10,7 +10,7 @@ import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import ProductCard from '@/views/product/ProductCard';
-import { SnackbarProvider} from 'notistack';
+import { SnackbarProvider } from 'notistack';
 
 let server: http.Server<
   typeof http.IncomingMessage,

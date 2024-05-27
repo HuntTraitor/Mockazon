@@ -14,7 +14,8 @@ const cardIcons = {
     'https://cdn.iconscout.com/icon/free/png-512/free-mastercard-3521564-2944982.png?f=webp&w=256',
   Visa: 'https://cdn.iconscout.com/icon/free/png-512/free-visa-3-226460.png?f=webp&w=256',
   Amex: 'https://cdn.iconscout.com/icon/free/png-512/free-american-express-6-675747.png?f=webp&w=256',
-  Discover: 'https://cdn.iconscout.com/icon/free/png-512/free-discover-diners-club-credit-card-bank-transaction-44632.png?f=webp&w=256',
+  Discover:
+    'https://cdn.iconscout.com/icon/free/png-512/free-discover-diners-club-credit-card-bank-transaction-44632.png?f=webp&w=256',
 };
 
 const PaymentMethod: React.FC<PaymentMethodProps> = ({ method, digits }) => {
