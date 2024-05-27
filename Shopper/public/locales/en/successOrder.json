@@ -5,8 +5,18 @@
   "orderNumber": "Order Number",
   "orderDetails": "Your Order Details",
   "items": "Items",
+  "productDetails": {
+    "productDescription": "Product Description",
+    "quantity": "Quantity",
+    "price": "Price"
+  },
   "yourInfo": "Your Information",
   "payment": "Payment",
+  "paymentDetails": {
+    "paymentInfo": "Payment Information",
+    "endingWith": "Ending with",
+    "expiresOn": "Expires on"
+  },
   "billing": "Billing Address",
   "billingDetails": {
     "name": "Name",

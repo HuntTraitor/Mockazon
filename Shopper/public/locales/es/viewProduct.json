@@ -11,5 +11,8 @@
   "soldBy": "Vendido por",
   "shipsFrom": "Envío desde",
   "brand": "Marca",
-  "customer": "Cliente"
+  "customer": "Cliente",
+  "addToCart": "Añadir al carrito",
+  "productAddedToCart": "Producto añadido al carrito",
+  "productNotAddedToCart": "No se pudo añadir el producto al carrito"
 }

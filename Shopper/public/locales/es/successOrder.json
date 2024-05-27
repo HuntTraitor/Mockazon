@@ -5,8 +5,18 @@
   "orderNumber": "Número de pedido",
   "orderDetails": "Detalles de tu pedido",
   "items": "Artículos",
+  "productDetails": {
+    "productDescription": "Descripción del Producto",
+    "quantity": "Cantidad",
+    "price": "Precio"
+  },
   "yourInfo": "Tu Información",
   "payment": "Pago",
+  "paymentDetails": {
+    "paymentInfo": "Información de Pago",
+    "endingWith": "Terminando en",
+    "expiresOn": "Expira en"
+  },
   "billing": "Dirección de Envio",
   "billingDetails": {
     "name": "Nombre",
