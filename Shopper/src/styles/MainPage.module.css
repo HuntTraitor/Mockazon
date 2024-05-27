@@ -1,0 +1,70 @@
+.gradientContainer {
+  position: relative;
+  background-image: linear-gradient(
+    to bottom,
+    #51C9ED,
+    #51C9ED 50%,
+    rgba(255, 255, 255, 0)
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 50vh;
+}
+
+.exterior {
+  display: flex;
+  background-color: #eaeded;
+  padding-bottom: 1rem;
+  min-height: 100vh;
+}
+
+.content {
+  background-color: #eaeded;
+  max-width: 65%;
+}
+
+.title {
+  color: #221616;
+  font-weight: bold;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.title h1 {
+  font-size: 4em;
+  margin-bottom: 10px;
+}
+
+.title h2 {
+  font-size: 1.5em;
+}
+
+.productImages {
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.productCarousel {
+  background-color: #ffffff;
+}
+
+.productList {
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.productListContent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background-color: #7c4f4f;
+}

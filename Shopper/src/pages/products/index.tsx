@@ -1,15 +1,16 @@
-import { Container, Grid, Box } from '@mui/material';
+import { Container, Grid, Box, Typography, Pagination } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import TopNav from '@/views/TopNav';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
-// import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import getConfig from 'next/config';
-import ProductCard from '@/views/product/ProductCard';
+import ProductCard from '@/views/product/MainPageProductCard';
 import { Product } from '@/graphql/types';
 import AppBackDrop from '@/components/AppBackdrop';
+import styles from '@/styles/MainPage.module.css';
+import ProductCarousel from '../../views/ProductCarousel';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -29,18 +30,29 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
+const itemsPerPage = 10;
+
 const Index = () => {
   const [products, setProducts] = useState([] as Product[]);
   const router = useRouter();
   const { vendorId, active, page, pageSize, search, orderBy, descending } =
     router.query;
-  // const { t } = useTranslation('products');
+  const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState('');
 
   useEffect(() => {
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vendorId, active, page, pageSize, search, orderBy, descending]);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handlePageChange = (event: any, value: any) => {
+    setCurrentPage(value);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
 
   const fetchProducts = () => {
     const variables: { [key: string]: string | boolean | number } = {};
@@ -60,35 +72,35 @@ const Index = () => {
 
     const query = {
       query: `
-        query GetProducts(
-          $vendorId: UUID,
-          $active: Boolean,
-          $page: Int,
-          $pageSize: Int,
-          $search: String,
-          $orderBy: String,
-          $descending: Boolean
+      query GetProducts(
+        $vendorId: UUID,
+        $active: Boolean,
+        $page: Int,
+        $pageSize: Int,
+        $search: String,
+        $orderBy: String,
+        $descending: Boolean
+      ) {
+        getProducts(
+          vendorId: $vendorId,
+          active: $active,
+          page: $page,
+          pageSize: $pageSize,
+          search: $search,
+          orderBy: $orderBy,
+          descending: $descending
         ) {
-          getProducts(
-            vendorId: $vendorId,
-            active: $active,
-            page: $page,
-            pageSize: $pageSize,
-            search: $search,
-            orderBy: $orderBy,
-            descending: $descending
-          ) {
-            id
-            data {
-              brand
-              name
-              rating
-              price
-              deliveryDate
-              image
-            }
+          id
+          data {
+            brand
+            name
+            rating
+            price
+            deliveryDate
+            image
           }
-        }`,
+        }
+      }`,
       variables: filteredVariables,
     };
 
@@ -122,21 +134,47 @@ const Index = () => {
     !descending
   ) {
     return (
-      <>
-        <Container style={{ marginTop: '20px', maxWidth: '100%' }}>
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={1}>
-              {products.map((product, index) => (
-                <Grid item key={index}>
-                  <ProductCard product={product} />
-                </Grid>
-              ))}
-            </Grid>
+      <div className={styles.exterior}>
+        <Container className={`${styles.content} ${styles.gradientContainer}`}>
+          <Box className={styles.title}>
+            <h1>Welcome to Mockazon</h1>
+            <h2>Where you can find the best deals on the internet</h2>
+          </Box>
+          <div className={styles.carouselContainer}>
+            <ProductCarousel title={`What's New`} products={products} />
+            <ProductCarousel title={`Buy Again`} products={products} />
+          </div>
+          <Box className={styles.productList}>
+            <div className={styles.productlistContent}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 'bold', textAlign: 'center' }}
+              >
+                {`More Products`}
+              </Typography>
+              <Grid container spacing={1} justifyContent="center">
+                {currentItems
+                  .slice()
+                  .sort(() => Math.random() - 0.5)
+                  .map((product, index) => (
+                    <Grid item key={index}>
+                      <ProductCard product={product} />
+                    </Grid>
+                  ))}
+              </Grid>
+              <Box display="flex" justifyContent="center" marginTop={2}>
+                <Pagination
+                  count={Math.ceil(products.length / itemsPerPage)}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                />
+              </Box>
+            </div>
           </Box>
         </Container>
         <MockazonMenuDrawer />
         <AppBackDrop />
-      </>
+      </div>
     );
   }
 
@@ -144,7 +182,7 @@ const Index = () => {
     <>
       {error && <p>{error}</p>}
       <TopNav />
-      <Container style={{ marginTop: '20px', maxWidth: '100%' }}>
+      <Container style={{ marginTop: '20px', maxWidth: '75%' }}>
         <Grid container spacing={1}>
           {products.map((product, index) => (
             <Grid item key={index}>
