@@ -10,6 +10,9 @@ import styles from '@/styles/OrderView.module.css';
 import { Order } from '@/graphql/types';
 import AppBackDrop from '@/components/AppBackdrop';
 import getConfig from 'next/config';
+import { enqueueSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
+
 const { basePath } = getConfig().publicRuntimeConfig;
 
 const namespaces = [
@@ -30,12 +33,14 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-const fetchOrderById = async (id: string, accessToken: string) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fetchOrderById = async (id: string, accessToken: string, t: any) => {
   // FIXME: The deliveryDate field on product needs to just be like "7 days" or some representation of that
   // However that field is not going to be used here. When placing an order, it needs to look at all the
   // products' deliveryDate (which is again just a number of days) and then get the MAX of them, and
   // make a timestamp of that into the future, and put it on deliveryTime. This is the time that will
   // show up for delivery on an order. All this needs to be done in the backend.
+
   const query = {
     query: `query GetOrder($id: String!) {
       getOrder(id: $id) {
@@ -95,6 +100,12 @@ const fetchOrderById = async (id: string, accessToken: string) => {
     })
     .catch(err => {
       console.error(err);
+      enqueueSnackbar(t('errorFetchingOrder'), {
+        variant: 'error',
+        persist: false,
+        autoHideDuration: 3000,
+        anchorOrigin: { horizontal: 'center', vertical: 'top' },
+      });
       return null;
     });
   console.log('Order:', order);
@@ -108,6 +119,7 @@ const OrderView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useTranslation('order');
 
   useEffect(() => {
     if (id && !order) {
@@ -117,7 +129,7 @@ const OrderView: React.FC = () => {
         window.location.href = '/login';
         return;
       }
-      fetchOrderById(id as string, user.accessToken).then(order => {
+      fetchOrderById(id as string, user.accessToken, t).then(order => {
         if (!order) {
           router.push('/orders');
           return;
@@ -126,7 +138,7 @@ const OrderView: React.FC = () => {
         setLoading(false);
       });
     }
-  }, [id, order, router]);
+  }, [id, order, router, t]);
 
   if (loading || !order) return <TopNav />;
 
