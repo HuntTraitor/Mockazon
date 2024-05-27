@@ -15,7 +15,8 @@ export class KeyService {
   }
 
   public async get(apiKey: UUID): Promise<SessionUser> {
-    const select = `SELECT vendor_id FROM api_key WHERE key = $1`;
+    const select = `SELECT vendor_id FROM api_key WHERE key = $1
+    AND active = true`;
     const query = {
       text: select,
       values: [`${apiKey}`],

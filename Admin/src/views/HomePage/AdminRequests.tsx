@@ -34,7 +34,10 @@ const fetchRequests = async (setRequests: Function, accessToken: string) => {
 
   fetch(`${basePath}/api/graphql`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify(query),
   })
     .then(res => {
@@ -54,16 +57,22 @@ const fetchRequests = async (setRequests: Function, accessToken: string) => {
  */
 export function AdminRequests() {
   const [requests, setRequests] = React.useState<Request[]>([]);
-  const {accessToken} = useContext(LoginContext);
-  const {refetch, setRefetch} = useContext(RefetchContext);
+  const { accessToken } = useContext(LoginContext);
+  const { refetch, setRefetch } = useContext(RefetchContext);
 
   React.useEffect(() => {
-    console.log("hit?")
+    console.log('hit?');
     fetchRequests(setRequests, accessToken);
-    setRefetch(false)
+    setRefetch(false);
+
+    // eslint-disable-next-line
   }, [accessToken, refetch]);
 
-  const handleApproveRequest = (vendorId: number, accessToken: string, setRefetch: Function) => {
+  const handleApproveRequest = (
+    vendorId: number,
+    accessToken: string,
+    setRefetch: (refetch: boolean) => void
+  ) => {
     console.log(vendorId);
     const query = {
       query: `mutation approveVendor{approveVendor(VendorId: "${vendorId}") {
@@ -77,7 +86,7 @@ export function AdminRequests() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(query),
     })
@@ -132,7 +141,13 @@ export function AdminRequests() {
                       variant="outlined"
                       color="primary"
                       data-testid={`approve-request-${request.id}`}
-                      onClick={() => handleApproveRequest(request.id, accessToken, setRefetch)}
+                      onClick={() =>
+                        handleApproveRequest(
+                          request.id,
+                          accessToken,
+                          setRefetch
+                        )
+                      }
                       style={{ marginRight: '8px' }}
                     >
                       Approve

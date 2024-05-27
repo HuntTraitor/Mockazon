@@ -34,14 +34,17 @@ const fetchAccounts = async (setAccounts: Function, accessToken: string) => {
 
   fetch(`${basePath}/api/graphql`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify(query),
   })
     .then(res => {
       return res.json();
     })
     .then(json => {
-      console.log(json)
+      console.log(json);
       setAccounts(json.data.account);
     })
     .catch(err => {
@@ -55,12 +58,13 @@ const fetchAccounts = async (setAccounts: Function, accessToken: string) => {
  */
 export function Users() {
   const [accounts, setAccounts] = useState<User[]>([]);
-  const {accessToken} = useContext(LoginContext);
-  const {refetch, setRefetch} = useContext(RefetchContext)
+  const { accessToken } = useContext(LoginContext);
+  const { refetch, setRefetch } = useContext(RefetchContext);
 
   React.useEffect(() => {
     fetchAccounts(setAccounts, accessToken);
     setRefetch(false);
+    // eslint-disable-next-line
   }, [accessToken, refetch]);
 
   const handleDeleteUser = (userId: number) => {

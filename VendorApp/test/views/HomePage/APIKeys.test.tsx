@@ -12,7 +12,9 @@ const handlers = [
     console.log(query);
     if (returnError) {
       return HttpResponse.json({
-        errors: [{ message: 'Some Error' }],
+        errors: [
+          { message: 'Some Error', extensions: { code: 'UNAUTHORIZED' } },
+        ],
       });
     }
     return HttpResponse.json({

@@ -18,7 +18,7 @@ export function Home() {
   React.useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      console.log(token)
+      console.log(token);
       loginContext.setAccessToken(token);
       router.push('/');
     } else {
