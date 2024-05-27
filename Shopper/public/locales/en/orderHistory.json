@@ -1,4 +1,5 @@
 {
   "yourOrders": "Your Orders",
-  "orders": "Orders"
+  "orders": "Orders",
+  "errorFetchingOrders": "Error fetching orders"
 }
