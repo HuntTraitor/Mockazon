@@ -12,7 +12,9 @@ const LanguageSwitcher = () => {
   const languageText = currentLocale === 'en' ? 'EN' : 'ES';
 
   const handleLocaleChange = (locale: string) => {
-    router.push(router.pathname, router.asPath, { locale });
+    // router.push(router.pathname, router.asPath, { locale });
+
+    window.location.href = `/${locale}${router.asPath}`;
   };
 
   return (
