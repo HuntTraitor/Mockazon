@@ -191,14 +191,17 @@ export class OrderService {
     vendorShopperOrder: VendorShopperOrder
   ): Promise<VendorShopperOrder> {
     const insert = `INSERT INTO vendor_shopper_order(shopper_order_id, vendor_order_id) VALUES
-    ($1, $2) RETURNING *`
+    ($1, $2) RETURNING *`;
 
     const query = {
       text: insert,
-      values: [`${vendorShopperOrder.shopper_id}`, `${vendorShopperOrder.vendor_id}`]
-    }
-    const {rows} = await pool.query(query)
-    return rows[0]
+      values: [
+        `${vendorShopperOrder.shopper_id}`,
+        `${vendorShopperOrder.vendor_id}`,
+      ],
+    };
+    const { rows } = await pool.query(query);
+    return rows[0];
   }
 
   public async setShipped(orderId: UUID, shipped: boolean): Promise<Order> {

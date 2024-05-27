@@ -141,6 +141,8 @@ export class OrderController extends Controller {
   public async createVendorShopperOrder(
     @Body() vendorShopperOrder: VendorShopperOrder
   ): Promise<VendorShopperOrder> {
-    return await new OrderService().createVendorShopperOrder(vendorShopperOrder)
+    return await new OrderService().createVendorShopperOrder(
+      vendorShopperOrder
+    );
   }
 }
