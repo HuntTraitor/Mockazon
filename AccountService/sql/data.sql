@@ -161,6 +161,27 @@ VALUES
         )
     );
 
+INSERT INTO
+    vendor (id, data)
+VALUES
+    (
+        '78b9467a-8029-4c1f-afd9-ea56932c3f45',
+        jsonb_build_object(
+            'email',
+            'supervendor@gmail.com',
+            'pwhash',
+            crypt('pass', '87'),
+            'name',
+            'Super Vendor',
+            'username',
+            'supervendor',
+            'role',
+            'vendor',
+            'suspended',
+            false
+        )
+    );
+
 -- Shopper Data --
 INSERT INTO
     shopper(data)
@@ -216,7 +237,25 @@ VALUES
         'name', 'Evan Metcalf',
         'username', 'Nave Flactem',
         'role', 'shopper',
-        'suspended', false
+        'suspended', false,
+        'shippingInfo', jsonb_build_array(
+            jsonb_build_object(
+                'name', 'Evan Metcalf',
+                'addressLine1', '1234 Elm St',
+                'country', 'USA',
+                'city', 'Santa Cruz',
+                'state', 'CA',
+                'postalCode', '95060'
+            ),
+            jsonb_build_object(
+                'name', 'Evan Metcalf',
+                'addressLine1', '5678 Oak St',
+                'country', 'USA',
+                'city', 'Santa Cruz',
+                'state', 'CA',
+                'postalCode', '95060'
+            )
+        )
     )
 );
 
