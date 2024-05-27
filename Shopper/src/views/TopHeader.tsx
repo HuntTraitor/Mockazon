@@ -9,7 +9,7 @@ import {
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import styles from '@/styles/TopHeader.module.css';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
 import 'flag-icons/css/flag-icons.min.css';
 import SignInDropdown from '@/views/SignInDropdown';
@@ -246,14 +246,14 @@ const TopHeader = () => {
           focused ? styles.focusedOutline : ''
         }`}
       >
-        <Button
+        {/* <Button
           aria-label="Categories Button"
           variant="text"
           className={styles.categoriesButton}
         >
           All
           <ExpandMoreIcon className={styles.dropdownIcon} />
-        </Button>
+        </Button> */}
         <Autocomplete
           className={styles.searchInputContainer}
           forcePopupIcon={false}
