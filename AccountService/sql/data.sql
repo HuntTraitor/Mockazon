@@ -165,39 +165,18 @@ INSERT INTO
     vendor (id, data)
 VALUES
     (
-        '78b9467a-8029-4c1f-afd9-ea56932c3f45',
+        '89f5cbfb-40a9-470d-ac8f-99e0416c6234',
         jsonb_build_object(
             'email',
-            'supervendor@gmail.com',
+            'victor@books.com',
             'pwhash',
             crypt('pass', '87'),
             'name',
-            'Super Vendor',
+            'Victor Vendor',
             'username',
-            'supervendor',
+            'victorvendor',
             'role',
             'vendor',
-            'suspended',
-            false
-        )
-    );
-
--- Shopper Data --
-INSERT INTO
-    shopper(data)
-VALUES
-    (
-        jsonb_build_object(
-            'sub',
-            'pass',
-            'email',
-            'addelros@ucsc.edu',
-            'name',
-            'Alfonso Del Rosario',
-            'username',
-            'addelros',
-            'role',
-            'shopper',
             'suspended',
             false
         )
@@ -224,6 +203,46 @@ VALUES
         )
     );
 
+-- Shopper Data --
+INSERT INTO
+    shopper(data)
+VALUES
+    (
+        jsonb_build_object(
+            'sub',
+            'pass',
+            'email',
+            'demo@email.com',
+            'name',
+            'Demo Dominique',
+            'username',
+            'demodominique',
+            'role',
+            'shopper',
+            'suspended',
+            false
+        )
+    );
+
+INSERT INTO
+    shopper(data)
+VALUES
+    (
+        jsonb_build_object(
+            'sub',
+            'pass',
+            'email',
+            'addelros@ucsc.edu',
+            'name',
+            'Alfonso Del Rosario',
+            'username',
+            'addelros',
+            'role',
+            'shopper',
+            'suspended',
+            false
+        )
+    );
 
 INSERT INTO
     shopper (data)
