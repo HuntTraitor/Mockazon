@@ -5,5 +5,7 @@
   "or": "O",
   "order": "Pedido",
   "delivered": "Entregado",
-  "arriving": "Llegando"
+  "arriving": "Llegando",
+  "welcomeToMockazon": "Bienvenido a Mockazon",
+  "secondaryWelcome": "¡Tu destino para comprar cosas que no necesitas!"
 }

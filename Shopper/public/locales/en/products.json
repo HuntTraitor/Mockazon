@@ -8,5 +8,8 @@
   "price": "Price",
   "deliveryDate": "Delivery Date",
   "quantity": "Quantity",
-  "errorFetchingProducts": "Error fetching products"
+  "errorFetchingProducts": "Error fetching products",
+  "whatNew": "What's New",
+  "buyAgain": "Buy it again",
+  "moreProducts": "More Products"
 }
