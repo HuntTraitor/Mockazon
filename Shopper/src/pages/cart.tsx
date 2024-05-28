@@ -58,7 +58,10 @@ const Cart = ({ locale }: { locale: string }) => {
   // https://chatgpt.com/share/872a5a3a-b9fa-4b65-aff1-7267086d14ce
   // https://chatgpt.com/share/018e08ea-be97-49b5-a207-a8ade89baf92
   useEffect(() => {
-    if (JSON.stringify(user) === '{}') {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (!user.accessToken) {
+      // FIXME: This needs to be handled globally, think back on the Authenticated Routes example
+      window.location.href = '/login';
       return;
     }
     const query = {

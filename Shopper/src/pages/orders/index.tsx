@@ -112,6 +112,12 @@ export default function Index() {
 
   useEffect(() => {
     if (!orders) {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.accessToken) {
+        // FIXME: This needs to be handled globally, think back on the Authenticated Routes example
+        window.location.href = '/login';
+        return;
+      }
       fetchOrders();
     }
   }, [fetchOrders, orders]);
