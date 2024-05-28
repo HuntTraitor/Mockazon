@@ -40,12 +40,14 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
               className={styles.productImage}
             >
               <CardActionArea>
-                <Image
-                  src={product.data.image}
-                  alt={`Product ${index + 1}`}
-                  width={200}
-                  height={200}
-                />
+                <Box className={styles.imageContainer}>
+                  <Image
+                    src={product.data.image}
+                    alt={`Product ${index + 1}`}
+                    layout='fill'
+                    objectFit='contain'
+                  />
+                </Box>
               </CardActionArea>
             </Button>
           </Box>

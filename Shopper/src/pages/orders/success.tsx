@@ -9,7 +9,7 @@ import TopNav from '@/views/TopNav';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import Image from 'next/image';
-import { Typography, List, ListItem, Stack, Link } from '@mui/material';
+import { Typography, List, ListItem, Stack, Link, Box } from '@mui/material';
 // import { useAppContext } from '@/contexts/AppContext';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'; // Assuming you have a CSS module file
@@ -128,13 +128,14 @@ const CheckoutSuccessPage = () => {
                   }}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <Image
-                    className={styles.productImage}
-                    width={200}
-                    height={200}
-                    alt={product.description}
-                    src={product.images[0]}
-                  />
+                  <Box className={styles.imageContainer}>
+                    <Image
+                      src={product.images[0]}
+                      alt={product.description}
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </Box>
                   <Stack>
                     <Link variant="h5" href={product.url} underline="none">
                       {product.name}

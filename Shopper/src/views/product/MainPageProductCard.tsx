@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { Product } from '@/graphql/types';
-import { Link } from '@mui/material';
+import { Link, Box } from '@mui/material';
 import Price from './Price';
 import DeliveryText from './DeliveryText';
 import AddToCartButton from './AddToCartButton';
@@ -38,7 +38,9 @@ export default function ProductCard({ product }: ProductProps) {
       }}
     >
       <Link href={`/products/${product.id}`} underline="none">
-        <Image src={product.data.image} alt={t('productImageAlt')} width={250} height={250} />
+        <Box className={styles.imageContainer}>
+          <Image src={product.data.image} alt={t('productImageAlt')} layout='fill' objectFit='contain' />
+        </Box>
       </Link>
       <CardContent>
         <Link href={`/products/${product.id}`} underline="none" color="inherit">
