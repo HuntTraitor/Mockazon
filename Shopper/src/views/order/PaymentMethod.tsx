@@ -43,14 +43,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
       <Box display="flex" alignItems="center">
         {method === 'link' ? (
           <>
-            <Image
-              src={cardIcons[method as keyof typeof cardIcons]}
-              alt={method}
-              style={{ marginRight: '8px' }}
-              width={20}
-              height={20}
-            />
-            <Typography variant="body2">{paymentBrand}</Typography>
+            <Typography variant="body2">Link Payment</Typography>
           </>
         ) : (
           <>
