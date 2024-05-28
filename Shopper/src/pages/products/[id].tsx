@@ -48,6 +48,7 @@ const ProductPage = () => {
   const { t } = useTranslation('viewProduct');
   const [product, setProduct] = useState({} as Product);
   const [quantity, setQuantity] = useState('1');
+  const [error, setError] = useState(false);
   const numbers = Array.from({ length: 5 }, (_, index) => index + 1);
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
@@ -79,12 +80,14 @@ const ProductPage = () => {
             autoHideDuration: 3000,
             anchorOrigin: { horizontal: 'center', vertical: 'top' },
           });
+          setError(true);
         } else {
           setProduct(product.data.getProduct);
         }
       })
       .catch(error => {
         console.error('Error fetching product:', error);
+        setError(true);
         enqueueSnackbar(t('errorFetchingProduct'), {
           variant: 'error',
           persist: false,
@@ -192,7 +195,7 @@ const ProductPage = () => {
         <AppBackDrop />
       </Box>
     );
-  } else {
+  } else if (error) {
     return (
       <Box className={styles.centerContainer}>
         <Card
@@ -208,6 +211,8 @@ const ProductPage = () => {
         <AppBackDrop />
       </Box>
     );
+  } else {
+    return null;
   }
 };
 
