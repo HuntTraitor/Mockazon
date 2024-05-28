@@ -8,7 +8,7 @@
   width: 130px;  
   height: 130px; 
   margin-top: 0.2rem; 
-  object-fit: cover;  
+  object-fit: contain;  
   cursor: pointer;
 }  
   
