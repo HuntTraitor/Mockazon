@@ -115,7 +115,9 @@ export default function Index() {
   }, [accessToken, user, fetchOrders]);
 
   if (JSON.stringify(user) === '{}') {
-    // router.push('/login');
+    if (typeof window !== "undefined") {
+      window.location.href = "/login"
+    }
     return null;
   }
 
