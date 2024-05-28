@@ -60,14 +60,15 @@
 
 .paperWide {
   margin-right: 1rem;
-  margin-top: 10px;
-  max-width: 57rem;
+  max-width: 58rem;
+  padding: 5px;
   width: 100%;
 }
 
 .paperMobile {
   margin-top: 10px;
-  max-width: 57rem;
+  max-width: 58rem;
+  padding: 5px;
   width: 92%;
 }
 
@@ -80,4 +81,41 @@
 .deliveryStatusText {
   font-weight: bold;
   text-shadow: 0.2px 0.2px 0.2px rgba(0, 0, 0, 0.2);
+}
+
+.cardHeader {
+  background-color: #E8E8E8;
+  width: 100%;
+  max-width: 58rem;
+  padding: 5px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-right: 1rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #505050;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.viewOrderLink {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  color: #007185;
+  font-family: "Amazon Ember", Arial, sans-serif;
+  font-size: 15px;
+}
+
+.viewOrderLink:hover {
+  color: #c7511f;
+  text-decoration: underline;
 }

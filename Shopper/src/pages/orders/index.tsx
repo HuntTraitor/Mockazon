@@ -114,13 +114,6 @@ export default function Index() {
     fetchOrders();
   }, [accessToken, user, fetchOrders]);
 
-  if (JSON.stringify(user) === '{}') {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/login';
-    }
-    return null;
-  }
-
   return (
     <>
       <TopNav />
