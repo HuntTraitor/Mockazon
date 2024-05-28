@@ -9,17 +9,18 @@
 
 .languageContainer {
   display: flex;
-  align-items: center;
   cursor: pointer;
   position: relative;
+  height: 55px;
+  align-items: center;
+  margin-top: 10px;
   -webkit-box-align: start;
-  align-items: flex-start;
   text-decoration: none;
   margin-left: 1em;
 }
 
 .languageBox {
-  padding: 1em 5px 5px 5px;
+  padding: 0px;
 }
 
 .hoverContainer:hover::after {

@@ -1,5 +1,8 @@
 .accountContainer {
   margin-right: 10px;
+  height: 50px;
+  align-items: center;
+  margin-top: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
