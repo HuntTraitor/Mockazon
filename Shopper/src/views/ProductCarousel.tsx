@@ -10,7 +10,10 @@ interface ProductCarouselProps {
   title: string;
 }
 
-const ProductCarousel: React.FC<ProductCarouselProps> = ({ products, title }) => {
+const ProductCarousel: React.FC<ProductCarouselProps> = ({
+  products,
+  title,
+}) => {
   return (
     <Box className={styles.productImages}>
       <Typography variant="h6" sx={{ fontWeight: 'bold' }}>

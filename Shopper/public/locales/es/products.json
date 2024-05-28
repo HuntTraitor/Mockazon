@@ -8,5 +8,8 @@
   "price": "Precio",
   "deliveryDate": "Fecha de entrega",
   "quantity": "Cantidad",
-  "errorFetchingProducts": "Error al obtener productos"
+  "errorFetchingProducts": "Error al obtener productos",
+  "whatNew": "¿Qué hay de nuevo?",
+  "buyAgain": "Comprar de nuevo",
+  "moreProducts": "Más productos"
 }

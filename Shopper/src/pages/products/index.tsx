@@ -44,7 +44,7 @@ const Index = () => {
     router.query;
   const [currentPage, setCurrentPage] = useState(1);
   const { accessToken, user } = useContext(LoggedInContext);
-  const { t } = useTranslation('products');
+  const { t } = useTranslation(['products', 'common']);
 
   useEffect(() => {
     fetchProducts();
@@ -125,7 +125,7 @@ const Index = () => {
       .then(data => {
         if (data.errors && data.errors.length > 0) {
           console.error('Error fetching products:', data.errors);
-          enqueueSnackbar(t('errorFetchingProducts'), {
+          enqueueSnackbar(t('products:errorFetchingProducts'), {
             variant: 'error',
             persist: false,
             autoHideDuration: 3000,
@@ -137,7 +137,7 @@ const Index = () => {
       })
       .catch(error => {
         console.error('Error fetching products:', error);
-        enqueueSnackbar(t('errorFetchingProducts'), {
+        enqueueSnackbar(t('products:errorFetchingProducts'), {
           variant: 'error',
           persist: false,
           autoHideDuration: 3000,
@@ -179,7 +179,7 @@ const Index = () => {
       .then(data => {
         if (data.errors && data.errors.length > 0) {
           console.error('Error fetching orders:', data.errors);
-          enqueueSnackbar(t('errorFetchingOrders'), {
+          enqueueSnackbar(t('products:errorFetchingOrders'), {
             variant: 'error',
             persist: false,
             autoHideDuration: 3000,
@@ -195,7 +195,7 @@ const Index = () => {
       })
       .catch(error => {
         console.error('Error fetching orders:', error);
-        enqueueSnackbar(t('errorFetchingOrders'), {
+        enqueueSnackbar(t('products:errorFetchingOrders'), {
           variant: 'error',
           persist: false,
           autoHideDuration: 3000,
@@ -217,12 +217,15 @@ const Index = () => {
       <div className={styles.exterior}>
         <Container className={`${styles.content} ${styles.gradientContainer}`}>
           <Box className={styles.title}>
-            <h1>Welcome to Mockazon</h1>
-            <h2>Where you can find the best deals on the internet</h2>
+            <h1>{t('common:welcomeToMockazon')}</h1>
+            <h2>{t('common:secondaryWelcome')}</h2>
           </Box>
           <div className={styles.carouselContainer}>
-            <ProductCarousel title={`What's New`} products={products} />
-            <ProductCarousel title={`Buy Again`} products={orders} />
+            <ProductCarousel
+              title={t('products:whatNew')}
+              products={products}
+            />
+            <ProductCarousel title={t('products:buyAgain')} products={orders} />
           </div>
           <Box className={styles.productList}>
             <div className={styles.productlistContent}>
@@ -230,7 +233,7 @@ const Index = () => {
                 variant="h6"
                 sx={{ fontWeight: 'bold', textAlign: 'center' }}
               >
-                {`More Products`}
+                {t('products:moreProducts')}
               </Typography>
               <Grid container spacing={1} justifyContent="center">
                 {currentItems
