@@ -42,12 +42,16 @@ const Index = () => {
   const { vendorId, active, page, pageSize, search, orderBy, descending } =
     router.query;
   const [currentPage, setCurrentPage] = useState(1);
-  const [error, setError] = useState('');
-  const { accessToken } = useContext(LoggedInContext);
+  const { accessToken, user } = useContext(LoggedInContext);
   const { t } = useTranslation('products');
 
   useEffect(() => {
     fetchProducts();
+
+    if (JSON.stringify(user) === '{}') {
+      return;
+    }
+
     fetchAllOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vendorId, active, page, pageSize, search, orderBy, descending]);
@@ -133,6 +137,57 @@ const Index = () => {
       .catch(error => {
         console.error('Error fetching products:', error);
         enqueueSnackbar(t('errorFetchingProducts'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
+      });
+  };
+
+  const fetchAllOrders = () => {
+    const query = {
+      query: `query GetAllOrders {
+        getAllOrders {
+          products {
+            id
+            data {
+              image
+            }
+          }
+          id
+        }
+      }`,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(query),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.errors && data.errors.length > 0) {
+          console.error('Error fetching orders:', data.errors);
+          enqueueSnackbar(t('errorFetchingOrders'), {
+            variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          });
+          return;
+        }
+        console.log(
+          `data.data.getOrders: ${JSON.stringify(data.data.getAllOrders)}`
+        );
+        setOrders(data.data.getAllOrders);
+      })
+      .catch(error => {
+        console.error('Error fetching orders:', error);
+        enqueueSnackbar(t('errorFetchingOrders'), {
           variant: 'error',
           persist: false,
           autoHideDuration: 3000,
