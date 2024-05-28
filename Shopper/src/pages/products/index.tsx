@@ -14,6 +14,7 @@ import styles from '@/styles/MainPage.module.css';
 import ProductCarousel from '../../views/ProductCarousel';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { enqueueSnackbar } from 'notistack';
+import { Order } from '@/graphql/types';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -151,11 +152,17 @@ const Index = () => {
         getAllOrders {
           products {
             id
+            quantity
             data {
+              brand
+              name
+              rating
+              price
+              deliveryDate
               image
+              description
             }
           }
-          id
         }
       }`,
     };
@@ -180,10 +187,11 @@ const Index = () => {
           });
           return;
         }
-        console.log(
-          `data.data.getOrders: ${JSON.stringify(data.data.getAllOrders)}`
+
+        const orderProducts = data.data.getAllOrders.flatMap(
+          (order: Order) => order.products
         );
-        setOrders(data.data.getAllOrders);
+        setOrders(orderProducts);
       })
       .catch(error => {
         console.error('Error fetching orders:', error);
