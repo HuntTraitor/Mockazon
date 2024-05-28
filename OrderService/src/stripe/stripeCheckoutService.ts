@@ -1,5 +1,5 @@
 import { UUID } from 'src/types';
-import { LineItem, Session, Error, MetaData } from '.';
+import { LineItem, Session, Error } from '.';
 import Stripe from 'stripe';
 
 const checkoutSessions = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -12,14 +12,11 @@ export class StripeCheckoutService {
     shopperId: UUID,
     origin: string,
     locale: Stripe.Checkout.SessionCreateParams.Locale,
-    metadata: MetaData
   ): Promise<Session | Error> {
     // prepare metadata for transfer by serializing it
     const preparedMetadata = {
-      items: 'items',
       shopperId: 'shopperId',
     };
-    preparedMetadata.items = JSON.stringify(metadata.items);
     preparedMetadata.shopperId = shopperId;
     try {
       // Create Checkout Sessions from body params.

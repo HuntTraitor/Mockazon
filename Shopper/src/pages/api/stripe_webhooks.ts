@@ -25,6 +25,169 @@ let vendorOrderIds: string[];
 let shopperOrderId: string;
 
 // https://chatgpt.com/share/6e1f30f1-eb7a-4212-a34e-89be3c97e662
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === 'POST') {
+    const buf = await buffer(req);
+    const sig = req.headers['stripe-signature'] as string;
+
+    let event: Stripe.Event;
+
+    try {
+      event = stripe.webhooks.constructEvent(
+        buf,
+        sig,
+          process.env.STRIPE_WEBHOOK_SECRET as string
+      );
+    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const msg = err.message;
+      console.log(`Error message: ${msg}`);
+      res.status(400).send(`Webhook Error: ${msg}`);
+      return;
+    }
+
+    // successful checkout and payment
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as Stripe.Checkout.Session;
+
+      // Retrieve line items
+      let lineItems;
+      try {
+        lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+      } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const msg = err.message;
+        res.status(400).send(`Error retrieving line items: ${msg}`);
+        console.log(`Error retrieving line items: ${msg}`);
+        return;
+      }
+
+      if (session.metadata === null) {
+        res.status(400).send(`Metadata not included`);
+        return;
+      }
+      const shopperId = session.metadata.shopperId;
+
+      // TODO send an email to user
+
+
+      // Retrieve product data from each product ID
+      const productDetailsPromises = lineItems.data.map(lineItem => {
+        return stripe.products.retrieve(lineItem.price?.product as string);
+      });
+
+      // Retrieve metadata about each product
+      const productAndVendorIds = (await Promise.all(productDetailsPromises)).map((item) => item.metadata);
+
+      const productIds = productAndVendorIds.map(
+        (item) => item.productId
+      );
+
+      const pendingVendorOrders = getOrders(
+        lineItems,
+        shopperId,
+        productAndVendorIds
+      );
+
+      // create vendor orders
+      try {
+        const createdOrders = await createVendorOrdersFromPurchase(
+          pendingVendorOrders,
+          shopperId
+        );
+
+        // console.log(createdOrders);
+        vendorOrderIds = createdOrders.map(item => item.id);
+      } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const msg = err.message;
+        res.status(500).send(`Error creating orders: ${msg}`);
+        console.log(`Error creating orders: ${msg}`);
+        return;
+      }
+
+      // create order history
+      let createdShopperOrder;
+      try {
+        createdShopperOrder = await createShopperOrder(
+          lineItems,
+          productIds,
+          shopperId,
+          session
+        );
+
+        shopperOrderId = createdShopperOrder.id;
+      } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const msg = err.message;
+        res.status(500).send(`Error creating order history: ${msg}`);
+        console.log(`Error creating order history: ${msg}`);
+        return;
+      }
+
+      const productQuantities = lineItems.data.map(
+        item => item.quantity as number
+      );
+
+      // create product_orders
+      try {
+        const createdProductOrders = await createOrderProducts(
+          productIds,
+          createdShopperOrder.id,
+          productQuantities
+        );
+        console.log(createdProductOrders);
+      } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const msg = err.message;
+        res.status(500).send(`Error creating product orders: ${msg}`);
+        console.log(`Error creating product orders: ${msg}`);
+        return;
+      }
+
+      try {
+        await createVendorShopperOrder(vendorOrderIds, shopperOrderId);
+      } catch (err) {
+        res
+          .status(500)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+          .send(`Error create vendor shopper order: ${err.message}`);
+      }
+
+      // Remove item from shopping cart
+      try {
+        // remove item from shopping cart
+        const removedCartItems = await removeProductsFromShoppingCart(
+          pendingVendorOrders,
+          shopperId
+        );
+        console.log(removedCartItems);
+      } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const msg = err.message;
+        res.status(500).send(`Error removing shopping cart items: ${msg}`);
+        console.log(`Error removing shopping cart items: ${msg}`);
+        return;
+      }
+
+      console.log(`Checkout Session was successful!`, lineItems);
+      res.status(200).json({ message: 'Checkout complete' });
+      return;
+    }
+    res.status(200).json({ message: 'Non checkout session event complete' });
+    return;
+  } else {
+    res.setHeader('Allow', 'POST');
+    res.status(405).end('Method Not Allowed');
+  }
+};
 
 function capitalizeFirstLetter(string: string) {
   if (!string) return '';
@@ -34,7 +197,7 @@ function capitalizeFirstLetter(string: string) {
 function getOrders(
   lineItems: Stripe.ApiList<Stripe.LineItem>,
   shopperId: string,
-  items: { vendorId: string; productId: string }[]
+  productAndVendorIdsFromMetadata: Stripe.Metadata[]
 ): Order[] {
   const orders = [];
 
@@ -45,8 +208,8 @@ function getOrders(
     orders.push({
       quantity,
       shopper_id: shopperId,
-      product_id: items[i].productId,
-      vendor_id: items[i].vendorId,
+      product_id: productAndVendorIdsFromMetadata[i].productId,
+      vendor_id: productAndVendorIdsFromMetadata[i].vendorId,
     });
   }
   return orders;
@@ -168,7 +331,7 @@ async function createShopperOrder(
       sum + item.amount_subtotal,
     0
   );
-  // TODO determine what total before tax is? -- maybe factoring in discount
+
   const paymentCard = paymentMethod.card;
   let tax = lineItemsData.reduce((sum, item) => sum + item.amount_tax, 0);
   tax = tax / 100;
@@ -244,174 +407,5 @@ async function createVendorShopperOrder(
     throw new Error('Failed to create shopper order');
   });
 }
-
-// most likely can't be converted to graphql because we don't call this endpoint, only Stripe does
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === 'POST') {
-    const buf = await buffer(req);
-    const sig = req.headers['stripe-signature'] as string;
-
-    let event: Stripe.Event;
-
-    try {
-      event = stripe.webhooks.constructEvent(
-        buf,
-        sig,
-        process.env.STRIPE_WEBHOOK_SECRET as string
-      );
-    } catch (err) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const msg = err.message;
-      console.log(`Error message: ${msg}`);
-      res.status(400).send(`Webhook Error: ${msg}`);
-      return;
-    }
-
-    // successful checkout and payment
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object as Stripe.Checkout.Session;
-
-      // Retrieve line items
-      let lineItems;
-      try {
-        lineItems = await stripe.checkout.sessions.listLineItems(session.id);
-      } catch (err) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const msg = err.message;
-        res.status(400).send(`Error retrieving line items: ${msg}`);
-        console.log(`Error retrieving line items: ${msg}`);
-        return;
-      }
-
-      if (session.metadata === null) {
-        res.status(400).send(`Metadata not included`);
-        return;
-      }
-
-      // TODO send an email to user
-
-      const shopperId = session.metadata.shopperId;
-      let itemsFromMetadata;
-      // retrieve metadata from session
-      try {
-        // product and vendor ids of products
-        itemsFromMetadata = JSON.parse(session.metadata.items);
-      } catch (err) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const msg = err.message;
-        res.status(400).send({ message: `Error parsing metadata: ${msg}` });
-        console.log(`Error parsing metadata: ${msg}`);
-        return;
-      }
-      const productIds = itemsFromMetadata.map(
-        (item: { productId: string; vendorId: string }) => item.productId
-      );
-
-      const pendingVendorOrders = getOrders(
-        lineItems,
-        shopperId,
-        itemsFromMetadata
-      );
-
-      // create vendor orders
-      try {
-        const createdOrders = await createVendorOrdersFromPurchase(
-          pendingVendorOrders,
-          shopperId
-        );
-
-        // console.log(createdOrders);
-        vendorOrderIds = createdOrders.map(item => item.id);
-      } catch (err) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const msg = err.message;
-        res.status(500).send(`Error creating orders: ${msg}`);
-        console.log(`Error creating orders: ${msg}`);
-        return;
-      }
-
-      // create order history
-      let createdShopperOrder;
-      try {
-        createdShopperOrder = await createShopperOrder(
-          lineItems,
-          productIds,
-          shopperId,
-          session
-        );
-
-        shopperOrderId = createdShopperOrder.id;
-      } catch (err) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const msg = err.message;
-        res.status(500).send(`Error creating order history: ${msg}`);
-        console.log(`Error creating order history: ${msg}`);
-        return;
-      }
-
-      const productQuantities = lineItems.data.map(
-        item => item.quantity as number
-      );
-
-      // create product_orders
-      try {
-        const createdProductOrders = await createOrderProducts(
-          productIds,
-          createdShopperOrder.id,
-          productQuantities
-        );
-        console.log(createdProductOrders);
-      } catch (err) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const msg = err.message;
-        res.status(500).send(`Error creating product orders: ${msg}`);
-        console.log(`Error creating product orders: ${msg}`);
-        return;
-      }
-
-      try {
-        await createVendorShopperOrder(vendorOrderIds, shopperOrderId);
-      } catch (err) {
-        res
-          .status(500)
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          .send(`Error create vendor shopper order: ${err.message}`);
-      }
-
-      // Remove item from shopping cart
-      try {
-        // remove item from shopping cart
-        const removedCartItems = await removeProductsFromShoppingCart(
-          pendingVendorOrders,
-          shopperId
-        );
-        console.log(removedCartItems);
-      } catch (err) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const msg = err.message;
-        res.status(500).send(`Error removing shopping cart items: ${msg}`);
-        console.log(`Error removing shopping cart items: ${msg}`);
-        return;
-      }
-
-      console.log(`Checkout Session was successful!`, lineItems);
-      res.status(200).json({ message: 'Checkout complete' });
-      return;
-    }
-    res.status(200).json({ message: 'Non checkout session event complete' });
-    return;
-  } else {
-    res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
-  }
-};
 
 export default handler;

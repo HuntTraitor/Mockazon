@@ -47,19 +47,22 @@ export default function CheckoutButton({
         product_data: {
           name: p.data.getProduct.data.name,
           images: [p.data.getProduct.data.image],
+          metadata: {
+            productId: p.data.getProduct.id,
+            vendorId: p.data.getProduct.vendor_id,
+          },
         },
       },
       quantity: parseInt(p.quantity),
     }));
 
     const query = `
-      mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!, $metadata: MetaData!) {
+      mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!) {
         createStripeCheckoutSession(
-        lineItems: $lineItems, 
-        shopperId: $shopperId, 
-        origin: $origin,
-        locale: $locale,
-        metadata: $metadata
+          lineItems: $lineItems, 
+          shopperId: $shopperId, 
+          origin: $origin,
+          locale: $locale,
         ) {
           id
           url
@@ -72,16 +75,7 @@ export default function CheckoutButton({
       shopperId: { shopperId },
       origin: window.location.origin,
       locale: Locale[locale as keyof typeof Locale],
-      metadata: {
-        items: productsWithContent.map(p => {
-          return {
-            productId: p.data.getProduct.id,
-            vendorId: p.data.getProduct.vendor_id,
-          };
-        }),
-      },
     };
-    // console.log('metadata is: ', variables.metadata);
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
