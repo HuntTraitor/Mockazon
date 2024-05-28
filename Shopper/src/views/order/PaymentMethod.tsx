@@ -49,7 +49,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ method, digits, paymentBr
                   height={20}
                 />
                 <Typography variant="body2">
-                  {method}
+                  {paymentBrand}
                 </Typography>
               </>
             )
