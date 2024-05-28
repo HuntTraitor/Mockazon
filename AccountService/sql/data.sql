@@ -165,6 +165,27 @@ INSERT INTO
     vendor (id, data)
 VALUES
     (
+        '78b9467a-8029-4c1f-afd9-ea56932c3f45',
+        jsonb_build_object(
+            'email',
+            'vincent@books.com',
+            'pwhash',
+            crypt('pass', '87'),
+            'name',
+            'Vincent Vendor',
+            'username',
+            'vincentvendor',
+            'role',
+            'vendor',
+            'suspended',
+            false
+        )
+    );
+
+INSERT INTO
+    vendor (id, data)
+VALUES
+    (
         '89f5cbfb-40a9-470d-ac8f-99e0416c6234',
         jsonb_build_object(
             'email',
