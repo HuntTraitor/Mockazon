@@ -11,12 +11,15 @@ import {
   TextField,
   Typography,
   Autocomplete,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import styles from '@/styles/TopHeader.module.css';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 import 'flag-icons/css/flag-icons.min.css';
 import SignInDropdown from '@/views/SignInDropdown';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
@@ -297,19 +300,35 @@ const TopHeader = () => {
                     onChange: e => setSearch(e.target.value),
                     onKeyDown: handleKeyDown,
                     endAdornment: (
-                      <Button
-                        aria-label="Search Button"
-                        variant="contained"
-                        color="warning"
-                        className={styles.searchButton}
-                        sx={{
-                          borderTopLeftRadius: '10px !important',
-                          borderBottomLeftRadius: '10px !important',
-                        }}
-                        onClick={handleSearch}
-                      >
-                        <SearchIcon />
-                      </Button>
+                      <InputAdornment position="end">
+                        {search && (
+                          <IconButton
+                            onClick={() => setSearch('')}
+                            size="small"
+                            className={styles.clearIndicator}
+                          >
+                            <ClearIcon />
+                          </IconButton>
+                        )}
+                        <Button
+                          aria-label="Search Button"
+                          variant="contained"
+                          color="warning"
+                          className={styles.searchButton}
+                          sx={{
+                            borderTopLeftRadius: '10px !important',
+                            borderBottomLeftRadius: '10px !important',
+                            top: '0px',
+                          }}
+                          onClick={handleSearch}
+                        >
+                          <SearchIcon 
+                            fontSize='large'
+                            sx={{
+                              color: 'black',
+                            }} />
+                        </Button>
+                      </InputAdornment>
                     ),
                   }}
                   value={search}
@@ -330,11 +349,6 @@ const TopHeader = () => {
                 </li>
               )}
               style={{ width: '100%' }}
-              classes={{
-                paper: styles.suggestionsPaper,
-                option: styles.suggestionOption,
-              }}
-              disableClearable
             />
           </Box>
         </>
@@ -405,15 +419,33 @@ const TopHeader = () => {
                     onChange: e => setSearch(e.target.value),
                     onKeyDown: handleKeyDown,
                     endAdornment: (
-                      <Button
-                        aria-label="Search Button"
-                        variant="contained"
-                        color="warning"
-                        className={styles.searchButton}
-                        onClick={handleSearch}
-                      >
-                        <SearchIcon />
-                      </Button>
+                      <InputAdornment position="end">
+                        {search && (
+                          <IconButton
+                            onClick={() => setSearch('')}
+                            size="small"
+                            className={styles.clearIndicator}
+                          >
+                            <ClearIcon />
+                          </IconButton>
+                        )}
+                        <Button
+                          aria-label="Search Button"
+                          variant="contained"
+                          color="warning"
+                          className={styles.searchButton}
+                          sx={{
+                            top: '0px',
+                          }}
+                          onClick={handleSearch}
+                        >
+                          <SearchIcon 
+                            sx={{
+                              color: '#333333',
+                            }}
+                          />
+                        </Button>
+                      </InputAdornment>
                     ),
                   }}
                   value={search}
@@ -434,11 +466,6 @@ const TopHeader = () => {
                 </li>
               )}
               style={{ width: '100%' }}
-              classes={{
-                paper: styles.suggestionsPaper,
-                option: styles.suggestionOption,
-              }}
-              disableClearable
             />
           </Box>
           <Box className={styles.topHeaderRight}>

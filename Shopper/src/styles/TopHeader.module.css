@@ -122,6 +122,11 @@
   box-shadow: 0 0 5px white;
 }
 
+.clearIndicator {
+  position: absolute;
+  transform: translate(-200%, -20%);
+}
+
 .hoverContainer:hover::after {
   content: '';
   position: absolute;
@@ -220,3 +225,4 @@
   min-width: auto;
   height: inherit !important;
 }
+
