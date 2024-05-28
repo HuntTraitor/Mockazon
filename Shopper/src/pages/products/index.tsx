@@ -67,7 +67,9 @@ const Index = () => {
   const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
 
   const fetchProducts = () => {
-    const variables: { [key: string]: string | boolean | number } = {};
+    const variables: { [key: string]: string | boolean | number } = {
+      pageSize: 80,
+    };
 
     if (vendorId) variables.vendorId = vendorId.toString();
     if (active !== undefined) variables.active = active === 'true';
@@ -88,7 +90,6 @@ const Index = () => {
         $vendorId: UUID,
         $active: Boolean,
         $page: Int,
-        $pageSize: Int,
         $search: String,
         $orderBy: String,
         $descending: Boolean
@@ -97,7 +98,7 @@ const Index = () => {
           vendorId: $vendorId,
           active: $active,
           page: $page,
-          pageSize: $pageSize,
+          pageSize: 80,
           search: $search,
           orderBy: $orderBy,
           descending: $descending
