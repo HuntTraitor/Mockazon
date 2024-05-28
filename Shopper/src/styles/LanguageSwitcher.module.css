@@ -8,7 +8,6 @@
 }
 
 .languageContainer {
-  display: flex;
   cursor: pointer;
   position: relative;
   height: 55px;

@@ -4,9 +4,11 @@ import { Box, Typography, MenuItem, Radio, Paper } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styles from '@/styles/LanguageSwitcher.module.css';
 import CustomPopper from '@/components/CustomPopper';
+import { useAppContext } from '@/contexts/AppContext';
 
 const LanguageSwitcher = () => {
   const router = useRouter();
+  const { isMobile } = useAppContext();
   const currentLocale = router.locale;
   const flagIcon = currentLocale === 'en' ? 'fi fi-us' : 'fi fi-es';
   const languageText = currentLocale === 'en' ? 'EN' : 'ES';
@@ -21,6 +23,9 @@ const LanguageSwitcher = () => {
     <Box
       className={`${styles.languageContainer} ${styles.hoverContainer}`}
       aria-label="Language Container"
+      sx={{ 
+        display: isMobile ? 'none' : 'flex',
+      }}
     >
       <CustomPopper
         buttonContent={
