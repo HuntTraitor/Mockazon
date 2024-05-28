@@ -102,7 +102,7 @@ const card = (
 */
 
 export default function OrderCard({ order }: { order: Order }) {
-  console.log(order);
+  // console.log(order);
   const { t, i18n } = useTranslation(['order', 'common']);
   const { accessToken } = useContext(LoggedInContext);
   const theme = useTheme();
@@ -168,8 +168,8 @@ export default function OrderCard({ order }: { order: Order }) {
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
         enqueueSnackbar(t('errorAddingToCart'), {
           variant: 'error',
           persist: false,

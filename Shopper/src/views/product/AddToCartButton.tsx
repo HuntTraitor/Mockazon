@@ -14,11 +14,11 @@ interface ProductProps {
 }
 
 export default function AddToCartButton({ product, quantity }: ProductProps) {
-  const { user, accessToken } = React.useContext(LoggedInContext);
+  const { accessToken } = React.useContext(LoggedInContext);
   const { t } = useTranslation('viewProduct');
 
   const addToShoppingCart = (productId: string) => {
-    console.log(user);
+    // console.log(user);
     const query = {
       query: `mutation AddToShoppingCart {
         addToShoppingCart(productId: "${productId}", quantity: "${quantity}") {
@@ -51,10 +51,10 @@ export default function AddToCartButton({ product, quantity }: ProductProps) {
           autoHideDuration: 3000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
-        console.log(shoppingCart);
+        // console.log(shoppingCart);
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
         enqueueSnackbar(t('productNotAddedToCart'), {
           variant: 'error',
           persist: false,

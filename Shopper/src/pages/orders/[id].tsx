@@ -110,7 +110,7 @@ const fetchOrderById = async (id: string, accessToken: string, t: any) => {
       });
       return null;
     });
-  console.log('Order:', order);
+  // console.log('Order:', order);
   return order;
 };
 

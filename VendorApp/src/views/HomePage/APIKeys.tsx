@@ -70,7 +70,7 @@ const setActiveStatus = (
     })
     .then(json => {
       if (json.errors) {
-        console.log(json.errors);
+        // console.log(json.errors);
       } else {
         const indexFound = keys.findIndex(
           obj => obj.key === json.data.setActiveStatus.key

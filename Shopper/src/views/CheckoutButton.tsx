@@ -81,7 +81,7 @@ export default function CheckoutButton({
         }),
       },
     };
-    console.log('metadata is: ', variables.metadata);
+    // console.log('metadata is: ', variables.metadata);
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -92,7 +92,7 @@ export default function CheckoutButton({
       })
       .then(async session => {
         if (session.errors) {
-          console.log(session.errors[0].message);
+          // console.log(session.errors[0].message);
           return;
         }
         // Redirect to Stripe Checkout

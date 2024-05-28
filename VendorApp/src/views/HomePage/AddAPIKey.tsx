@@ -27,7 +27,7 @@ const postAPIKeyRequest = (
     })
     .then(json => {
       if (json.errors) {
-        console.log(json.errors);
+        // console.log(json.errors);
         setKeys([]);
       } else {
         const temp = keys.slice();

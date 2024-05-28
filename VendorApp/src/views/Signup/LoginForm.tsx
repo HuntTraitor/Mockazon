@@ -43,10 +43,10 @@ export function LoginForm({ navigate }: LoginFormProps) {
       })
       .then(json => {
         if (json.errors) {
-          console.log(`${json.errors[0].message}`);
+          // console.log(`${json.errors[0].message}`);
           handleClickError();
         } else {
-          console.log(json.data.login.accessToken);
+          // console.log(json.data.login.accessToken);
           loginContext.setAccessToken(json.data.login.accessToken);
           loginContext.setId(json.data.login.id);
           localStorage.setItem('accessToken', json.data.login.accessToken);
@@ -54,8 +54,8 @@ export function LoginForm({ navigate }: LoginFormProps) {
           router.push('/');
         }
       })
-      .catch(e => {
-        console.log(e);
+      .catch(() => {
+        // console.log(e);
         handleClickError();
       });
   };

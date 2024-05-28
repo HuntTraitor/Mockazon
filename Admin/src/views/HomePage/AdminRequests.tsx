@@ -98,17 +98,13 @@ export function AdminRequests() {
         if (json.errors) {
           throw new Error(json.errors[0].message);
         } else {
-          console.log(json);
+          // console.log(json);
           setRefetch(true);
         }
       })
       .catch(e => {
         alert(e.toString());
       });
-  };
-
-  const handleRejectRequest = (requestId: number) => {
-    console.log(`Rejecting request with ID: ${requestId}`); // FIXME: what is this
   };
 
   return (
@@ -157,7 +153,6 @@ export function AdminRequests() {
                       variant="outlined"
                       color="error"
                       data-testid={`reject-request-${request.id}`}
-                      onClick={() => handleRejectRequest(request.id)}
                     >
                       Reject
                     </Button>

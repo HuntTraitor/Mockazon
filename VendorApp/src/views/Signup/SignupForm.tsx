@@ -48,14 +48,14 @@ export function SignupForm({ navigate }: LoginFormProps) {
       })
       .then(json => {
         if (json.errors) {
-          console.log(`${json.errors[0].message}`);
+          // console.log(`${json.errors[0].message}`);
           handleClickError();
         } else {
           handleClickSuccess();
         }
       })
-      .catch(e => {
-        console.log(e);
+      .catch(() => {
+        // console.log(e);
         handleClickError();
       });
   };
