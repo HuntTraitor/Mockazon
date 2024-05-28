@@ -17,11 +17,14 @@ it('Sign Out button is clickable', async () => {
   let setAccessToken = jest.fn();
   render(
     <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
-        <MyAppBar />
-    </LoginContext.Provider>);
+      <MyAppBar />
+    </LoginContext.Provider>
+  );
   const signOut = await screen.findByText('Sign Out', {
     exact: false,
   });
   await fireEvent.click(signOut);
-  waitFor(() => {expect(logSpy).toHaveBeenCalledWith('Sign Out')});
+  waitFor(() => {
+    expect(logSpy).toHaveBeenCalledWith('Sign Out');
+  });
 });
