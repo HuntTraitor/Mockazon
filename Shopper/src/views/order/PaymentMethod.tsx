@@ -7,6 +7,7 @@ import styles from '@/styles/OrderView.module.css';
 type PaymentMethodProps = {
   method: string;
   digits: number;
+  paymentBrand: string;
 };
 
 const cardIcons = {
@@ -16,9 +17,10 @@ const cardIcons = {
   Amex: 'https://cdn.iconscout.com/icon/free/png-512/free-american-express-6-675747.png?f=webp&w=256',
   Discover:
     'https://cdn.iconscout.com/icon/free/png-512/free-discover-diners-club-credit-card-bank-transaction-44632.png?f=webp&w=256',
+  link: 'https://i.imgur.com/G2ha0UD.png',
 };
 
-const PaymentMethod: React.FC<PaymentMethodProps> = ({ method, digits }) => {
+const PaymentMethod: React.FC<PaymentMethodProps> = ({ method, digits, paymentBrand }) => {
   const { t } = useTranslation(['order']);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -35,16 +37,38 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ method, digits }) => {
         </Typography>
       )}
       <Box display="flex" alignItems="center">
-        <Image
-          src={cardIcons[method as keyof typeof cardIcons]}
-          alt={method}
-          style={{ marginRight: '8px' }}
-          width={20}
-          height={20}
-        />
-        <Typography variant="body2">
-          {method} {t('order:endingIn')} {digits}
-        </Typography>
+        {
+          method === 'link' ?
+            (
+              <>
+                <Image
+                  src={cardIcons[method as keyof typeof cardIcons]}
+                  alt={method}
+                  style={{ marginRight: '8px' }}
+                  width={20}
+                  height={20}
+                />
+                <Typography variant="body2">
+                  {method}
+                </Typography>
+              </>
+            )
+            :
+            (
+              <>
+                <Image
+                  src={cardIcons[paymentBrand as keyof typeof cardIcons]}
+                  alt={paymentBrand}
+                  style={{ marginRight: '8px' }}
+                  width={20}
+                  height={20}
+                />
+                <Typography variant="body2">
+                  {method} {t('order:endingIn')} {digits}
+                </Typography>
+              </>
+            )
+        }
       </Box>
     </Box>
   );

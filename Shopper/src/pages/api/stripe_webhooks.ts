@@ -26,6 +26,11 @@ let shopperOrderId: string;
 
 // https://chatgpt.com/share/6e1f30f1-eb7a-4212-a34e-89be3c97e662
 
+function capitalizeFirstLetter(string: string) {
+  if (!string) return '';
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function getOrders(
   lineItems: Stripe.ApiList<Stripe.LineItem>,
   shopperId: string,
@@ -164,14 +169,16 @@ async function createShopperOrder(
     0
   );
   // TODO determine what total before tax is? -- maybe factoring in discount
+  const paymentCard = paymentMethod.card;
   let tax = lineItemsData.reduce((sum, item) => sum + item.amount_tax, 0);
   tax = tax / 100;
   subtotal = subtotal / 100;
   const total = subtotal + tax;
-  const paymentDigits = paymentMethod.card;
   let last4 = '';
-  if (paymentDigits) {
-    last4 = paymentDigits.last4.toString();
+  let brand = '';
+  if (paymentCard) {
+    last4 = paymentCard.last4.toString();
+    brand = paymentCard.brand.toString();
   }
   const res = await fetch(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/shopperOrder?shopperId=${shopperId}`,
@@ -190,6 +197,7 @@ async function createShopperOrder(
         ).toISOString(),
         paymentDigits: last4,
         paymentMethod: paymentMethod.type.toString(),
+        paymentBrand: capitalizeFirstLetter(brand.toString()),
         shippingAddress: {
           city: getValue(address?.city),
           name: getValue(customerDetails?.name),
