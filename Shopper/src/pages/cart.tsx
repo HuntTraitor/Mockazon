@@ -64,6 +64,10 @@ const Cart = ({ locale }: { locale: string }) => {
       window.location.href = '/login';
       return;
     }
+    // user access token present but accessToken hasn't been loaded yet
+    if(!accessToken) {
+      return;
+    }
     const query = {
       query: `query GetShoppingCart {
     getShoppingCart {
