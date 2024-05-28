@@ -23,7 +23,7 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ address }) => {
       <Typography variant="body2">{address.name}</Typography>
       <Typography variant="body2">{address.addressLine1}</Typography>
       <Typography variant="body2">
-        {address.city}, {address.state} {address.postalCode}
+        {`${address.city ? `${address.city}, ${address.state} ` : ''}${address.postalCode}`}
       </Typography>
       <Typography variant="body2">{address.country}</Typography>
     </Box>
