@@ -17,7 +17,7 @@ interface ProductProps {
 
 export default function ProductCard({ product }: ProductProps) {
   const { t } = useTranslation('viewProduct');
-  const price = product.data.price.toString();
+  const price = product.data.price.toFixed(2).toString();
 
   // Set the maximum number of characters for the product name
   const maxCharacters = 45;

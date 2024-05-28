@@ -19,7 +19,7 @@ interface ProductProps {
 
 export default function ProductCard({ product }: ProductProps) {
   const { t } = useTranslation('viewProduct');
-  const price = product.data.price.toString();
+  const price = product.data.price.toFixed(2).toString();
   const router = useRouter();
 
   return (
