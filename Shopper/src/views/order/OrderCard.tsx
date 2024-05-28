@@ -194,7 +194,9 @@ export default function OrderCard({ order }: { order: Order }) {
           </div>
           <div>
             <Typography variant="subtitle2">TOTAL</Typography>
-            <Typography variant="body2">${Number(order.total).toFixed(2)}</Typography>
+            <Typography variant="body2">
+              ${Number(order.total).toFixed(2)}
+            </Typography>
           </div>
           <div>
             <Typography variant="subtitle2">SHIP TO</Typography>

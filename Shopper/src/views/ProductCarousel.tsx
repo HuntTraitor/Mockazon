@@ -44,8 +44,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   <Image
                     src={product.data.image}
                     alt={`Product ${index + 1}`}
-                    layout='fill'
-                    objectFit='contain'
+                    layout="fill"
+                    objectFit="contain"
                   />
                 </Box>
               </CardActionArea>

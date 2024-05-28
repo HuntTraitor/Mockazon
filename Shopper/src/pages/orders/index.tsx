@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 
 export default function Index() {
-  const [Orders, setOrders] = useState([] as Order[]);
+  const [orders, setOrders] = useState([] as Order[]);
   const { t } = useTranslation('orderHistory');
   const { accessToken, user } = useContext(LoggedInContext);
 
@@ -179,16 +179,22 @@ export default function Index() {
             fontWeight: '700',
           }}
         >
-          {Orders.length} {t('orders')} {/* placed in */}
+          {orders.length} {t('orders')} {/* placed in */}
         </Typography>
         {/* Time range selector if doable*/}
         <Grid container spacing={2}>
-          {Orders.map(order => (
-            <Grid item key={order.id} xs={12}>
-              <OrderCard order={order} />{' '}
-              {/* pass order as prop or something */}
-            </Grid>
-          ))}
+          {orders
+            .sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+            .map(order => (
+              <Grid item key={order.id} xs={12}>
+                <OrderCard order={order} />{' '}
+                {/* pass order as prop or something */}
+              </Grid>
+            ))}
         </Grid>
       </Container>
     </>
