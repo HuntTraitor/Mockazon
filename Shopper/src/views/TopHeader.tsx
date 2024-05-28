@@ -63,7 +63,7 @@ const CustomTextField = styled(TextField)(() => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: '5px 0 0 5px',
+    borderRadius: '5px 5px 5px 5px',
     backgroundColor: 'white',
     fontSize: '14px',
     '& fieldset': {
@@ -96,7 +96,7 @@ const TopHeader = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [focused, setFocused] = useState(false);
   const [suggestionClicked, setSuggestionClicked] = useState(false);
-  const { setBackDropOpen } = useAppContext();
+  const { setBackDropOpen, isMobile } = useAppContext();
   const inputRef = useRef<HTMLInputElement>(null); // Reference for the input element
   const { accessToken } = useContext(LoggedInContext);
 
@@ -214,134 +214,269 @@ const TopHeader = () => {
   }, [router.events]);
 
   return (
-    <Box className={styles.container}>
-      <Box className={styles.topHeaderLeft}>
-        <Box className={`${styles.logo} ${styles.hoverContainer}`}>
-          <Link href="/">
-            <Image
-              aria-label="bar logo"
-              src={`${basePath}/mockazon_logo_white_transparent.png`}
-              width={150}
-              height={50}
-              alt="Logo"
-              priority
-            />
-            {/* Replace with a new logo */}
-          </Link>
-        </Box>
-        {/* <Box
-          aria-label="Address Container"
-          className={`${styles.addressContainer} ${styles.hoverContainer}`}
-        >
-          <PlaceOutlinedIcon className={styles.addressIcon} />
-          <Box className={styles.addressTextContainer}>
-            <Typography variant="caption" className={styles.deliveryText}>
-              {t('topHeader:deliveryText')}
-            </Typography>
-            <Typography
-              aria-label="Address"
-              variant="body2"
-              className={styles.addressText}
-              onClick={() => console.log('Clicked Address')}
+    <Box className={styles.container} sx={{
+      flexDirection: isMobile ? 'column' : 'row',
+      backgroundColor: '#232f3e !important',
+    }}>
+      {isMobile ? (
+        <>
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}>
+            <Box 
+              className={`${styles.logo}`}
             >
-              Santa Cruz 95060
-            </Typography>
-          </Box>
-        </Box> */}
-      </Box>
-      <Box
-        className={`${styles.searchContainer} ${
-          focused ? styles.focusedOutline : ''
-        }`}
-      >
-        {/* <Button
+              <Link href="/">
+                <Image
+                  aria-label="bar logo"
+                  src={`${basePath}/mockazon_logo_white_transparent.png`}
+                  width={130}
+                  height={40}
+                  alt="Logo"
+                  priority
+                />
+                {/* Replace with a new logo */}
+              </Link>
+            </Box>
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              transform: 'translateY(-15%)',
+            }}>
+              <SignInDropdown />
+              <Box
+                aria-label="Cart Button"
+                className={`${styles.cartContainer}`}
+                onClick={() => {
+                  router.push(accessToken ? '/cart' : '/login');
+                }}
+              >
+                <ShoppingCartOutlinedIcon fontSize='large' />
+              </Box>
+            </Box>
+          </Box>  
+          <Box
+            className={`${
+              focused ? styles.focusedOutline : ''
+            }`}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '95%',
+              mb: '10px',
+            }}
+          >
+            {/* <Button
           aria-label="Categories Button"
           variant="text"
           className={styles.categoriesButton}
-        >
+          >
           All
           <ExpandMoreIcon className={styles.dropdownIcon} />
         </Button> */}
-        <Autocomplete
-          className={styles.searchInputContainer}
-          forcePopupIcon={false}
-          options={suggestions.slice(0, 10)}
-          getOptionLabel={option => option}
-          noOptionsText={''}
-          value={search}
-          open={Boolean(search) && focused}
-          renderInput={params => (
-            <CustomTextField
-              {...params}
-              inputRef={inputRef}
-              placeholder={t('searchPlaceholder') as string}
-              InputProps={{
-                ...params.InputProps,
-                onChange: e => setSearch(e.target.value),
-                onKeyDown: handleKeyDown,
-              }}
+            <Autocomplete
+              className={styles.searchInputContainer}
+              forcePopupIcon={false}
+              options={suggestions.slice(0, 10)}
+              getOptionLabel={option => option}
+              noOptionsText={''}
               value={search}
-              onChange={e => setSearch(e.target.value)}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              open={Boolean(search) && focused}
+              renderInput={params => (
+                <CustomTextField
+                  {...params}
+                  inputRef={inputRef}
+                  placeholder={t('searchPlaceholder') as string}
+                  InputProps={{
+                    ...params.InputProps,
+                    onChange: e => setSearch(e.target.value),
+                    onKeyDown: handleKeyDown,
+                    endAdornment: (
+                      <Button
+                        aria-label="Search Button"
+                        variant="contained"
+                        color="warning"
+                        className={styles.searchButton}
+                        sx={{
+                          borderTopLeftRadius: '10px !important',
+                          borderBottomLeftRadius: '10px !important',
+                        }}
+                        onClick={handleSearch}
+                      >
+                        <SearchIcon />
+                      </Button>
+                    ),
+                  }}
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              )}
+              renderOption={(props, option) => (
+                <li {...props} onClick={() => handleSuggestionClick(option)}>
+                  <SearchIcon
+                    style={{
+                      marginRight: '5px',
+                      color: 'rgba(0, 0, 0, 0.54)',
+                    }}
+                  />
+                  {highlightMatch(option, search)}
+                </li>
+              )}
+              style={{ width: '100%' }}
+              classes={{
+                paper: styles.suggestionsPaper,
+                option: styles.suggestionOption,
+              }}
+              disableClearable
             />
-          )}
-          renderOption={(props, option) => (
-            <li {...props} onClick={() => handleSuggestionClick(option)}>
-              <SearchIcon
-                style={{
-                  marginRight: '5px',
-                  color: 'rgba(0, 0, 0, 0.54)',
-                }}
-              />
-              {highlightMatch(option, search)}
-            </li>
-          )}
-          style={{ width: '100%' }}
-          classes={{
-            paper: styles.suggestionsPaper,
-            option: styles.suggestionOption,
-          }}
-          disableClearable
-        />
-        <Button
-          aria-label="Search Button"
-          variant="contained"
-          color="warning"
-          className={styles.searchButton}
-          onClick={handleSearch}
-        >
-          <SearchIcon />
-        </Button>
-      </Box>
-      <Box className={styles.topHeaderRight}>
-        <LanguageSwitcher />
-        <SignInDropdown />
-        <Box
-          aria-label="Orders Button"
-          className={`${styles.ordersContainer} ${styles.hoverContainer}`}
-          onClick={() => {
-            router.push(accessToken ? '/orders' : '/login');
-          }}
-        >
-          <Typography>
-            <span className={styles.caption}>{t('topHeader:returns')}</span>
-            <span className={styles.boldBody2}>{t('topHeader:orders')}</span>
+          </Box>
+        </>
+      ) : (
+        <>
+          <Box className={styles.topHeaderLeft}>
+            <Box className={`${styles.logo} ${styles.hoverContainer}`}>
+              <Link href="/">
+                <Image
+                  aria-label="bar logo"
+                  src={`${basePath}/mockazon_logo_white_transparent.png`}
+                  width={150}
+                  height={50}
+                  alt="Logo"
+                  priority
+                />
+                {/* Replace with a new logo */}
+              </Link>
+            </Box>
+            {/* <Box
+          aria-label="Address Container"
+          className={`${styles.addressContainer} ${styles.hoverContainer}`}
+          >
+          <PlaceOutlinedIcon className={styles.addressIcon} />
+          <Box className={styles.addressTextContainer}>
+          <Typography variant="caption" className={styles.deliveryText}>
+          {t('topHeader:deliveryText')}
           </Typography>
-        </Box>
-        <Box
-          aria-label="Cart Button"
-          className={`${styles.cartContainer} ${styles.hoverContainer}`}
-          onClick={() => {
-            router.push(accessToken ? '/cart' : '/login');
-          }}
-        >
-          <ShoppingCartOutlinedIcon />
-          <Typography className={styles.cartText} variant="body2">
-            {t('cart')}
+          <Typography
+          aria-label="Address"
+          variant="body2"
+          className={styles.addressText}
+          onClick={() => console.log('Clicked Address')}
+          >
+          Santa Cruz 95060
           </Typography>
-        </Box>
-      </Box>
+          </Box>
+        </Box> */}
+          </Box>
+          <Box
+            className={`${styles.searchContainer} ${
+              focused ? styles.focusedOutline : ''
+            }`}
+          >
+            {/* <Button
+          aria-label="Categories Button"
+          variant="text"
+          className={styles.categoriesButton}
+          >
+          All
+          <ExpandMoreIcon className={styles.dropdownIcon} />
+        </Button> */}
+            <Autocomplete
+              className={styles.searchInputContainer}
+              forcePopupIcon={false}
+              options={suggestions.slice(0, 10)}
+              getOptionLabel={option => option}
+              noOptionsText={''}
+              value={search}
+              open={Boolean(search) && focused}
+              renderInput={params => (
+                <CustomTextField
+                  {...params}
+                  inputRef={inputRef}
+                  placeholder={t('searchPlaceholder') as string}
+                  InputProps={{
+                    ...params.InputProps,
+                    onChange: e => setSearch(e.target.value),
+                    onKeyDown: handleKeyDown,
+                    endAdornment: (
+                      <Button
+                        aria-label="Search Button"
+                        variant="contained"
+                        color="warning"
+                        className={styles.searchButton}
+                        onClick={handleSearch}
+                      >
+                        <SearchIcon />
+                      </Button>
+                    ),
+                  }}
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              )}
+              renderOption={(props, option) => (
+                <li {...props} onClick={() => handleSuggestionClick(option)}>
+                  <SearchIcon
+                    style={{
+                      marginRight: '5px',
+                      color: 'rgba(0, 0, 0, 0.54)',
+                    }}
+                  />
+                  {highlightMatch(option, search)}
+                </li>
+              )}
+              style={{ width: '100%' }}
+              classes={{
+                paper: styles.suggestionsPaper,
+                option: styles.suggestionOption,
+              }}
+              disableClearable
+            />
+          </Box>
+          <Box className={styles.topHeaderRight}>
+            <LanguageSwitcher />
+            <SignInDropdown />
+            <Box
+              aria-label="Orders Button"
+              className={`${styles.ordersContainer} ${styles.hoverContainer}`}
+              onClick={() => {
+                router.push(accessToken ? '/orders' : '/login');
+              }}
+              sx={{
+                display: { xs: 'none', sm: 'block' },
+              }}
+            >
+              <Typography>
+                <span className={styles.caption}>{t('topHeader:returns')}</span>
+                <span className={styles.boldBody2}>{t('topHeader:orders')}</span>
+              </Typography>
+            </Box>
+            <Box
+              aria-label="Cart Button"
+              className={`${styles.cartContainer} ${styles.hoverContainer}`}
+              onClick={() => {
+                router.push(accessToken ? '/cart' : '/login');
+              }}
+            >
+              <ShoppingCartOutlinedIcon />
+              <Typography className={styles.cartText} variant="body2" sx={{
+                display: { xs: 'none', sm: 'block' },
+              }}>
+                {t('cart')}
+              </Typography>
+            </Box>
+          </Box>
+        </>
+      )
+      }
     </Box>
   );
 };
