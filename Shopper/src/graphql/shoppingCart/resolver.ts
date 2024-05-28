@@ -22,6 +22,15 @@ export class ShoppingCartResolver {
     return new ShoppingCartService().addToShoppingCart(item, request.user.id);
   }
 
+  @Mutation(() => ShoppingCartItem)
+  @Authorized()
+  async updateShoppingCart(
+    @Args() item: AddItem,
+    @Ctx() request: NextApiRequest
+  ): Promise<ShoppingCartItem> {
+    return new ShoppingCartService().updateShoppingCart(item, request.user.id);
+  }
+
   @Authorized()
   @Mutation(() => ShoppingCartItem)
   async removeFromShoppingCart(
