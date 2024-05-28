@@ -28,13 +28,10 @@ const handlers = [
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/:vendor_id`,
     async ({params}) => {
-      console.log('hit');
-      console.log(params.vendor_id);
       if (error) {
         return new HttpResponse(null, { status: 401 });
       } else {
-        return HttpResponse.json(
-          { body: {data: [{
+        return HttpResponse.json([{
             key: 'some key',
             vendor_id: 'some id',
             active: true,
@@ -45,7 +42,7 @@ const handlers = [
             vendor_id: 'some id',
             active: false,
             blacklisted: false,
-          }]}},
+          }],
           { status: 200 }
         );
       }
@@ -71,7 +68,8 @@ afterAll(done => {
   server.close(done);
 });
 
-test('Successful request', async () => {
+test('Successful key retrieval', async () => {
+  error = false;
   await supertest(server)
     .post('/api/graphql')
     .set('Authorization', 'Bearer someToken')
@@ -83,6 +81,8 @@ test('Successful request', async () => {
       expect(res).toBeDefined();
       console.log(res.body)
       expect(res.body.data).toBeDefined();
+      expect(res.body.data.keys).toBeDefined();
+      expect(res.body.data.keys.length).toEqual(2);
     });
 });
 
