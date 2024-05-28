@@ -7,6 +7,18 @@ export class ShoppingCartService {
   public async addToShoppingCart(
     NewOrder: NewOrder
   ): Promise<ShoppingCartItem> {
+    // get the current cart
+    const cart = await this.getShoppingCart(NewOrder.shopper_id);
+
+    // if the cart already has the product, update the quantity
+    const existingProduct = cart.find(
+      (item) => item.product_id === NewOrder.product_id
+    );
+    if (existingProduct) {
+      NewOrder.quantity = (Number(NewOrder.quantity) + Number(existingProduct.data.quantity)).toString();
+      return this.updateShoppingCart(NewOrder);
+    }
+
     const insert = `INSERT INTO shopping_cart_item(shopper_id, product_id, data) VALUES 
     ($1, $2, $3) RETURNING *`;
     const orderData = {
