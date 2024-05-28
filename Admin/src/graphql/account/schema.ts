@@ -1,5 +1,5 @@
 import { Field, ObjectType } from 'type-graphql';
-import { Matches, IsUUID } from 'class-validator';
+import { IsUUID, IsEmail } from 'class-validator';
 
 @ObjectType()
 export class Account {
@@ -7,7 +7,7 @@ export class Account {
   @IsUUID()
     id!: string;
   @Field()
-  @Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
+  @IsEmail()
     email!: string;
   @Field()
     name!: string;
