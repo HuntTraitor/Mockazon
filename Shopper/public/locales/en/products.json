@@ -7,5 +7,6 @@
   "rating": "Rating",
   "price": "Price",
   "deliveryDate": "Delivery Date",
-  "quantity": "Quantity"
+  "quantity": "Quantity",
+  "errorFetchingProducts": "Error fetching products"
 }

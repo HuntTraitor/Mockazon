@@ -18,6 +18,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import getConfig from 'next/config';
 import { useTranslation } from 'next-i18next';
+import { enqueueSnackbar } from 'notistack';
 const { basePath } = getConfig().publicRuntimeConfig;
 
 const namespaces = [
@@ -43,6 +44,7 @@ export default function Index() {
   const [Orders, setOrders] = useState([] as Order[]);
   const { t } = useTranslation('orderHistory');
   const { accessToken, user } = useContext(LoggedInContext);
+
   // TODO add quantity field
   const fetchOrders = useCallback(() => {
     // this could be altered to take arguments for filtering in the future
@@ -95,9 +97,15 @@ export default function Index() {
         setOrders(data.data.getAllOrders);
       })
       .catch(error => {
-        console.error('Error:', error);
+        enqueueSnackbar(t('errorFetchingOrders'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
+        console.error('Error fetching orders:', error);
       });
-  }, [accessToken]);
+  }, [accessToken, t]);
 
   useEffect(() => {
     if (JSON.stringify(user) === '{}') {

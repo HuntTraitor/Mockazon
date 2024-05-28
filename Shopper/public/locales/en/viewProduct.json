@@ -17,5 +17,7 @@
   "productNotAddedToCart": "Product not added to cart",
   "productImageAlt": "Product Image",
   "quantity": "Quantity",
-  "quantitySelector": "Quantity Selector"
+  "quantitySelector": "Quantity Selector",
+  "errorFetchingProduct": "Error fetching product",
+  "productNotFound": "Product not found"
 }

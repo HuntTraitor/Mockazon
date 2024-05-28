@@ -40,13 +40,16 @@ export class AuthService {
 
   public async login(credentials: Credentials): Promise<Authenticated> {
     return new Promise((resolve, reject) => {
-      fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/login`, {
-        method: 'POST',
-        body: JSON.stringify(credentials),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/login`,
+        {
+          method: 'POST',
+          body: JSON.stringify(credentials),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
         .then(res => {
           if (!res.ok) {
             throw res;

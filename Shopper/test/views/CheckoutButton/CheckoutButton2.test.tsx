@@ -8,6 +8,16 @@ import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import CheckoutButton from '@/views/CheckoutButton';
+import { SnackbarProvider, useSnackbar } from 'notistack';
+jest.mock('notistack', () => ({
+  ...jest.requireActual('notistack'),
+  useSnackbar: jest.fn(),
+}));
+
+const mockEnqueueSnackbar = jest.fn();
+(useSnackbar as jest.Mock).mockReturnValue({
+  enqueueSnackbar: mockEnqueueSnackbar,
+});
 
 jest.mock('next/config', () => () => ({
   publicRuntimeConfig: { basePath: '' },
@@ -164,21 +174,23 @@ it('Clicks checkout button and encounters error redirecting to checkout', async 
   render(
     <AppContext.Provider value={AppContextProps}>
       <LoggedInContext.Provider value={newLoggedInContextProps}>
-        <CheckoutButton
-          productsWithContent={products.map(product => ({
-            ...product,
-            data: {
-              ...product.data,
-              getProduct: {
-                ...product.data.getProduct,
-                vendor_id: 'vendor_id_value',
+        <SnackbarProvider>
+          <CheckoutButton
+            productsWithContent={products.map(product => ({
+              ...product,
+              data: {
+                ...product.data,
+                getProduct: {
+                  ...product.data.getProduct,
+                  vendor_id: 'vendor_id_value',
+                },
               },
-            },
-          }))}
-          shopperId={'123'}
-          subtotal={100}
-          locale={'en'}
-        />
+            }))}
+            shopperId={'123'}
+            subtotal={100}
+            locale={'en'}
+          />
+        </SnackbarProvider>
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );

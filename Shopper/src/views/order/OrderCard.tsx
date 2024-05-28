@@ -150,7 +150,7 @@ export default function OrderCard({ order }: { order: Order }) {
         if (shoppingCart.errors && shoppingCart.errors.length > 0) {
           throw new Error(shoppingCart.errors[0].message);
         }
-        enqueueSnackbar('Added to shopping cart', {
+        enqueueSnackbar(t('addedToCart'), {
           variant: 'success',
           persist: false,
           autoHideDuration: 3000,
@@ -160,7 +160,7 @@ export default function OrderCard({ order }: { order: Order }) {
       })
       .catch(err => {
         console.log(err);
-        enqueueSnackbar('Could not add product to cart', {
+        enqueueSnackbar(t('errorAddingToCart'), {
           variant: 'error',
           persist: false,
           autoHideDuration: 3000,

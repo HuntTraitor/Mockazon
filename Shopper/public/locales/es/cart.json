@@ -4,5 +4,8 @@
   "remove": "Eliminar",
   "items": "elementos",
   "item": "elemento",
-  "proceedToCheckout": "Pasar por la caja"
+  "proceedToCheckout": "Pasar por la caja",
+  "errorFetchingProducts": "Error al obtener productos",
+  "errorRemovingProduct": "Error al eliminar producto",
+  "errorCreatingCheckoutSession": "Error al crear la sesión de pago"
 }

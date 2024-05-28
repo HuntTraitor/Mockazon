@@ -23,6 +23,7 @@ import Layout from '@/components/Layout';
 import getConfig from 'next/config';
 const { basePath } = getConfig().publicRuntimeConfig;
 import AppBackDrop from '@/components/AppBackdrop';
+import { enqueueSnackbar } from 'notistack';
 
 const namespaces = [
   'products',
@@ -46,8 +47,8 @@ const ProductPage = () => {
   const { id } = router.query;
   const { t } = useTranslation('viewProduct');
   const [product, setProduct] = useState({} as Product);
-  const [error, setError] = useState('');
   const [quantity, setQuantity] = useState('1');
+  const [error, setError] = useState(false);
   const numbers = Array.from({ length: 5 }, (_, index) => index + 1);
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
@@ -73,16 +74,28 @@ const ProductPage = () => {
       .then(product => {
         if (product.errors) {
           console.error('Error fetching product:', product);
-          setError('Could not fetch product');
+          enqueueSnackbar(t('errorFetchingProduct'), {
+            variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          });
+          setError(true);
         } else {
           setProduct(product.data.getProduct);
         }
       })
       .catch(error => {
         console.error('Error fetching product:', error);
-        setError('Could not fetch product');
+        setError(true);
+        enqueueSnackbar(t('errorFetchingProduct'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
       });
-  }, [id]);
+  }, [id, t]);
 
   if (product && product.data) {
     return (
@@ -182,8 +195,24 @@ const ProductPage = () => {
         <AppBackDrop />
       </Box>
     );
+  } else if (error) {
+    return (
+      <Box className={styles.centerContainer}>
+        <Card
+          sx={{ maxWidth: 1500, minWidth: 175 }}
+          className={styles.cardWrapper}
+        >
+          <Box className={styles.wrapper}>
+            <Typography className={styles.productName}>
+              {t('productNotFound')}
+            </Typography>
+          </Box>
+        </Card>
+        <AppBackDrop />
+      </Box>
+    );
   } else {
-    return <div>{error}</div>;
+    return null;
   }
 };
 

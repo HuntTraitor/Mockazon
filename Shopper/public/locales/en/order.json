@@ -13,5 +13,8 @@
   "shipmentDetails": "Shipment Details",
   "soldBy": "Sold by",
   "buyItAgain": "Buy it again",
-  "quantity": "Quantity"
+  "quantity": "Quantity",
+  "errorFetchingOrder": "Error fetching order",
+  "addedToCart": "Added to cart",
+  "errorAddingToCart": "Error adding to cart"
 }

@@ -1,4 +1,5 @@
 {
-    "yourOrders": "Tus Ordenes",
-    "orders": "Ordenes"
+  "yourOrders": "Tus Ordenes",
+  "orders": "Ordenes",
+  "errorFetchingOrders": "Error al obtener las ordenes"
 }

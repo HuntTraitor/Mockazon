@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import TopNav from '@/views/TopNav';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import getConfig from 'next/config';
 import ProductCard from '@/views/product/MainPageProductCard';
@@ -12,6 +13,7 @@ import AppBackDrop from '@/components/AppBackdrop';
 import styles from '@/styles/MainPage.module.css';
 import ProductCarousel from '../../views/ProductCarousel';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
+import { enqueueSnackbar } from 'notistack';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -42,6 +44,7 @@ const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState('');
   const { accessToken } = useContext(LoggedInContext);
+  const { t } = useTranslation('products');
 
   useEffect(() => {
     fetchProducts();
@@ -117,47 +120,24 @@ const Index = () => {
       .then(data => {
         if (data.errors && data.errors.length > 0) {
           console.error('Error fetching products:', data.errors);
-          setError('Could not fetch products');
+          enqueueSnackbar(t('errorFetchingProducts'), {
+            variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          });
           return;
         }
         setProducts(data.data.getProducts);
       })
       .catch(error => {
         console.error('Error fetching products:', error);
-        setError('Could not fetch products');
-      });
-  };
-
-  const fetchAllOrders = () => {
-    const query = {
-      query: `query getAllOrders {
-        getAllOrders {
-          id
-          products {
-            id
-            data {
-              image
-            }
-          }
-          total
-      }}`,
-    };
-
-    fetch(`${basePath}/api/graphql`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(query),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('data:', data);
-        setOrders(data.data.getAllOrders);
-      })
-      .catch(error => {
-        console.error('Error:', error);
+        enqueueSnackbar(t('errorFetchingProducts'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
       });
   };
 
@@ -217,7 +197,6 @@ const Index = () => {
 
   return (
     <>
-      {error && <p>{error}</p>}
       <TopNav />
       <Container style={{ marginTop: '20px', maxWidth: '75%' }}>
         <Grid container spacing={1}>
