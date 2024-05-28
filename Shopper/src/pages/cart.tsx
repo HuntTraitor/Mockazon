@@ -244,9 +244,68 @@ const Cart = ({ locale }: { locale: string }) => {
   };
 
   const handleQuantityChange = (productId: string, quantity: string) => {
-    // Update the quantity of the product with the given productId
-    // You can update the state or send an API request here
-    console.log(`Updating quantity for product ${productId} to ${quantity}`);
+    const query = {
+      query: `mutation UpdateCart {
+        updateShoppingCart(
+          productId: "${productId}"
+          quantity: "${quantity}"
+        ) {
+          id
+          product_id
+          shopper_id
+          data {
+            quantity
+          }
+        }
+      }`,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(query),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(updatedCart => {
+        if (updatedCart.errors && updatedCart.errors.length > 0) {
+          console.error(updatedCart.errors[0].message);
+          enqueueSnackbar(t('cart:errorUpdatingQuantity'), {
+            variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          });
+          return;
+        }
+        // Update the local state with the updated quantity
+        const updatedProducts = products.map(product => {
+          if (product.data.getProduct.id === productId) {
+            return {
+              ...product,
+              quantity: quantity,
+            };
+          }
+          return product;
+        });
+        setProducts(updatedProducts);
+      })
+      .catch(err => {
+        console.error('Error updating quantity:', err);
+        enqueueSnackbar(t('cart:errorUpdatingQuantity'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
+      });
   };
 
   return (
@@ -345,7 +404,7 @@ const Cart = ({ locale }: { locale: string }) => {
                                 }
                               >
                                 {Array.from({ length: 10 }, (_, i) => (
-                                  <option key={i + 1} value={i + 1}>
+                                  <option key={i + 1} value={`${i + 1}`}>
                                     Qty: {i + 1}
                                   </option>
                                 ))}
