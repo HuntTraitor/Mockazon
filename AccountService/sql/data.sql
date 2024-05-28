@@ -119,6 +119,26 @@ VALUES
         )
     );
 
+INSERT INTO
+    administrator (data)
+VALUES
+    (
+        jsonb_build_object(
+                'email',
+                'drharrisonadmin@ucsc.edu',
+                'pwhash',
+                crypt('pass', '87'),
+                'name',
+                'Dr. Harrison',
+                'username',
+                'drharrison',
+                'role',
+                'admin',
+                'suspended',
+                false
+        )
+    );
+
 -- Vendor Data --
 INSERT INTO
     vendor (data)
@@ -137,6 +157,26 @@ VALUES
             'vendor',
             'suspended',
             false
+        )
+    );
+
+INSERT INTO
+    vendor (data)
+VALUES
+    (
+        jsonb_build_object(
+                'email',
+                'drharrisonvendor@ucsc.edu',
+                'pwhash',
+                crypt('pass', '87'),
+                'name',
+                'Dr. Harrison',
+                'username',
+                'drharrison',
+                'role',
+                'vendor',
+                'suspended',
+                false
         )
     );
 

@@ -81,3 +81,9 @@
   width: 150px;
   font-weight: bold;
 }
+
+.imageContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}

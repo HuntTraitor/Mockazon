@@ -335,13 +335,15 @@ const Cart = ({ locale }: { locale: string }) => {
                         href={`/products/${product.data.getProduct.id}`}
                       >
                         <CardActionArea>
-                          <Image
-                            style={{ outline: '2px solid #f0eeee' }}
-                            src={`${product.data.getProduct.data.image}`}
-                            alt="Product image"
-                            width={180}
-                            height={180}
-                          />
+                          <Box className={styles.imageContainer}>
+                            <Image
+                              style={{ outline: '2px solid #f0eeee' }}
+                              src={`${product.data.getProduct.data.image}`}
+                              alt="Product image"
+                              layout="fill"
+                              objectFit="contain"
+                            />
+                          </Box>
                         </CardActionArea>
                       </Link>
                     </Box>

@@ -44,3 +44,15 @@
 .shippingSpeed {
   margin-left: 2px;
 }
+
+.imageContainer {
+  position: relative;
+  width: 250px;
+  height: 250px;
+}
+
+.imageContainerAlt {
+  position: relative;
+  width: 250px;
+  height: 350px;
+}

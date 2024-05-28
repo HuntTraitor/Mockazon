@@ -182,3 +182,9 @@ h1.h1 {
   font-size: 28px;
   line-height: 36px;
 }
+
+.imageContainer {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}

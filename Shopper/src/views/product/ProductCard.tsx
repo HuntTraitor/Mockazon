@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import styles from '@/styles/ProductCard.module.css';
 import { Product } from '@/graphql/types';
-import { Link } from '@mui/material';
+import { Link, Box } from '@mui/material';
 import Price from './Price';
 import DeliveryText from './DeliveryText';
 import AddToCartButton from './AddToCartButton';
@@ -35,12 +35,14 @@ export default function ProductCard({ product }: ProductProps) {
           onClick={() => router.push(`/products/${product.id}`)}
           className={styles.productImage}
         >
-          <Image
-            src={product.data.image}
-            alt={t('productImageAlt')}
-            width={250}
-            height={350}
-          />
+          <Box className={styles.imageContainerAlt}>
+            <Image
+              src={product.data.image}
+              alt={t('productImageAlt')}
+              layout="fill"
+              objectFit="contain"
+            />
+          </Box>
         </Button>
         <div>
           <Link

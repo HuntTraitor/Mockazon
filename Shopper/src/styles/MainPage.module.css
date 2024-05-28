@@ -68,3 +68,9 @@
   justify-content: space-around;
   background-color: #7c4f4f;
 }
+
+.imageContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
