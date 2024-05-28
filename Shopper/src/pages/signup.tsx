@@ -85,6 +85,7 @@ const Signup = () => {
           }
         }
         localStorage.setItem('user', JSON.stringify(data.data.signUp));
+        setUser(data.data.signUp);
         setAccessToken(data.data.signUp.accessToken);
         await router.push('/');
       } else {
