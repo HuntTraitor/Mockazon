@@ -7,26 +7,26 @@ const isProd = process.env.ENVIRONMENT == 'production';
 
 // Define the TSOA configuration
 const tsoaConfig = {
-  entryFile: "src/app.ts",
-  noImplicitAdditionalProperties: "throw-on-extras",
-  controllerPathGlobs: ["src/**/*[cC]ontroller.ts"],
+  entryFile: 'src/app.ts',
+  noImplicitAdditionalProperties: 'throw-on-extras',
+  controllerPathGlobs: ['src/**/*[cC]ontroller.ts'],
   spec: {
-    outputDirectory: "build",
+    outputDirectory: 'build',
     specVersion: 3,
-    schemes: ["http"],
+    schemes: ['http'],
     basePath: isProd ? '/vendorapi/v0' : '/v0',
     securityDefinitions: {
       ApiKeyAuth: {
-        type: "apiKey",
-        name: "X-API-KEY",
-        in: "header"
-      }
-    }
+        type: 'apiKey',
+        name: 'X-API-KEY',
+        in: 'header',
+      },
+    },
   },
   routes: {
-    routesDir: "build",
-    authenticationModule: "./src/auth/expressAuth.ts"
-  }
+    routesDir: 'build',
+    authenticationModule: './src/auth/expressAuth.ts',
+  },
 };
 
 // Write the TSOA configuration to a file

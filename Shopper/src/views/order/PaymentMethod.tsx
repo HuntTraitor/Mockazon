@@ -20,7 +20,11 @@ const cardIcons = {
   link: 'https://i.imgur.com/G2ha0UD.png',
 };
 
-const PaymentMethod: React.FC<PaymentMethodProps> = ({ method, digits, paymentBrand }) => {
+const PaymentMethod: React.FC<PaymentMethodProps> = ({
+  method,
+  digits,
+  paymentBrand,
+}) => {
   const { t } = useTranslation(['order']);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -37,38 +41,31 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ method, digits, paymentBr
         </Typography>
       )}
       <Box display="flex" alignItems="center">
-        {
-          method === 'link' ?
-            (
-              <>
-                <Image
-                  src={cardIcons[method as keyof typeof cardIcons]}
-                  alt={method}
-                  style={{ marginRight: '8px' }}
-                  width={20}
-                  height={20}
-                />
-                <Typography variant="body2">
-                  {paymentBrand}
-                </Typography>
-              </>
-            )
-            :
-            (
-              <>
-                <Image
-                  src={cardIcons[paymentBrand as keyof typeof cardIcons]}
-                  alt={paymentBrand}
-                  style={{ marginRight: '8px' }}
-                  width={20}
-                  height={20}
-                />
-                <Typography variant="body2">
-                  {method} {t('order:endingIn')} {digits}
-                </Typography>
-              </>
-            )
-        }
+        {method === 'link' ? (
+          <>
+            <Image
+              src={cardIcons[method as keyof typeof cardIcons]}
+              alt={method}
+              style={{ marginRight: '8px' }}
+              width={20}
+              height={20}
+            />
+            <Typography variant="body2">{paymentBrand}</Typography>
+          </>
+        ) : (
+          <>
+            <Image
+              src={cardIcons[paymentBrand as keyof typeof cardIcons]}
+              alt={paymentBrand}
+              style={{ marginRight: '8px' }}
+              width={20}
+              height={20}
+            />
+            <Typography variant="body2">
+              {method} {t('order:endingIn')} {digits}
+            </Typography>
+          </>
+        )}
       </Box>
     </Box>
   );

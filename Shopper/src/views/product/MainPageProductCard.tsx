@@ -39,7 +39,12 @@ export default function ProductCard({ product }: ProductProps) {
     >
       <Link href={`/products/${product.id}`} underline="none">
         <Box className={styles.imageContainer}>
-          <Image src={product.data.image} alt={t('productImageAlt')} layout='fill' objectFit='contain' />
+          <Image
+            src={product.data.image}
+            alt={t('productImageAlt')}
+            layout="fill"
+            objectFit="contain"
+          />
         </Box>
       </Link>
       <CardContent>
@@ -53,8 +58,17 @@ export default function ProductCard({ product }: ProductProps) {
           </Typography>
         </Link>
         <Price price={price} />
-        <Typography variant="body1" color="text.secondary" className={styles.primeLogo}>
-          <Image src="/prime_logo.jpg" alt="Prime logo" width={70} height={21.5} />
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          className={styles.primeLogo}
+        >
+          <Image
+            src="/prime_logo.jpg"
+            alt="Prime logo"
+            width={70}
+            height={21.5}
+          />
         </Typography>
         <DeliveryText deliveryDate={product.data.deliveryDate} />
         <AddToCartButton product={product} quantity={'1'} />
