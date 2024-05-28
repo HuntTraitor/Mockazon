@@ -1,4 +1,11 @@
 import { UUID } from '../types';
+
+/**
+ * URL of an image
+ * @example "https://example.com/image.jpg"
+ */
+type URL = string;
+
 /**
  * Price of a Product
  * https://www.regextester.com/93999
@@ -9,7 +16,7 @@ type Price = string;
 export interface NewProduct {
   name: string;
   brand: string;
-  image: string;
+  image: URL;
   rating: string;
   price: Price;
   description: string;
@@ -24,7 +31,7 @@ export interface Product {
   data: {
     name: string;
     brand: string;
-    image: string;
+    image: URL;
     price: string;
     rating: string;
     description: string;
