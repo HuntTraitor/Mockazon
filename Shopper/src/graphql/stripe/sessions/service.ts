@@ -1,4 +1,4 @@
-import { LineItem, Locale, MetaData, Session, ShopperId } from './schema';
+import { LineItem, Locale, Session, ShopperId } from './schema';
 import { GraphQLError } from 'graphql/error';
 
 export class StripeService {
@@ -7,7 +7,6 @@ export class StripeService {
     shopperId: ShopperId,
     origin: string,
     locale: Locale,
-    metadata: MetaData
   ): Promise<Session> {
     const result = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/stripeCheckout`,
@@ -21,7 +20,6 @@ export class StripeService {
           shopperId,
           origin,
           locale,
-          metadata,
         }),
       }
     )

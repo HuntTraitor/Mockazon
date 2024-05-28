@@ -19,6 +19,17 @@ registerEnumType(Locale, {
 });
 
 @InputType()
+export class Item {
+  @IsUUID()
+  @Field(() => UUID)
+    productId!: string;
+
+  @IsUUID()
+  @Field(() => UUID)
+    vendorId!: string;
+}
+
+@InputType()
 export class ShopperId {
   @IsUUID()
   @Field()
@@ -31,6 +42,8 @@ export class StripeProductData {
     name!: string;
   @Field(() => [String])
     images!: string[];
+  @Field(() => Item)
+    metadata!: Item;
 }
 
 @InputType()
@@ -59,23 +72,6 @@ export class Session {
     url!: string;
 }
 
-@InputType()
-export class Item {
-  @IsUUID()
-  @Field(() => UUID)
-    productId!: string;
-
-  @IsUUID()
-  @Field(() => UUID)
-    vendorId!: string;
-}
-
-@InputType()
-export class MetaData {
-  @Field(() => [Item])
-    items!: Item[];
-}
-
 @ArgsType()
 export class CheckoutSessionInput {
   @Field(() => [LineItem])
@@ -86,8 +82,6 @@ export class CheckoutSessionInput {
     origin!: string;
   @Field(() => Locale)
     locale!: Locale;
-  @Field(() => MetaData)
-    metadata!: MetaData;
 }
 
 @ObjectType()

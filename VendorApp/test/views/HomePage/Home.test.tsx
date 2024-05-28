@@ -4,6 +4,7 @@ import { Home } from '../../../src/views/HomePage/Home';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { Key, KeyContext } from '@/contexts/KeyContext';
+import React from 'react';
 
 let returnError = false;
 const handlers = [

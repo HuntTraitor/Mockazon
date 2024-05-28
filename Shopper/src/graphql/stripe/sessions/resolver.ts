@@ -2,7 +2,6 @@ import { Args, Mutation, Resolver } from 'type-graphql';
 import {
   CheckoutSessionInput,
   LineItem,
-  MetaData,
   Session,
   ShopperId,
 } from './schema';
@@ -20,20 +19,17 @@ export class StripeCheckoutResolver {
       shopperId,
       origin,
       locale,
-      metadata,
     }: {
       lineItems: LineItem[];
       shopperId: ShopperId;
       origin: string;
       locale: Locale;
-      metadata: MetaData;
     } = input;
     return new StripeService().createCheckoutSession(
       lineItems,
       shopperId,
       origin,
       locale,
-      metadata
     );
   }
 }

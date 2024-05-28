@@ -14,6 +14,10 @@ export interface LineItem {
     product_data: {
       name: string;
       images: string[];
+      metadata: {
+        productId: UUID;
+        vendorId: UUID;
+      }
     };
   };
   quantity: number;
@@ -43,5 +47,4 @@ export interface SessionInput {
   shopperId: ShopperId;
   origin: string;
   locale: Locale;
-  metadata: MetaData;
 }
