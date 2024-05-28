@@ -93,12 +93,14 @@
     }
   },
   "scripts": {
+    "generate-tsoa-config": "node generateTsoaConfig.ts",
     "not-prestart": "npm run build",
     "start": "node build/src/server.js",
     "prebuild": "npm run swagger",
     "build": "tsc",
     "predev": "npm run swagger",
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
+    "preswagger": "npm run generate-tsoa-config",
     "swagger": "tsoa spec-and-routes",
     "pretest": "npm run swagger",
     "test": "jest --runInBand --coverage --verbose --forceExit",

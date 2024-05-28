@@ -50,5 +50,4 @@ export class ShoppingCartController extends Controller {
   ): Promise<ShoppingCartRemoveInput | undefined> {
     return await new ShoppingCartService().removeFromShoppingCart(order);
   }
-
 }

@@ -64,6 +64,7 @@ const fetchOrderById = async (id: string, accessToken: string, t: any) => {
         deliveryTime
         products {
           id
+          quantity
           data {
             name
             brand

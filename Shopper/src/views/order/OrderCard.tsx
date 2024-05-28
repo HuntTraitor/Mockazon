@@ -102,8 +102,9 @@ const card = (
 */
 
 export default function OrderCard({ order }: { order: Order }) {
+  console.log(order);
   const { t, i18n } = useTranslation(['order', 'common']);
-  const { user, accessToken } = useContext(LoggedInContext);
+  const { accessToken } = useContext(LoggedInContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
@@ -131,14 +132,9 @@ export default function OrderCard({ order }: { order: Order }) {
     )}`;
   };
 
-  const formatPrice = (price: number) => {
-    return (price / 1000).toFixed(2).replace(/\.?0+$/, '');
-  };
-
   // FIXME: This function is duplicated, export it to a shared location or something.
   // Check AddToCartButton.tsx
   const addToShoppingCart = (productId: string, quantity: number = 1) => {
-    console.log(user);
     const query = {
       query: `mutation AddToShoppingCart {
         addToShoppingCart(productId: "${productId}", quantity: "${quantity}") {
@@ -171,7 +167,6 @@ export default function OrderCard({ order }: { order: Order }) {
           autoHideDuration: 3000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
-        console.log(shoppingCart);
       })
       .catch(err => {
         console.log(err);
@@ -183,8 +178,6 @@ export default function OrderCard({ order }: { order: Order }) {
         });
       });
   };
-
-  console.log(order);
 
   return (
     <>
@@ -201,7 +194,7 @@ export default function OrderCard({ order }: { order: Order }) {
           </div>
           <div>
             <Typography variant="subtitle2">TOTAL</Typography>
-            <Typography variant="body2">${formatPrice(order.total)}</Typography>
+            <Typography variant="body2">${order.total}</Typography>
           </div>
           <div>
             <Typography variant="subtitle2">SHIP TO</Typography>
@@ -277,14 +270,7 @@ export default function OrderCard({ order }: { order: Order }) {
                         variant="body2"
                         className={styles.productPrice}
                       >
-                        Total: $
-                        {(
-                          Math.round(
-                            product.quantity *
-                              parseFloat(product.data.price.toString()) *
-                              100
-                          ) / 100
-                        ).toFixed(2)}
+                        Total: ${order.total}
                       </Typography>
                       <Box className={styles.actionButtons}>
                         <Button

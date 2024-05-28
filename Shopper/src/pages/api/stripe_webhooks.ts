@@ -158,15 +158,16 @@ async function createShopperOrder(
   const paymentMethod = await stripe.paymentMethods.retrieve(
     paymentIntent.payment_method as string
   );
-  const subtotal = lineItemsData.reduce(
+  let subtotal = lineItemsData.reduce(
     (sum: number, item: { amount_subtotal: number }) =>
       sum + item.amount_subtotal,
     0
   );
   // TODO determine what total before tax is? -- maybe factoring in discount
-  const totalBeforeTax = subtotal.toString();
-  const tax = lineItemsData.reduce((sum, item) => sum + item.amount_tax, 0);
-  const total = totalBeforeTax + tax;
+  let tax = lineItemsData.reduce((sum, item) => sum + item.amount_tax, 0);
+  tax = tax / 100;
+  subtotal = subtotal / 100;
+  const total = subtotal + tax;
   const paymentDigits = paymentMethod.card;
   let last4 = '';
   if (paymentDigits) {
