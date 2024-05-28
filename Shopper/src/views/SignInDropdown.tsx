@@ -20,6 +20,7 @@ const SignInDropdown = () => {
     setUser({ accessToken: '', id: '', name: '', role: '' });
     setAccessToken('');
     setBackDropOpen(false);
+    router.push('/');
   };
 
   return (
