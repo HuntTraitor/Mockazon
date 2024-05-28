@@ -17,12 +17,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/vendorapi/v0/docs', function (req, res) {
-  res.redirect('/vendorapi/v0/docs/');
-});
-
 app.use(
-  '/v0/docs/',
+  '/v0/docs',
   swaggerUi.serve,
   async (_req: ExRequest, res: ExResponse) => {
     return res.send(
@@ -30,10 +26,6 @@ app.use(
     );
   }
 );
-
-app.use('/v0/docs', (_req: ExRequest, res: ExResponse) => {
-  return res.redirect('/v0/docs/');
-});
 
 const router = Router();
 RegisterRoutes(router);
