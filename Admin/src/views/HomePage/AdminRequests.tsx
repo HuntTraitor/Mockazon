@@ -51,8 +51,8 @@ const fetchRequests = async (setRequests: Function, accessToken: string) => {
       }
       setRequests(json.data.request);
     })
-    .catch(err => {
-      console.error(err);
+    .catch(() => {
+      // console.error(err);
     });
 };
 

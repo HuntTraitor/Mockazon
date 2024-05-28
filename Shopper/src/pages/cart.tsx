@@ -98,7 +98,7 @@ const Cart = ({ locale }: { locale: string }) => {
             autoHideDuration: 3000,
             anchorOrigin: { horizontal: 'center', vertical: 'top' },
           });
-          console.error(shoppingCartProducts.errors[0].message);
+          //console.error(shoppingCartProducts.errors[0].message);
           return;
         }
         const fetchPromises = shoppingCartProducts.data.getShoppingCart.map(
@@ -140,7 +140,7 @@ const Cart = ({ locale }: { locale: string }) => {
                 autoHideDuration: 3000,
                 anchorOrigin: { horizontal: 'center', vertical: 'top' },
               });
-              console.error('Error fetching product:', err);
+              //console.error('Error fetching product:', err);
             }
           }
         );
@@ -159,24 +159,24 @@ const Cart = ({ locale }: { locale: string }) => {
             );
             setSubtotal(Math.round(subtotal * 100) / 100);
           })
-          .catch(err => {
+          .catch(() => {
             enqueueSnackbar(t('cart:errorFetchingProducts'), {
               variant: 'error',
               persist: false,
               autoHideDuration: 3000,
               anchorOrigin: { horizontal: 'center', vertical: 'top' },
             });
-            console.error('Error fetching shoppingCartProducts:', err);
+            //console.error('Error fetching shoppingCartProducts:', err);
           });
       })
-      .catch(err => {
+      .catch(() => {
         enqueueSnackbar(t('cart:errorFetchingProducts'), {
           variant: 'error',
           persist: false,
           autoHideDuration: 3000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
-        console.error('Error fetching shopping cart:', err);
+        //console.error('Error fetching shopping cart:', err);
       });
   }, [router, user, accessToken, t]);
 
@@ -209,7 +209,7 @@ const Cart = ({ locale }: { locale: string }) => {
       })
       .then(removedProduct => {
         if (removedProduct.errors && removedProduct.errors.length > 0) {
-          console.error(removedProduct.errors[0].message);
+          //console.error(removedProduct.errors[0].message);
           enqueueSnackbar(t('cart:errorRemovingProduct'), {
             variant: 'error',
             persist: false,
@@ -232,8 +232,8 @@ const Cart = ({ locale }: { locale: string }) => {
         );
         setSubtotal(subtotal);
       })
-      .catch(err => {
-        console.error('Error removing product:', err);
+      .catch(() => {
+        //console.error('Error removing product:', err);
         enqueueSnackbar(t('cart:errorRemovingProduct'), {
           variant: 'error',
           persist: false,
@@ -276,7 +276,7 @@ const Cart = ({ locale }: { locale: string }) => {
       })
       .then(updatedCart => {
         if (updatedCart.errors && updatedCart.errors.length > 0) {
-          console.error(updatedCart.errors[0].message);
+          //console.error(updatedCart.errors[0].message);
           enqueueSnackbar(t('cart:errorUpdatingQuantity'), {
             variant: 'error',
             persist: false,
@@ -297,8 +297,8 @@ const Cart = ({ locale }: { locale: string }) => {
         });
         setProducts(updatedProducts);
       })
-      .catch(err => {
-        console.error('Error updating quantity:', err);
+      .catch(() => {
+        //console.error('Error updating quantity:', err);
         enqueueSnackbar(t('cart:errorUpdatingQuantity'), {
           variant: 'error',
           persist: false,

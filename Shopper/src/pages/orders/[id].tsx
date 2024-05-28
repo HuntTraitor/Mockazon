@@ -100,8 +100,8 @@ const fetchOrderById = async (id: string, accessToken: string, t: any) => {
       }
       return data.data.getOrder;
     })
-    .catch(err => {
-      console.error(err);
+    .catch(() => {
+      //console.error(err);
       enqueueSnackbar(t('errorFetchingOrder'), {
         variant: 'error',
         persist: false,

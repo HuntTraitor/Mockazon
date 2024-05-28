@@ -51,8 +51,8 @@ const fetchAccounts = async (setAccounts: Function, accessToken: string) => {
       }
       setAccounts(json.data.account);
     })
-    .catch(err => {
-      console.error(err);
+    .catch(() => {
+      //console.error(err);
     });
 };
 

@@ -75,11 +75,11 @@ const Signup = () => {
         const data = await response.json();
         if (data.errors && data.errors.length > 0) {
           if (data.errors[0].message === 'Duplicate account') {
-            console.error('Duplicate account:', data.errors[0].message);
+            //console.error('Duplicate account:', data.errors[0].message);
             alert(t('signup:duplicateAccount'));
             return;
           } else {
-            console.error('Error signing up:', data.errors[0].message);
+            //console.error('Error signing up:', data.errors[0].message);
             alert(t('signup:signupFailed'));
             return;
           }
@@ -88,12 +88,12 @@ const Signup = () => {
         setAccessToken(data.data.signUp.accessToken);
         await router.push('/');
       } else {
-        console.error('Network error signing up.');
+        //console.error('Network error signing up.');
         alert(t('signup:signupFailed'));
         return;
       }
     } catch (error) {
-      console.error('Error signing up:', error);
+      //console.error('Error signing up:', error);
       alert(t('signup:signupFailed'));
     }
   };
@@ -129,11 +129,11 @@ const Signup = () => {
         const data = await response.json();
         if (data.errors && data.errors.length > 0) {
           if (data.errors[0].message === 'Duplicate account') {
-            console.error('Duplicate account:', data.errors[0].message);
+            //console.error('Duplicate account:', data.errors[0].message);
             alert(t('signup:duplicateAccount'));
             return;
           } else {
-            console.error('Error signing up:', data.errors[0].message);
+            //console.error('Error signing up:', data.errors[0].message);
             alert(t('signup:signupFailed'));
             return;
           }
@@ -142,12 +142,12 @@ const Signup = () => {
         setAccessToken(data.data.signUp.accessToken);
         await router.push('/');
       } else {
-        console.error('Network error signing up.');
+        //console.error('Network error signing up.');
         alert(t('signup:signupFailed'));
         return;
       }
     } catch (error) {
-      console.error('Error signing up:', error);
+      //console.error('Error signing up:', error);
       alert(t('signup:signupFailed'));
     }
   };

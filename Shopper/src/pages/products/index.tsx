@@ -125,7 +125,7 @@ const Index = () => {
       .then(response => response.json())
       .then(data => {
         if (data.errors && data.errors.length > 0) {
-          console.error('Error fetching products:', data.errors);
+          //console.error('Error fetching products:', data.errors);
           enqueueSnackbar(t('products:errorFetchingProducts'), {
             variant: 'error',
             persist: false,
@@ -136,8 +136,8 @@ const Index = () => {
         }
         setProducts(data.data.getProducts);
       })
-      .catch(error => {
-        console.error('Error fetching products:', error);
+      .catch(() => {
+        //console.error('Error fetching products:', error);
         enqueueSnackbar(t('products:errorFetchingProducts'), {
           variant: 'error',
           persist: false,
@@ -179,7 +179,7 @@ const Index = () => {
       .then(response => response.json())
       .then(data => {
         if (data.errors && data.errors.length > 0) {
-          console.error('Error fetching orders:', data.errors);
+          //console.error('Error fetching orders:', data.errors);
           enqueueSnackbar(t('products:errorFetchingOrders'), {
             variant: 'error',
             persist: false,
@@ -194,8 +194,8 @@ const Index = () => {
         );
         setOrders(orderProducts);
       })
-      .catch(error => {
-        console.error('Error fetching orders:', error);
+      .catch(() => {
+        //console.error('Error fetching orders:', error);
         enqueueSnackbar(t('products:errorFetchingOrders'), {
           variant: 'error',
           persist: false,

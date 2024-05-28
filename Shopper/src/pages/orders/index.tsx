@@ -98,14 +98,14 @@ export default function Index() {
       .then(data => {
         setOrders(data.data.getAllOrders);
       })
-      .catch(error => {
+      .catch(() => {
         enqueueSnackbar(t('errorFetchingOrders'), {
           variant: 'error',
           persist: false,
           autoHideDuration: 3000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
-        console.error('Error fetching orders:', error);
+        //console.error('Error fetching orders:', error);
       });
   }, [accessToken, t]);
 

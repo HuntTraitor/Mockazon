@@ -119,12 +119,12 @@ const TopHeader = () => {
         });
 
         if (!response.ok) {
-          console.error('Error fetching products:', response.statusText);
+          //console.error('Error fetching products:', response.statusText);
         }
 
         const data = await response.json();
         if (data.errors && data.errors.length > 0) {
-          console.error('Error fetching products:', data.errors);
+          //console.error('Error fetching products:', data.errors);
           return;
         }
 
@@ -139,7 +139,7 @@ const TopHeader = () => {
           setSuggestions([]);
         }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        //console.error('Error fetching products:', error);
       }
     }, 300),
     []

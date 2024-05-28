@@ -73,7 +73,7 @@ const ProductPage = () => {
       })
       .then(product => {
         if (product.errors) {
-          console.error('Error fetching product:', product);
+          //console.error('Error fetching product:', product);
           enqueueSnackbar(t('errorFetchingProduct'), {
             variant: 'error',
             persist: false,
@@ -85,8 +85,8 @@ const ProductPage = () => {
           setProduct(product.data.getProduct);
         }
       })
-      .catch(error => {
-        console.error('Error fetching product:', error);
+      .catch(() => {
+        //console.error('Error fetching product:', error);
         setError(true);
         enqueueSnackbar(t('errorFetchingProduct'), {
           variant: 'error',

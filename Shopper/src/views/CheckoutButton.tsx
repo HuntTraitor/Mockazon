@@ -101,11 +101,11 @@ export default function CheckoutButton({
         });
 
         if (result.error) {
-          console.error(result.error.message);
+          //console.error(result.error.message);
         }
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
+        //console.error(err);
         enqueueSnackbar(t('cart:errorCreatingCheckoutSession'), {
           variant: 'error',
           persist: false,

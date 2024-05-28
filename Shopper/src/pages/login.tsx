@@ -67,7 +67,7 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         if (data.errors && data.errors.length > 0) {
-          console.error('Error logging in:', data.errors[0].message);
+          //console.error('Error logging in:', data.errors[0].message);
           alert(data.errors[0].message);
           return;
         }
@@ -76,11 +76,11 @@ const Login = () => {
         setAccessToken(data.data.login.accessToken);
         await router.push('/');
       } else {
-        console.error('Error logging in');
+        //console.error('Error logging in');
         alert('Unexpected error occurred');
       }
     } catch (error) {
-      console.error('Error logging in:', error);
+      //console.error('Error logging in:', error);
       alert('Unexpected error occurred: ' + error);
     }
   };
@@ -108,7 +108,7 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         if (data.errors && data.errors.length > 0) {
-          console.error('Error logging in:', data.errors[0].message);
+          //console.error('Error logging in:', data.errors[0].message);
           alert(data.errors[0].message);
           return;
         }
@@ -117,12 +117,12 @@ const Login = () => {
         setAccessToken(data.data.login.accessToken);
         await router.push('/');
       } else {
-        console.error('Error logging in');
+        //console.error('Error logging in');
         alert('Unexpected error occurred');
         return;
       }
     } catch (error) {
-      console.error('Error logging in:', error);
+      //console.error('Error logging in:', error);
       alert('Unexpected error occurred: ' + error);
     }
   };
