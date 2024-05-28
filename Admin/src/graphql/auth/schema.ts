@@ -15,7 +15,6 @@ import { Length, IsUUID } from 'class-validator';
 @ArgsType()
 export class Credentials {
   @Field()
-  @Length(4, 20)
     email!: string;
   @Field()
   @Length(2, 20)
