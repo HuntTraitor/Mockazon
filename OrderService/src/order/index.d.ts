@@ -56,6 +56,7 @@ export interface ShopperOrder {
   deliveryTime: string;
   paymentDigits: string;
   paymentMethod: string;
+  paymentBrand: string;
   shippingAddress: {
     city: string;
     name: string;

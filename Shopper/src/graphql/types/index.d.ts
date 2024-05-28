@@ -19,6 +19,7 @@ export type Order = {
   };
   paymentMethod: string;
   paymentDigits: number;
+  paymentBrand: string;
   subtotal: number;
   totalBeforeTax: number;
   tax: number;

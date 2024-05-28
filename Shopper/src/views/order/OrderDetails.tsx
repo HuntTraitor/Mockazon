@@ -80,6 +80,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
               t('order:paymentMethod'),
               <PaymentMethod
                 method={order.paymentMethod}
+                paymentBrand={order.paymentBrand}
                 digits={order.paymentDigits}
               />
             )}
@@ -95,6 +96,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
               {section(
                 t('order:paymentMethod'),
                 <PaymentMethod
+                  paymentBrand={order.paymentBrand}
                   method={order.paymentMethod}
                   digits={order.paymentDigits}
                 />

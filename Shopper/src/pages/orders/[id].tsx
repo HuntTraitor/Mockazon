@@ -56,6 +56,7 @@ const fetchOrderById = async (id: string, accessToken: string, t: any) => {
         }
         paymentMethod
         paymentDigits
+        paymentBrand
         subtotal
         tax
         total

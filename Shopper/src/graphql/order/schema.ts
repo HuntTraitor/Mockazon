@@ -34,6 +34,9 @@ export class ShopperOrder {
     paymentDigits!: string;
 
   @Field()
+    paymentBrand!: string;
+
+  @Field()
   @IsPositive()
     subtotal!: number;
 
