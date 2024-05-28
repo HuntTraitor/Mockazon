@@ -8,6 +8,8 @@ import express, {
 } from 'express';
 import swaggerUi from 'swagger-ui-express';
 
+const isProd = process.env.ENVIRONMENT == 'production';
+
 import { RegisterRoutes } from '../build/routes';
 
 const app: Express = express();
@@ -35,7 +37,7 @@ app.use('/v0/docs', (_req: ExRequest, res: ExResponse) => {
 
 const router = Router();
 RegisterRoutes(router);
-app.use('/v0', router);
+app.use(isProd ? '/vendorapi/v0' : '/v0', router);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
