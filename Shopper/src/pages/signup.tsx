@@ -41,7 +41,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { accessToken, setAccessToken } = useContext(LoggedInContext);
+  const { accessToken, setAccessToken, setUser } = useContext(LoggedInContext);
   const { t, i18n } = useTranslation(['common', 'signup']);
   const router = useRouter();
 
@@ -139,6 +139,7 @@ const Signup = () => {
           }
         }
         localStorage.setItem('user', JSON.stringify(data.data.signUp));
+        setUser(data.data.signUp);
         setAccessToken(data.data.signUp.accessToken);
         await router.push('/');
       } else {
