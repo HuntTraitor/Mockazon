@@ -43,9 +43,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 
 export default function Index() {
-  const [orders, setOrders] = useState([] as Order[]);
+  const [orders, setOrders] = useState<Order[]>();
   const { t } = useTranslation('orderHistory');
-  const { accessToken, user } = useContext(LoggedInContext);
+  const { accessToken } = useContext(LoggedInContext);
 
   // TODO add quantity field
   const fetchOrders = useCallback(() => {
@@ -110,11 +110,14 @@ export default function Index() {
   }, [accessToken, t]);
 
   useEffect(() => {
-    if (JSON.stringify(user) === '{}') {
-      return;
+    if (!orders) {
+      fetchOrders();
     }
-    fetchOrders();
-  }, [accessToken, user, fetchOrders]);
+  }, [fetchOrders, orders]);
+
+  if (!orders) {
+    return null;
+  }
 
   return (
     <>
