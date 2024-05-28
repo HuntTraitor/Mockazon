@@ -139,7 +139,7 @@ export class OrderService {
 
   public async getAllShopperOrder(shopperId: UUID): Promise<ShopperOrder[]> {
     const arr: ShopperOrder[] = [];
-    const select = `SELECT * FROM shopper_order WHERE shopper_id = $1`;
+    const select = `SELECT * FROM shopper_order WHERE shopper_id = $1 ORDER BY (data->>'createdAt')::timestamp DESC`;
     const query = {
       text: select,
       values: [`${shopperId}`],
