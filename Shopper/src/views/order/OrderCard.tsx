@@ -270,7 +270,7 @@ export default function OrderCard({ order }: { order: Order }) {
                         variant="body2"
                         className={styles.productPrice}
                       >
-                        Total: ${Number(order.total).toFixed(2)}
+                        Total: ${Number(product.data.price).toFixed(2)}
                       </Typography>
                       <Box className={styles.actionButtons}>
                         <Button
