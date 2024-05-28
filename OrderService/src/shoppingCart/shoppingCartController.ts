@@ -7,6 +7,7 @@ import {
   Post,
   Get,
   Delete,
+  Put,
 } from 'tsoa';
 
 import {
@@ -34,6 +35,13 @@ export class ShoppingCartController extends Controller {
   ): Promise<ShoppingCart | undefined> {
     return await new ShoppingCartService().getShoppingCart(shopperId);
   }
+  @Put('')
+  @SuccessResponse('201', 'Updated Shopping Cart')
+  public async updateShoppingCart(
+    @Body() order: ShoppingCartInput
+  ): Promise<ShoppingCartItem | undefined> {
+    return await new ShoppingCartService().updateShoppingCart(order);
+  }
 
   @Delete('')
   @SuccessResponse('201', 'Removed from Shopping Cart')
@@ -42,4 +50,5 @@ export class ShoppingCartController extends Controller {
   ): Promise<ShoppingCartRemoveInput | undefined> {
     return await new ShoppingCartService().removeFromShoppingCart(order);
   }
+
 }
