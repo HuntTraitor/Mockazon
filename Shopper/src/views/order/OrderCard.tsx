@@ -121,16 +121,19 @@ export default function OrderCard({ order }: { order: Order }) {
   };
 
   const epicDate = (date: string): string => {
-    return `${new Date(date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })}`
-  }
+    return `${new Date(date).toLocaleDateString(
+      i18n.language === 'en' ? 'en-US' : 'es-US',
+      {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }
+    )}`;
+  };
 
   const formatPrice = (price: number) => {
     return (price / 1000).toFixed(2).replace(/\.?0+$/, '');
-  }
+  };
 
   // FIXME: This function is duplicated, export it to a shared location or something.
   // Check AddToCartButton.tsx
@@ -181,7 +184,7 @@ export default function OrderCard({ order }: { order: Order }) {
       });
   };
 
-  console.log(order)
+  console.log(order);
 
   return (
     <>
@@ -191,126 +194,124 @@ export default function OrderCard({ order }: { order: Order }) {
         </Typography>
       )}
       <div className={styles.wrapper}>
-          <div className={styles.cardHeader}>
-            <div style={{paddingLeft: '15px'}}>
-              <Typography variant="subtitle2">ORDER PLACED</Typography>
-              <Typography variant="body2">{epicDate(order.createdAt)}</Typography>
-            </div>
-            <div>
-              <Typography variant="subtitle2">TOTAL</Typography>
-              <Typography variant="body2">${formatPrice(order.total)}</Typography>
-            </div>
-            <div>
-              <Typography variant="subtitle2">SHIP TO</Typography>
-              <Typography variant="body2">
-                {order.shippingAddress.name}
-              </Typography>
-            </div>
-            <div style={{display: 'flex', flexDirection: 'column'}}>
-              <Typography variant="subtitle2">
-                  ORDER # {order.id}
-              </Typography>
-              <Link className={styles.viewOrderLink} href={`/orders/${order.id}`}>View order details</Link>
-            </div>
+        <div className={styles.cardHeader}>
+          <div style={{ paddingLeft: '15px' }}>
+            <Typography variant="subtitle2">ORDER PLACED</Typography>
+            <Typography variant="body2">{epicDate(order.createdAt)}</Typography>
           </div>
-          <Paper
-            className={isMobile ? styles.paperMobile : styles.paperWide}
-          >
-            <Card variant="outlined" className={styles.card}>
-              <Typography
-                variant="h6"
-                gutterBottom
-                className={styles.deliveryStatusText}
-              >
-                {formatDate(order.deliveryTime, order.delivered)}
-              </Typography>
-              <Grid
-                container
-                spacing={2}
-                justifyContent="space-between"
-                alignItems="center"
-                className={styles.gridContainer}
-              >
-                {order.products.map((product: Product, index) => (
-                  <Grid item xs={12} key={index} className={styles.productItem}>
-                    <Grid container spacing={2} alignItems="flex-start">
-                      <Grid item>
-                        <CardMedia
-                          component="img"
-                          image={product.data.image}
-                          alt={product.data.name}
-                          className={styles.productImage}
-                          onClick={() => router.push(`/products/${product.id}`)}
-                        />
-                      </Grid>
-                      <Grid item xs className={styles.productDetails}>
-                        <Link
-                          href={`/products/${product.id}`}
+          <div>
+            <Typography variant="subtitle2">TOTAL</Typography>
+            <Typography variant="body2">${formatPrice(order.total)}</Typography>
+          </div>
+          <div>
+            <Typography variant="subtitle2">SHIP TO</Typography>
+            <Typography variant="body2">
+              {order.shippingAddress.name}
+            </Typography>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="subtitle2">ORDER # {order.id}</Typography>
+            <Link className={styles.viewOrderLink} href={`/orders/${order.id}`}>
+              View order details
+            </Link>
+          </div>
+        </div>
+        <Paper className={isMobile ? styles.paperMobile : styles.paperWide}>
+          <Card variant="outlined" className={styles.card}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              className={styles.deliveryStatusText}
+            >
+              {formatDate(order.deliveryTime, order.delivered)}
+            </Typography>
+            <Grid
+              container
+              spacing={2}
+              justifyContent="space-between"
+              alignItems="center"
+              className={styles.gridContainer}
+            >
+              {order.products.map((product: Product, index) => (
+                <Grid item xs={12} key={index} className={styles.productItem}>
+                  <Grid container spacing={2} alignItems="flex-start">
+                    <Grid item>
+                      <CardMedia
+                        component="img"
+                        image={product.data.image}
+                        alt={product.data.name}
+                        className={styles.productImage}
+                        onClick={() => router.push(`/products/${product.id}`)}
+                      />
+                    </Grid>
+                    <Grid item xs className={styles.productDetails}>
+                      <Link
+                        href={`/products/${product.id}`}
+                        className={styles.productName}
+                      >
+                        <Typography
+                          variant="subtitle1"
                           className={styles.productName}
                         >
-                          <Typography
-                            variant="subtitle1"
-                            className={styles.productName}
-                          >
-                            {product.data.name}
-                          </Typography>
-                        </Link>
-                        {product.data.brand && (
-                          <Typography
-                            variant="body2"
-                            className={styles.productBrand}
-                          >
-                            {t('order:soldBy')}: {product.data.brand}
-                          </Typography>
-                        )}
+                          {product.data.name}
+                        </Typography>
+                      </Link>
+                      {product.data.brand && (
                         <Typography
                           variant="body2"
                           className={styles.productBrand}
                         >
-                          {/*products and quantities are in sync*/}
-                          {/*each index in product corresponds to an index in quantity*/}
-                          {/*FIXME: refactor this if there's time*/}
-                          {t('order:quantity')}: {product.quantity}
+                          {t('order:soldBy')}: {product.data.brand}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          className={styles.productPrice}
+                      )}
+                      <Typography
+                        variant="body2"
+                        className={styles.productBrand}
+                      >
+                        {/*products and quantities are in sync*/}
+                        {/*each index in product corresponds to an index in quantity*/}
+                        {/*FIXME: refactor this if there's time*/}
+                        {t('order:quantity')}: {product.quantity}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        className={styles.productPrice}
+                      >
+                        Total: $
+                        {(
+                          Math.round(
+                            product.quantity *
+                              parseFloat(product.data.price.toString()) *
+                              100
+                          ) / 100
+                        ).toFixed(2)}
+                      </Typography>
+                      <Box className={styles.actionButtons}>
+                        <Button
+                          className={styles.buyAgain}
+                          variant="contained"
+                          color="warning"
+                          sx={{ mr: 1 }}
+                          startIcon={
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src="https://m.media-amazon.com/images/S/sash/7uhR68oBHEcdiIr.png"
+                              alt="BuyAgain"
+                              className={styles.buyAgainIcon}
+                            />
+                          }
+                          onClick={() => addToShoppingCart(product.id, 1)}
                         >
-                          Total: $
-                          {(
-                            Math.round(
-                              product.quantity *
-                                parseFloat(product.data.price.toString()) *
-                                100
-                            ) / 100
-                          ).toFixed(2)}
-                        </Typography>
-                        <Box className={styles.actionButtons}>
-                          <Button
-                            className={styles.buyAgain}
-                            variant="contained"
-                            color="warning"
-                            sx={{ mr: 1 }}
-                            startIcon={
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                src="https://m.media-amazon.com/images/S/sash/7uhR68oBHEcdiIr.png"
-                                alt="BuyAgain"
-                                className={styles.buyAgainIcon}
-                              />
-                            }
-                            onClick={() => addToShoppingCart(product.id, 1)}
-                          >
-                            {t('order:buyItAgain')}
-                          </Button>
-                        </Box>
-                      </Grid>
+                          {t('order:buyItAgain')}
+                        </Button>
+                      </Box>
                     </Grid>
                   </Grid>
-                ))}
-              </Grid>
-            </Card>
-          </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </Card>
+        </Paper>
       </div>
     </>
   );
