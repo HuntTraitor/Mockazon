@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useContext,
+} from 'react';
 import {
   Box,
   Button,
@@ -21,6 +27,7 @@ import { useTranslation } from 'next-i18next';
 import debounce from 'lodash/debounce';
 import { useAppContext } from '@/contexts/AppContext';
 import getConfig from 'next/config';
+import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -91,6 +98,7 @@ const TopHeader = () => {
   const [suggestionClicked, setSuggestionClicked] = useState(false);
   const { setBackDropOpen } = useAppContext();
   const inputRef = useRef<HTMLInputElement>(null); // Reference for the input element
+  const { accessToken } = useContext(LoggedInContext);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchSuggestions = useCallback(
@@ -313,7 +321,7 @@ const TopHeader = () => {
           aria-label="Orders Button"
           className={`${styles.ordersContainer} ${styles.hoverContainer}`}
           onClick={() => {
-            router.push('/orders');
+            router.push(accessToken ? '/orders' : '/login');
           }}
         >
           <Typography>
@@ -325,7 +333,7 @@ const TopHeader = () => {
           aria-label="Cart Button"
           className={`${styles.cartContainer} ${styles.hoverContainer}`}
           onClick={() => {
-            router.push('/cart');
+            router.push(accessToken ? '/cart' : '/login');
           }}
         >
           <ShoppingCartOutlinedIcon />
