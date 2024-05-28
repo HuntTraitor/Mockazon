@@ -49,6 +49,7 @@ export default function Index() {
 
   // TODO add quantity field
   const fetchOrders = useCallback(() => {
+    if (!accessToken) return;
     // this could be altered to take arguments for filtering in the future
     const query = {
       query: `query getAllOrders {
