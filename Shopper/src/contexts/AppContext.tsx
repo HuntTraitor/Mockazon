@@ -14,6 +14,10 @@ export interface ContextType {
   setBackDropOpen: Dispatch<SetStateAction<boolean>>;
   mockazonMenuDrawerOpen: boolean;
   setMockazonMenuDrawerOpen: Dispatch<SetStateAction<boolean>>;
+  isMobile: boolean;
+  setIsMobile?: Dispatch<SetStateAction<boolean>>;
+  accountDrawerOpen: boolean;
+  setAccountDrawerOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<ContextType | undefined>(undefined);
@@ -23,6 +27,8 @@ export const AppContextProvider: React.FC<PropsWithChildren<object>> = ({
 }) => {
   const [backDropOpen, setBackDropOpen] = useState(false);
   const [mockazonMenuDrawerOpen, setMockazonMenuDrawerOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [accountDrawerOpen, setAccountDrawerOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,6 +43,33 @@ export const AppContextProvider: React.FC<PropsWithChildren<object>> = ({
     };
   }, [router.events]);
 
+  useEffect(() => {
+    const mobileSize = 1000;
+
+    if (window.innerWidth < mobileSize) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+
+    const handleResize = () => {
+      if (window.innerWidth < mobileSize) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log('AccountDrawer open:', accountDrawerOpen);
+  }, [accountDrawerOpen]);
+
   return (
     <AppContext.Provider
       value={{
@@ -44,6 +77,10 @@ export const AppContextProvider: React.FC<PropsWithChildren<object>> = ({
         setBackDropOpen,
         mockazonMenuDrawerOpen,
         setMockazonMenuDrawerOpen,
+        isMobile,
+        setIsMobile,
+        accountDrawerOpen,
+        setAccountDrawerOpen,
       }}
     >
       {children}
