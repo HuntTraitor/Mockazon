@@ -42,4 +42,19 @@ export class ShoppingCartService {
     const { rows } = await pool.query(query);
     return { product_id: rows[0].product_id, shopper_id: rows[0].shopper_id };
   }
+
+  public async updateShoppingCart(
+    NewOrder: NewOrder
+  ): Promise<ShoppingCartItem> {
+    const update = `UPDATE shopping_cart_item SET data = $3 WHERE shopper_id = $1 AND product_id = $2 RETURNING *`;
+    const orderData = {
+      quantity: NewOrder.quantity,
+    };
+    const query = {
+      text: update,
+      values: [`${NewOrder.shopper_id}`, `${NewOrder.product_id}`, orderData],
+    };
+    const { rows } = await pool.query(query);
+    return rows[0];
+  }
 }
