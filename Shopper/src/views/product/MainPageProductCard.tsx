@@ -19,6 +19,15 @@ export default function ProductCard({ product }: ProductProps) {
   const { t } = useTranslation('viewProduct');
   const price = product.data.price.toString();
 
+  // Set the maximum number of characters for the product name
+  const maxCharacters = 45;
+
+  // Truncate the product name if it exceeds the maximum characters
+  const truncatedName =
+    product.data.name.length > maxCharacters
+      ? product.data.name.slice(0, maxCharacters) + '...'
+      : product.data.name;
+
   return (
     <Card
       sx={{
@@ -29,37 +38,21 @@ export default function ProductCard({ product }: ProductProps) {
       }}
     >
       <Link href={`/products/${product.id}`} underline="none">
-        <Image
-          src={product.data.image}
-          alt={t('productImageAlt')}
-          width={250}
-          height={250}
-        />
+        <Image src={product.data.image} alt={t('productImageAlt')} width={250} height={250} />
       </Link>
       <CardContent>
         <Link href={`/products/${product.id}`} underline="none" color="inherit">
           <Typography
-            style={{
-              fontSize: '1rem',
-            }}
+            style={{ fontSize: '1rem' }}
             component="div"
             className={styles.productName}
           >
-            {product.data.name}
+            {truncatedName}
           </Typography>
         </Link>
         <Price price={price} />
-        <Typography
-          variant="body1"
-          color="text.secondary"
-          className={styles.primeLogo}
-        >
-          <Image
-            src="/prime_logo.jpg"
-            alt="Prime logo"
-            width={70}
-            height={21.5}
-          />
+        <Typography variant="body1" color="text.secondary" className={styles.primeLogo}>
+          <Image src="/prime_logo.jpg" alt="Prime logo" width={70} height={21.5} />
         </Typography>
         <DeliveryText deliveryDate={product.data.deliveryDate} />
         <AddToCartButton product={product} quantity={'1'} />
