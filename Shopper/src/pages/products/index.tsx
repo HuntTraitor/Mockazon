@@ -221,7 +221,10 @@ const Index = () => {
             <h2>{t('common:secondaryWelcome')}</h2>
           </Box>
           <div className={styles.carouselContainer}>
-            <ProductCarousel title={t('products:whatNew')} products={products} />
+            <ProductCarousel
+              title={t('products:whatNew')}
+              products={products}
+            />
             <ProductCarousel title={t('products:buyAgain')} products={orders} />
           </div>
           <Box className={styles.productList}>
