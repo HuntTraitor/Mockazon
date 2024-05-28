@@ -149,6 +149,7 @@ export function AdminRequests() {
                     >
                       Approve
                     </Button>
+                    {/* }
                     <Button
                       variant="outlined"
                       color="error"
@@ -156,6 +157,7 @@ export function AdminRequests() {
                     >
                       Reject
                     </Button>
+                    */}
                   </TableCell>
                 </TableRow>
               ))}
