@@ -158,7 +158,7 @@ const APIKeys = () => {
                   ) : (
                     <TableCell>
                       <Button
-                        disabled={key.blacklisted ? true : false}
+                        disabled={key.blacklisted}
                         aria-label="active-button"
                         variant="outlined"
                         color="success"
