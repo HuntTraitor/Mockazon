@@ -109,7 +109,8 @@ const ProductPage = () => {
               <Image
                 src={product.data.image}
                 alt={t('productImageAlt')}
-                fill
+                layout="fill"
+                objectFit="contain"
                 priority
               />
             </Box>

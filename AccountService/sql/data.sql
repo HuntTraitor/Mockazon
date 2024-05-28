@@ -205,6 +205,27 @@ INSERT INTO
     vendor (id, data)
 VALUES
     (
+        '78b9467a-8029-4c1f-afd9-ea56932c3f45',
+        jsonb_build_object(
+            'email',
+            'vincent@books.com',
+            'pwhash',
+            crypt('pass', '87'),
+            'name',
+            'Vincent Vendor',
+            'username',
+            'vincentvendor',
+            'role',
+            'vendor',
+            'suspended',
+            false
+        )
+    );
+
+INSERT INTO
+    vendor (id, data)
+VALUES
+    (
         '89f5cbfb-40a9-470d-ac8f-99e0416c6234',
         jsonb_build_object(
             'email',
@@ -331,3 +352,53 @@ VALUES
         'suspended', false
         )
     );
+
+-- Lukas vendors
+INSERT INTO
+    shopper (id, data)
+VALUES
+    (
+        'a4213cf8-c2e4-4424-8688-0907a6c58fd2',
+        jsonb_build_object(
+        'email', 'muscletech@gmail.com',
+        'pwhash', crypt('pass', '87'),
+        'sub', 'sub',
+        'name', 'MuscleTech',
+        'username', 'muscletech',
+        'role', 'vendor',
+        'suspended', false
+        )
+    );
+
+INSERT INTO
+    shopper (id, data)
+VALUES
+    (
+        'a4213cf8-c2e4-4424-8688-0907a6c58fd3',
+        jsonb_build_object(
+        'email', 'ordinary@gmail.com',
+        'pwhash', crypt('pass', '87'),
+        'sub', 'sub',
+        'name', 'Ordinary',
+        'username', 'ordinary',
+        'role', 'vendor',
+        'suspended', false
+        )
+    );
+
+INSERT INTO
+    shopper (id, data)
+VALUES
+    (
+        'a4213cf8-c2e4-4424-8688-0907a6c58fd4',
+        jsonb_build_object(
+        'email', 'colgate@gmail.com',
+        'pwhash', crypt('pass', '87'),
+        'sub', 'sub',
+        'name', 'Colgate',
+        'username', 'colgate',
+        'role', 'vendor',
+        'suspended', false
+        )
+    );
+
