@@ -27,7 +27,7 @@ import getConfig from 'next/config';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
-const namespaces = ['common', 'login', 'signup', 'products'];
+const namespaces = ['common', 'login', 'signup', 'products', 'accountDrawer'];
 export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {

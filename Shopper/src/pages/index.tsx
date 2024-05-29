@@ -15,6 +15,7 @@ const namespaces = [
   'products',
   'topHeader',
   'subHeader',
+  'accountDrawer',
   'signInDropdown',
   'viewProduct',
 ];

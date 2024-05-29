@@ -22,6 +22,7 @@ const namespaces = [
   'common',
   'signInDropdown',
   'order',
+  'accountDrawer',
   'viewProduct',
 ];
 

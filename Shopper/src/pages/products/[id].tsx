@@ -31,6 +31,7 @@ const namespaces = [
   'subHeader',
   'common',
   'signInDropdown',
+  'accountDrawer',
   'viewProduct',
 ];
 

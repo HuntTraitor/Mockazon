@@ -31,6 +31,7 @@ const namespaces = [
   'signInDropdown',
   'order',
   'orderHistory',
+  'accountDrawer',
   'viewProduct',
 ];
 

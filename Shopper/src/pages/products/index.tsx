@@ -15,6 +15,7 @@ import ProductCarousel from '../../views/ProductCarousel';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { enqueueSnackbar } from 'notistack';
 import { Order } from '@/graphql/types';
+import AccountDrawer from '@/views/AccountDrawer';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -24,6 +25,7 @@ const namespaces = [
   'subHeader',
   'common',
   'signInDropdown',
+  'accountDrawer',
   'viewProduct',
 ];
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -274,6 +276,7 @@ const Index = () => {
           ))}
         </Grid>
       </Container>
+      <AccountDrawer />
       <MockazonMenuDrawer />
       <AppBackDrop />
     </>

@@ -34,6 +34,7 @@ const namespaces = [
   'topHeader',
   'common',
   'signInDropdown',
+  'accountDrawer',
   'cart',
   'viewProduct',
 ];
