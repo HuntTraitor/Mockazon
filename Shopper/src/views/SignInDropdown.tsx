@@ -32,14 +32,14 @@ const SignInDropdown = () => {
       router.push('/login');
     }
     setBackDropOpen(false);
-  }
+  };
 
   return (
     <Box
       aria-label="Sign In Container"
       className={`${styles.accountContainer} ${isMobile ? null : styles.hoverContainer}`}
     >
-      { isMobile ? (
+      {isMobile ? (
         <Button
           aria-label="Mobile Account Button"
           sx={{
@@ -49,13 +49,14 @@ const SignInDropdown = () => {
           onClick={handleMobileClick}
         >
           {user.name ? user.name.split(' ')[0] : t('signIn')}
-          <KeyboardArrowRightIcon 
+          <KeyboardArrowRightIcon
             sx={{
               position: 'relative',
               width: '15px',
-            }}/>
+            }}
+          />
           <PersonOutlineOutlinedIcon
-            fontSize='large' 
+            fontSize="large"
             sx={{
               position: 'relative',
               mb: '3px',
@@ -81,7 +82,9 @@ const SignInDropdown = () => {
                 <span className={styles.caption}>
                   {`${t('hello')} ${user.name ? user.name : t('signInText')}`}
                 </span>
-                <span className={styles.boldBody2}>{t('accountsAndLists')}</span>
+                <span className={styles.boldBody2}>
+                  {t('accountsAndLists')}
+                </span>
               </Typography>
               <ExpandMoreIcon className={styles.dropdownIcon} />
             </Box>

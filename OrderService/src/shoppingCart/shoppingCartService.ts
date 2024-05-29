@@ -12,10 +12,12 @@ export class ShoppingCartService {
 
     // if the cart already has the product, update the quantity
     const existingProduct = cart.find(
-      (item) => item.product_id === NewOrder.product_id
+      item => item.product_id === NewOrder.product_id
     );
     if (existingProduct) {
-      NewOrder.quantity = (Number(NewOrder.quantity) + Number(existingProduct.data.quantity)).toString();
+      NewOrder.quantity = (
+        Number(NewOrder.quantity) + Number(existingProduct.data.quantity)
+      ).toString();
       return this.updateShoppingCart(NewOrder);
     }
 

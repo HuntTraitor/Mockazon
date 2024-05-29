@@ -66,7 +66,7 @@ const Cart = ({ locale }: { locale: string }) => {
       return;
     }
     // user access token present but accessToken hasn't been loaded yet
-    if(!accessToken) {
+    if (!accessToken) {
       return;
     }
     const query = {

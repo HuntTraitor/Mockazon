@@ -11,7 +11,7 @@ export class StripeCheckoutService {
     lineItems: LineItem[],
     shopperId: UUID,
     origin: string,
-    locale: Stripe.Checkout.SessionCreateParams.Locale,
+    locale: Stripe.Checkout.SessionCreateParams.Locale
   ): Promise<Session | Error> {
     // prepare metadata for transfer by serializing it
     const preparedMetadata = {

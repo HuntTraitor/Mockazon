@@ -6,7 +6,7 @@ export class StripeService {
     lineItems: LineItem[],
     shopperId: ShopperId,
     origin: string,
-    locale: Locale,
+    locale: Locale
   ): Promise<Session> {
     const result = await fetch(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/stripeCheckout`,

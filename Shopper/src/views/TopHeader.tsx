@@ -217,20 +217,23 @@ const TopHeader = () => {
   }, [router.events]);
 
   return (
-    <Box className={styles.container} sx={{
-      flexDirection: isMobile ? 'column' : 'row',
-      backgroundColor: '#232f3e !important',
-    }}>
+    <Box
+      className={styles.container}
+      sx={{
+        flexDirection: isMobile ? 'column' : 'row',
+        backgroundColor: '#232f3e !important',
+      }}
+    >
       {isMobile ? (
         <>
-          <Box sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}>
-            <Box 
-              className={`${styles.logo}`}
-            >
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
+          >
+            <Box className={`${styles.logo}`}>
               <Link href="/">
                 <Image
                   aria-label="bar logo"
@@ -243,13 +246,15 @@ const TopHeader = () => {
                 {/* Replace with a new logo */}
               </Link>
             </Box>
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              transform: 'translateY(-15%)',
-            }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                transform: 'translateY(-15%)',
+              }}
+            >
               <SignInDropdown />
               <Box
                 aria-label="Cart Button"
@@ -258,14 +263,12 @@ const TopHeader = () => {
                   router.push(accessToken ? '/cart' : '/login');
                 }}
               >
-                <ShoppingCartOutlinedIcon fontSize='large' />
+                <ShoppingCartOutlinedIcon fontSize="large" />
               </Box>
             </Box>
-          </Box>  
+          </Box>
           <Box
-            className={`${
-              focused ? styles.focusedOutline : ''
-            }`}
+            className={`${focused ? styles.focusedOutline : ''}`}
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -307,7 +310,7 @@ const TopHeader = () => {
                             size="small"
                             className={styles.clearIndicator}
                           >
-                            <ClearIcon 
+                            <ClearIcon
                               sx={{
                                 width: '19px',
                               }}
@@ -326,11 +329,12 @@ const TopHeader = () => {
                           }}
                           onClick={handleSearch}
                         >
-                          <SearchIcon 
-                            fontSize='large'
+                          <SearchIcon
+                            fontSize="large"
                             sx={{
                               color: 'black',
-                            }} />
+                            }}
+                          />
                         </Button>
                       </InputAdornment>
                     ),
@@ -430,7 +434,7 @@ const TopHeader = () => {
                             size="small"
                             className={styles.clearIndicator}
                           >
-                            <ClearIcon 
+                            <ClearIcon
                               sx={{
                                 width: '19px',
                               }}
@@ -447,7 +451,7 @@ const TopHeader = () => {
                           }}
                           onClick={handleSearch}
                         >
-                          <SearchIcon 
+                          <SearchIcon
                             sx={{
                               color: '#333333',
                             }}
@@ -491,7 +495,9 @@ const TopHeader = () => {
             >
               <Typography>
                 <span className={styles.caption}>{t('topHeader:returns')}</span>
-                <span className={styles.boldBody2}>{t('topHeader:orders')}</span>
+                <span className={styles.boldBody2}>
+                  {t('topHeader:orders')}
+                </span>
               </Typography>
             </Box>
             <Box
@@ -502,16 +508,19 @@ const TopHeader = () => {
               }}
             >
               <ShoppingCartOutlinedIcon />
-              <Typography className={styles.cartText} variant="body2" sx={{
-                display: { xs: 'none', sm: 'block' },
-              }}>
+              <Typography
+                className={styles.cartText}
+                variant="body2"
+                sx={{
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
                 {t('cart')}
               </Typography>
             </Box>
           </Box>
         </>
-      )
-      }
+      )}
     </Box>
   );
 };

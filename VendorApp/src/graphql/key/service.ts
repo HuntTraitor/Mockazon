@@ -2,7 +2,7 @@ import { Key } from './schema';
 
 export class KeyService {
   public async list(vendor_id: string): Promise<Key[]> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       fetch(
         `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/${vendor_id}`,
         {
@@ -17,7 +17,7 @@ export class KeyService {
         })
         .then(product => {
           resolve(product);
-        })
+        });
     });
   }
 

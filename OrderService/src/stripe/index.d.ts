@@ -17,7 +17,7 @@ export interface LineItem {
       metadata: {
         productId: UUID;
         vendorId: UUID;
-      }
+      };
     };
   };
   quantity: number;

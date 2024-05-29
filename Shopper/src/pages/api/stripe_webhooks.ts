@@ -36,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       event = stripe.webhooks.constructEvent(
         buf,
         sig,
-          process.env.STRIPE_WEBHOOK_SECRET as string
+        process.env.STRIPE_WEBHOOK_SECRET as string
       );
     } catch (err) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -72,18 +72,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       // TODO send an email to user
 
-
       // Retrieve product data from each product ID
       const productDetailsPromises = lineItems.data.map(lineItem => {
         return stripe.products.retrieve(lineItem.price?.product as string);
       });
 
       // Retrieve metadata about each product
-      const productAndVendorIds = (await Promise.all(productDetailsPromises)).map((item) => item.metadata);
+      const productAndVendorIds = (
+        await Promise.all(productDetailsPromises)
+      ).map(item => item.metadata);
 
-      const productIds = productAndVendorIds.map(
-        (item) => item.productId
-      );
+      const productIds = productAndVendorIds.map(item => item.productId);
 
       const pendingVendorOrders = getOrders(
         lineItems,
@@ -155,8 +154,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       } catch (err) {
         res
           .status(500)
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           .send(`Error create vendor shopper order: ${err.message}`);
       }
 

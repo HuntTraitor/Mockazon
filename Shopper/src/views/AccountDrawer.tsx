@@ -20,17 +20,10 @@ import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { useRouter } from 'next/router';
 
 const AccountDrawer = () => {
-  const { 
-    accountDrawerOpen, 
-    setAccountDrawerOpen,
-    setBackDropOpen, 
-  } = useAppContext();
+  const { accountDrawerOpen, setAccountDrawerOpen, setBackDropOpen } =
+    useAppContext();
   const { t } = useTranslation('accountDrawer');
-  const { 
-    user,
-    setUser,
-    setAccessToken, 
-  } = useContext(LoggedInContext);
+  const { user, setUser, setAccessToken } = useContext(LoggedInContext);
   const router = useRouter();
   const currentLocale = router.locale;
 
@@ -52,7 +45,7 @@ const AccountDrawer = () => {
   const handleGoToOrders = () => {
     setAccountDrawerOpen(false);
     router.push('/orders');
-  }
+  };
 
   useEffect(() => {
     console.log('AccountDrawer open:', accountDrawerOpen);
@@ -60,7 +53,7 @@ const AccountDrawer = () => {
 
   return (
     <>
-      { accountDrawerOpen && (
+      {accountDrawerOpen && (
         <Box
           sx={{
             position: 'fixed',
@@ -76,9 +69,7 @@ const AccountDrawer = () => {
               color: 'white',
             }}
           >
-            <CloseIcon
-              fontSize='large'
-            />
+            <CloseIcon fontSize="large" />
           </IconButton>
         </Box>
       )}
@@ -112,9 +103,9 @@ const AccountDrawer = () => {
           </ListItem>
           <ListItem>
             <Paper elevation={0} sx={{ width: '100%', padding: 2 }}>
-              <Typography 
-                variant="h5" 
-                component="h3" 
+              <Typography
+                variant="h5"
+                component="h3"
                 fontWeight={900}
                 sx={{
                   mb: 4,
@@ -135,15 +126,17 @@ const AccountDrawer = () => {
               </Typography>
             </Paper>
           </ListItem>
-          <Divider sx={{ 
-            height: '5px',
-            backgroundColor: '#d5dbdb',
-          }} />
+          <Divider
+            sx={{
+              height: '5px',
+              backgroundColor: '#d5dbdb',
+            }}
+          />
           <ListItem>
             <Paper elevation={0} sx={{ width: '100%', padding: 2 }}>
-              <Typography 
-                variant="h5" 
-                component="h3" 
+              <Typography
+                variant="h5"
+                component="h3"
                 fontWeight={900}
                 sx={{
                   mb: 4,
@@ -171,9 +164,9 @@ const AccountDrawer = () => {
                 ></span>{' '}
                 Español
               </Box>
-              <Typography 
-                variant="h6" 
-                component="h3" 
+              <Typography
+                variant="h6"
+                component="h3"
                 sx={{
                   mt: 4,
                   mb: 4,
@@ -188,6 +181,6 @@ const AccountDrawer = () => {
       </Drawer>
     </>
   );
-}
+};
 
 export default AccountDrawer;

@@ -6,7 +6,10 @@ import { setupServer } from 'msw/node';
 
 import requestHandler from './requestHandler';
 
-let server: http.Server<typeof http.IncomingMessage,typeof http.ServerResponse>;
+let server: http.Server<
+  typeof http.IncomingMessage,
+  typeof http.ServerResponse
+>;
 let error = false;
 
 const handlers = [
@@ -24,25 +27,29 @@ const handlers = [
           { status: 200 }
         );
       }
-    }),
+    }
+  ),
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/:vendor_id`,
-    async ({params}) => {
+    async ({ params }) => {
       if (error) {
         return new HttpResponse(null, { status: 401 });
       } else {
-        return HttpResponse.json([{
-            key: 'some key',
-            vendor_id: 'some id',
-            active: true,
-            blacklisted: false,
-          },
-          {
-            key: 'some key2',
-            vendor_id: 'some id',
-            active: false,
-            blacklisted: false,
-          }],
+        return HttpResponse.json(
+          [
+            {
+              key: 'some key',
+              vendor_id: 'some id',
+              active: true,
+              blacklisted: false,
+            },
+            {
+              key: 'some key2',
+              vendor_id: 'some id',
+              active: false,
+              blacklisted: false,
+            },
+          ],
           { status: 200 }
         );
       }
@@ -79,7 +86,7 @@ test('Successful key retrieval', async () => {
     .expect('Content-Type', /json/)
     .then(res => {
       expect(res).toBeDefined();
-      console.log(res.body)
+      console.log(res.body);
       expect(res.body.data).toBeDefined();
       expect(res.body.data.keys).toBeDefined();
       expect(res.body.data.keys.length).toEqual(2);

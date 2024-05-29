@@ -1,10 +1,5 @@
 import { Args, Mutation, Resolver } from 'type-graphql';
-import {
-  CheckoutSessionInput,
-  LineItem,
-  Session,
-  ShopperId,
-} from './schema';
+import { CheckoutSessionInput, LineItem, Session, ShopperId } from './schema';
 import { StripeService } from '@/graphql/stripe/sessions/service';
 import { Locale } from '@/graphql/stripe/sessions/schema';
 
@@ -29,7 +24,7 @@ export class StripeCheckoutResolver {
       lineItems,
       shopperId,
       origin,
-      locale,
+      locale
     );
   }
 }

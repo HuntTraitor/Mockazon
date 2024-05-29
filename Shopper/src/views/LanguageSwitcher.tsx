@@ -23,7 +23,7 @@ const LanguageSwitcher = () => {
     <Box
       className={`${styles.languageContainer} ${styles.hoverContainer}`}
       aria-label="Language Container"
-      sx={{ 
+      sx={{
         display: isMobile ? 'none' : 'flex',
       }}
     >
