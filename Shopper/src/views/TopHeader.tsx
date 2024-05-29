@@ -433,8 +433,7 @@ const TopHeader = () => {
                     <ListItem
                       button
                       key={option}
-                      selected={index === suggestionIndex}
-                      onClick={() => handleSuggestionClick(option)}
+                      onMouseDown={() => handleSuggestionClick(option)}
                     >
                       <ListItemText
                         primary={highlightMatch(option, search)}
@@ -576,8 +575,7 @@ const TopHeader = () => {
                     <ListItem
                       button
                       key={option}
-                      selected={index === suggestionIndex}
-                      onClick={() => handleSuggestionClick(option)}
+                      onMouseDown={() => handleSuggestionClick(option)}
                     >
                       <ListItemText
                         primary={highlightMatch(option, search)}
