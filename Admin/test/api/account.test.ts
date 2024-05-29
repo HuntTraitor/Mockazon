@@ -12,7 +12,7 @@ let server: http.Server<
 >;
 
 let error = false;
-
+let requestError = true;
 const handlers = [
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/accounts`,
@@ -130,6 +130,21 @@ it('approve an existing vendor request', async () => {
 
 it('approve an existing vendor request with error', async () => {
   error = true;
+  await supertest(server)
+    .post('/api/graphql')
+    .send({
+      query:
+        'mutation approveVendor{approveVendor(VendorId: "invalidId") {id email name role suspended}}',
+    })
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.body.errors.length).toEqual(1);
+    });
+});
+
+it('approve an existing vendor request with error', async () => {
+  requestError = true;
   await supertest(server)
     .post('/api/graphql')
     .send({

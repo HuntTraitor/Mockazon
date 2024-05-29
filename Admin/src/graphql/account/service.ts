@@ -28,17 +28,17 @@ export class AccountService {
         }
       )
         .then(res => {
-          if (!res.ok) {
-            throw res;
-          }
+          // if (!res.ok) {
+          //   throw res;
+          // }
           return res.json();
         })
         .then(json => {
           resolve(json);
         })
-        .catch(e => {
-          reject(new GraphQLError(e));
-        });
+        // .catch(e => {
+        //   reject(new GraphQLError(e));
+        // });
     });
   }
 }
