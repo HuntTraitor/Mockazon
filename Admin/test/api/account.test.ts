@@ -5,6 +5,7 @@ import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from './requestHandler';
+import { HTTPResponse } from 'puppeteer';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -12,7 +13,7 @@ let server: http.Server<
 >;
 
 let error = false;
-let requestError = true;
+let wrongRole = false;
 const handlers = [
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/accounts`,
@@ -66,7 +67,15 @@ const handlers = [
     async () => {
       if (error) {
         return new HttpResponse(null, { status: 401 });
-      } else {
+      } else if (wrongRole) {
+        return HttpResponse.json(
+          {
+            id: '37a65191-2a4a-46c6-b7e5-d36133132b09',
+            role: 'WRONG ROLE',
+          },
+        );
+      }
+      else {
         return HttpResponse.json(
           {
             id: '37a65191-2a4a-46c6-b7e5-d36133132b09',
@@ -143,15 +152,47 @@ it('approve an existing vendor request with error', async () => {
     });
 });
 
-it('approve an existing vendor request with error', async () => {
-  requestError = true;
+it('Ill-formatted Authorization Header', async () => {
   await supertest(server)
     .post('/api/graphql')
+    .set('Authorization', 'someGarbge token')
     .send({
       query:
-        'mutation approveVendor{approveVendor(VendorId: "invalidId") {id email name role suspended}}',
+        'mutation approveVendor{approveVendor(VendorId: "someId") {id email name role suspended}}',
     })
-    .expect('Content-Type', /json/)
+    .expect(200)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.body.errors.length).toEqual(1);
+    });
+});
+
+it('Admin Auth Check failed', async () => {
+  error = true
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query:
+        'mutation approveVendor{approveVendor(VendorId: "someId") {id email name role suspended}}',
+    })
+    .expect(200)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.body.errors.length).toEqual(1);
+    });
+});
+it('Fail at returning right role', async () => {
+  error = false
+  wrongRole = true
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query:
+        'mutation approveVendor{approveVendor(VendorId: "someId") {id email name role suspended}}',
+    })
+    .expect(200)
     .then(res => {
       expect(res).toBeDefined();
       expect(res.body.errors.length).toEqual(1);
