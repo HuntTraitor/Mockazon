@@ -1,4 +1,3 @@
-import { GraphQLError } from 'graphql';
 import type { Account } from './schema';
 
 /**
@@ -17,7 +16,7 @@ export class AccountService {
   }
 
   public async approve(id: string): Promise<Account> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       fetch(
         `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/requests/${id}/approve`,
         {
@@ -28,6 +27,7 @@ export class AccountService {
         }
       )
         .then(res => {
+          // Commented out because Microservice throws error, does not return anything but sucesss
           // if (!res.ok) {
           //   throw res;
           // }
