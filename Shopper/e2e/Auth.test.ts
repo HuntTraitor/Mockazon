@@ -39,7 +39,6 @@ describe('Auth', () => {
   });
 
   test('Fails to create account with missing fields', async () => {
-    await page.goto('http://localhost:3000/signup');
     await page.waitForSelector('form');
 
     await page.click('button[type="submit"]');
