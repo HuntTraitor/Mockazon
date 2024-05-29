@@ -13,6 +13,8 @@ let server: http.Server<
 >;
 let error = false;
 let errorPut = false;
+let errorPost = false;
+
 const handlers = [
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/check`,
@@ -60,11 +62,8 @@ const handlers = [
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/:key/active`,
     async () => {
       if (errorPut) {
-        console.log('an error occurred')
         return new HttpResponse(undefined, { status: 401 });
       } else {
-        console.log('SUP')
-        console.log(error)
         return HttpResponse.json(
           {
             key: 'some key',
@@ -76,6 +75,23 @@ const handlers = [
         );
       }
     }),
+    rest.post(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/$:vendor_id/request`,
+      async () => {
+        if (errorPost) {
+          return new HttpResponse(undefined, { status: 401 });
+        } else {
+          return HttpResponse.json(
+            {
+              key: 'some key',
+              vendor_id: 'some id',
+              active: true,
+              blacklisted: false,
+            },
+            { status: 200 }
+          );
+        }
+      }),
 ];
 
 const microServices = setupServer(...handlers);
@@ -87,7 +103,6 @@ beforeAll(async () => {
 });
 
 afterEach(() => {
-  //error = false;
   microServices.resetHandlers();
 });
 
@@ -107,10 +122,6 @@ test('Successful key retrieval', async () => {
     .expect('Content-Type', /json/)
     .then(res => {
       expect(res).toBeDefined();
-<<<<<<< Updated upstream
-      console.log(res.body);
-=======
->>>>>>> Stashed changes
       expect(res.body.data).toBeDefined();
       expect(res.body.data.keys).toBeDefined();
       expect(res.body.data.keys.length).toEqual(2);
@@ -133,8 +144,7 @@ test('Error key retrieval', async () => {
     });
 });
 
-
-test('Successful set status', async () => {
+test('Successful set active status', async () => {
   error = false;
   await supertest(server)
     .post('/api/graphql')
@@ -149,14 +159,44 @@ test('Successful set status', async () => {
       expect(res.body.data.setActiveStatus.key).toBeDefined();
     });
 });
-
-test('Unsuccessful set status', async () => {
+test('Unsuccessful set active status', async () => {
   errorPut = true;
   await supertest(server)
     .post('/api/graphql')
     .set('Authorization', 'Bearer someToken')
     .send({
       query: `mutation key {setActiveStatus (apiKey: "some id") {key, vendor_id, blacklisted, active}}`,
+    })
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.error).toBeDefined();
+    });
+});
+
+test('Successful API Key Request', async () => {
+  errorPost = false;
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query: `mutation key {postAPIKeyRequest {key, vendor_id, blacklisted, active}}`,
+    })
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.body.data).toBeDefined();
+      expect(res.body.data.postAPIKeyRequest.key).toBeDefined();
+    });
+});
+
+test('Unsuccessful API Key Request', async () => {
+  errorPost = false;
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query: `mutation key {postAPIKeyRequest {key, vendor_id, blacklisted, active}}`,
     })
     .expect('Content-Type', /json/)
     .then(res => {
