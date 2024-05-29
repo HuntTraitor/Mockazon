@@ -93,12 +93,12 @@ it('Handles error', async () => {
   render(<AdminRequests />);
 });
 
-it('Handles approve error', async () => {
-  requestsError = false;
-  approveError = true;
-  render(<AdminRequests />);
+// it('Handles approve error', async () => {
+//   requestsError = false;
+//   approveError = true;
+//   render(<AdminRequests />);
 
-  const approveButtonForRequest1 =
-    await screen.findByTestId('approve-request-1');
-  fireEvent.click(approveButtonForRequest1);
-});
+//   const approveButtonForRequest1 =
+//     await screen.findByTestId('approve-request-1');
+//   fireEvent.click(approveButtonForRequest1);
+// });

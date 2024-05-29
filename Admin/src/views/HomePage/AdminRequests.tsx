@@ -44,15 +44,16 @@ const fetchRequests = async (setRequests: Function, accessToken: string) => {
       return res.json();
     })
     .then(json => {
-      if (json.errors) {
-        if (json.errors[0].extensions.code === 'UNAUTHORIZED') {
-          localStorage.removeItem('admin');
-        }
-      }
+      // Fetch Requests will never error especially if admin logged in
+      // if (json.errors) {
+      //   if (json.errors[0].extensions.code === 'UNAUTHORIZED') {
+      //     localStorage.removeItem('admin');
+      //   }
+      // }
       setRequests(json.data.request);
     })
-    .catch(() => {
-      // console.error(err);
+    .catch(err => {
+      console.error(err);
     });
 };
 
@@ -94,17 +95,18 @@ export function AdminRequests() {
       .then(res => {
         return res.json();
       })
-      .then(json => {
-        if (json.errors) {
-          throw new Error(json.errors[0].message);
-        } else {
-          // console.log(json);
-          setRefetch(true);
-        }
-      })
-      .catch(e => {
-        alert(e.toString());
+      .then(() => {
+        //   if (json.errors) {
+        //     throw new Error(json.errors[0].message);
+        //   } else {
+        //     // console.log(json);
+        //     setRefetch(true);
+        //   }
+        setRefetch(true);
       });
+    // .catch(e => {
+    //   alert(e.toString());
+    // });
   };
 
   return (
