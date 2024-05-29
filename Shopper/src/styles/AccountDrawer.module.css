@@ -1,0 +1,14 @@
+.topBox {
+    position: relative;
+    background-color: #232f3e;
+    color: #ffffff;
+    height: 150px;
+}
+
+.itemContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
