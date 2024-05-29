@@ -1,23 +1,20 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  useContext,
-} from 'react';
+import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
 import {
   Box,
   Button,
   TextField,
   Typography,
-  Autocomplete,
   InputAdornment,
   IconButton,
+  Popper,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import styles from '@/styles/TopHeader.module.css';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import 'flag-icons/css/flag-icons.min.css';
@@ -84,7 +81,7 @@ const CustomTextField = styled(TextField)(() => ({
     padding: '8px 12px',
     fontSize: '14px',
     display: 'flex',
-    transform: 'translateY(-20%)',
+    transform: 'translateY(0%)',
   },
   '& .MuiInputBase-input:focus': {
     outline: 'none',
@@ -132,12 +129,12 @@ const TopHeader = () => {
         });
 
         if (!response.ok) {
-          //console.error('Error fetching products:', response.statusText);
+          console.error('Error fetching products:', response.statusText);
         }
 
         const data = await response.json();
         if (data.errors && data.errors.length > 0) {
-          //console.error('Error fetching products:', data.errors);
+          console.error('Error fetching products:', data.errors);
           return;
         }
 
@@ -152,7 +149,7 @@ const TopHeader = () => {
           setSuggestions([]);
         }
       } catch (error) {
-        //console.error('Error fetching products:', error);
+        console.error('Error fetching products:', error);
       }
     }, 300),
     []
@@ -210,7 +207,7 @@ const TopHeader = () => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const allSuggestions = [search, ...suggestions];
+    const allSuggestions = [...suggestions, search];
     if (event.key === 'Enter') {
       if (suggestionIndex >= 0) {
         handleSuggestionClick(allSuggestions[suggestionIndex]);
@@ -220,12 +217,6 @@ const TopHeader = () => {
       if (inputRef.current) {
         inputRef.current.blur();
       }
-    } else if (event.key === 'ArrowDown') {
-      setSuggestionIndex((prevIndex) => (prevIndex + 1) % allSuggestions.length);
-    } else if (event.key === 'ArrowUp') {
-      setSuggestionIndex(
-        (prevIndex) => (prevIndex - 1 + allSuggestions.length) % allSuggestions.length
-      );
     } else if (event.key === 'Tab') {
       if (suggestionIndex >= 0) {
         setSearch(allSuggestions[suggestionIndex]);
@@ -234,13 +225,23 @@ const TopHeader = () => {
       if (inputRef.current) {
         inputRef.current.blur();
       }
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setSuggestionIndex((prevIndex) => (prevIndex + 1) % allSuggestions.length);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      setSuggestionIndex(
+        (prevIndex) => (prevIndex - 1 + allSuggestions.length) % allSuggestions.length
+      );
     }
   };
 
   useEffect(() => {
-    const allSuggestions = [search, ...suggestions];
+    const allSuggestions = [...suggestions, search];
     if (suggestionIndex >= 0) {
       setDisplayedValue(allSuggestions[suggestionIndex]);
+    } else {
+      setDisplayedValue(search);
     }
   }, [suggestionIndex, suggestions, search]);
 
@@ -309,124 +310,7 @@ const TopHeader = () => {
               </Box>
             </Box>
           </Box>
-          <Box
-            className={`${focused ? styles.focusedOutline : ''}`}
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '95%',
-              mb: '10px',
-            }}
-          >
-            {/* <Button
-          aria-label="Categories Button"
-          variant="text"
-          className={styles.categoriesButton}
-          >
-          All
-          <ExpandMoreIcon className={styles.dropdownIcon} />
-        </Button> */}
-            <Autocomplete
-              className={styles.searchInputContainer}
-              forcePopupIcon={false}
-              options={suggestions.slice(0, 10)}
-              getOptionLabel={option => option}
-              noOptionsText={''}
-              value={displayedValue}
-              open={Boolean(search) && focused && suggestions.length > 0}
-              renderInput={params => (
-                <CustomTextField
-                  {...params}
-                  inputRef={inputRef}
-                  placeholder={t('searchPlaceholder') as string}
-                  InputProps={{
-                    ...params.InputProps,
-                    onChange: (e) => {
-                      setSearch(e.target.value);
-                      setDisplayedValue(e.target.value);
-                      setSuggestionIndex(-1);
-                    },
-                    onKeyDown: handleKeyDown,
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {search && (
-                          <IconButton
-                            onClick={() => {
-                              setSearch('');
-                              setDisplayedValue('');
-                              setSuggestionIndex(-1);
-                            }}
-                            size="small"
-                            className={styles.clearIndicator}
-                          >
-                            <ClearIcon
-                              sx={{
-                                width: '19px',
-                              }} 
-                            />
-                          </IconButton>
-                        )}
-                        <Button
-                          aria-label="Search Button"
-                          variant="contained"
-                          color="warning"
-                          className={styles.searchButton}
-                          sx={{
-                            borderTopLeftRadius: '10px !important',
-                            borderBottomLeftRadius: '10px !important',
-                            top: '0px',
-                          }}
-                          onClick={handleSearch}
-                        >
-                          <SearchIcon
-                            fontSize="large"
-                            sx={{
-                              color: 'black',
-                            }}
-                          />
-                        </Button>
-                      </InputAdornment>
-                    ),
-                  }}
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
-                />
-              )}
-              renderOption={(props, option) => (
-                <li {...props} onClick={() => handleSuggestionClick(option)}>
-                  <SearchIcon
-                    style={{
-                      marginRight: '5px',
-                      color: 'rgba(0, 0, 0, 0.54)',
-                    }}
-                  />
-                  {highlightMatch(option, search)}
-                </li>
-              )}
-              style={{ width: '100%' }}
-            />
-          </Box>
-        </>
-      ) : (
-        <>
-          <Box className={styles.topHeaderLeft}>
-            <Box className={`${styles.logo} ${styles.hoverContainer}`}>
-              <Link href="/">
-                <Image
-                  aria-label="bar logo"
-                  src={`${basePath}/mockazon_logo_white_transparent.png`}
-                  width={150}
-                  height={50}
-                  alt="Logo"
-                  priority
-                />
-                {/* Replace with a new logo */}
-              </Link>
-            </Box>
-            {/* <Box
+          {/* <Box
           aria-label="Address Container"
           className={`${styles.addressContainer} ${styles.hoverContainer}`}
           >
@@ -445,11 +329,16 @@ const TopHeader = () => {
           </Typography>
           </Box>
         </Box> */}
-          </Box>
           <Box
-            className={`${styles.searchContainer} ${
-              focused ? styles.focusedOutline : ''
-            }`}
+            className={`${focused ? styles.focusedOutline : ''}`}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '95%',
+              mb: '10px',
+              position: 'relative',
+            }}
           >
             {/* <Button
           aria-label="Categories Button"
@@ -459,84 +348,244 @@ const TopHeader = () => {
           All
           <ExpandMoreIcon className={styles.dropdownIcon} />
         </Button> */}
-            <Autocomplete
-              className={styles.searchInputContainer}
-              forcePopupIcon={false}
-              options={suggestions.slice(0, 10)}
-              getOptionLabel={option => option}
-              noOptionsText={''}
-              value={displayedValue}
-              open={Boolean(search) && focused && suggestions.length > 0}
-              renderInput={params => (
-                <CustomTextField
-                  {...params}
-                  inputRef={inputRef}
-                  placeholder={t('searchPlaceholder') as string}
-                  InputProps={{
-                    ...params.InputProps,
-                    onChange: (e) => {
-                      setSearch(e.target.value);
-                      setDisplayedValue(e.target.value);
-                      setSuggestionIndex(-1);
-                    },
-                    onKeyDown: handleKeyDown,
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {search && (
-                          <IconButton
-                            onClick={() => {
-                              setSearch('');
-                              setDisplayedValue('');
-                              setSuggestionIndex(-1);
-                            }}
-                            size="small"
-                            className={styles.clearIndicator}
-                          >
-                            <ClearIcon
-                              sx={{
-                                width: '19px',
-                              }}
-                            />
-                          </IconButton>
-                        )}
-                        <Button
-                          aria-label="Search Button"
-                          variant="contained"
-                          color="warning"
-                          className={styles.searchButton}
-                          sx={{
-                            top: '0px',
+            <Box sx={{ width: '100%' }}>
+              <CustomTextField
+                inputRef={inputRef}
+                placeholder={t('searchPlaceholder') as string}
+                InputProps={{
+                  onChange: (e) => {
+                    setSearch(e.target.value);
+                    setDisplayedValue(e.target.value);
+                    setSuggestionIndex(-1);
+                  },
+                  onKeyDown: handleKeyDown,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      {search && (
+                        <IconButton
+                          onClick={() => {
+                            setSearch('');
+                            setDisplayedValue('');
+                            setSuggestionIndex(-1);
                           }}
-                          onClick={handleSearch}
+                          size="small"
+                          className={styles.clearIndicator}
                         >
-                          <SearchIcon
-                            sx={{
-                              color: '#333333',
-                            }}
-                          />
-                        </Button>
-                      </InputAdornment>
-                    ),
-                  }}
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                          <ClearIcon sx={{ width: '19px' }} />
+                        </IconButton>
+                      )}
+                      <Button
+                        aria-label="Search Button"
+                        variant="contained"
+                        color="warning"
+                        className={styles.searchButton}
+                        sx={{
+                          borderTopLeftRadius: '10px !important',
+                          borderBottomLeftRadius: '10px !important',
+                          top: '0px',
+                        }}
+                        onClick={handleSearch}
+                      >
+                        <SearchIcon
+                          fontSize="large"
+                          sx={{ color: 'black' }}
+                        />
+                      </Button>
+                    </InputAdornment>
+                  ),
+                }}
+                value={displayedValue}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                sx={{ width: '100%' }}
+              />
+            </Box>
+            <Popper
+              open={focused && suggestions.length > 0}
+              anchorEl={inputRef.current}
+              placement="bottom-start"
+              style={{ 
+                width: inputRef.current?.offsetParent?.clientWidth, 
+                zIndex: 1100,
+              }}
+              modifiers={[
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, 4],
+                  },
+                },
+              ]}
+            >
+              <Paper 
+                sx={{
+                  width: '100%',
+                  maxHeight: 'none',
+                  overflow: 'visible',
+                }}
+              >
+                <List>
+                  {suggestions.map((option, index) => (
+                    <ListItem
+                      button
+                      key={option}
+                      selected={index === suggestionIndex}
+                      onClick={() => handleSuggestionClick(option)}
+                    >
+                      <ListItemText
+                        primary={highlightMatch(option, search)}
+                        primaryTypographyProps={{
+                          style: {
+                            fontWeight: index === suggestionIndex ? 'bold' : 'normal',
+                          },
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            </Popper>
+          </Box>
+        </>
+      ) : (
+        <>
+          <Box className={styles.topHeaderLeft}>
+            <Box className={`${styles.logo} ${styles.hoverContainer}`}>
+              <Link href="/">
+                <Image
+                  aria-label="bar logo"
+                  src={`${basePath}/mockazon_logo_white_transparent.png`}
+                  width={150}
+                  height={50}
+                  alt="Logo"
+                  priority
                 />
-              )}
-              renderOption={(props, option) => (
-                <li {...props} onClick={() => handleSuggestionClick(option)}>
-                  <SearchIcon
-                    style={{
-                      marginRight: '5px',
-                      color: 'rgba(0, 0, 0, 0.54)',
-                    }}
-                  />
-                  {highlightMatch(option, search)}
-                </li>
-              )}
-              style={{ width: '100%' }}
-            />
+                {/* Replace with a new logo */}
+              </Link>
+            </Box>
+          </Box>
+          {/* <Box
+          aria-label="Address Container"
+          className={`${styles.addressContainer} ${styles.hoverContainer}`}
+          >
+          <PlaceOutlinedIcon className={styles.addressIcon} />
+          <Box className={styles.addressTextContainer}>
+          <Typography variant="caption" className={styles.deliveryText}>
+          {t('topHeader:deliveryText')}
+          </Typography>
+          <Typography
+          aria-label="Address"
+          variant="body2"
+          className={styles.addressText}
+          onClick={() => console.log('Clicked Address')}
+          >
+          Santa Cruz 95060
+          </Typography>
+          </Box>
+        </Box> */}
+          <Box
+            className={`${styles.searchContainer} ${
+              focused ? styles.focusedOutline : ''
+            }`}
+            sx={{ position: 'relative' }}
+          >
+            {/* <Button
+          aria-label="Categories Button"
+          variant="text"
+          className={styles.categoriesButton}
+          >
+          All
+          <ExpandMoreIcon className={styles.dropdownIcon} />
+        </Button> */}
+            <Box sx={{ width: '100%' }}>
+              <CustomTextField
+                inputRef={inputRef}
+                placeholder={t('searchPlaceholder') as string}
+                InputProps={{
+                  onChange: (e) => {
+                    setSearch(e.target.value);
+                    setDisplayedValue(e.target.value);
+                    setSuggestionIndex(-1); // Reset index on new input
+                  },
+                  onKeyDown: handleKeyDown,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      {search && (
+                        <IconButton
+                          onClick={() => {
+                            setSearch('');
+                            setDisplayedValue('');
+                            setSuggestionIndex(-1);
+                          }}
+                          size="small"
+                          className={styles.clearIndicator}
+                        >
+                          <ClearIcon sx={{ width: '19px' }} />
+                        </IconButton>
+                      )}
+                      <Button
+                        aria-label="Search Button"
+                        variant="contained"
+                        color="warning"
+                        className={styles.searchButton}
+                        sx={{ top: '0px' }}
+                        onClick={handleSearch}
+                      >
+                        <SearchIcon sx={{ color: '#333333' }} />
+                      </Button>
+                    </InputAdornment>
+                  ),
+                }}
+                value={displayedValue}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+              />
+            </Box>
+            <Popper
+              open={focused && suggestions.length > 0}
+              anchorEl={inputRef.current}
+              placement="bottom-start"
+              style={{ 
+                width: inputRef.current?.offsetParent?.clientWidth, 
+                zIndex: 1100,
+              }}
+              modifiers={[
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, 4],
+                  },
+                },
+              ]}
+            >
+              <Paper 
+                sx={{
+                  width: '100%',
+                  maxHeight: 'none',
+                  overflow: 'visible',
+                }}
+              >
+                <List>
+                  {suggestions.map((option, index) => (
+                    <ListItem
+                      button
+                      key={option}
+                      selected={index === suggestionIndex}
+                      onClick={() => handleSuggestionClick(option)}
+                    >
+                      <ListItemText
+                        primary={highlightMatch(option, search)}
+                        primaryTypographyProps={{
+                          style: {
+                            fontWeight: index === suggestionIndex ? 'bold' : 'normal',
+                          },
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            </Popper>
           </Box>
           <Box className={styles.topHeaderRight}>
             <LanguageSwitcher />
@@ -547,9 +596,7 @@ const TopHeader = () => {
               onClick={() => {
                 router.push(accessToken ? '/orders' : '/login');
               }}
-              sx={{
-                display: { xs: 'none', sm: 'block' },
-              }}
+              sx={{ display: { xs: 'none', sm: 'block' } }}
             >
               <Typography>
                 <span className={styles.caption}>{t('topHeader:returns')}</span>
@@ -569,9 +616,7 @@ const TopHeader = () => {
               <Typography
                 className={styles.cartText}
                 variant="body2"
-                sx={{
-                  display: { xs: 'none', sm: 'block' },
-                }}
+                sx={{ display: { xs: 'none', sm: 'block' } }}
               >
                 {t('cart')}
               </Typography>
