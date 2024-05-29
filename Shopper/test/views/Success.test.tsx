@@ -23,6 +23,11 @@ const AppContextProps = {
   setBackDropOpen: jest.fn(),
   mockazonMenuDrawerOpen: false,
   setMockazonMenuDrawerOpen: jest.fn(),
+  isMobile: false,
+  setIsMobile: jest.fn(),
+  accountDrawerOpen: false,
+  setAccountDrawerOpen: jest.fn(),
+
 };
 
 jest.mock('next/router', () => ({

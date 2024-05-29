@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useContext,
+} from 'react';
 import {
   Box,
   Button,
@@ -227,11 +233,12 @@ const TopHeader = () => {
       }
     } else if (event.key === 'ArrowDown') {
       event.preventDefault();
-      setSuggestionIndex((prevIndex) => (prevIndex + 1) % allSuggestions.length);
+      setSuggestionIndex(prevIndex => (prevIndex + 1) % allSuggestions.length);
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
       setSuggestionIndex(
-        (prevIndex) => (prevIndex - 1 + allSuggestions.length) % allSuggestions.length
+        prevIndex =>
+          (prevIndex - 1 + allSuggestions.length) % allSuggestions.length
       );
     }
   };
@@ -353,7 +360,7 @@ const TopHeader = () => {
                 inputRef={inputRef}
                 placeholder={t('searchPlaceholder') as string}
                 InputProps={{
-                  onChange: (e) => {
+                  onChange: e => {
                     setSearch(e.target.value);
                     setDisplayedValue(e.target.value);
                     setSuggestionIndex(-1);
@@ -386,10 +393,7 @@ const TopHeader = () => {
                         }}
                         onClick={handleSearch}
                       >
-                        <SearchIcon
-                          fontSize="large"
-                          sx={{ color: 'black' }}
-                        />
+                        <SearchIcon fontSize="large" sx={{ color: 'black' }} />
                       </Button>
                     </InputAdornment>
                   ),
@@ -404,8 +408,8 @@ const TopHeader = () => {
               open={focused && suggestions.length > 0}
               anchorEl={inputRef.current}
               placement="bottom-start"
-              style={{ 
-                width: inputRef.current?.offsetParent?.clientWidth, 
+              style={{
+                width: inputRef.current?.offsetParent?.clientWidth,
                 zIndex: 1100,
               }}
               modifiers={[
@@ -417,7 +421,7 @@ const TopHeader = () => {
                 },
               ]}
             >
-              <Paper 
+              <Paper
                 sx={{
                   width: '100%',
                   maxHeight: 'none',
@@ -436,7 +440,8 @@ const TopHeader = () => {
                         primary={highlightMatch(option, search)}
                         primaryTypographyProps={{
                           style: {
-                            fontWeight: index === suggestionIndex ? 'bold' : 'normal',
+                            fontWeight:
+                              index === suggestionIndex ? 'bold' : 'normal',
                           },
                         }}
                       />
@@ -502,7 +507,7 @@ const TopHeader = () => {
                 inputRef={inputRef}
                 placeholder={t('searchPlaceholder') as string}
                 InputProps={{
-                  onChange: (e) => {
+                  onChange: e => {
                     setSearch(e.target.value);
                     setDisplayedValue(e.target.value);
                     setSuggestionIndex(-1); // Reset index on new input
@@ -545,8 +550,8 @@ const TopHeader = () => {
               open={focused && suggestions.length > 0}
               anchorEl={inputRef.current}
               placement="bottom-start"
-              style={{ 
-                width: inputRef.current?.offsetParent?.clientWidth, 
+              style={{
+                width: inputRef.current?.offsetParent?.clientWidth,
                 zIndex: 1100,
               }}
               modifiers={[
@@ -558,7 +563,7 @@ const TopHeader = () => {
                 },
               ]}
             >
-              <Paper 
+              <Paper
                 sx={{
                   width: '100%',
                   maxHeight: 'none',
@@ -577,7 +582,8 @@ const TopHeader = () => {
                         primary={highlightMatch(option, search)}
                         primaryTypographyProps={{
                           style: {
-                            fontWeight: index === suggestionIndex ? 'bold' : 'normal',
+                            fontWeight:
+                              index === suggestionIndex ? 'bold' : 'normal',
                           },
                         }}
                       />

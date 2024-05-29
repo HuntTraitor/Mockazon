@@ -40,18 +40,18 @@ jest.mock('next-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       switch (key) {
-        case 'deliveryText':
-          return 'Delivery to';
-        case 'searchPlaceholder':
-          return 'Search Mockazon';
-        case 'returns':
-          return 'Returns';
-        case 'orders':
-          return '& Orders';
-        case 'cart':
-          return 'Cart';
-        default:
-          return key;
+      case 'deliveryText':
+        return 'Delivery to';
+      case 'searchPlaceholder':
+        return 'Search Mockazon';
+      case 'returns':
+        return 'Returns';
+      case 'orders':
+        return '& Orders';
+      case 'cart':
+        return 'Cart';
+      default:
+        return key;
       }
     },
     i18n: {
@@ -65,6 +65,10 @@ const AppContextProps = {
   setBackDropOpen: jest.fn(),
   mockazonMenuDrawerOpen: false,
   setMockazonMenuDrawerOpen: jest.fn(),
+  isMobile: false,
+  setIsMobile: jest.fn(),
+  accountDrawerOpen: false,
+  setAccountDrawerOpen: jest.fn(),
 };
 
 jest.mock('lodash/debounce', () => jest.fn(fn => fn));
@@ -83,17 +87,17 @@ describe('Top Header', () => {
     await screen.findByText('Cart');
   });
 
-  it('Clicking on orders navigates to the orders page', async () => {
+  it('Clicking on orders navigates to login page, not signed in', async () => {
     render(
       <AppContext.Provider value={AppContextProps}>
         <TopHeader />
       </AppContext.Provider>
     );
     fireEvent.click(screen.getByLabelText('Orders Button'));
-    expect(pushMock).toHaveBeenCalledWith('/orders');
+    expect(pushMock).toHaveBeenCalledWith('/login');
   });
 
-  it('Clicking on the cart navigates to the cart page', async () => {
+  it('Clicking on the cart navigates to the login page when not signed in', async () => {
     render(
       <AppContext.Provider value={AppContextProps}>
         <TopHeader />
@@ -101,7 +105,7 @@ describe('Top Header', () => {
     );
     const cart = screen.getByLabelText('Cart Button');
     cart.click();
-    expect(pushMock).toHaveBeenCalledWith('/cart');
+    expect(pushMock).toHaveBeenCalledWith('/login');
   });
 
   it('Typing in search bar fetches suggestions', async () => {
