@@ -99,6 +99,8 @@ const TopHeader = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [focused, setFocused] = useState(false);
   const [suggestionClicked, setSuggestionClicked] = useState(false);
+  const [displayedValue, setDisplayedValue] = useState(search);
+  const [suggestionIndex, setSuggestionIndex] = useState(-1);
   const { setBackDropOpen, isMobile } = useAppContext();
   const inputRef = useRef<HTMLInputElement>(null); // Reference for the input element
   const { accessToken } = useContext(LoggedInContext);
@@ -171,6 +173,18 @@ const TopHeader = () => {
   const handleFocus = () => {
     setFocused(true);
     setBackDropOpen(true);
+
+    const disableDocumentKeydown = (event: KeyboardEvent) => {
+      if (['ArrowUp', 'ArrowDown', 'Tab'].includes(event.key)) {
+        event.preventDefault();
+      }
+    };
+
+    document.addEventListener('keydown', disableDocumentKeydown);
+
+    return () => {
+      document.removeEventListener('keydown', disableDocumentKeydown);
+    };
   };
 
   const handleBlur = () => {
@@ -190,17 +204,45 @@ const TopHeader = () => {
 
   const handleSuggestionClick = (option: string) => {
     setSearch(option);
+    setDisplayedValue(option);
     setSuggestionClicked(true);
+    setSuggestionIndex(-1);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const allSuggestions = [search, ...suggestions];
     if (event.key === 'Enter') {
+      if (suggestionIndex >= 0) {
+        handleSuggestionClick(allSuggestions[suggestionIndex]);
+      } else {
+        handleSearch();
+      }
       if (inputRef.current) {
         inputRef.current.blur();
       }
-      handleSearch();
+    } else if (event.key === 'ArrowDown') {
+      setSuggestionIndex((prevIndex) => (prevIndex + 1) % allSuggestions.length);
+    } else if (event.key === 'ArrowUp') {
+      setSuggestionIndex(
+        (prevIndex) => (prevIndex - 1 + allSuggestions.length) % allSuggestions.length
+      );
+    } else if (event.key === 'Tab') {
+      if (suggestionIndex >= 0) {
+        setSearch(allSuggestions[suggestionIndex]);
+        setDisplayedValue(allSuggestions[suggestionIndex]);
+      }
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
     }
   };
+
+  useEffect(() => {
+    const allSuggestions = [search, ...suggestions];
+    if (suggestionIndex >= 0) {
+      setDisplayedValue(allSuggestions[suggestionIndex]);
+    }
+  }, [suggestionIndex, suggestions, search]);
 
   useEffect(() => {
     const handleRouteChange = () => {
@@ -291,8 +333,8 @@ const TopHeader = () => {
               options={suggestions.slice(0, 10)}
               getOptionLabel={option => option}
               noOptionsText={''}
-              value={search}
-              open={Boolean(search) && focused}
+              value={displayedValue}
+              open={Boolean(search) && focused && suggestions.length > 0}
               renderInput={params => (
                 <CustomTextField
                   {...params}
@@ -300,20 +342,28 @@ const TopHeader = () => {
                   placeholder={t('searchPlaceholder') as string}
                   InputProps={{
                     ...params.InputProps,
-                    onChange: e => setSearch(e.target.value),
+                    onChange: (e) => {
+                      setSearch(e.target.value);
+                      setDisplayedValue(e.target.value);
+                      setSuggestionIndex(-1);
+                    },
                     onKeyDown: handleKeyDown,
                     endAdornment: (
                       <InputAdornment position="end">
                         {search && (
                           <IconButton
-                            onClick={() => setSearch('')}
+                            onClick={() => {
+                              setSearch('');
+                              setDisplayedValue('');
+                              setSuggestionIndex(-1);
+                            }}
                             size="small"
                             className={styles.clearIndicator}
                           >
                             <ClearIcon
                               sx={{
                                 width: '19px',
-                              }}
+                              }} 
                             />
                           </IconButton>
                         )}
@@ -415,8 +465,8 @@ const TopHeader = () => {
               options={suggestions.slice(0, 10)}
               getOptionLabel={option => option}
               noOptionsText={''}
-              value={search}
-              open={Boolean(search) && focused}
+              value={displayedValue}
+              open={Boolean(search) && focused && suggestions.length > 0}
               renderInput={params => (
                 <CustomTextField
                   {...params}
@@ -424,13 +474,21 @@ const TopHeader = () => {
                   placeholder={t('searchPlaceholder') as string}
                   InputProps={{
                     ...params.InputProps,
-                    onChange: e => setSearch(e.target.value),
+                    onChange: (e) => {
+                      setSearch(e.target.value);
+                      setDisplayedValue(e.target.value);
+                      setSuggestionIndex(-1);
+                    },
                     onKeyDown: handleKeyDown,
                     endAdornment: (
                       <InputAdornment position="end">
                         {search && (
                           <IconButton
-                            onClick={() => setSearch('')}
+                            onClick={() => {
+                              setSearch('');
+                              setDisplayedValue('');
+                              setSuggestionIndex(-1);
+                            }}
                             size="small"
                             className={styles.clearIndicator}
                           >
