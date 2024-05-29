@@ -204,3 +204,33 @@ test('Unsuccessful API Key Request', async () => {
       expect(res.error).toBeDefined();
     });
 });
+
+test('No Auth Header Provided', async () => {
+  errorPost = false;
+  await supertest(server)
+    .post('/api/graphql')
+    // .set('Authorization', 'Bearer someToken')
+    .send({
+      query: `mutation key {postAPIKeyRequest {key, vendor_id, blacklisted, active}}`,
+    })
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.error).toBeDefined();
+    });
+});
+
+test('Garbage Value for Auth Header', async () => {
+  errorPost = false;
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'some garbageToken')
+    .send({
+      query: `mutation key {postAPIKeyRequest {key, vendor_id, blacklisted, active}}`,
+    })
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.error).toBeDefined();
+    });
+});
