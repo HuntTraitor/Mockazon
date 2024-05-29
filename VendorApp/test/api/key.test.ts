@@ -5,13 +5,14 @@ import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from './requestHandler';
+import { TramRounded } from '@mui/icons-material';
 
 let server: http.Server<
   typeof http.IncomingMessage,
   typeof http.ServerResponse
 >;
 let error = false;
-
+let errorPut = false;
 const handlers = [
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/vendor/check`,
@@ -55,6 +56,26 @@ const handlers = [
       }
     }
   ),
+  rest.put(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/:key/active`,
+    async () => {
+      if (errorPut) {
+        console.log('an error occurred')
+        return new HttpResponse(undefined, { status: 401 });
+      } else {
+        console.log('SUP')
+        console.log(error)
+        return HttpResponse.json(
+          {
+            key: 'some key',
+            vendor_id: 'some id',
+            active: true,
+            blacklisted: false,
+          },
+          { status: 200 }
+        );
+      }
+    }),
 ];
 
 const microServices = setupServer(...handlers);
@@ -66,7 +87,7 @@ beforeAll(async () => {
 });
 
 afterEach(() => {
-  error = false;
+  //error = false;
   microServices.resetHandlers();
 });
 
@@ -86,69 +107,60 @@ test('Successful key retrieval', async () => {
     .expect('Content-Type', /json/)
     .then(res => {
       expect(res).toBeDefined();
+<<<<<<< Updated upstream
       console.log(res.body);
+=======
+>>>>>>> Stashed changes
       expect(res.body.data).toBeDefined();
       expect(res.body.data.keys).toBeDefined();
       expect(res.body.data.keys.length).toEqual(2);
     });
 });
 
-// test('Errors on a bad email', async () => {
-//   await supertest(server)
-//     .post('/api/graphql')
-//     .send({
-//       query: `{signup(
-//       name: "Test name"
-//       email: "test@gmail"
-//       password: "password123"
-//     ) {content}}`,
-//     })
-//     .expect('Content-Type', /json/)
-//     .then(res => {
-//       console.log(res.body);
-//       expect(res).toBeDefined();
-//       expect(res.body.errors.length).toEqual(1);
-//       expect(res.body.errors[0].message).toBe('Argument Validation Error');
-//     });
-// });
+test('Error key retrieval', async () => {
+  error = true;
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query: `query key {keys {key, vendor_id, active, blacklisted}}`,
+    })
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.body.errors).toBeDefined();
+      expect(res.body.data).toBeNull();
+    });
+});
 
-// test('Errors on a too short password', async () => {
-//   await supertest(server)
-//     .post('/api/graphql')
-//     .send({
-//       query: `{signup(
-//       name: "Test name"
-//       email: "test@gmail.com"
-//       password: "123"
-//     ) {content}}`,
-//     })
-//     .expect('Content-Type', /json/)
-//     .then(res => {
-//       console.log(res.body);
-//       expect(res).toBeDefined();
-//       expect(res.body.errors.length).toEqual(1);
-//       expect(res.body.errors[0].message).toBe('Argument Validation Error');
-//     });
-// });
 
-// test('Errors on a bad microservice response', async () => {
-//   error = true;
-//   await supertest(server)
-//     .post('/api/graphql')
-//     .send({
-//       query: `{signup(
-//       name: "Test name"
-//       email: "test@gmail.com"
-//       password: "password123"
-//     ) {content}}`,
-//     })
-//     .expect('Content-Type', /json/)
-//     .then(res => {
-//       console.log(res.body);
-//       expect(res).toBeDefined();
-//       expect(res.body.errors.length).toEqual(1);
-//       expect(res.body.errors[0].message).toBe(
-//         'Request failed, please try again'
-//       );
-//     });
-// });
+test('Successful set status', async () => {
+  error = false;
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query: `mutation key {setActiveStatus (apiKey: "some id") {key, vendor_id, blacklisted, active}}`,
+    })
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.body.data).toBeDefined();
+      expect(res.body.data.setActiveStatus.key).toBeDefined();
+    });
+});
+
+test('Unsuccessful set status', async () => {
+  errorPut = true;
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query: `mutation key {setActiveStatus (apiKey: "some id") {key, vendor_id, blacklisted, active}}`,
+    })
+    .expect('Content-Type', /json/)
+    .then(res => {
+      expect(res).toBeDefined();
+      expect(res.error).toBeDefined();
+    });
+});
