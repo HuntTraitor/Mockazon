@@ -401,7 +401,7 @@ const TopHeader = () => {
                 value={displayedValue}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                sx={{ width: '100%' }}
+                sx={{ minWidth: '100%' }}
               />
             </Box>
             <Popper
@@ -544,6 +544,7 @@ const TopHeader = () => {
                 value={displayedValue}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
+                sx={{ minWidth: '100%' }}
               />
             </Box>
             <Popper
