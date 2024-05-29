@@ -124,7 +124,10 @@
 
 .clearIndicator {
   position: absolute;
-  transform: translate(-200%, -20%);
+  transform: translate(-145%, -20%);
+  background-color: white;
+  padding-right: 15px;
+  padding-left: 15px;
 }
 
 .hoverContainer:hover::after {

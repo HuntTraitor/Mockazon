@@ -307,7 +307,11 @@ const TopHeader = () => {
                             size="small"
                             className={styles.clearIndicator}
                           >
-                            <ClearIcon />
+                            <ClearIcon 
+                              sx={{
+                                width: '19px',
+                              }}
+                            />
                           </IconButton>
                         )}
                         <Button
@@ -426,7 +430,11 @@ const TopHeader = () => {
                             size="small"
                             className={styles.clearIndicator}
                           >
-                            <ClearIcon />
+                            <ClearIcon 
+                              sx={{
+                                width: '19px',
+                              }}
+                            />
                           </IconButton>
                         )}
                         <Button
