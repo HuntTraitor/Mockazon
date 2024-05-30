@@ -74,6 +74,7 @@ const AccountDrawer = () => {
         </Box>
       )}
       <Drawer
+        aria-label={'account drawer'}
         anchor="right"
         open={accountDrawerOpen}
         onClose={() => setAccountDrawerOpen(false)}
@@ -114,6 +115,7 @@ const AccountDrawer = () => {
                 {t('yourOrders')}
               </Typography>
               <Typography
+                aria-label={'go to orders'}
                 variant="h6"
                 component="h3"
                 sx={{
@@ -146,6 +148,7 @@ const AccountDrawer = () => {
               </Typography>
               <Box>
                 <Radio
+                  aria-label={'select english'}
                   checked={currentLocale === 'en'}
                   onClick={() => handleLocaleChange('en')}
                 />
@@ -155,6 +158,7 @@ const AccountDrawer = () => {
                 ></span>{' '}
                 English
                 <Radio
+                  aria-label={'select spanish'}
                   checked={currentLocale === 'es'}
                   onClick={() => handleLocaleChange('es')}
                 />
@@ -165,6 +169,7 @@ const AccountDrawer = () => {
                 Español
               </Box>
               <Typography
+                aria-label={'sign out'}
                 variant="h6"
                 component="h3"
                 sx={{
