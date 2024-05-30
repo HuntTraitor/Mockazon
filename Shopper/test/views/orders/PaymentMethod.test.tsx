@@ -69,6 +69,5 @@ it('Loads payment method with Link', async () => {
       </SnackbarProvider>
     </AppContext.Provider>
   );
-  screen.getByText('card order:endingIn 4242');
-  screen.getByAltText('Visa');
+  screen.getByText('Link Payment');
 });
