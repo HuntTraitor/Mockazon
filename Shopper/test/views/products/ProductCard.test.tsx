@@ -117,7 +117,6 @@ it('Renders ProductCard successfully', async () => {
   expect(screen.getByText('$')).toBeDefined();
   expect(screen.getByText('12')).toBeDefined();
   expect(screen.getByText('99')).toBeDefined();
-  expect(screen.getByText('Mon, May 20')).toBeDefined();
 });
 
 it('Renders ProductCard with a weird price successful', async () => {

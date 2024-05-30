@@ -81,6 +81,10 @@ const lineItems = [
       product_data: {
         name: 'T-Shirt',
         images: ['https://i.imgur.com/EHyR2nP.png'],
+        metadata: {
+          productId: '123',
+          vendorId: '123',
+        }
       },
     },
     quantity: 1,
@@ -95,13 +99,12 @@ test('Create Stripe Checkout Session', async () => {
     .post('/api/graphql')
     .send({
       query: `
-          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!, $metadata: MetaData!) {
+          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!) {
             createStripeCheckoutSession(
               lineItems: $lineItems, 
               shopperId: $shopperId, 
               origin: $origin,
               locale: $locale,
-              metadata: $metadata
             ) {
               id
               url
@@ -113,14 +116,6 @@ test('Create Stripe Checkout Session', async () => {
         shopperId,
         origin,
         locale: 'en',
-        metadata: {
-          items: [
-            {
-              productId: '123',
-              vendorId: '123',
-            },
-          ],
-        },
       },
     });
   expect(result.body.data.createStripeCheckoutSession.id).toBeDefined();
@@ -133,13 +128,12 @@ test('Create Stripe Checkout Session with error', async () => {
     .post('/api/graphql')
     .send({
       query: `
-          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!, $metadata: MetaData!) {
+          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!) {
             createStripeCheckoutSession(
               lineItems: $lineItems, 
               shopperId: $shopperId, 
               origin: $origin,
               locale: $locale,
-              metadata: $metadata
             ) {
               id
               url
@@ -151,9 +145,6 @@ test('Create Stripe Checkout Session with error', async () => {
         shopperId,
         origin,
         locale: 'en',
-        metadata: {
-          items: [{ productId: '123', vendorId: '123' }],
-        },
       },
     });
 
@@ -167,7 +158,7 @@ test('Create Stripe Checkout Session fails with invalid input', async () => {
     .post('/api/graphql')
     .send({
       query: `
-          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!, $metadata: MetaData!) {
+          mutation CreateStripeCheckoutSession($lineItems: [LineItem!]!, $shopperId: ShopperId!, $origin: String!, $locale: Locale!) {
             createStripeCheckoutSession(
               lineItems: $lineItems, 
               shopperId: $shopperId, 

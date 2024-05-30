@@ -18,7 +18,8 @@ let server: http.Server<
 let vendorPostPasses = true;
 const orderProductsPostPasses = true;
 const shopperPostPasses = true;
-const deletePasses = true;
+let deletePasses = true;
+const vendorShopperOrderPasses = true;
 
 const handlers = [
   rest.post(
@@ -46,6 +47,7 @@ const handlers = [
       if (shopperPostPasses) {
         return HttpResponse.json(
           {
+            id: '123',
             createdAt: '2020-01-01T00:00:00.000Z',
             shipped: true,
             delivered: false,
@@ -90,6 +92,25 @@ const handlers = [
       } else {
         return HttpResponse.json(
           { message: 'Create order error' },
+          { status: 500 }
+        );
+      }
+    }
+  ),
+  rest.post(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/VendorShopperOrder`,
+    async () => {
+      if (vendorShopperOrderPasses) {
+        return HttpResponse.json(
+          {
+            vendor_id: '123',
+            shopper_id: '123',
+          },
+          { status: 200 }
+        );
+      } else {
+        return HttpResponse.json(
+          { message: 'Failed to create vendor shopper order' },
           { status: 500 }
         );
       }
@@ -153,6 +174,11 @@ jest.mock('stripe', () => {
           data: {
             object: {
               id: '123',
+              customer_details: {
+                email: 'email',
+                address: 'address',
+              },
+              payment_intent: 'paymentintent',
               metadata: {
                 items: JSON.stringify([
                   {
@@ -185,12 +211,22 @@ jest.mock('stripe', () => {
           amount_subtotal: 0,
           amount_tax: 0,
           amount_total: 0,
+          payment_method: 'card',
+        }),
+      },
+      products: {
+        retrieve: jest.fn().mockResolvedValue({
+          metadata: {
+            vendorId: '123',
+            productId: '123',
+          },
         }),
       },
       paymentMethods: {
         retrieve: jest.fn().mockResolvedValue({
           card: {
             last4: '1234',
+            brand: 'visa',
           },
           type: 'card',
         }),
@@ -204,17 +240,15 @@ describe('/api/stripe_webhooks', () => {
     jest.clearAllMocks();
   });
 
-  // test('should return 200 for a valid webhook event', async () => {
-  //   const result = await supertest(server)
-  //     .post('/api/stripe_webhooks')
-  //     .set('stripe-signature', 'test-signature')
-  //     .send('test-body');
-
-  //   expect(result.status).toBe(200);
-  //   // .expect(200, {
-  //   //   message: 'Checkout complete',
-  //   // });
-  // });
+  test('should return 200 for a valid webhook event', async () => {
+    await supertest(server)
+      .post('/api/stripe_webhooks')
+      .set('stripe-signature', 'test-signature')
+      .send('test-body')
+      .expect(200, {
+        message: 'Checkout complete',
+      });
+  });
 
   test('should return 500 for a failed create order', async () => {
     vendorPostPasses = false;
@@ -228,18 +262,18 @@ describe('/api/stripe_webhooks', () => {
       });
   });
 
-  // test('should return 500 for a failed create order', async () => {
-  //   deletePasses = false;
-  //   vendorPostPasses = true;
-  //   await supertest(server)
-  //     .post('/api/stripe_webhooks')
-  //     .set('stripe-signature', 'test-signature')
-  //     .send('test-body')
-  //     .expect(500)
-  //     .catch(err => {
-  //       expect(err.message).toBe('Delete shopping cart error');
-  //     });
-  // });
+  test('should return 500 for a failed create order', async () => {
+    deletePasses = false;
+    vendorPostPasses = true;
+    await supertest(server)
+      .post('/api/stripe_webhooks')
+      .set('stripe-signature', 'test-signature')
+      .send('test-body')
+      .expect(500)
+      .catch(err => {
+        expect(err.message).toBe('Delete shopping cart error');
+      });
+  });
 
   test('should return 405 for non-POST requests', async () => {
     await supertest(server)
