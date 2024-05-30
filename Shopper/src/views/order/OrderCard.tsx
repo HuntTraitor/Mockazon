@@ -134,7 +134,7 @@ export default function OrderCard({ order }: { order: Order }) {
 
   // FIXME: This function is duplicated, export it to a shared location or something.
   // Check AddToCartButton.tsx
-  const addToShoppingCart = (productId: string, quantity: number = 1) => {
+  const addToShoppingCart = (productId: string, quantity: number) => {
     const query = {
       query: `mutation AddToShoppingCart {
         addToShoppingCart(productId: "${productId}", quantity: "${quantity}") {
