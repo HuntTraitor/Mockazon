@@ -33,7 +33,10 @@ const convertDate = (dateString: string): string => {
 export default function DeliveryText({ deliveryDate }: DeliveryDateProps) {
   const { t } = useTranslation('viewProduct');
   const date = new Date();
-  date.setDate(date.getDate() + 7);
+  // Sets delivery date to be
+  // random number of days between 5 to 10 inclusive
+  // plus today's date
+  date.setDate(date.getDate() + (Math.floor(Math.random() * (10 - 5 + 1)) + 5));
   return (
     <Typography variant="body2">
       {t('freeDelivery')}{' '}
