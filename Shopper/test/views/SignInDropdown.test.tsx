@@ -12,20 +12,20 @@ jest.mock('next-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       switch (key) {
-      case 'hello':
-        return 'Hello,';
-      case 'signInText':
-        return 'sign in';
-      case 'accountsAndLists':
-        return 'Accounts & Lists';
-      case 'signOutText':
-        return 'Sign Out';
-      case 'newCustomer':
-        return 'New Customer?';
-      case 'startHere':
-        return 'Start here.';
-      default:
-        return key;
+        case 'hello':
+          return 'Hello,';
+        case 'signInText':
+          return 'sign in';
+        case 'accountsAndLists':
+          return 'Accounts & Lists';
+        case 'signOutText':
+          return 'Sign Out';
+        case 'newCustomer':
+          return 'New Customer?';
+        case 'startHere':
+          return 'Start here.';
+        default:
+          return key;
       }
     },
     i18n: {
@@ -105,10 +105,12 @@ describe('Sign In Dropdown', () => {
   it('Renders successfully mobile with user name', async () => {
     render(
       <AppContext.Provider value={AppContextPropsMobile}>
-        <LoggedInContext.Provider value={{
-          ...providerProps,
-          user: { accessToken: '', id: '', name: 'Guest', role: '' }
-        }}>
+        <LoggedInContext.Provider
+          value={{
+            ...providerProps,
+            user: { accessToken: '', id: '', name: 'Guest', role: '' },
+          }}
+        >
           <SignInDropdown />
         </LoggedInContext.Provider>
       </AppContext.Provider>
