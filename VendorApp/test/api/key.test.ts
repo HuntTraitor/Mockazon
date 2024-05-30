@@ -75,23 +75,23 @@ const handlers = [
         );
       }
     }),
-    rest.post(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/$:vendor_id/request`,
-      async () => {
-        if (errorPost) {
-          return new HttpResponse(undefined, { status: 401 });
-        } else {
-          return HttpResponse.json(
-            {
-              key: 'some key',
-              vendor_id: 'some id',
-              active: true,
-              blacklisted: false,
-            },
-            { status: 200 }
-          );
-        }
-      }),
+  rest.post(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/:vendor_id/request`,
+    async () => {
+      if (errorPost) {
+        return new HttpResponse(undefined, { status: 401 });
+      } else {
+        return HttpResponse.json(
+          {
+            key: 'some key',
+            vendor_id: 'some id',
+            active: true,
+            blacklisted: false,
+          },
+          { status: 200 }
+        );
+      }
+    }),
 ];
 
 const microServices = setupServer(...handlers);
