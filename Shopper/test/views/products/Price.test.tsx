@@ -1,17 +1,13 @@
 import React from 'react';
-import {
-  render,
-} from '@testing-library/react';
-import {
-  screen,
-} from '@testing-library/dom';
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
 import http from 'http';
 
 import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import { AppContext } from '@/contexts/AppContext';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
-import Price from "@/views/product/Price";
+import Price from '@/views/product/Price';
 
 let server: http.Server<
   typeof http.IncomingMessage,

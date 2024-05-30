@@ -1,17 +1,13 @@
 import React from 'react';
-import {
-  render,
-} from '@testing-library/react';
-import {
-  screen,
-} from '@testing-library/dom';
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
 import http from 'http';
 
 import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import { AppContext } from '@/contexts/AppContext';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
-import PaymentMethod from "@/views/order/PaymentMethod";
+import PaymentMethod from '@/views/order/PaymentMethod';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -57,7 +53,7 @@ it('Loads payment method', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <SnackbarProvider>
-        <PaymentMethod  digits={4242} method={'card'} paymentBrand={'Visa'}/>
+        <PaymentMethod digits={4242} method={'card'} paymentBrand={'Visa'} />
       </SnackbarProvider>
     </AppContext.Provider>
   );
@@ -69,7 +65,7 @@ it('Loads payment method with Link', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <SnackbarProvider>
-        <PaymentMethod  digits={4242} method={'link'} paymentBrand={'Visa'}/>
+        <PaymentMethod digits={4242} method={'link'} paymentBrand={'Visa'} />
       </SnackbarProvider>
     </AppContext.Provider>
   );

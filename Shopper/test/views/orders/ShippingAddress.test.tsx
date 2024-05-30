@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-  render,
-} from '@testing-library/react';
-import {
-  screen,
-} from '@testing-library/dom';
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
 import http from 'http';
 
 import { HttpResponse, graphql } from 'msw';
@@ -12,7 +8,7 @@ import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import { AppContext } from '@/contexts/AppContext';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
-import ShippingAddress from "@/views/order/ShippingAddress";
+import ShippingAddress from '@/views/order/ShippingAddress';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -125,7 +121,7 @@ it('Loads shipping address', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <SnackbarProvider>
-        <ShippingAddress address={mockAddress}/>
+        <ShippingAddress address={mockAddress} />
       </SnackbarProvider>
     </AppContext.Provider>
   );
@@ -136,7 +132,7 @@ it('Loads shipping address without city', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <SnackbarProvider>
-        <ShippingAddress address={mockAddressWithoutCity}/>
+        <ShippingAddress address={mockAddressWithoutCity} />
       </SnackbarProvider>
     </AppContext.Provider>
   );

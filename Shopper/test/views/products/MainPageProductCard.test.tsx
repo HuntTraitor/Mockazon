@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-  render,
-} from '@testing-library/react';
-import {
-  screen,
-} from '@testing-library/dom';
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
 import http from 'http';
 import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
@@ -114,5 +110,9 @@ it('Loads product with truncated name', async () => {
       </SnackbarProvider>
     </AppContext.Provider>
   );
-  expect(screen.getByText('Test product nameTest product nameTest produc...', {exact: false})).toBeInTheDocument();
+  expect(
+    screen.getByText('Test product nameTest product nameTest produc...', {
+      exact: false,
+    })
+  ).toBeInTheDocument();
 });
