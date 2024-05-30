@@ -9,16 +9,12 @@ import { setupServer } from 'msw/node';
 import { loadStripe } from '@stripe/stripe-js';
 import requestHandler from '../../api/requestHandler';
 import CheckoutButton from '@/views/CheckoutButton';
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
+
 jest.mock('notistack', () => ({
   ...jest.requireActual('notistack'),
-  useSnackbar: jest.fn(),
+  enqueueSnackbar: jest.fn(),
 }));
-
-const mockEnqueueSnackbar = jest.fn();
-(useSnackbar as jest.Mock).mockReturnValue({
-  enqueueSnackbar: mockEnqueueSnackbar,
-});
 
 jest.mock('next/config', () => () => ({
   publicRuntimeConfig: { basePath: '' },
@@ -28,6 +24,8 @@ let server: http.Server<
   typeof http.IncomingMessage,
   typeof http.ServerResponse
 >;
+
+(enqueueSnackbar as jest.Mock).mockImplementation(jest.fn());
 
 let errorInCreateSession = false;
 // let errorInShoppingCart = false;
@@ -161,156 +159,152 @@ jest.mock('@stripe/stripe-js', () => ({
   }),
 }));
 
-it('passes', () => {
-  expect(1).toBe(1);
+it('Clicks checkout button and redirects successfully', async () => {
+  jest.mock('@stripe/stripe-js', () => {
+    return {
+      __esModule: true,
+      ...jest.requireActual('@stripe/stripe-js'),
+      loadStripe: jest.fn().mockResolvedValue({
+        redirectToCheckout: jest.fn().mockResolvedValue({ error: null }),
+      }),
+    };
+  });
+
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <SnackbarProvider>
+          <CheckoutButton
+            productsWithContent={products.map(product => ({
+              ...product,
+              data: {
+                ...product.data,
+                getProduct: {
+                  ...product.data.getProduct,
+                  vendor_id: 'vendor_id_value',
+                },
+              },
+            }))}
+            shopperId={'123'}
+            subtotal={100}
+            locale={'en'}
+          />
+        </SnackbarProvider>
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
 });
 
-// it('Clicks checkout button and redirects successfully', async () => {
-//   jest.mock('@stripe/stripe-js', () => {
-//     return {
-//       __esModule: true,
-//       ...jest.requireActual('@stripe/stripe-js'),
-//       loadStripe: jest.fn().mockResolvedValue({
-//         redirectToCheckout: jest.fn().mockResolvedValue({ error: null }),
-//       }),
-//     };
-//   });
+it('Clicks checkout button and encounters error creating session', async () => {
+  jest.mock('@stripe/stripe-js', () => {
+    return {
+      __esModule: true,
+      ...jest.requireActual('@stripe/stripe-js'),
+      loadStripe: jest.fn().mockResolvedValue({
+        redirectToCheckout: jest.fn().mockResolvedValue({ error: null }),
+      }),
+    };
+  });
 
-//   render(
-//     <AppContext.Provider value={AppContextProps}>
-//       <LoggedInContext.Provider value={newLoggedInContextProps}>
-//         <SnackbarProvider>
-//           <CheckoutButton
-//             productsWithContent={products.map(product => ({
-//               ...product,
-//               data: {
-//                 ...product.data,
-//                 getProduct: {
-//                   ...product.data.getProduct,
-//                   vendor_id: 'vendor_id_value',
-//                 },
-//               },
-//             }))}
-//             shopperId={'123'}
-//             subtotal={100}
-//             locale={'en'}
-//           />
-//         </SnackbarProvider>
-//       </LoggedInContext.Provider>
-//     </AppContext.Provider>
-//   );
-//   fireEvent.click(screen.getByText('cart:proceedToCheckout'));
-// });
+  errorInCreateSession = true;
 
-// it('Clicks checkout button and encounters error creating session', async () => {
-//   jest.mock('@stripe/stripe-js', () => {
-//     return {
-//       __esModule: true,
-//       ...jest.requireActual('@stripe/stripe-js'),
-//       loadStripe: jest.fn().mockResolvedValue({
-//         redirectToCheckout: jest.fn().mockResolvedValue({ error: null }),
-//       }),
-//     };
-//   });
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <SnackbarProvider>
+          <CheckoutButton
+            productsWithContent={products.map(product => ({
+              ...product,
+              data: {
+                ...product.data,
+                getProduct: {
+                  ...product.data.getProduct,
+                  vendor_id: 'vendor_id_value',
+                },
+              },
+            }))}
+            shopperId={'123'}
+            subtotal={100}
+            locale={'en'}
+          />
+        </SnackbarProvider>
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
+});
 
-//   errorInCreateSession = true;
+it('Clicks checkout button and encounters error during redirect', async () => {
+  jest.resetAllMocks();
+  const mockStripe = {
+    redirectToCheckout: jest
+      .fn()
+      .mockResolvedValue({ error: { message: 'Mock error' } }),
+  };
+  (loadStripe as jest.Mock).mockResolvedValue(mockStripe);
 
-//   render(
-//     <AppContext.Provider value={AppContextProps}>
-//       <LoggedInContext.Provider value={newLoggedInContextProps}>
-//         <SnackbarProvider>
-//           <CheckoutButton
-//             productsWithContent={products.map(product => ({
-//               ...product,
-//               data: {
-//                 ...product.data,
-//                 getProduct: {
-//                   ...product.data.getProduct,
-//                   vendor_id: 'vendor_id_value',
-//                 },
-//               },
-//             }))}
-//             shopperId={'123'}
-//             subtotal={100}
-//             locale={'en'}
-//           />
-//         </SnackbarProvider>
-//       </LoggedInContext.Provider>
-//     </AppContext.Provider>
-//   );
-//   fireEvent.click(screen.getByText('cart:proceedToCheckout'));
-// });
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <SnackbarProvider>
+          <CheckoutButton
+            productsWithContent={products.map(product => ({
+              ...product,
+              data: {
+                ...product.data,
+                getProduct: {
+                  ...product.data.getProduct,
+                  vendor_id: 'vendor_id_value',
+                },
+              },
+            }))}
+            shopperId={'123'}
+            subtotal={100}
+            locale={'en'}
+          />
+        </SnackbarProvider>
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
+});
 
-// it('Clicks checkout button and encounters error during redirect', async () => {
-//   jest.resetAllMocks();
-//   const mockStripe = {
-//     redirectToCheckout: jest
-//       .fn()
-//       .mockResolvedValue({ error: { message: 'Mock error' } }),
-//   };
-//   (loadStripe as jest.Mock).mockResolvedValue(mockStripe);
+it('Clicks checkout button and encounters error redirecting to checkout', async () => {
+  jest.mock('@stripe/stripe-js', () => {
+    return {
+      __esModule: true,
+      ...jest.requireActual('@stripe/stripe-js'),
+      loadStripe: jest.fn().mockResolvedValue({
+        redirectToCheckout: jest
+          .fn()
+          .mockResolvedValue({ error: 'error message' }),
+      }),
+    };
+  });
 
-//   render(
-//     <AppContext.Provider value={AppContextProps}>
-//       <LoggedInContext.Provider value={newLoggedInContextProps}>
-//         <SnackbarProvider>
-//           <CheckoutButton
-//             productsWithContent={products.map(product => ({
-//               ...product,
-//               data: {
-//                 ...product.data,
-//                 getProduct: {
-//                   ...product.data.getProduct,
-//                   vendor_id: 'vendor_id_value',
-//                 },
-//               },
-//             }))}
-//             shopperId={'123'}
-//             subtotal={100}
-//             locale={'en'}
-//           />
-//         </SnackbarProvider>
-//       </LoggedInContext.Provider>
-//     </AppContext.Provider>
-//   );
-//   fireEvent.click(screen.getByText('cart:proceedToCheckout'));
-// });
-
-// it('Clicks checkout button and encounters error redirecting to checkout', async () => {
-//   jest.mock('@stripe/stripe-js', () => {
-//     return {
-//       __esModule: true,
-//       ...jest.requireActual('@stripe/stripe-js'),
-//       loadStripe: jest.fn().mockResolvedValue({
-//         redirectToCheckout: jest
-//           .fn()
-//           .mockResolvedValue({ error: 'error message' }),
-//       }),
-//     };
-//   });
-
-//   render(
-//     <AppContext.Provider value={AppContextProps}>
-//       <LoggedInContext.Provider value={newLoggedInContextProps}>
-//         <SnackbarProvider>
-//           <CheckoutButton
-//             productsWithContent={products.map(product => ({
-//               ...product,
-//               data: {
-//                 ...product.data,
-//                 getProduct: {
-//                   ...product.data.getProduct,
-//                   vendor_id: 'vendor_id_value',
-//                 },
-//               },
-//             }))}
-//             shopperId={'123'}
-//             subtotal={100}
-//             locale={'en'}
-//           />
-//         </ SnackbarProvider>
-//       </LoggedInContext.Provider>
-//     </AppContext.Provider>
-//   );
-//   fireEvent.click(screen.getByText('cart:proceedToCheckout'));
-// });
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <SnackbarProvider>
+          <CheckoutButton
+            productsWithContent={products.map(product => ({
+              ...product,
+              data: {
+                ...product.data,
+                getProduct: {
+                  ...product.data.getProduct,
+                  vendor_id: 'vendor_id_value',
+                },
+              },
+            }))}
+            shopperId={'123'}
+            subtotal={100}
+            locale={'en'}
+          />
+        </ SnackbarProvider>
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+  fireEvent.click(screen.getByText('cart:proceedToCheckout'));
+});
