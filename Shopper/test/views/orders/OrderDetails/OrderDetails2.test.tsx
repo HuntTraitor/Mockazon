@@ -1,12 +1,12 @@
 import React from 'react';
-import {screen, render} from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import http from 'http';
 
 import { setupServer } from 'msw/node';
 import requestHandler from '../../../api/requestHandler';
 import { AppContext } from '@/contexts/AppContext';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
-import OrderDetails from "@/views/order/OrderDetails";
+import OrderDetails from '@/views/order/OrderDetails';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -105,9 +105,14 @@ it('Loads order details', async () => {
     </AppContext.Provider>
   );
   screen.getByText(mockOrder.id, { exact: false });
-  screen.getByText(new Date(mockOrder.createdAt).toLocaleDateString('en-US',
-    { year: 'numeric', month: 'long', day: 'numeric'
-    }), { exact: false });
+  screen.getByText(
+    new Date(mockOrder.createdAt).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
+    { exact: false }
+  );
 });
 
 it('Loads order details with null order', async () => {
@@ -118,7 +123,7 @@ it('Loads order details with null order', async () => {
       </SnackbarProvider>
     </AppContext.Provider>
   );
-  expect(screen.queryByText(mockOrder.id, {exact: false})).toBeNull();
+  expect(screen.queryByText(mockOrder.id, { exact: false })).toBeNull();
 });
 
 it('Loads order details with mobile', async () => {
@@ -145,11 +150,12 @@ it('Loads order details with mobile', async () => {
     </AppContext.Provider>
   );
   screen.getByText(mockOrder.id, { exact: false });
-  screen.getByText(new Date(mockOrder.createdAt).toLocaleDateString('en-US',
-    { year: 'numeric', month: 'long', day: 'numeric'
-    }), { exact: false });
+  screen.getByText(
+    new Date(mockOrder.createdAt).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
+    { exact: false }
+  );
 });
-
-
-
-

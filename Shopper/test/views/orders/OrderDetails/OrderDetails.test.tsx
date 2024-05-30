@@ -1,8 +1,8 @@
-import {render, screen} from "@testing-library/react";
-import {AppContext} from "@/contexts/AppContext";
+import { render, screen } from '@testing-library/react';
+import { AppContext } from '@/contexts/AppContext';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
-import OrderDetails from "@/views/order/OrderDetails";
-import React from "react";
+import OrderDetails from '@/views/order/OrderDetails';
+import React from 'react';
 
 import http from 'http';
 

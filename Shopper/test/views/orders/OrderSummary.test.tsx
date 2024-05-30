@@ -7,7 +7,7 @@ import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import { AppContext } from '@/contexts/AppContext';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
-import OrderSummary from "@/views/order/OrderSummary";
+import OrderSummary from '@/views/order/OrderSummary';
 
 let server: http.Server<
   typeof http.IncomingMessage,
