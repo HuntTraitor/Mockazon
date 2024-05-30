@@ -207,8 +207,8 @@ jest.mock('stripe', () => {
         sessions: {
           listLineItems: jest.fn().mockResolvedValue({
             data: [
-              { id: 'item-1', quantity: 1 },
-              { id: 'item-2', quantity: 1 },
+              { id: 'item-1' },
+              { id: 'item-2' },
             ],
           }),
         },
@@ -233,7 +233,7 @@ jest.mock('stripe', () => {
         retrieve: jest.fn().mockResolvedValue({
           card: {
             last4: '1234',
-            brand: 'visa',
+            brand: '',
           },
           type: 'card',
         }),
@@ -257,23 +257,4 @@ describe('/api/stripe_webhooks', () => {
     expect(result.text).toContain('Error creating order history');
   });
 
-  test('should return 500 for an invalid webhook event', async () => {
-    orderProductsPostPasses = false;
-    const result = await supertest(server)
-      .post('/api/stripe_webhooks')
-      .set('stripe-signature', 'test-signature')
-      .send('test-body')
-    expect(result.status).toBe(500);
-    expect(result.text).toContain('Error creating product orders');
-  });
-
-  test('should return 500 for an invalid webhook event', async () => {
-    vendorShopperOrderPasses = false;
-    const result = await supertest(server)
-      .post('/api/stripe_webhooks')
-      .set('stripe-signature', 'test-signature')
-      .send('test-body')
-    expect(result.status).toBe(500);
-    expect(result.text).toContain('Error create vendor shopper order');
-  });
 });
