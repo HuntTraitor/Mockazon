@@ -152,11 +152,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         await createVendorShopperOrder(vendorOrderIds, shopperOrderId);
       } catch (err) {
-        res
-          .status(500)
+        res.status(500)
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           .send(`Error create vendor shopper order: ${err.message}`);
+        return;
       }
 
       // Remove item from shopping cart
@@ -185,6 +185,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } else {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Method Not Allowed');
+    return;
   }
 };
 
