@@ -228,7 +228,12 @@ const Index = () => {
               title={t('products:whatNew')}
               products={products}
             />
-            <ProductCarousel title={t('products:buyAgain')} products={orders} />
+            {orders.length > 0 && (
+              <ProductCarousel
+                title={t('products:buyAgain')}
+                products={orders}
+              />
+            )}
           </div>
           <Box className={styles.productList}>
             <div className={styles.productlistContent}>
