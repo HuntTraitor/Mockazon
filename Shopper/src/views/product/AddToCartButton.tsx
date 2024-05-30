@@ -70,6 +70,7 @@ export default function AddToCartButton({ product, quantity }: ProductProps) {
       className={styles.addToCart}
       onClick={() => addToShoppingCart(product.id)}
       aria-label="Add to cart button"
+      sx={{ position: 'relative' }}
     >
       {t('addToCart')}
     </Button>

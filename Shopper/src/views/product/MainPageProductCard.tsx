@@ -20,7 +20,7 @@ export default function ProductCard({ product }: ProductProps) {
   const price = product.data.price.toFixed(2).toString();
 
   // Set the maximum number of characters for the product name
-  const maxCharacters = 45;
+  const maxCharacters = 40;
 
   // Truncate the product name if it exceeds the maximum characters
   const truncatedName =
