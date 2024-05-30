@@ -121,7 +121,7 @@ const mockAddressWithoutCity = {
   country: 'USA',
 };
 
-it('Loads address', async () => {
+it('Loads shipping address', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <SnackbarProvider>
@@ -132,7 +132,7 @@ it('Loads address', async () => {
   expect(screen.getByText(mockAddress.name)).toBeInTheDocument();
 });
 
-it('Loads address without city', async () => {
+it('Loads shipping address without city', async () => {
   render(
     <AppContext.Provider value={AppContextProps}>
       <SnackbarProvider>
