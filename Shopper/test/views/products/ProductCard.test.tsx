@@ -1,7 +1,8 @@
 import React from 'react';
 import {
   fireEvent,
-  render, waitFor,
+  render,
+  waitFor,
   // waitFor
 } from '@testing-library/react';
 import {
@@ -16,7 +17,7 @@ import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import ProductCard from '@/views/product/ProductCard';
 import { AppContext } from '@/contexts/AppContext';
-import {enqueueSnackbar, SnackbarProvider} from 'notistack';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -75,7 +76,6 @@ const AppContextProps = {
 };
 
 (enqueueSnackbar as jest.Mock).mockImplementation(jest.fn());
-
 
 beforeAll(async () => {
   returnError = false;
@@ -150,7 +150,10 @@ it('Clicks on add to shopping cart', async () => {
   );
   fireEvent.click(screen.getByLabelText('Add to cart button'));
   await waitFor(() => {
-    expect(enqueueSnackbar).toHaveBeenCalledWith(expect.stringContaining('productAddedToCart'), expect.anything());
+    expect(enqueueSnackbar).toHaveBeenCalledWith(
+      expect.stringContaining('productAddedToCart'),
+      expect.anything()
+    );
   });
 });
 
@@ -165,7 +168,10 @@ it('Clicks on add to shopping cart error', async () => {
   );
   fireEvent.click(screen.getByLabelText('Add to cart button'));
   await waitFor(() => {
-    expect(enqueueSnackbar).toHaveBeenCalledWith(expect.stringContaining('productNotAddedToCart'), expect.anything());
+    expect(enqueueSnackbar).toHaveBeenCalledWith(
+      expect.stringContaining('productNotAddedToCart'),
+      expect.anything()
+    );
   });
 });
 
