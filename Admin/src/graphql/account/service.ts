@@ -16,7 +16,7 @@ export class AccountService {
   }
 
   public async approve(id: string): Promise<Account> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       fetch(
         `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/requests/${id}/approve`,
         {
@@ -35,10 +35,10 @@ export class AccountService {
         })
         .then(json => {
           resolve(json);
-        })
-        // .catch(e => {
-        //   reject(new GraphQLError(e));
-        // });
+        });
+      // .catch(e => {
+      //   reject(new GraphQLError(e));
+      // });
     });
   }
 }

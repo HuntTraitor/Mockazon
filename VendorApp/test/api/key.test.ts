@@ -74,7 +74,8 @@ const handlers = [
           { status: 200 }
         );
       }
-    }),
+    }
+  ),
   rest.post(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/:vendor_id/request`,
     async () => {
@@ -91,7 +92,8 @@ const handlers = [
           { status: 200 }
         );
       }
-    }),
+    }
+  ),
 ];
 
 const microServices = setupServer(...handlers);

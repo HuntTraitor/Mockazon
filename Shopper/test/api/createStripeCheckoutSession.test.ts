@@ -84,7 +84,7 @@ const lineItems = [
         metadata: {
           productId: '123',
           vendorId: '123',
-        }
+        },
       },
     },
     quantity: 1,

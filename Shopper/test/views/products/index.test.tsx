@@ -187,7 +187,6 @@ const AppContextProps = {
   setIsMobile: jest.fn(),
   accountDrawerOpen: false,
   setAccountDrawerOpen: jest.fn(),
-
 };
 
 jest.mock('notistack', () => ({

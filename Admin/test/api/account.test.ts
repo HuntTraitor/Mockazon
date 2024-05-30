@@ -68,14 +68,11 @@ const handlers = [
       if (error) {
         return new HttpResponse(null, { status: 401 });
       } else if (wrongRole) {
-        return HttpResponse.json(
-          {
-            id: '37a65191-2a4a-46c6-b7e5-d36133132b09',
-            role: 'WRONG ROLE',
-          },
-        );
-      }
-      else {
+        return HttpResponse.json({
+          id: '37a65191-2a4a-46c6-b7e5-d36133132b09',
+          role: 'WRONG ROLE',
+        });
+      } else {
         return HttpResponse.json(
           {
             id: '37a65191-2a4a-46c6-b7e5-d36133132b09',
@@ -168,7 +165,7 @@ it('Ill-formatted Authorization Header', async () => {
 });
 
 it('Admin Auth Check failed', async () => {
-  error = true
+  error = true;
   await supertest(server)
     .post('/api/graphql')
     .set('Authorization', 'Bearer someToken')
@@ -183,8 +180,8 @@ it('Admin Auth Check failed', async () => {
     });
 });
 it('Fail at returning right role', async () => {
-  error = false
-  wrongRole = true
+  error = false;
+  wrongRole = true;
   await supertest(server)
     .post('/api/graphql')
     .set('Authorization', 'Bearer someToken')

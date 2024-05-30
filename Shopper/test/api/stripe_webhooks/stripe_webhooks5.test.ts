@@ -252,7 +252,7 @@ describe('/api/stripe_webhooks', () => {
     const result = await supertest(server)
       .post('/api/stripe_webhooks')
       .set('stripe-signature', 'test-signature')
-      .send('test-body')
+      .send('test-body');
     expect(result.status).toBe(500);
     expect(result.text).toContain('Error creating order history');
   });
@@ -262,7 +262,7 @@ describe('/api/stripe_webhooks', () => {
     const result = await supertest(server)
       .post('/api/stripe_webhooks')
       .set('stripe-signature', 'test-signature')
-      .send('test-body')
+      .send('test-body');
     expect(result.status).toBe(500);
     expect(result.text).toContain('Error creating product orders');
   });
@@ -272,7 +272,7 @@ describe('/api/stripe_webhooks', () => {
     const result = await supertest(server)
       .post('/api/stripe_webhooks')
       .set('stripe-signature', 'test-signature')
-      .send('test-body')
+      .send('test-body');
     expect(result.status).toBe(500);
     expect(result.text).toContain('Error create vendor shopper order');
   });

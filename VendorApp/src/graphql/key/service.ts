@@ -48,7 +48,7 @@ export class KeyService {
   }
 
   public async postAPIKeyRequest(vendor_id: string): Promise<Key> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       fetch(
         `http://${process.env.MICROSERVICE_URL || 'localhost'}:3013/api/v0/key/${vendor_id}/request`,
         {
@@ -63,7 +63,7 @@ export class KeyService {
         })
         .then(product => {
           resolve(product);
-        })
+        });
     });
   }
 }

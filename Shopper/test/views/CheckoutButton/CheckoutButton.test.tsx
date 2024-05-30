@@ -132,7 +132,6 @@ const AppContextProps = {
   setIsMobile: jest.fn(),
   accountDrawerOpen: false,
   setAccountDrawerOpen: jest.fn(),
-
 };
 
 const products = [
