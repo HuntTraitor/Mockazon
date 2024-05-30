@@ -355,7 +355,7 @@ const Cart = ({ locale }: { locale: string }) => {
                         </CardActionArea>
                       </Link>
                     </Box>
-                    <CardContent sx={{ flex: '1 0 auto' }}>
+                    <CardContent>
                       <Box
                         sx={{
                           display: 'flex',
