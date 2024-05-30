@@ -40,10 +40,30 @@ const AppContextProps = {
   setAccountDrawerOpen: jest.fn(),
 };
 
+const AppContextPropsForMobile = {
+  backDropOpen: false,
+  setBackDropOpen: jest.fn(),
+  mockazonMenuDrawerOpen: false,
+  setMockazonMenuDrawerOpen: jest.fn(),
+  isMobile: true,
+  setIsMobile: jest.fn(),
+  accountDrawerOpen: false,
+  setAccountDrawerOpen: jest.fn(),
+};
+
 describe('Language Switcher', () => {
   it('Renders successfully', async () => {
     render(
       <AppContext.Provider value={AppContextProps}>
+        <LanguageSwitcher />
+      </AppContext.Provider>
+    );
+    await screen.findByText('EN');
+  });
+
+  it('Renders successfully in mobile', async () => {
+    render(
+      <AppContext.Provider value={AppContextPropsForMobile}>
         <LanguageSwitcher />
       </AppContext.Provider>
     );
