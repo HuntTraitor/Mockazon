@@ -16,10 +16,10 @@ import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
 import requestHandler from '../api/requestHandler';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
-import AccountDrawer from "@/views/AccountDrawer";
-import {AppContext} from "@/contexts/AppContext";
-import {LoggedInContext, User} from "@/contexts/LoggedInUserContext";
-import Content from "@/views/Content";
+import AccountDrawer from '@/views/AccountDrawer';
+import { AppContext } from '@/contexts/AppContext';
+import { LoggedInContext, User } from '@/contexts/LoggedInUserContext';
+import Content from '@/views/Content';
 
 let server: http.Server<
   typeof http.IncomingMessage,
