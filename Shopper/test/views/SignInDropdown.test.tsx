@@ -12,20 +12,20 @@ jest.mock('next-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       switch (key) {
-        case 'hello':
-          return 'Hello,';
-        case 'signInText':
-          return 'sign in';
-        case 'accountsAndLists':
-          return 'Accounts & Lists';
-        case 'signOutText':
-          return 'Sign Out';
-        case 'newCustomer':
-          return 'New Customer?';
-        case 'startHere':
-          return 'Start here.';
-        default:
-          return key;
+      case 'hello':
+        return 'Hello,';
+      case 'signInText':
+        return 'sign in';
+      case 'accountsAndLists':
+        return 'Accounts & Lists';
+      case 'signOutText':
+        return 'Sign Out';
+      case 'newCustomer':
+        return 'New Customer?';
+      case 'startHere':
+        return 'Start here.';
+      default:
+        return key;
       }
     },
     i18n: {
@@ -79,6 +79,17 @@ const AppContextProps = {
   setAccountDrawerOpen: jest.fn(),
 };
 
+const AppContextPropsMobile = {
+  backDropOpen: false,
+  setBackDropOpen: jest.fn(),
+  mockazonMenuDrawerOpen: false,
+  setMockazonMenuDrawerOpen: jest.fn(),
+  isMobile: true,
+  setIsMobile: jest.fn(),
+  accountDrawerOpen: false,
+  setAccountDrawerOpen: jest.fn(),
+};
+
 describe('Sign In Dropdown', () => {
   it('Renders successfully', async () => {
     render(
@@ -89,6 +100,31 @@ describe('Sign In Dropdown', () => {
       </AppContext.Provider>
     );
     await screen.findByText('Hello,', { exact: false });
+  });
+
+  it('Renders successfully mobile with user name', async () => {
+    render(
+      <AppContext.Provider value={AppContextPropsMobile}>
+        <LoggedInContext.Provider value={{
+          ...providerProps,
+          user: { accessToken: '', id: '', name: 'Guest', role: '' }
+        }}>
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
+    );
+    fireEvent.click(screen.getByLabelText('Mobile Account Button'));
+  });
+
+  it('Renders successfully mobile with no user name', async () => {
+    render(
+      <AppContext.Provider value={AppContextPropsMobile}>
+        <LoggedInContext.Provider value={{ ...providerProps }}>
+          <SignInDropdown />
+        </LoggedInContext.Provider>
+      </AppContext.Provider>
+    );
+    fireEvent.click(screen.getByLabelText('Mobile Account Button'));
   });
 
   it("Shows a user's name if they are logged in", async () => {
