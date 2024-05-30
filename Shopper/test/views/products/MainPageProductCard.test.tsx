@@ -111,7 +111,7 @@ it('Loads product with truncated name', async () => {
     </AppContext.Provider>
   );
   expect(
-    screen.getByText('Test product nameTest product nameTest produc...', {
+    screen.getByText('Test product nameTest product nameTest p...', {
       exact: false,
     })
   ).toBeInTheDocument();
