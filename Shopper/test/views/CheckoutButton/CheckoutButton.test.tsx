@@ -302,7 +302,7 @@ it('Clicks checkout button and encounters error redirecting to checkout', async 
             subtotal={100}
             locale={'en'}
           />
-        </ SnackbarProvider>
+        </SnackbarProvider>
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
