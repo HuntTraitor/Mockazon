@@ -62,6 +62,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           ))}
         </Box>
         <Button
+          aria-label={'previous button'}
           sx={{
             position: 'absolute',
             left: 0,
@@ -99,6 +100,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
               backgroundColor: 'white',
             },
           }}
+          aria-label={'next button'}
           onClick={() => handleScroll('next')}
         >
           <ArrowForwardIosIcon />
