@@ -1,16 +1,16 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import {http as rest, HttpResponse} from 'msw';
+import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import Success from '@/pages/orders/success';
 import { getServerSideProps } from '@/pages/orders/success';
 import { AppContext } from '@/contexts/AppContext';
-import {randomUUID} from "crypto";
-import {useTranslation} from "next-i18next";
+import { randomUUID } from 'crypto';
+import { useTranslation } from 'next-i18next';
 import useSWR from 'swr';
-import {fetcher} from '@/pages/orders/success';
-import http from "http";
+import { fetcher } from '@/pages/orders/success';
+import http from 'http';
 
 jest.mock('next/config', () => () => ({
   publicRuntimeConfig: { basePath: '' },
@@ -64,10 +64,12 @@ jest.mock('next/router', () => ({
   t: (key: string) => key,
 });
 
-const microServices = setupServer(...[
-  rest.get('/api/stripe/sessions/123', () => {
-    return HttpResponse.json({}, { status: 200 })
-  })]
+const microServices = setupServer(
+  ...[
+    rest.get('/api/stripe/sessions/123', () => {
+      return HttpResponse.json({}, { status: 200 });
+    }),
+  ]
 );
 
 beforeAll(async () => {
