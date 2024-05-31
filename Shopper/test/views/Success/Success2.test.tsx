@@ -1,13 +1,16 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import http from 'http';
-import { graphql, HttpResponse } from 'msw';
+import {http as rest, HttpResponse} from 'msw';
 import { setupServer } from 'msw/node';
-
-import requestHandler from '../api/requestHandler';
+import requestHandler from '../../api/requestHandler';
 import Success from '@/pages/orders/success';
 import { getServerSideProps } from '@/pages/orders/success';
 import { AppContext } from '@/contexts/AppContext';
+import {randomUUID} from "crypto";
+import {useTranslation} from "next-i18next";
+import useSWR from 'swr';
+import {fetcher} from '@/pages/orders/success';
+import http from "http";
 
 jest.mock('next/config', () => () => ({
   publicRuntimeConfig: { basePath: '' },
@@ -33,7 +36,7 @@ jest.mock('next/router', () => ({
   useRouter: () => ({
     basePath: '',
     pathname: '/',
-    query: { id: '1' },
+    query: { sessionId: null },
     asPath: '/products/1',
     locale: 'en',
     locales: ['en', 'es'],
@@ -52,36 +55,20 @@ jest.mock('next/router', () => ({
   }),
 }));
 
-const errorInShoppingCart = false;
+(useSWR as jest.Mock).mockReturnValue({
+  data: null,
+  error: null,
+});
 
-const handlers = [
-  graphql.query('GetShoppingCart', () => {
-    if (errorInShoppingCart) {
-      return HttpResponse.json({}, { status: 400 });
-    } else {
-      return HttpResponse.json(
-        {
-          data: {
-            getShoppingCart: [
-              {
-                id: '123',
-                product_id: '123',
-                shopper_id: '123',
-                vendor_id: '123',
-                data: {
-                  quantity: '3',
-                },
-              },
-            ],
-          },
-        },
-        { status: 200 }
-      );
-    }
-  }),
-];
+(useTranslation as jest.Mock).mockReturnValue({
+  t: (key: string) => key,
+});
 
-const microServices = setupServer(...handlers);
+const microServices = setupServer(...[
+  rest.get('/api/stripe/sessions/123', () => {
+    return HttpResponse.json({}, { status: 200 })
+  })]
+);
 
 beforeAll(async () => {
   microServices.listen({ onUnhandledRequest: 'bypass' });
@@ -111,6 +98,10 @@ it('Renders one item successfully', async () => {
   );
 });
 
+it('Runs fetcher', async () => {
+  await fetcher('/api/stripe/sessions/123');
+});
+
 it('should fetch server side props with translations', async () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
@@ -122,6 +113,12 @@ it('should fetch server side props with translations without locale', async () =
   // @ts-expect-error
   await getServerSideProps({});
 });
+
+jest.mock('swr', () => jest.fn());
+
+jest.mock('next-i18next', () => ({
+  useTranslation: jest.fn(),
+}));
 
 it('Click Backdrop', () => {
   render(
