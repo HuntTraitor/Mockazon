@@ -17,7 +17,7 @@ import AppBackDrop from '@/components/AppBackdrop';
 import { useTranslation } from 'next-i18next';
 // TODO this entire page needs to be converted to graphQL
 
-const fetcher = async (url: RequestInfo, init?: RequestInit) => {
+export const fetcher = async (url: RequestInfo, init?: RequestInit) => {
   const response = await fetch(url, init);
   return response.json();
 };
@@ -76,10 +76,12 @@ const CheckoutSuccessPage = () => {
     (item: {
       price: { product: Product; unit_amount: number };
       quantity: number;
+      description: string;
     }) => ({
       ...item.price.product,
       price: item.price.unit_amount,
       quantity: item.quantity,
+      description: item.description,
     })
   );
 
@@ -141,24 +143,21 @@ const CheckoutSuccessPage = () => {
                     <Link variant="h5" href={product.url} underline="none">
                       {product.name}
                     </Link>
-                    <Typography>{product.description}</Typography>
-                    {product.description ? (
-                      <Typography>
-                        <strong>
-                          {t('productDetails.productDescription')}:{' '}
-                        </strong>
-                        {product.description}
-                      </Typography>
-                    ) : null}
+                    <Typography>
+                      <strong>
+                        {t('productDetails.productDescription')}:{' '}
+                      </strong>
+                      {product.description}
+                    </Typography>
                     <Typography>
                       <strong>{t('productDetails.quantity')}: </strong>
                       {product.quantity}{' '}
                     </Typography>
                     <Typography>
                       <strong>{t('productDetails.price')}: </strong>
-                      {(product.price / 100).toLocaleString('en-CA', {
+                      {(product.price / 100).toLocaleString('en-us', {
                         style: 'currency',
-                        currency: 'CAD',
+                        currency: 'USD',
                       })}
                     </Typography>
                   </Stack>
