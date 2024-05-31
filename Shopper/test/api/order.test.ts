@@ -40,7 +40,10 @@ const handlers = [
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/:id`,
     async () => {
       if (getProductsError) {
-        return HttpResponse.json({ message: 'Get products error' }, { status: 500 });
+        return HttpResponse.json(
+          { message: 'Get products error' },
+          { status: 500 }
+        );
       }
       return HttpResponse.json(
         {
@@ -67,45 +70,50 @@ const handlers = [
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/shopperOrder/${validUUID}`,
     async () => {
       if (getOrderError) {
-        return HttpResponse.json({ message: 'Get order error' }, { status: 500 });
+        return HttpResponse.json(
+          { message: 'Get order error' },
+          { status: 500 }
+        );
       }
-      return HttpResponse.json({
-        id: validUUID,
-        createdAt: new Date(),
-        shippingAddress: {
-          name: 'name',
-          addressLine1: 'address',
-          city: 'city',
-          state: 'state',
-          postalCode: 'postalCode',
-          country: 'country',
-        },
-        paymentMethod: '5',
-        paymentDigits: '5',
-        paymentBrand: '5',
-        subtotal: 2,
-        tax: 3,
-        total: 5,
-        shipped: true,
-        delivered: true,
-        deliveryTime: new Date(),
-        products: [
-          {
-            id: validUUID,
-            vendor_id: validUUID,
-            quantity: 5,
-            data: {
-              brand: 'abc',
-              name: 'name',
-              rating: '5',
-              price: 5,
-              deliveryDate: '5',
-              image: 'image',
-              description: 'desc',
+      return HttpResponse.json(
+        {
+          id: validUUID,
+          createdAt: new Date(),
+          shippingAddress: {
+            name: 'name',
+            addressLine1: 'address',
+            city: 'city',
+            state: 'state',
+            postalCode: 'postalCode',
+            country: 'country',
+          },
+          paymentMethod: '5',
+          paymentDigits: '5',
+          paymentBrand: '5',
+          subtotal: 2,
+          tax: 3,
+          total: 5,
+          shipped: true,
+          delivered: true,
+          deliveryTime: new Date(),
+          products: [
+            {
+              id: validUUID,
+              vendor_id: validUUID,
+              quantity: 5,
+              data: {
+                brand: 'abc',
+                name: 'name',
+                rating: '5',
+                price: 5,
+                deliveryDate: '5',
+                image: 'image',
+                description: 'desc',
+              },
             },
-          }],
-      },
-      { status: 200 }
+          ],
+        },
+        { status: 200 }
       );
     }
   ),
@@ -113,45 +121,52 @@ const handlers = [
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/shopperOrder`,
     async () => {
       if (getAllOrdersError) {
-        return HttpResponse.json({ message: 'Get order error' }, { status: 500 });
+        return HttpResponse.json(
+          { message: 'Get order error' },
+          { status: 500 }
+        );
       }
-      return HttpResponse.json([{
-        id: validUUID,
-        createdAt: new Date(),
-        shippingAddress: {
-          name: 'name',
-          addressLine1: 'address',
-          city: 'city',
-          state: 'state',
-          postalCode: 'postalCode',
-          country: 'country',
-        },
-        paymentMethod: '5',
-        paymentDigits: '5',
-        paymentBrand: '5',
-        subtotal: 2,
-        tax: 3,
-        total: 5,
-        shipped: true,
-        delivered: true,
-        deliveryTime: new Date(),
-        products: [
+      return HttpResponse.json(
+        [
           {
             id: validUUID,
-            vendor_id: validUUID,
-            quantity: 5,
-            data: {
-              brand: 'abc',
+            createdAt: new Date(),
+            shippingAddress: {
               name: 'name',
-              rating: '5',
-              price: 5,
-              deliveryDate: '5',
-              image: 'image',
-              description: 'desc',
+              addressLine1: 'address',
+              city: 'city',
+              state: 'state',
+              postalCode: 'postalCode',
+              country: 'country',
             },
-          }],
-      }],
-      { status: 200 }
+            paymentMethod: '5',
+            paymentDigits: '5',
+            paymentBrand: '5',
+            subtotal: 2,
+            tax: 3,
+            total: 5,
+            shipped: true,
+            delivered: true,
+            deliveryTime: new Date(),
+            products: [
+              {
+                id: validUUID,
+                vendor_id: validUUID,
+                quantity: 5,
+                data: {
+                  brand: 'abc',
+                  name: 'name',
+                  rating: '5',
+                  price: 5,
+                  deliveryDate: '5',
+                  image: 'image',
+                  description: 'desc',
+                },
+              },
+            ],
+          },
+        ],
+        { status: 200 }
       );
     }
   ),
@@ -228,8 +243,12 @@ test('Get order', async () => {
   expect(result.body.data.getOrder.shippingAddress.name).toEqual('name');
   expect(result.body.data.getOrder.shippingAddress.state).toEqual('state');
   expect(result.body.data.getOrder.shippingAddress.country).toEqual('country');
-  expect(result.body.data.getOrder.shippingAddress.postalCode).toEqual('postalCode');
-  expect(result.body.data.getOrder.shippingAddress.addressLine1).toEqual('address');
+  expect(result.body.data.getOrder.shippingAddress.postalCode).toEqual(
+    'postalCode'
+  );
+  expect(result.body.data.getOrder.shippingAddress.addressLine1).toEqual(
+    'address'
+  );
 });
 
 test('Get order error', async () => {
@@ -347,10 +366,18 @@ test('Get orders', async () => {
   expect(result.body.data.getAllOrders[0].shippingAddress).not.toBeNull();
   expect(result.body.data.getAllOrders[0].shippingAddress.city).toEqual('city');
   expect(result.body.data.getAllOrders[0].shippingAddress.name).toEqual('name');
-  expect(result.body.data.getAllOrders[0].shippingAddress.state).toEqual('state');
-  expect(result.body.data.getAllOrders[0].shippingAddress.country).toEqual('country');
-  expect(result.body.data.getAllOrders[0].shippingAddress.postalCode).toEqual('postalCode');
-  expect(result.body.data.getAllOrders[0].shippingAddress.addressLine1).toEqual('address');
+  expect(result.body.data.getAllOrders[0].shippingAddress.state).toEqual(
+    'state'
+  );
+  expect(result.body.data.getAllOrders[0].shippingAddress.country).toEqual(
+    'country'
+  );
+  expect(result.body.data.getAllOrders[0].shippingAddress.postalCode).toEqual(
+    'postalCode'
+  );
+  expect(result.body.data.getAllOrders[0].shippingAddress.addressLine1).toEqual(
+    'address'
+  );
 });
 
 test('Get all orders error', async () => {
