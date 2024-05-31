@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from '@testing-library/react';
+import { render } from '@testing-library/react';
 import Products from '@/pages/products';
 import http from 'http';
 import { AppContext } from '@/contexts/AppContext';
@@ -7,7 +7,7 @@ import { AppContext } from '@/contexts/AppContext';
 import { setupServer } from 'msw/node';
 
 import requestHandler from '../../../api/requestHandler';
-import {enqueueSnackbar, SnackbarProvider} from 'notistack';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -34,7 +34,7 @@ jest.mock('next/router', () => ({
   useRouter: () => ({
     basePath: '',
     pathname: '/',
-    query: { orderBy: 'Dogs'},
+    query: { orderBy: 'Dogs' },
     asPath: '/',
     locale: 'en',
     locales: ['en', 'es'],

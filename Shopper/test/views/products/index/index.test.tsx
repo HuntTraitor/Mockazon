@@ -1,5 +1,5 @@
 import React from 'react';
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import Products from '@/pages/products';
 import { getServerSideProps } from '@/pages/products';
 import http from 'http';
@@ -9,7 +9,7 @@ import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from '../../../api/requestHandler';
-import {enqueueSnackbar, SnackbarProvider} from 'notistack';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -41,8 +41,7 @@ const handlers = [
       }
       return HttpResponse.json(
         {
-          errors: [
-          ],
+          errors: [],
         },
         { status: 400 }
       );
@@ -131,8 +130,7 @@ const handlers = [
       }
       return HttpResponse.json(
         {
-          errors: [
-          ],
+          errors: [],
         },
         { status: 400 }
       );
@@ -287,7 +285,10 @@ it('Adds to shopping cart', async () => {
   const button = screen.getByLabelText('Add to cart button');
   fireEvent.click(button);
   await waitFor(() => {
-    expect(enqueueSnackbar).toHaveBeenCalledWith('productAddedToCart', expect.anything());
+    expect(enqueueSnackbar).toHaveBeenCalledWith(
+      'productAddedToCart',
+      expect.anything()
+    );
   });
 });
 

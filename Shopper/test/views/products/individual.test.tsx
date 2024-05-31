@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, waitFor, fireEvent} from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import ProductPage from '@/pages/products/[id]';
 import { getServerSideProps } from '@/pages/products/[id]';
@@ -8,7 +8,7 @@ import { AppContext } from '@/contexts/AppContext';
 
 import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
-import {enqueueSnackbar, SnackbarProvider} from 'notistack';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 
 import requestHandler from '../../api/requestHandler';
 
@@ -27,7 +27,7 @@ jest.mock('next/config', () => () => ({
 const handlers = [
   graphql.query('getProduct', () => {
     if (returnError) {
-      if(graphQLReturnError) {
+      if (graphQLReturnError) {
         return HttpResponse.json(
           {
             errors: [
@@ -36,10 +36,10 @@ const handlers = [
               },
             ],
           },
-          {status: 400}
+          { status: 400 }
         );
       }
-      return HttpResponse.json({})
+      return HttpResponse.json({});
     }
     return HttpResponse.json({
       data: {
@@ -132,7 +132,6 @@ const AppContextProps = {
   accountDrawerOpen: false,
   setAccountDrawerOpen: jest.fn(),
 };
-
 
 it('Renders successfully', async () => {
   render(

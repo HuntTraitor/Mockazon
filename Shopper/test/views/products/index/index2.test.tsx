@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Products from '@/pages/products';
 import http from 'http';
 import { AppContext } from '@/contexts/AppContext';
@@ -8,9 +8,9 @@ import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from '../../../api/requestHandler';
-import {enqueueSnackbar, SnackbarProvider} from 'notistack';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import { LoggedInContext, User } from '@/contexts/LoggedInUserContext';
-import userEvent from "@testing-library/user-event";
+import userEvent from '@testing-library/user-event';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -74,7 +74,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -84,7 +85,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -94,7 +96,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -104,7 +107,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -114,7 +118,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -124,7 +129,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -134,7 +140,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -144,7 +151,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -154,7 +162,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -164,7 +173,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -174,7 +184,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -184,7 +195,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -194,7 +206,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -204,7 +217,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -214,7 +228,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -224,7 +239,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -234,7 +250,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -244,7 +261,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -254,7 +272,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -264,7 +283,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -274,7 +294,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -284,7 +305,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -294,7 +316,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -304,7 +327,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -314,7 +338,8 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
@@ -324,12 +349,12 @@ const handlers = [
                   deliveryDate: 'test',
                   // image: 'test',
                 },
-              },              {
+              },
+              {
                 id: 'some id',
                 data: {
                   brand: 'test',
                   name: 'test name',
-
 
                   rating: 'test',
                   price: 1,
@@ -591,13 +616,8 @@ jest.mock('notistack', () => ({
 
 (enqueueSnackbar as jest.Mock).mockImplementation(jest.fn());
 
-
-
 it('Tries to access index page with user logged out', async () => {
-  localStorage.setItem(
-    'user',
-    '{}'
-  );
+  localStorage.setItem('user', '{}');
   const emptyLoggedInContextProps = {
     accessToken: 'abc',
     setAccessToken: jest.fn(),
@@ -625,7 +645,7 @@ it('Renders successfully and clicks next page', async () => {
     useRouter: () => ({
       basePath: '',
       pathname: '/',
-      query: {active: true},
+      query: { active: true },
       asPath: '/',
       locale: 'en',
       locales: ['en', 'es'],
@@ -660,8 +680,8 @@ it('Renders successfully and clicks next page', async () => {
     </AppContext.Provider>
   );
 
-  const secondPage = await screen.findByRole("button", {
-    name: "Go to page 2",
+  const secondPage = await screen.findByRole('button', {
+    name: 'Go to page 2',
   });
   await userEvent.click(secondPage);
 });
