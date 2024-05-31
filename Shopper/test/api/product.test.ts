@@ -21,7 +21,7 @@ const handlers = [
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/suggestions`,
     async () => {
-      if(errorInSearchSuggestions){
+      if (errorInSearchSuggestions) {
         return HttpResponse.json({ message: 'Login error' }, { status: 500 });
       }
       return HttpResponse.json(
@@ -236,11 +236,9 @@ test('Gets products with parameters', async () => {
 });
 
 test('Gets search suggestions', async () => {
-  const result = await supertest(server)
-    .post('/api/graphql')
-    .send({
-      query: `{getSearchSuggestions(search: "search")}`,
-    });
+  const result = await supertest(server).post('/api/graphql').send({
+    query: `{getSearchSuggestions(search: "search")}`,
+  });
   expect(result.body.data).not.toBeNull();
   expect(result.body.data.getSearchSuggestions).toEqual([
     'name1',
@@ -258,11 +256,9 @@ test('Gets search suggestions', async () => {
 
 test('Gets search suggestions with error', async () => {
   errorInSearchSuggestions = true;
-  const result = await supertest(server)
-    .post('/api/graphql')
-    .send({
-      query: `{getSearchSuggestions(search: "search")}`,
-    });
+  const result = await supertest(server).post('/api/graphql').send({
+    query: `{getSearchSuggestions(search: "search")}`,
+  });
   expect(result.body.data).toBeNull();
   expect(result.body.errors[0].message).toBe('Internal Server Error');
 });
