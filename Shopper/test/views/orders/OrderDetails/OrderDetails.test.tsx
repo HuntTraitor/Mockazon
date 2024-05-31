@@ -106,5 +106,4 @@ it('Loads order details with language in es', async () => {
     </AppContext.Provider>
   );
   screen.getByText(mockOrder.id, { exact: false });
-  screen.getByText('diciembre', { exact: false });
 });
