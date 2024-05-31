@@ -239,6 +239,7 @@ test('Gets search suggestions', async () => {
   const result = await supertest(server).post('/api/graphql').send({
     query: `{getSearchSuggestions(search: "search")}`,
   });
+  expect(result.body.data).toBeDefined();
   expect(result.body.data).not.toBeNull();
   expect(result.body.data.getSearchSuggestions).toEqual([
     'name1',
