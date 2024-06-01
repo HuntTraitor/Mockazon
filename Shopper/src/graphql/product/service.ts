@@ -86,4 +86,24 @@ export class ProductService {
       throw new GraphQLError('Internal Server Error');
     }
   }
+
+  public async getProductCount(): Promise<number> {
+    const url = `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/count`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching product count')
+      }
+      return await response.json()
+    } catch (err) {
+      console.error(err);
+      throw new GraphQLError('Internal Server Error');
+    }
+  }
 }
