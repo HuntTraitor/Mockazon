@@ -98,9 +98,9 @@ export class ProductService {
       });
 
       if (!response.ok) {
-        throw new Error('Error fetching product count')
+        throw new Error('Error fetching product count');
       }
-      return await response.json()
+      return await response.json();
     } catch (err) {
       console.error(err);
       throw new GraphQLError('Internal Server Error');

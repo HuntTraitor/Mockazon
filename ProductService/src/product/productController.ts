@@ -67,8 +67,8 @@ export class ProductController extends Controller {
   @Get('count')
   @SuccessResponse('200', 'Count retrieved')
   public async getCount(): Promise<number> {
-    const count = await new ProductService().getCount()
-    return parseInt(count)
+    const count = await new ProductService().getCount();
+    return parseInt(count);
   }
 
   @Get('{productId}')

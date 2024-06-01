@@ -231,11 +231,11 @@ export class ProductService {
   }
 
   public async getCount(): Promise<string> {
-    const select = `SELECT COUNT(*) FROM product`
+    const select = `SELECT COUNT(*) FROM product`;
     const query = {
-      text: select
-    }
-    const {rows} = await pool.query(query)
-    return rows[0].count
+      text: select,
+    };
+    const { rows } = await pool.query(query);
+    return rows[0].count;
   }
 }

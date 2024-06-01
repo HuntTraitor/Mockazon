@@ -199,11 +199,11 @@ test('Should return an empty array for no search suggestions', async () => {
   expect(suggestions.body).toHaveLength(0);
 });
 
-test('Should retrieve product count success 200', async() => {
+test('Should retrieve product count success 200', async () => {
   await supertest(server)
     .get('/api/v0/product/count')
     .expect(200)
     .then(res => {
-      expect(res.body).toBe(3)
-    })
-})
+      expect(res.body).toBe(3);
+    });
+});

@@ -35,6 +35,6 @@ export class ProductResolver {
 
   @Query(() => Number)
   async getProductCount(): Promise<number> {
-    return this.productService.getProductCount()
+    return this.productService.getProductCount();
   }
 }

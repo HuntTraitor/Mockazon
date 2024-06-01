@@ -33,10 +33,10 @@ interface MockProduct {
     price: number;
     deliveryDate: string;
     image: string;
-  }
+  };
 }
 
-const mockProducts: MockProduct[] = []
+const mockProducts: MockProduct[] = [];
 for (let i = 0; i < 31; i++) {
   mockProducts.push({
     id: 'some id',
@@ -48,7 +48,7 @@ for (let i = 0; i < 31; i++) {
       deliveryDate: 'test',
       image: 'https://test-image.jpg',
     },
-  })
+  });
 }
 
 const handlers = [
@@ -81,7 +81,7 @@ const handlers = [
       return HttpResponse.json(
         {
           data: {
-            getProducts: mockProducts
+            getProducts: mockProducts,
           },
         },
         { status: 200 }

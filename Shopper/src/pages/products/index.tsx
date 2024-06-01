@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 const Index = () => {
   const [products, setProducts] = useState([] as Product[]);
   const [newProducts, setNewProducts] = useState([] as Product[]);
-  const [productCount, setProductCount] = useState(0)
+  const [productCount, setProductCount] = useState(0);
   const [orders, setOrders] = useState([] as Product[]);
   const router = useRouter();
   const { vendorId, active, page, pageSize, search, orderBy, descending } =
@@ -65,12 +65,22 @@ const Index = () => {
 
     fetchAllOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vendorId, active, page, pageSize, search, orderBy, descending, currentPage]);
+  }, [
+    vendorId,
+    active,
+    page,
+    pageSize,
+    search,
+    orderBy,
+    descending,
+    currentPage,
+  ]);
 
   useEffect(() => {
     fetchProductCount();
     fetchNewProducts();
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePageChange = (event: any, value: any) => {
@@ -81,27 +91,27 @@ const Index = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const fetchProductCount = () => {
-    const query = {query: `query getProductCount {getProductCount}`}
+    const query = { query: `query getProductCount {getProductCount}` };
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(query)
+      body: JSON.stringify(query),
     })
       .then(response => response.json())
       .then(json => {
-        setProductCount(json.data.getProductCount)
+        setProductCount(json.data.getProductCount);
       })
       .catch(() => {
         return;
-      })
-  }
+      });
+  };
 
   const fetchNewProducts = () => {
     const variables: { [key: string]: string | boolean | number } = {
       page: 1,
-      orderBy: "posted",
+      orderBy: 'posted',
       descending: true,
     };
 
@@ -179,7 +189,7 @@ const Index = () => {
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       });
-  }
+  };
 
   const fetchProducts = () => {
     const variables: { [key: string]: string | boolean | number } = {
@@ -368,13 +378,11 @@ const Index = () => {
                 {t('products:moreProducts')}
               </Typography>
               <Grid container spacing={1} justifyContent="center">
-                {products
-                  .slice()
-                  .map((product, index) => (
-                    <Grid item key={index}>
-                      <ProductCard product={product} />
-                    </Grid>
-                  ))}
+                {products.slice().map((product, index) => (
+                  <Grid item key={index}>
+                    <ProductCard product={product} />
+                  </Grid>
+                ))}
               </Grid>
               <Box display="flex" justifyContent="center" marginTop={2}>
                 <Pagination
