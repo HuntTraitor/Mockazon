@@ -16,7 +16,7 @@ let server: http.Server<
 let getPasses = true;
 let postPasses = true;
 let updateShoppingCartSuccess = true;
-let removeFromShoppingCartSuccess= true;
+let removeFromShoppingCartSuccess = true;
 
 const handlers = [
   rest.get(
@@ -78,7 +78,10 @@ const handlers = [
           { status: 200 }
         );
       } else {
-        return HttpResponse.json({ message: 'Update shopping cart error' }, { status: 500 });
+        return HttpResponse.json(
+          { message: 'Update shopping cart error' },
+          { status: 500 }
+        );
       }
     }
   ),
@@ -93,7 +96,10 @@ const handlers = [
           { status: 200 }
         );
       } else {
-        return HttpResponse.json({ message: 'Remove from shopping cart error' }, { status: 500 });
+        return HttpResponse.json(
+          { message: 'Remove from shopping cart error' },
+          { status: 500 }
+        );
       }
     }
   ),
