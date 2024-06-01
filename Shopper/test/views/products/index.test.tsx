@@ -8,8 +8,11 @@ import { AppContext } from '@/contexts/AppContext';
 import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
 
-import requestHandler from '../../../api/requestHandler';
+import requestHandler from '../../api/requestHandler';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
+import {LoggedInContext, User} from "@/contexts/LoggedInUserContext";
+import userEvent from '@testing-library/user-event';
+import {randomUUID} from "crypto";
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -22,8 +25,72 @@ let errorInAddToShoppingCart = false;
 let errorInAddToShoppingCartGraphQL = false;
 let errorInGetAllOrders = false;
 let errorInGetAllOrdersGraphQL = false;
+let errorInGetProductCount = false;
+const errorInGetProductCountGraphQL = false;
+
+interface MockProduct {
+  id: string;
+  data: {
+    brand: string;
+    name: string;
+    rating: string;
+    price: number;
+    deliveryDate: string;
+    image: string;
+  };
+}
+const mockProducts: MockProduct[] = [];
+for (let i = 0; i < 31; i++) {
+  mockProducts.push({
+    id: 'some id',
+    data: {
+      brand: 'test',
+      name: 'test name',
+      rating: 'test',
+      price: 1,
+      deliveryDate: 'test',
+      image: 'https://test-image.jpg',
+    },
+  });
+}
 
 const handlers = [
+  graphql.query('getProductCount', ({ query }) => {
+    console.log(query);
+    if (errorInGetProductCount) {
+      if (errorInGetProductCountGraphQL) {
+        return HttpResponse.json(
+          {
+            errors: [
+              {
+                message: 'test errorInGetProductCount',
+              },
+            ],
+          },
+          { status: 200 }
+        );
+      }
+      return HttpResponse.json(
+        {
+          errors: [
+            {
+              message: 'test errorInGetProductCount',
+            },
+          ],
+        },
+        { status: 400 }
+      );
+    } else {
+      return HttpResponse.json(
+        {
+          data: {
+            getProductCount: 31,
+          },
+        },
+        { status: 200 }
+      );
+    }
+  }),
   graphql.query('GetProducts', ({ query }) => {
     console.log(query);
     if (errorInGetProducts) {
@@ -49,19 +116,7 @@ const handlers = [
       return HttpResponse.json(
         {
           data: {
-            getProducts: [
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-            ],
+            getProducts: mockProducts
           },
         },
         { status: 200 }
@@ -142,6 +197,7 @@ const handlers = [
               {
                 id: 'some id',
                 quantity: 1,
+                products: mockProducts,
                 data: {
                   brand: 'test',
                   name: 'test name',
@@ -177,11 +233,17 @@ afterEach(() => {
   microServices.resetHandlers();
 });
 
+const active = true;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let queryParams: any = {
+  active: active,
+}
+
 jest.mock('next/router', () => ({
   useRouter: () => ({
     basePath: '',
     pathname: '/',
-    query: { active: true },
+    query: queryParams,
     asPath: '/',
     locale: 'en',
     locales: ['en', 'es'],
@@ -223,13 +285,13 @@ jest.mock('next-i18next/serverSideTranslations', () => ({
     },
   }),
 }));
-
+let mobile = false;
 const AppContextProps = {
   backDropOpen: false,
   setBackDropOpen: jest.fn(),
   mockazonMenuDrawerOpen: false,
   setMockazonMenuDrawerOpen: jest.fn(),
-  isMobile: false,
+  isMobile: mobile,
   setIsMobile: jest.fn(),
   accountDrawerOpen: false,
   setAccountDrawerOpen: jest.fn(),
@@ -260,7 +322,7 @@ it('Renders successfully', async () => {
     </AppContext.Provider>
   );
 
-  await waitFor(() => screen.getByText('test name'));
+  await waitFor(() => screen.getAllByText('test name'));
 });
 
 it('Adds to shopping cart', async () => {
@@ -281,8 +343,8 @@ it('Adds to shopping cart', async () => {
       </SnackbarProvider>
     </AppContext.Provider>
   );
-  await waitFor(() => expect(screen.getByLabelText('Add to cart button')));
-  const button = screen.getByLabelText('Add to cart button');
+  await waitFor(() => expect(screen.getAllByLabelText('Add to cart button')));
+  const button = screen.getAllByLabelText('Add to cart button')[0];
   fireEvent.click(button);
   await waitFor(() => {
     expect(enqueueSnackbar).toHaveBeenCalledWith(
@@ -313,8 +375,8 @@ it("Doesn't add to shopping cart because error in add to shopping cart", async (
     </AppContext.Provider>
   );
 
-  await waitFor(() => screen.getByLabelText('Add to cart button'));
-  const button = screen.getByLabelText('Add to cart button');
+  await waitFor(() => screen.getAllByLabelText('Add to cart button'));
+  const button = screen.getAllByLabelText('Add to cart button')[0];
   fireEvent.click(button);
   await waitFor(() => {
     expect(enqueueSnackbar).toHaveBeenNthCalledWith(
@@ -354,8 +416,8 @@ it("Doesn't add to shopping cart because error in add to shopping cart graphql",
     </AppContext.Provider>
   );
 
-  await waitFor(() => expect(screen.getByText('test name')));
-  const button = screen.getByLabelText('Add to cart button');
+  await waitFor(() => expect(screen.getAllByText('test name')));
+  const button = screen.getAllByLabelText('Add to cart button')[0];
   fireEvent.click(button);
   await waitFor(() => {
     expect(enqueueSnackbar).toHaveBeenNthCalledWith(
@@ -441,7 +503,7 @@ it('Renders with error in get all orders graphql', async () => {
     </AppContext.Provider>
   );
 
-  await waitFor(() => screen.getByText('test name'));
+  await waitFor(() => screen.getAllByText('test name'));
 });
 
 it('Renders with error in get all orders', async () => {
@@ -463,5 +525,251 @@ it('Renders with error in get all orders', async () => {
     </AppContext.Provider>
   );
 
-  await waitFor(() => screen.getByText('test name'));
+  await waitFor(() => screen.getAllByText('test name'));
+});
+
+it('Tries to access index page with user logged out', async () => {
+  localStorage.setItem('user', '{}');
+  const emptyLoggedInContextProps = {
+    accessToken: 'abc',
+    setAccessToken: jest.fn(),
+    location: 'content',
+    setLocation: jest.fn(),
+    locale: 'en',
+    setLocale: jest.fn(),
+    user: {} as User,
+    setUser: jest.fn(),
+  };
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <LoggedInContext.Provider value={emptyLoggedInContextProps}>
+          <Products />
+        </LoggedInContext.Provider>
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+  // fireEvent.click(screen.getByLabelText('backdrop'));
+});
+
+it('Renders successfully and clicks next page', async () => {
+  queryParams = {};
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+
+  const secondPage = await screen.findByRole('button', {
+    name: 'Go to page 2',
+  });
+  await userEvent.click(secondPage);
+});
+
+it('Renders with error in proudct count', async () => {
+  errorInGetProductCount = true;
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+
+  await waitFor(() => screen.getAllByText('test name'));
+});
+
+it('Renders successfully with vendorId', async () => {
+  queryParams = {vendorId: randomUUID()}
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders successfully with page', async () => {
+  queryParams = {page: '3'}
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders successfully with pageSize', async () => {
+  queryParams = {pageSize: '3'}
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders successfully with search', async () => {
+  queryParams = {search: '3'}
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders successfully with orderBy', async () => {
+  queryParams = {orderBy: 'count'}
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders successfully with descending', async () => {
+  queryParams = {descending: 'true'}
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders successfully no query params', async () => {
+  queryParams = {}
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders successfully no query params and mobile set', async () => {
+  queryParams = {}
+  mobile = true;
+  window.matchMedia = jest.fn().mockImplementation(query => {
+    const isSmallScreen = true;
+    AppContextProps.isMobile = true;
+    return {
+      matches: isSmallScreen, // Mock 'sm' breakpoint to always match
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    };
+  });
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
 });
