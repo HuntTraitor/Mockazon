@@ -3,7 +3,8 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   margin-top: calc(4vh + 4vw);
 }
 
@@ -12,17 +13,29 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 50px;
+  margin-bottom: 10px;
 }
 
 @media (min-width: 900px) {
   .wrapper {
-    margin-right: 5%;
+    margin-right: 2%;
     margin-top: 0;
     flex-direction: row;
     justify-content: space-between;
     align-items: stretch;
   }
+}
+
+.checkoutWrapperMobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 20px;
+  border: 1px solid grey;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
 }
 
 .checkoutWrapper {
@@ -34,6 +47,36 @@
   padding: 20px;
   border-radius: 10px;
   width: 100%;
+  max-width: calc(100vw - 40px);
+}
+
+@media (min-width: 600px) {
+  .checkoutWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 20px;
+    border: 1px solid grey;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: fit-content;
+    max-width: calc(85vw);
+  }
+}
+
+@media (min-width: 900px) {
+  .checkoutWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 20px;
+    border: 1px solid grey;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+    width: 100%;
+    max-width: 200px;
+  }
 }
 
 .checkoutMoreInformation {
@@ -49,15 +92,14 @@
 }
 
 .checkoutCenter {
-  /* padding: 20px; */
-  justify-content: center;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: flex-start;
+  gap: 5px;
   width: 100%;
+  margin-bottom: 10px;
   max-width: calc(100vw - 40px);
-  background-color: aquamarine;
 }
 
 @media (min-width: 600px) {
@@ -68,12 +110,11 @@
 
 @media (min-width: 900px) {
   .checkoutCenter {
-    justify-content: center;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    max-width: 400px;
+    align-items: flex-start;
+    gap: 5px;
   }
 }
 
@@ -109,11 +150,13 @@
 
 .productName {
   font-size: 1rem;
+  font-weight: bold;
 }
 
 @media (min-width: 600px) {
   .productName {
     font-size: 1.1rem;
+    font-weight: 100;
   }
 }
 
@@ -125,6 +168,7 @@
 
 @media (min-width: 1200px) {
   .productName {
+    font-weight: 100;
     font-size: 1.3rem;
   }
 }

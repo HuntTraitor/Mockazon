@@ -23,9 +23,10 @@ import AddToCartButton from '@/views/product/AddToCartButton';
 import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
 import getConfig from 'next/config';
-const { basePath } = getConfig().publicRuntimeConfig;
 import AppBackDrop from '@/components/AppBackdrop';
 import { enqueueSnackbar } from 'notistack';
+
+const { basePath } = getConfig().publicRuntimeConfig;
 
 const namespaces = [
   'products',
@@ -49,36 +50,37 @@ const ProductPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const { t } = useTranslation('viewProduct');
-  const [product, setProduct] = useState({} as Product);
+  const [product, setProduct] = useState<Product>({} as Product);
   const [quantity, setQuantity] = useState('1');
   const [error, setError] = useState(false);
   const numbers = Array.from({ length: 5 }, (_, index) => index + 1);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
   };
 
   useEffect(() => {
-    const query = {
-      query: `query getProduct{getProduct(
-        productId: "${id}"
-      ) {id data {brand name rating price deliveryDate image description}}}`,
-    };
+    const fetchProduct = async () => {
+      try {
+        const query = {
+          query: `query getProduct{getProduct(
+            productId: "${id}"
+          ) {id data {brand name rating price deliveryDate image description}}}`,
+        };
 
-    fetch(`${basePath}/api/graphql`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(query),
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(product => {
-        if (product.errors) {
-          //console.error('Error fetching product:', product);
+        const response = await fetch(`${basePath}/api/graphql`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(query),
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
           enqueueSnackbar(t('errorFetchingProduct'), {
             variant: 'error',
             persist: false,
@@ -87,11 +89,9 @@ const ProductPage = () => {
           });
           setError(true);
         } else {
-          setProduct(product.data.getProduct);
+          setProduct(data.data.getProduct);
         }
-      })
-      .catch(() => {
-        //console.error('Error fetching product:', error);
+      } catch (error) {
         setError(true);
         enqueueSnackbar(t('errorFetchingProduct'), {
           variant: 'error',
@@ -99,7 +99,10 @@ const ProductPage = () => {
           autoHideDuration: 3000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
-      });
+      }
+    };
+
+    fetchProduct();
   }, [id, t]);
 
   if (product && product.data) {
@@ -146,66 +149,68 @@ const ProductPage = () => {
                 {product.data.description}
               </Typography>
             </Box>
-            <div>
-              <div className={styles.checkoutWrapper}>
-                <Price price={product.data.price.toString()} />
-                <DeliveryText deliveryDate={product.data.deliveryDate} />
-                <TextField
-                  id="Quantity Selector"
-                  select
-                  label={t('quantity')}
-                  defaultValue="1"
-                  onChange={handleQuantityChange}
-                  aria-label={t('quantitySelector') ?? ''}
-                >
-                  {numbers.map(number => (
-                    <MenuItem
-                      key={number}
-                      value={number}
-                      aria-label="Quantity number"
-                    >
-                      {number}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <AddToCartButton product={product} quantity={quantity} />
-                <Box className={styles.checkoutMoreInformation}>
-                  <Box>
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      className={styles.checkoutMoreInformationCaption}
-                    >
-                      {t('shipsFrom')}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      className={styles.checkoutMoreInformationCaption}
-                    >
-                      {t('soldBy')}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      className={styles.checkoutMoreInformationCaption}
-                    >
-                      {t('customer')}
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Typography variant="caption" display="block">
-                      Mockazon
-                    </Typography>
-                    <Typography variant="caption" display="block">
-                      {product.data.brand}
-                    </Typography>
-                    <Typography variant="caption" display="block">
-                      User
-                    </Typography>
-                  </Box>
+            <div
+              className={
+                isMobile ? styles.checkoutWrapperMobile : styles.checkoutWrapper
+              }
+            >
+              <Price price={product.data.price.toString()} />
+              <DeliveryText deliveryDate={product.data.deliveryDate} />
+              <TextField
+                id="Quantity Selector"
+                select
+                label={t('quantity')}
+                defaultValue="1"
+                onChange={handleQuantityChange}
+                aria-label={t('quantitySelector') ?? ''}
+              >
+                {numbers.map(number => (
+                  <MenuItem
+                    key={number}
+                    value={number}
+                    aria-label="Quantity number"
+                  >
+                    {number}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <AddToCartButton product={product} quantity={quantity} />
+              <Box className={styles.checkoutMoreInformation}>
+                <Box>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    className={styles.checkoutMoreInformationCaption}
+                  >
+                    {t('shipsFrom')}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    className={styles.checkoutMoreInformationCaption}
+                  >
+                    {t('soldBy')}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    className={styles.checkoutMoreInformationCaption}
+                  >
+                    {t('customer')}
+                  </Typography>
                 </Box>
-              </div>
+                <Box>
+                  <Typography variant="caption" display="block">
+                    Mockazon
+                  </Typography>
+                  <Typography variant="caption" display="block">
+                    {product.data.brand}
+                  </Typography>
+                  <Typography variant="caption" display="block">
+                    User
+                  </Typography>
+                </Box>
+              </Box>
             </div>
           </Box>
         </Card>
@@ -215,10 +220,7 @@ const ProductPage = () => {
   } else if (error) {
     return (
       <Box className={styles.centerContainer}>
-        <Card
-          sx={{ maxWidth: 1500, minWidth: 175 }}
-          className={styles.cardWrapper}
-        >
+        <Card className={styles.cardWrapper}>
           <Box className={styles.wrapper}>
             <Typography className={styles.productName}>
               {t('productNotFound')}
