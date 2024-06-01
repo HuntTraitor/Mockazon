@@ -44,10 +44,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-const itemsPerPage = 10;
-
 const Index = () => {
   const [products, setProducts] = useState([] as Product[]);
+  const [newProducts, setNewProducts] = useState([] as Product[]);
+  const [productCount, setProductCount] = useState(0)
   const [orders, setOrders] = useState([] as Product[]);
   const router = useRouter();
   const { vendorId, active, page, pageSize, search, orderBy, descending } =
@@ -65,22 +65,43 @@ const Index = () => {
 
     fetchAllOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vendorId, active, page, pageSize, search, orderBy, descending]);
+  }, [vendorId, active, page, pageSize, search, orderBy, descending, currentPage]);
+
+  useEffect(() => {
+    fetchProductCount();
+    fetchNewProducts();
+  }, [])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePageChange = (event: any, value: any) => {
     setCurrentPage(value);
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const fetchProducts = () => {
+  const fetchProductCount = () => {
+    const query = {query: `query getProductCount {getProductCount}`}
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(query)
+    })
+      .then(response => response.json())
+      .then(json => {
+        setProductCount(json.data.getProductCount)
+      })
+      .catch(() => {
+        return;
+      })
+  }
+
+  const fetchNewProducts = () => {
     const variables: { [key: string]: string | boolean | number } = {
-      pageSize: 80,
+      page: 1,
+      orderBy: "posted",
     };
 
     if (vendorId) variables.vendorId = vendorId.toString();
@@ -110,7 +131,7 @@ const Index = () => {
           vendorId: $vendorId,
           active: $active,
           page: $page,
-          pageSize: 80,
+          pageSize: 10,
           search: $search,
           orderBy: $orderBy,
           descending: $descending
@@ -242,7 +263,7 @@ const Index = () => {
           <div>
             <ProductCarousel
               title={t('products:whatNew')}
-              products={products}
+              products={newProducts}
             />
             {orders.length > 0 && (
               <ProductCarousel
@@ -265,9 +286,8 @@ const Index = () => {
                 {t('products:moreProducts')}
               </Typography>
               <Grid container spacing={1} justifyContent="center">
-                {currentItems
+                {products
                   .slice()
-                  .sort(() => Math.random() - 0.5)
                   .map((product, index) => (
                     <Grid item key={index}>
                       <ProductCard product={product} />
@@ -276,7 +296,7 @@ const Index = () => {
               </Grid>
               <Box display="flex" justifyContent="center" marginTop={2}>
                 <Pagination
-                  count={Math.ceil(products.length / itemsPerPage)}
+                  count={Math.ceil(productCount / 10)}
                   page={currentPage}
                   onChange={handlePageChange}
                 />
