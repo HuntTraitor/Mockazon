@@ -79,7 +79,8 @@ const handlers = [
                 rating: 'test',
                 price: 1,
                 deliveryDate: new Date().toUTCString(),
-                image: 'https://i5.walmartimages.com/seo/BGZLEU-Happy-Sounds-Cat-Plush-Toy-Happy-Meme-Plush-Happy-Stuffed-Animal-Toys-Figure-Pillow-Used-Home-Decoration-Children-s-Birthday-Gifts_62eea2e9-fbf0-432f-9008-77b5fa5f40bc.9e26f429c761d0b80ee9da229db8a046.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF',
+                image:
+                  'https://i5.walmartimages.com/seo/BGZLEU-Happy-Sounds-Cat-Plush-Toy-Happy-Meme-Plush-Happy-Stuffed-Animal-Toys-Figure-Pillow-Used-Home-Decoration-Children-s-Birthday-Gifts_62eea2e9-fbf0-432f-9008-77b5fa5f40bc.9e26f429c761d0b80ee9da229db8a046.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF',
               },
             },
           },
@@ -289,9 +290,7 @@ it('Click Backdrop', () => {
 });
 
 it('Render failure due to no user access token', async () => {
-  localStorage.removeItem(
-    'user'
-  );
+  localStorage.removeItem('user');
 
   render(
     <AppContext.Provider value={AppContextProps}>
