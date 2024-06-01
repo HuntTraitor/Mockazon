@@ -16,6 +16,7 @@ let server: http.Server<
 let noErrorInProduct = true;
 let noErrorInProducts = true;
 let errorInSearchSuggestions = false;
+let noErrorInProductCount = true;
 
 const handlers = [
   rest.get(
@@ -39,6 +40,16 @@ const handlers = [
         ],
         { status: 200 }
       );
+    }
+  ),
+  rest.get(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product/count`,
+    async() => {
+      if (noErrorInProductCount) {
+        return HttpResponse.json(45, {status: 200})
+      } else {
+        return HttpResponse.json({message: 'Internal server error'}, {status: 500})
+      }
     }
   ),
   rest.get(
@@ -263,3 +274,21 @@ test('Gets search suggestions with error', async () => {
   expect(result.body.data).toBeNull();
   expect(result.body.errors[0].message).toBe('Internal Server Error');
 });
+
+test('Gets product count successfully', async() => {
+  const result = await supertest(server).post('/api/graphql').send({
+    query: `query getProductCount{getProductCount}`
+  });
+  expect(result.body.data).toBeDefined();
+  expect(result.body.data.getProductCount).toBeDefined();
+  expect(result.body.data.getProductCount).toBe(45)
+})
+
+test('Gets product count failure', async() => {
+  noErrorInProductCount = false;
+  const result = await supertest(server).post('/api/graphql').send({
+    query: `query getProductCount{getProductCount}`
+  });
+  expect(result.body.errors).toBeDefined();
+  expect(result.body.errors[0].message).toBe('Internal Server Error');
+})
