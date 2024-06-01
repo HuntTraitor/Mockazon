@@ -68,3 +68,28 @@ it('Does not Render...Empty Access Key', async () => {
 
   expect(await screen.queryAllByText('Users').length).toBe(0);
 });
+
+it('Grab accessToken from local storage', async () => {
+  localStorage.setItem(
+    'admin',
+    JSON.stringify({ data: { login: { accessToken: 'some token' } } })
+  );
+  let accessToken = '';
+  const setAccessToken = (val: string) => {
+    accessToken = val;
+  };
+  const id = '';
+  const setId = () => {};
+  await render(
+    <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
+      <Home />
+    </LoginContext.Provider>
+  );
+  // Re-render after useEffect()
+  await render(
+    <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
+      <Home />
+    </LoginContext.Provider>
+  );
+  expect(await screen.queryAllByText('Users').length).toBe(1);
+});
