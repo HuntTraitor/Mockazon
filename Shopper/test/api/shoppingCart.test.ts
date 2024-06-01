@@ -15,6 +15,8 @@ let server: http.Server<
 
 let getPasses = true;
 let postPasses = true;
+let updateShoppingCartSuccess = true;
+let removeFromShoppingCartSuccess= true;
 
 const handlers = [
   rest.get(
@@ -60,6 +62,39 @@ const handlers = [
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/shopper/check`,
     async () => {
       return HttpResponse.json({ accessToken: '12345' }, { status: 200 });
+    }
+  ),
+  rest.put(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
+    async () => {
+      if (updateShoppingCartSuccess) {
+        return HttpResponse.json(
+          {
+            id: '123',
+            product_id: '123',
+            shopper_id: '123',
+            data: { quantity: '5' },
+          },
+          { status: 200 }
+        );
+      } else {
+        return HttpResponse.json({ message: 'Update shopping cart error' }, { status: 500 });
+      }
+    }
+  ),
+  rest.delete(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/shoppingCart`,
+    async () => {
+      if (removeFromShoppingCartSuccess) {
+        return HttpResponse.json(
+          {
+            product_id: '123',
+          },
+          { status: 200 }
+        );
+      } else {
+        return HttpResponse.json({ message: 'Remove from shopping cart error' }, { status: 500 });
+      }
     }
   ),
 ];
@@ -157,4 +192,69 @@ test('Add item to shopping cart with failure', async () => {
 
   expect(result.body.errors[0].message).toBeDefined();
   expect(result.body.errors.data).toBeUndefined();
+});
+
+test('Update shopping cart success', async () => {
+  updateShoppingCartSuccess = true;
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer ' + 123)
+    .send({
+      query: `mutation { updateShoppingCart(
+      productId: "${randomUUID()}",
+      quantity: "3")
+    { id, product_id, shopper_id, data { quantity } }}`,
+    });
+
+  expect(result.body.data).toBeDefined();
+  expect(result.body.data.updateShoppingCart.id).toBe('123');
+  expect(result.body.data.updateShoppingCart.product_id).toBe('123');
+  expect(result.body.data.updateShoppingCart.shopper_id).toBe('123');
+  expect(result.body.data.updateShoppingCart.data.quantity).toBe('5');
+});
+
+test('Update shopping cart failure', async () => {
+  updateShoppingCartSuccess = false;
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer ' + 123)
+    .send({
+      query: `mutation { updateShoppingCart(
+      productId: "${randomUUID()}",
+      quantity: "3")
+    { id, product_id, shopper_id, data { quantity } }}`,
+    });
+
+  expect(result.body.data).toBeNull();
+  expect(result.body.errors[0].message).toBe('Internal Server Error');
+});
+
+test('Delete shopping cart success', async () => {
+  removeFromShoppingCartSuccess = true;
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer ' + 123)
+    .send({
+      query: `mutation { removeFromShoppingCart(
+      productId: "${randomUUID()}")
+    { product_id }}`,
+    });
+
+  expect(result.body.data).toBeDefined();
+  expect(result.body.data.removeFromShoppingCart.product_id).toBe('123');
+});
+
+test('Delete shopping cart failure', async () => {
+  removeFromShoppingCartSuccess = false;
+  const result = await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer ' + 123)
+    .send({
+      query: `mutation { removeFromShoppingCart(
+      productId: "${randomUUID()}")
+    { product_id }}`,
+    });
+
+  expect(result.body.data).toBeNull();
+  expect(result.body.errors[0].message).toBe('Internal Server Error');
 });
