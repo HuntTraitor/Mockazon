@@ -1,13 +1,12 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import { render, fireEvent, screen } from '@testing-library/react';
 import { getServerSideProps } from '@/pages/cart';
 import http from 'http';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import { AppContext } from '@/contexts/AppContext';
 import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-
+import { enqueueSnackbar } from 'notistack';
 import requestHandler from '../api/requestHandler';
 import ShoppingCart from '@/pages/cart';
 
@@ -20,9 +19,16 @@ let server: http.Server<
   typeof http.ServerResponse
 >;
 
+jest.mock('notistack', () => ({
+  ...jest.requireActual('notistack'),
+  enqueueSnackbar: jest.fn(),
+}));
+
+(enqueueSnackbar as jest.Mock).mockImplementation(jest.fn());
+
 let errorInFetchProduct = false;
 let errorInShoppingCart = false;
-const errorInGraphQLShoppingCart = false;
+let errorInGraphQLShoppingCart = false;
 
 const handlers = [
   graphql.query('GetShoppingCart', () => {
@@ -66,13 +72,15 @@ const handlers = [
           id: '123',
           data: {
             getProduct: {
+              id: '123',
               data: {
                 brand: 'test',
                 name: 'test name',
                 rating: 'test',
                 price: 1,
                 deliveryDate: new Date().toUTCString(),
-                image: 'test',
+                image:
+                  'https://i5.walmartimages.com/seo/BGZLEU-Happy-Sounds-Cat-Plush-Toy-Happy-Meme-Plush-Happy-Stuffed-Animal-Toys-Figure-Pillow-Used-Home-Decoration-Children-s-Birthday-Gifts_62eea2e9-fbf0-432f-9008-77b5fa5f40bc.9e26f429c761d0b80ee9da229db8a046.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF',
               },
             },
           },
@@ -151,6 +159,22 @@ const newLoggedInContextProps = {
   setUser: jest.fn(),
 };
 
+const newLoggedInContextNoAccessTokenProps = {
+  accessToken: '',
+  setAccessToken: jest.fn(),
+  location: 'login',
+  setLocation: jest.fn(),
+  locale: 'en',
+  setLocale: jest.fn(),
+  user: {
+    accessToken: 'abc',
+    id: 'abc',
+    name: 'Trevor',
+    role: 'Shopper',
+  },
+  setUser: jest.fn(),
+};
+
 const AppContextProps = {
   backDropOpen: false,
   setBackDropOpen: jest.fn(),
@@ -166,17 +190,138 @@ it('passes', () => {
   expect(1).toBe(1);
 });
 
-// it('Renders successfully', async () => {
-//   localStorage.setItem(
-//     'user',
-//     JSON.stringify({
-//       accessToken: 'abc',
-//       id: 'abc',
-//       name: 'Trevor',
-//       role: 'Shopper',
-//     })
-//   );
+it('Renders successfully', async () => {
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'Trevor',
+      role: 'Shopper',
+    })
+  );
 
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart locale={'en'} />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+});
+
+it('Render fails because localStorageUser not set', async () => {
+  const newLoggedInContextProps2 = { ...newLoggedInContextProps };
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  newLoggedInContextProps2.user = {};
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps2}>
+        <ShoppingCart locale={'en'} />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+});
+
+it('should fetch server side props with translations', async () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  await getServerSideProps({ locale: 'en' });
+});
+
+it('should fetch server side props with translations without locale', async () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  await getServerSideProps({});
+});
+
+it('Renders with error in fetch shopping cart items', async () => {
+  errorInShoppingCart = true;
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart locale={'en'} />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders with error in graphQL fetch shopping cart items', async () => {
+  errorInShoppingCart = true;
+  errorInGraphQLShoppingCart = true;
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart locale={'en'} />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+});
+
+it('Renders with error in fetch product', async () => {
+  errorInFetchProduct = true;
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart locale={'en'} />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+});
+
+it('Click Backdrop', () => {
+  render(
+    <AppContext.Provider
+      value={{
+        ...AppContextProps,
+        backDropOpen: true,
+      }}
+    >
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart locale={'en'} />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+  const backdrop = document.querySelector('.MuiBackdrop-root');
+  if (backdrop) {
+    fireEvent.click(backdrop);
+  }
+});
+
+it('Render failure due to no user access token', async () => {
+  localStorage.removeItem('user');
+
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextProps}>
+        <ShoppingCart locale={'en'} />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+});
+
+it('Render failure due to no access token', async () => {
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'Trevor',
+      role: 'Shopper',
+    })
+  );
+
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={newLoggedInContextNoAccessTokenProps}>
+        <ShoppingCart locale={'en'} />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+});
+
+// it('Renders successfully and clicks remove item', async () => {
 //   render(
 //     <AppContext.Provider value={AppContextProps}>
 //       <LoggedInContext.Provider value={newLoggedInContextProps}>
@@ -184,84 +329,5 @@ it('passes', () => {
 //       </LoggedInContext.Provider>
 //     </AppContext.Provider>
 //   );
-//   await waitFor(() => expect(screen.getByText('test name')));
-// });
-
-// it('Render fails because localStorageUser not set', async () => {
-//   const newLoggedInContextProps2 = { ...newLoggedInContextProps };
-//   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//   // @ts-expect-error
-//   newLoggedInContextProps2.user = {};
-//   render(
-//     <AppContext.Provider value={AppContextProps}>
-//       <LoggedInContext.Provider value={newLoggedInContextProps2}>
-//         <ShoppingCart locale={'en'} />
-//       </LoggedInContext.Provider>
-//     </AppContext.Provider>
-//   );
-// });
-
-// it('should fetch server side props with translations', async () => {
-//   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//   // @ts-expect-error
-//   await getServerSideProps({ locale: 'en' });
-// });
-
-// it('should fetch server side props with translations without locale', async () => {
-//   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//   // @ts-expect-error
-//   await getServerSideProps({});
-// });
-
-// it('Renders with error in fetch shopping cart items', async () => {
-//   errorInShoppingCart = true;
-//   render(
-//     <AppContext.Provider value={AppContextProps}>
-//       <LoggedInContext.Provider value={newLoggedInContextProps}>
-//         <ShoppingCart locale={'en'} />
-//       </LoggedInContext.Provider>
-//     </AppContext.Provider>
-//   );
-// });
-
-// it('Renders with error in graphQL fetch shopping cart items', async () => {
-//   errorInShoppingCart = true;
-//   errorInGraphQLShoppingCart = true;
-//   render(
-//     <AppContext.Provider value={AppContextProps}>
-//       <LoggedInContext.Provider value={newLoggedInContextProps}>
-//         <ShoppingCart locale={'en'} />
-//       </LoggedInContext.Provider>
-//     </AppContext.Provider>
-//   );
-// });
-
-// it('Renders with error in fetch product', async () => {
-//   errorInFetchProduct = true;
-//   render(
-//     <AppContext.Provider value={AppContextProps}>
-//       <LoggedInContext.Provider value={newLoggedInContextProps}>
-//         <ShoppingCart locale={'en'} />
-//       </LoggedInContext.Provider>
-//     </AppContext.Provider>
-//   );
-// });
-
-// it('Click Backdrop', () => {
-//   render(
-//     <AppContext.Provider
-//       value={{
-//         ...AppContextProps,
-//         backDropOpen: true,
-//       }}
-//     >
-//       <LoggedInContext.Provider value={newLoggedInContextProps}>
-//         <ShoppingCart locale={'en'} />
-//       </LoggedInContext.Provider>
-//     </AppContext.Provider>
-//   );
-//   const backdrop = document.querySelector('.MuiBackdrop-root');
-//   if (backdrop) {
-//     fireEvent.click(backdrop);
-//   }
+//   fireEvent.click(screen.getByLabelText('cart:Delete' + ' test name'));
 // });

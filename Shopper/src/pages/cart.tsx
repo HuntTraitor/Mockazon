@@ -421,6 +421,7 @@ const Cart = ({ locale }: { locale: string }) => {
                               </select>
                               <Divider orientation="vertical" flexItem />
                               <Typography
+                                aria-label={`${t('cart:Delete')} ${product.data.getProduct.data.name}`}
                                 style={{
                                   fontSize: '0.8rem',
                                   marginLeft: '0.5rem',
