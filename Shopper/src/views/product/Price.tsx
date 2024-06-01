@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Typography, useTheme, useMediaQuery } from '@mui/material';
 import styles from '@/styles/ProductCard.module.css';
 
 interface PriceProps {
@@ -7,6 +7,8 @@ interface PriceProps {
 
 export default function Price({ price }: PriceProps) {
   let beforeDot, afterDot: string;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const dotIndex = price.indexOf('.');
   if (dotIndex === -1) {
     beforeDot = price;
@@ -19,7 +21,11 @@ export default function Price({ price }: PriceProps) {
   return (
     <Typography variant="body2" className={styles.priceContainer}>
       <span>$</span>
-      <span className={styles.middlePrice}>{beforeDot}</span>
+      <span
+        className={isMobile ? styles.middlePriceMobile : styles.middlePrice}
+      >
+        {beforeDot}
+      </span>
       <span>{afterDot}</span>
     </Typography>
   );

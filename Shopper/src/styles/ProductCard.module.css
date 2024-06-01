@@ -20,7 +20,13 @@
   font-size: 2rem;
   position: relative;
   top: 0.8rem;
-  
+}
+
+.middlePriceMobile {
+  font-weight: bold;
+  font-size: 1.25rem;
+  position: relative;
+  top: 0.3rem;
 }
 
 .deliveryDate {
@@ -29,7 +35,7 @@
 
 .addToCart {
   text-transform: capitalize;
-  background-color: #ffDA00;
+  background-color: #ffda00;
   color: #0f1111;
   margin-top: 9px;
   border-radius: 10px;
@@ -50,6 +56,12 @@
   position: relative;
   width: 250px;
   height: 250px;
+}
+
+.imageContainerMobile {
+  position: relative;
+  width: 150px;
+  height: 150px;
 }
 
 .imageContainerAlt {

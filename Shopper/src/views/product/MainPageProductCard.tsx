@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { Product } from '@/graphql/types';
-import { Link, Box } from '@mui/material';
+import { Link, Box, useTheme, useMediaQuery } from '@mui/material';
 import Price from './Price';
 import DeliveryText from './DeliveryText';
 import AddToCartButton from './AddToCartButton';
@@ -18,9 +18,11 @@ interface ProductProps {
 export default function ProductCard({ product }: ProductProps) {
   const { t } = useTranslation('viewProduct');
   const price = product.data.price.toFixed(2).toString();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Set the maximum number of characters for the product name
-  const maxCharacters = 40;
+  const maxCharacters = isMobile ? 20 : 40;
 
   // Truncate the product name if it exceeds the maximum characters
   const truncatedName =
@@ -31,14 +33,18 @@ export default function ProductCard({ product }: ProductProps) {
   return (
     <Card
       sx={{
-        width: 250,
-        height: 500,
+        width: isMobile ? 150 : 250,
+        height: isMobile ? 260 : 500,
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
         transition: 'all 0.3s ease',
       }}
     >
       <Link href={`/products/${product.id}`} underline="none">
-        <Box className={styles.imageContainer}>
+        <Box
+          className={
+            isMobile ? styles.imageContainerMobile : styles.imageContainer
+          }
+        >
           <Image
             src={product.data.image}
             alt={t('productImageAlt')}
@@ -50,7 +56,7 @@ export default function ProductCard({ product }: ProductProps) {
       <CardContent>
         <Link href={`/products/${product.id}`} underline="none" color="inherit">
           <Typography
-            style={{ fontSize: '1rem' }}
+            style={{ fontSize: isMobile ? '0.9rem' : '1rem' }}
             component="div"
             className={styles.productName}
           >
@@ -58,20 +64,22 @@ export default function ProductCard({ product }: ProductProps) {
           </Typography>
         </Link>
         <Price price={price} />
-        <Typography
-          variant="body1"
-          color="text.secondary"
-          className={styles.primeLogo}
-        >
-          <Image
-            src="/prime_logo.jpg"
-            alt="Prime logo"
-            width={70}
-            height={21.5}
-          />
-        </Typography>
-        <DeliveryText deliveryDate={product.data.deliveryDate} />
-        <AddToCartButton product={product} quantity={'1'} />
+        {!isMobile && (
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            className={styles.primeLogo}
+          >
+            <Image
+              src="/prime_logo.jpg"
+              alt="Prime logo"
+              width={70}
+              height={21.5}
+            />
+          </Typography>
+        )}
+        {!isMobile && <DeliveryText deliveryDate={product.data.deliveryDate} />}
+        {!isMobile && <AddToCartButton product={product} quantity={'1'} />}
       </CardContent>
     </Card>
   );

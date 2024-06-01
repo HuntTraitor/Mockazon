@@ -1,4 +1,12 @@
-import { Container, Grid, Box, Typography, Pagination } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Box,
+  Typography,
+  Pagination,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -67,6 +75,8 @@ const Index = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const fetchProducts = () => {
     const variables: { [key: string]: string | boolean | number } = {
@@ -218,12 +228,18 @@ const Index = () => {
   ) {
     return (
       <div className={styles.exterior}>
-        <Container className={`${styles.content} ${styles.gradientContainer}`}>
-          <Box className={styles.title}>
+        <Container
+          className={
+            isMobile
+              ? `${styles.mobileContent} ${styles.gradientContainer}`
+              : `${styles.content} ${styles.gradientContainer}`
+          }
+        >
+          <Box className={isMobile ? styles.titleMobile : styles.title}>
             <h1>{t('common:welcomeToMockazon')}</h1>
             <h2>{t('common:secondaryWelcome')}</h2>
           </Box>
-          <div className={styles.carouselContainer}>
+          <div>
             <ProductCarousel
               title={t('products:whatNew')}
               products={products}
@@ -235,11 +251,16 @@ const Index = () => {
               />
             )}
           </div>
-          <Box className={styles.productList}>
+          <Box
+            className={isMobile ? styles.productListMobile : styles.productList}
+          >
             <div className={styles.productlistContent}>
               <Typography
-                variant="h6"
-                sx={{ fontWeight: 'bold', textAlign: 'center' }}
+                variant={isMobile ? 'subtitle1' : 'h6'}
+                sx={{
+                  fontWeight: 'bold',
+                  textAlign: isMobile ? 'left' : 'center',
+                }}
               >
                 {t('products:moreProducts')}
               </Typography>
