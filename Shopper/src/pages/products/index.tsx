@@ -102,6 +102,7 @@ const Index = () => {
     const variables: { [key: string]: string | boolean | number } = {
       page: 1,
       orderBy: "posted",
+      descending: true,
     };
 
     if (vendorId) variables.vendorId = vendorId.toString();
