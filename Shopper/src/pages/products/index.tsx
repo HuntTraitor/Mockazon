@@ -122,8 +122,89 @@ const Index = () => {
       query GetProducts(
         $vendorId: UUID,
         $active: Boolean,
-        $page: Int,
         $search: String,
+        $page: Int,
+        $orderBy: String,
+        $descending: Boolean
+      ) {
+        getProducts(
+          vendorId: $vendorId,
+          active: $active,
+          page: $page,
+          pageSize: 20,
+          search: $search,
+          orderBy: $orderBy,
+          descending: $descending
+        ) {
+          id
+          data {
+            brand
+            name
+            rating
+            price
+            deliveryDate
+            image
+          }
+        }
+      }`,
+      variables: filteredVariables,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(query),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.errors && data.errors.length > 0) {
+          //console.error('Error fetching products:', data.errors);
+          enqueueSnackbar(t('products:errorFetchingProducts'), {
+            variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          });
+          return;
+        }
+        setNewProducts(data.data.getProducts);
+      })
+      .catch(() => {
+        //console.error('Error fetching products:', error);
+        enqueueSnackbar(t('products:errorFetchingProducts'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
+      });
+  }
+
+  const fetchProducts = () => {
+    const variables: { [key: string]: string | boolean | number } = {
+      page: currentPage,
+    };
+
+    if (vendorId) variables.vendorId = vendorId.toString();
+    if (active !== undefined) variables.active = active === 'true';
+    if (page) variables.page = parseInt(page as string);
+    if (pageSize) variables.pageSize = parseInt(pageSize as string);
+    if (search) variables.search = search.toString();
+    if (orderBy) variables.orderBy = orderBy.toString();
+    if (descending !== undefined) variables.descending = descending === 'true';
+
+    const filteredVariables = Object.fromEntries(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(variables).filter(([_, v]) => v !== undefined)
+    );
+
+    const query = {
+      query: `
+      query GetProducts(
+        $vendorId: UUID,
+        $active: Boolean,
+        $search: String,
+        $page: Int,
         $orderBy: String,
         $descending: Boolean
       ) {
