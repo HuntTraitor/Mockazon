@@ -5,6 +5,8 @@ import {
   Divider,
   TextField,
   MenuItem,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -51,6 +53,8 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState('1');
   const [error, setError] = useState(false);
   const numbers = Array.from({ length: 5 }, (_, index) => index + 1);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
   };
@@ -102,11 +106,14 @@ const ProductPage = () => {
     return (
       <Box className={styles.centerContainer}>
         <Card
-          sx={{ maxWidth: 1500, minWidth: 175 }}
-          className={styles.cardWrapper}
+          className={isMobile ? styles.cardWrapperMobile : styles.cardWrapper}
         >
-          <Box className={styles.wrapper}>
-            <Box className={styles.productImage}>
+          <Box className={isMobile ? styles.wrapperMobile : styles.wrapper}>
+            <Box
+              className={
+                isMobile ? styles.productImageMobile : styles.productImage
+              }
+            >
               <Image
                 src={product.data.image}
                 alt={t('productImageAlt')}
@@ -115,23 +122,31 @@ const ProductPage = () => {
                 priority
               />
             </Box>
-            <Box className={styles.checkoutCenter}>
+            <Box
+              className={
+                isMobile ? styles.checkoutCenterMobile : styles.checkoutCenter
+              }
+            >
               <Typography className={styles.productName}>
                 {product.data.name}
               </Typography>
               <Typography className={styles.brandName}>
                 {t('brand')}: {product.data.brand}
               </Typography>
-              <Divider />
-              <div style={{ marginBottom: '10px' }}>
-                <Price price={product.data.price.toString()} />
-              </div>
-              <Divider />
+              {!isMobile && (
+                <>
+                  <Divider />
+                  <div style={{ marginBottom: '10px' }}>
+                    <Price price={product.data.price.toString()} />
+                  </div>
+                  <Divider />
+                </>
+              )}
               <Typography className={styles.productDescription}>
                 {product.data.description}
               </Typography>
             </Box>
-            <Box>
+            <div>
               <div className={styles.checkoutWrapper}>
                 <Price price={product.data.price.toString()} />
                 <DeliveryText deliveryDate={product.data.deliveryDate} />
@@ -191,7 +206,7 @@ const ProductPage = () => {
                   </Box>
                 </Box>
               </div>
-            </Box>
+            </div>
           </Box>
         </Card>
         <AppBackDrop />
