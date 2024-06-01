@@ -10,9 +10,9 @@ import { setupServer } from 'msw/node';
 
 import requestHandler from '../../api/requestHandler';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
-import {LoggedInContext, User} from "@/contexts/LoggedInUserContext";
+import { LoggedInContext, User } from '@/contexts/LoggedInUserContext';
 import userEvent from '@testing-library/user-event';
-import {randomUUID} from "crypto";
+import { randomUUID } from 'crypto';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -116,7 +116,7 @@ const handlers = [
       return HttpResponse.json(
         {
           data: {
-            getProducts: mockProducts
+            getProducts: mockProducts,
           },
         },
         { status: 200 }
@@ -237,7 +237,7 @@ const active = true;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let queryParams: any = {
   active: active,
-}
+};
 
 jest.mock('next/router', () => ({
   useRouter: () => ({
@@ -600,7 +600,7 @@ it('Renders with error in proudct count', async () => {
 });
 
 it('Renders successfully with vendorId', async () => {
-  queryParams = {vendorId: randomUUID()}
+  queryParams = { vendorId: randomUUID() };
   localStorage.setItem(
     'user',
     JSON.stringify({
@@ -620,7 +620,7 @@ it('Renders successfully with vendorId', async () => {
 });
 
 it('Renders successfully with page', async () => {
-  queryParams = {page: '3'}
+  queryParams = { page: '3' };
   localStorage.setItem(
     'user',
     JSON.stringify({
@@ -640,7 +640,7 @@ it('Renders successfully with page', async () => {
 });
 
 it('Renders successfully with pageSize', async () => {
-  queryParams = {pageSize: '3'}
+  queryParams = { pageSize: '3' };
   localStorage.setItem(
     'user',
     JSON.stringify({
@@ -660,7 +660,7 @@ it('Renders successfully with pageSize', async () => {
 });
 
 it('Renders successfully with search', async () => {
-  queryParams = {search: '3'}
+  queryParams = { search: '3' };
   localStorage.setItem(
     'user',
     JSON.stringify({
@@ -680,7 +680,7 @@ it('Renders successfully with search', async () => {
 });
 
 it('Renders successfully with orderBy', async () => {
-  queryParams = {orderBy: 'count'}
+  queryParams = { orderBy: 'count' };
   localStorage.setItem(
     'user',
     JSON.stringify({
@@ -700,7 +700,7 @@ it('Renders successfully with orderBy', async () => {
 });
 
 it('Renders successfully with descending', async () => {
-  queryParams = {descending: 'true'}
+  queryParams = { descending: 'true' };
   localStorage.setItem(
     'user',
     JSON.stringify({
@@ -720,7 +720,7 @@ it('Renders successfully with descending', async () => {
 });
 
 it('Renders successfully no query params', async () => {
-  queryParams = {}
+  queryParams = {};
   localStorage.setItem(
     'user',
     JSON.stringify({
@@ -740,7 +740,7 @@ it('Renders successfully no query params', async () => {
 });
 
 it('Renders successfully no query params and mobile set', async () => {
-  queryParams = {}
+  queryParams = {};
   mobile = true;
   window.matchMedia = jest.fn().mockImplementation(query => {
     const isSmallScreen = true;
