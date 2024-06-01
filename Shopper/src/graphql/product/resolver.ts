@@ -32,4 +32,9 @@ export class ProductResolver {
   ): Promise<string[]> {
     return this.productService.getSearchSuggestions(search);
   }
+
+  @Query(() => Number)
+  async getProductCount(): Promise<number> {
+    return this.productService.getProductCount();
+  }
 }

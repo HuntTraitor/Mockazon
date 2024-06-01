@@ -21,6 +21,35 @@ let errorInGetProducts = false;
 let errorInGetProductsGraphQL = false;
 let errorInAddToShoppingCart = false;
 let errorInAddToShoppingCartGraphQL = false;
+let errorInGetProductCount = false;
+let errorInGetProductCountGraphQL = false;
+
+interface MockProduct {
+  id: string;
+  data: {
+    brand: string;
+    name: string;
+    rating: string;
+    price: number;
+    deliveryDate: string;
+    image: string;
+  };
+}
+
+const mockProducts: MockProduct[] = [];
+for (let i = 0; i < 31; i++) {
+  mockProducts.push({
+    id: 'some id',
+    data: {
+      brand: 'test',
+      name: 'test name',
+      rating: 'test',
+      price: 1,
+      deliveryDate: 'test',
+      image: 'https://test-image.jpg',
+    },
+  });
+}
 
 const handlers = [
   graphql.query('GetProducts', ({ query }) => {
@@ -52,438 +81,44 @@ const handlers = [
       return HttpResponse.json(
         {
           data: {
-            getProducts: [
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
+            getProducts: mockProducts,
+          },
+        },
+        { status: 200 }
+      );
+    }
+  }),
 
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
+  graphql.query('getProductCount', ({ query }) => {
+    console.log(query);
+    if (errorInGetProductCount) {
+      if (errorInGetProductCountGraphQL) {
+        return HttpResponse.json(
+          {
+            errors: [
               {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
-              },
-              {
-                id: 'some id',
-                data: {
-                  brand: 'test',
-                  name: 'test name',
-                  rating: 'test',
-                  price: 1,
-                  deliveryDate: 'test',
-                  // image: 'test',
-                },
+                message: 'test errorInGetProductCount',
               },
             ],
+          },
+          { status: 200 }
+        );
+      }
+      return HttpResponse.json(
+        {
+          errors: [
+            {
+              message: 'test errorInGetProductCount',
+            },
+          ],
+        },
+        { status: 400 }
+      );
+    } else {
+      return HttpResponse.json(
+        {
+          data: {
+            getProductCount: 31,
           },
         },
         { status: 200 }

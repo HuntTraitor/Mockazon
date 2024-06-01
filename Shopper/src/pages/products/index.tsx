@@ -44,10 +44,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-const itemsPerPage = 10;
-
 const Index = () => {
   const [products, setProducts] = useState([] as Product[]);
+  const [newProducts, setNewProducts] = useState([] as Product[]);
+  const [productCount, setProductCount] = useState(0);
   const [orders, setOrders] = useState([] as Product[]);
   const router = useRouter();
   const { vendorId, active, page, pageSize, search, orderBy, descending } =
@@ -65,22 +65,54 @@ const Index = () => {
 
     fetchAllOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vendorId, active, page, pageSize, search, orderBy, descending]);
+  }, [
+    vendorId,
+    active,
+    page,
+    pageSize,
+    search,
+    orderBy,
+    descending,
+    currentPage,
+  ]);
+
+  useEffect(() => {
+    fetchProductCount();
+    fetchNewProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePageChange = (event: any, value: any) => {
     setCurrentPage(value);
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const fetchProducts = () => {
+  const fetchProductCount = () => {
+    const query = { query: `query getProductCount {getProductCount}` };
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(query),
+    })
+      .then(response => response.json())
+      .then(json => {
+        setProductCount(json.data.getProductCount);
+      })
+      .catch(() => {
+        return;
+      });
+  };
+
+  const fetchNewProducts = () => {
     const variables: { [key: string]: string | boolean | number } = {
-      pageSize: 80,
+      page: 1,
+      orderBy: 'posted',
+      descending: true,
     };
 
     if (vendorId) variables.vendorId = vendorId.toString();
@@ -101,8 +133,8 @@ const Index = () => {
       query GetProducts(
         $vendorId: UUID,
         $active: Boolean,
-        $page: Int,
         $search: String,
+        $page: Int,
         $orderBy: String,
         $descending: Boolean
       ) {
@@ -110,7 +142,88 @@ const Index = () => {
           vendorId: $vendorId,
           active: $active,
           page: $page,
-          pageSize: 80,
+          pageSize: 20,
+          search: $search,
+          orderBy: $orderBy,
+          descending: $descending
+        ) {
+          id
+          data {
+            brand
+            name
+            rating
+            price
+            deliveryDate
+            image
+          }
+        }
+      }`,
+      variables: filteredVariables,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(query),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.errors && data.errors.length > 0) {
+          //console.error('Error fetching products:', data.errors);
+          enqueueSnackbar(t('products:errorFetchingProducts'), {
+            variant: 'error',
+            persist: false,
+            autoHideDuration: 3000,
+            anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          });
+          return;
+        }
+        setNewProducts(data.data.getProducts);
+      })
+      .catch(() => {
+        //console.error('Error fetching products:', error);
+        enqueueSnackbar(t('products:errorFetchingProducts'), {
+          variant: 'error',
+          persist: false,
+          autoHideDuration: 3000,
+          anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        });
+      });
+  };
+
+  const fetchProducts = () => {
+    const variables: { [key: string]: string | boolean | number } = {
+      page: currentPage,
+    };
+
+    if (vendorId) variables.vendorId = vendorId.toString();
+    if (active !== undefined) variables.active = active === 'true';
+    if (page) variables.page = parseInt(page as string);
+    if (pageSize) variables.pageSize = parseInt(pageSize as string);
+    if (search) variables.search = search.toString();
+    if (orderBy) variables.orderBy = orderBy.toString();
+    if (descending !== undefined) variables.descending = descending === 'true';
+
+    const filteredVariables = Object.fromEntries(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(variables).filter(([_, v]) => v !== undefined)
+    );
+
+    const query = {
+      query: `
+      query GetProducts(
+        $vendorId: UUID,
+        $active: Boolean,
+        $search: String,
+        $page: Int,
+        $orderBy: String,
+        $descending: Boolean
+      ) {
+        getProducts(
+          vendorId: $vendorId,
+          active: $active,
+          page: $page,
+          pageSize: 10,
           search: $search,
           orderBy: $orderBy,
           descending: $descending
@@ -242,7 +355,7 @@ const Index = () => {
           <div>
             <ProductCarousel
               title={t('products:whatNew')}
-              products={products}
+              products={newProducts}
             />
             {orders.length > 0 && (
               <ProductCarousel
@@ -265,18 +378,15 @@ const Index = () => {
                 {t('products:moreProducts')}
               </Typography>
               <Grid container spacing={1} justifyContent="center">
-                {currentItems
-                  .slice()
-                  .sort(() => Math.random() - 0.5)
-                  .map((product, index) => (
-                    <Grid item key={index}>
-                      <ProductCard product={product} />
-                    </Grid>
-                  ))}
+                {products.slice().map((product, index) => (
+                  <Grid item key={index}>
+                    <ProductCard product={product} />
+                  </Grid>
+                ))}
               </Grid>
               <Box display="flex" justifyContent="center" marginTop={2}>
                 <Pagination
-                  count={Math.ceil(products.length / itemsPerPage)}
+                  count={Math.ceil(productCount / 10)}
                   page={currentPage}
                   onChange={handlePageChange}
                 />
