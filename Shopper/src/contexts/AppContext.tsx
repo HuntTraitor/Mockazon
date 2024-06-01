@@ -44,7 +44,7 @@ export const AppContextProvider: React.FC<PropsWithChildren<object>> = ({
   }, [router.events]);
 
   useEffect(() => {
-    const mobileSize = 1000;
+    const mobileSize = 900;
 
     if (window.innerWidth < mobileSize) {
       setIsMobile(true);
