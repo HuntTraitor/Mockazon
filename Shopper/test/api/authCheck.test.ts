@@ -153,7 +153,9 @@ test('Calling authenticated endpoint without auth header', async () => {
     .post('/api/graphql')
     .send({ query: mockAddShippingMutation });
   expect(response.body.errors).toBeDefined();
-  expect(response.body.errors[0].message).toBe('Access denied! You don\'t have permission for this action!');
+  expect(response.body.errors[0].message).toBe(
+    "Access denied! You don't have permission for this action!"
+  );
 });
 
 test('Calling authenticated endpoint with authorization header but without bearer', async () => {
@@ -164,7 +166,9 @@ test('Calling authenticated endpoint with authorization header but without beare
     .set('Authorization', 'cat')
     .send({ query: mockAddShippingMutation });
   expect(response.body.errors).toBeDefined();
-  expect(response.body.errors[0].message).toBe('Access denied! You don\'t have permission for this action!');
+  expect(response.body.errors[0].message).toBe(
+    "Access denied! You don't have permission for this action!"
+  );
 });
 
 test('Calling authenticated endpoint with authorization header but without bearer token', async () => {
@@ -175,5 +179,7 @@ test('Calling authenticated endpoint with authorization header but without beare
     .set('Authorization', 'taco cat')
     .send({ query: mockAddShippingMutation });
   expect(response.body.errors).toBeDefined();
-  expect(response.body.errors[0].message).toBe('Access denied! You don\'t have permission for this action!');
+  expect(response.body.errors[0].message).toBe(
+    "Access denied! You don't have permission for this action!"
+  );
 });
