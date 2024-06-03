@@ -1,5 +1,5 @@
 import { Page } from 'puppeteer';
-import {randomUUID} from "crypto";
+import { randomUUID } from 'crypto';
 
 export async function findByTextAndSelector(
   page: Page,
@@ -21,7 +21,12 @@ export async function findByTextAndSelector(
   );
 }
 
-export async function signUp(page: Page, name: string, password: string, email: string) {
+export async function signUp(
+  page: Page,
+  name: string,
+  password: string,
+  email: string
+) {
   await page.goto('http://localhost:3000/signup');
   await page.waitForSelector('form');
 

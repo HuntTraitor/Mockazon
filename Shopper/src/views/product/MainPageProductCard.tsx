@@ -40,7 +40,11 @@ export default function ProductCard({ product, ariaLabel }: ProductProps) {
         transition: 'all 0.3s ease',
       }}
     >
-      <Link href={`/products/${product.id}`} underline="none" aria-label={`${ariaLabel}-${product.data.name}`}>
+      <Link
+        href={`/products/${product.id}`}
+        underline="none"
+        aria-label={`${ariaLabel}-${product.data.name}`}
+      >
         <Box
           className={
             isMobile ? styles.imageContainerMobile : styles.imageContainer

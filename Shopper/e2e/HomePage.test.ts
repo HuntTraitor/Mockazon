@@ -1,5 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import {getRandomEmail, signUp} from "./helpers";
+import { getRandomEmail, signUp } from './helpers';
 
 describe('Next.js App', () => {
   let browser: Browser;
@@ -18,14 +18,14 @@ describe('Next.js App', () => {
     await page.goto('http://localhost:3000');
   });
 
-  test('Navigate to home page and clicks on a what\'s new item', async () => {
+  test("Navigate to home page and clicks on a what's new item", async () => {
     await page.goto('http://localhost:3000');
     await page.waitForSelector('[aria-label^="What\'s New-"]');
     await page.click('[aria-label^="What\'s New-"]');
     await page.waitForNavigation();
   });
 
-  test('Navigate to home page and clicks right arrow on what\'s new then clicks on a what\'s new item', async () => {
+  test("Navigate to home page and clicks right arrow on what's new then clicks on a what's new item", async () => {
     await page.goto('http://localhost:3000');
     await page.waitForSelector('[data-testid="ArrowForwardIosIcon"]');
     await page.click('[data-testid="ArrowForwardIosIcon"]');

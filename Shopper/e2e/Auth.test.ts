@@ -1,5 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import {getRandomEmail, signUp} from "./helpers";
+import { getRandomEmail, signUp } from './helpers';
 
 const email = getRandomEmail();
 describe('Auth', () => {

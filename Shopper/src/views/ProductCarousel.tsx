@@ -61,7 +61,11 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           }}
         >
           {products.map((product, index) => (
-            <Box aria-label={`${ariaLabel}-${product.data.name}`} key={index} sx={{ flexShrink: 0, marginRight: '16px' }}>
+            <Box
+              aria-label={`${ariaLabel}-${product.data.name}`}
+              key={index}
+              sx={{ flexShrink: 0, marginRight: '16px' }}
+            >
               <Button
                 href={`/products/${product.id}`}
                 className={styles.productImage}

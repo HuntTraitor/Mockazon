@@ -382,7 +382,10 @@ const Index = () => {
               <Grid container spacing={1} justifyContent="center">
                 {products.slice().map((product, index) => (
                   <Grid item key={index}>
-                    <ProductCard ariaLabel={t('products:moreProducts')} product={product} />
+                    <ProductCard
+                      ariaLabel={t('products:moreProducts')}
+                      product={product}
+                    />
                   </Grid>
                 ))}
               </Grid>
@@ -409,7 +412,10 @@ const Index = () => {
         <Grid container spacing={1}>
           {products.map((product, index) => (
             <Grid item key={index}>
-              <ProductCard ariaLabel={`search-product-${product.data.name}`} product={product} />
+              <ProductCard
+                ariaLabel={`search-product-${product.data.name}`}
+                product={product}
+              />
             </Grid>
           ))}
         </Grid>
