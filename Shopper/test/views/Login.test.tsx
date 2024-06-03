@@ -352,7 +352,15 @@ describe('Login component', () => {
         setLocation('mockToken');
         setLocale('mockToken');
         setUser({} as User);
-      }, [setLocale, accessToken, setAccessToken, location, setLocation, locale, setUser]);
+      }, [
+        setLocale,
+        accessToken,
+        setAccessToken,
+        location,
+        setLocation,
+        locale,
+        setUser,
+      ]);
 
       return null;
     };
