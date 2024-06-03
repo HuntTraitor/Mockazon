@@ -10,7 +10,7 @@ import { LoggedInContext, User } from '@/contexts/LoggedInUserContext';
 import { AppContext } from '@/contexts/AppContext';
 import { enqueueSnackbar } from 'notistack';
 import React from 'react';
-import {randomUUID} from "crypto";
+import { randomUUID } from 'crypto';
 
 jest.mock('next/router', () => ({
   useRouter: () => ({
@@ -50,11 +50,8 @@ let renderWithNullOrder = false;
 
 const handlers = [
   graphql.query('GetOrder', () => {
-    if(renderWithNullOrder) {
-      return HttpResponse.json(
-        { data: { getOrder: null } },
-        { status: 200 }
-      );
+    if (renderWithNullOrder) {
+      return HttpResponse.json({ data: { getOrder: null } }, { status: 200 });
     }
     if (errorInGetOrder) {
       if (errorInGetOrderGraphQL) {
@@ -62,13 +59,12 @@ const handlers = [
           { errors: [{ message: 'error' }] },
           { status: 200 }
         );
-      }else{
+      } else {
         return HttpResponse.json(
           { errors: [{ message: 'error' }] },
           { status: 400 }
         );
       }
-
     } else {
       return HttpResponse.json(
         {
@@ -98,7 +94,7 @@ const handlers = [
                   },
                 },
               ],
-            }
+            },
           },
         },
         { status: 200 }
