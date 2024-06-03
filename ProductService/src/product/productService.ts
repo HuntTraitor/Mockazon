@@ -243,7 +243,8 @@ export class ProductService {
       });
     }
 
-    console.log(suggestions);
+    suggestions.splice(10);
+
     return suggestions;
   }
 

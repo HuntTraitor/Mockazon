@@ -17,6 +17,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
@@ -403,8 +404,8 @@ const TopHeader = () => {
               <Paper
                 sx={{
                   width: '100%',
-                  maxHeight: 'none',
-                  overflow: 'visible',
+                  maxHeight: '50vh',
+                  overflow: 'auto',
                 }}
               >
                 <List>
@@ -413,14 +414,26 @@ const TopHeader = () => {
                       button
                       key={option}
                       onMouseDown={() => handleSuggestionClick(option)}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                     >
+                      <ListItemIcon>
+                        <SearchIcon />
+                      </ListItemIcon>
                       <ListItemText
                         primary={highlightMatch(option, search)}
                         primaryTypographyProps={{
                           style: {
                             fontWeight:
-                              index === suggestionIndex ? 'bold' : 'normal',
+                            index === suggestionIndex ? 'bold' : 'normal',
+                            fontSize: '14px',
                           },
+                        }}
+                        sx={{ 
+                          marginLeft: '-20px',
                         }}
                       />
                     </ListItem>
@@ -545,7 +558,7 @@ const TopHeader = () => {
               <Paper
                 sx={{
                   width: '100%',
-                  maxHeight: '45vh',
+                  maxHeight: '60vh',
                   overflow: 'auto',
                 }}
               >
@@ -555,14 +568,26 @@ const TopHeader = () => {
                       button
                       key={option}
                       onMouseDown={() => handleSuggestionClick(option)}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                     >
+                      <ListItemIcon>
+                        <SearchIcon />
+                      </ListItemIcon>
                       <ListItemText
                         primary={highlightMatch(option, search)}
                         primaryTypographyProps={{
                           style: {
                             fontWeight:
                               index === suggestionIndex ? 'bold' : 'normal',
+                            fontSize: '14px',
                           },
+                        }}
+                        sx={{ 
+                          marginLeft: '-20px',
                         }}
                       />
                     </ListItem>
