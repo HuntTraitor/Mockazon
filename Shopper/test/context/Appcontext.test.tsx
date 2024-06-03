@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import {
+  AppContext,
   AppContextProvider,
   useAppContext,
 } from '../../src/contexts/AppContext';
@@ -50,6 +51,51 @@ describe('AppContextProvider', () => {
     expect(
       screen.getByText('mockazonMenuDrawerOpen: false')
     ).toBeInTheDocument();
+  });
+
+  test('test mobile layout', () => {
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+
+    const TestComponent = () => {
+      const { backDropOpen, mockazonMenuDrawerOpen } = useAppContext();
+      return (
+        <div>
+          <span>backDropOpen: {backDropOpen.toString()}</span>
+          <span>
+            mockazonMenuDrawerOpen: {mockazonMenuDrawerOpen.toString()}
+          </span>
+        </div>
+      );
+    };
+
+    render(
+      <AppContextProvider>
+        <TestComponent />
+      </AppContextProvider>
+    );
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 600,
+    });
+    global.dispatchEvent(new Event('resize'));
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1100,
+    });
+    global.dispatchEvent(new Event('resize'));
+
+    expect(screen.getByText('backDropOpen: false')).toBeInTheDocument();
+    expect(
+      screen.getByText('mockazonMenuDrawerOpen: false')
+    ).toBeInTheDocument();
+    const appContext = useContext(AppContext);
+    console.log(appContext);
   });
 
   test('updates context values', async () => {
