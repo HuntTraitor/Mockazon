@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import {

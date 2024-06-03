@@ -428,11 +428,11 @@ const TopHeader = () => {
                         primaryTypographyProps={{
                           style: {
                             fontWeight:
-                            index === suggestionIndex ? 'bold' : 'normal',
+                              index === suggestionIndex ? 'bold' : 'normal',
                             fontSize: '14px',
                           },
                         }}
-                        sx={{ 
+                        sx={{
                           marginLeft: '-20px',
                         }}
                       />
@@ -586,7 +586,7 @@ const TopHeader = () => {
                             fontSize: '14px',
                           },
                         }}
-                        sx={{ 
+                        sx={{
                           marginLeft: '-20px',
                         }}
                       />
