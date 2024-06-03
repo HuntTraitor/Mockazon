@@ -10,7 +10,7 @@ describe('Next.js App', () => {
   });
 
   afterAll(async () => {
-    // await browser.close();
+    await browser.close();
   });
 
   test('Navigate to home page', async () => {
