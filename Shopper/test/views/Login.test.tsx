@@ -345,19 +345,14 @@ describe('Login component', () => {
         setLocation,
         location,
         setLocale,
+        setUser,
       } = useContext(LoggedInContext);
       useEffect(() => {
         setAccessToken('mockToken');
         setLocation('mockToken');
         setLocale('mockToken');
-      }, [
-        setLocale,
-        accessToken,
-        setAccessToken,
-        location,
-        setLocation,
-        locale,
-      ]);
+        setUser({} as User);
+      }, [setLocale, accessToken, setAccessToken, location, setLocation, locale, setUser]);
 
       return null;
     };
