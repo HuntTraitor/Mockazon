@@ -62,6 +62,8 @@ describe('AppContextProvider', () => {
 
     const TestComponent = () => {
       const { backDropOpen, mockazonMenuDrawerOpen } = useAppContext();
+      const appContext = useContext(AppContext);
+      console.log(appContext);
       return (
         <div>
           <span>backDropOpen: {backDropOpen.toString()}</span>
@@ -94,8 +96,7 @@ describe('AppContextProvider', () => {
     expect(
       screen.getByText('mockazonMenuDrawerOpen: false')
     ).toBeInTheDocument();
-    const appContext = useContext(AppContext);
-    console.log(appContext);
+
   });
 
   test('updates context values', async () => {
