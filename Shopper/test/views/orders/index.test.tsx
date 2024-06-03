@@ -3,13 +3,13 @@ import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from '../../api/requestHandler';
-import {render, waitFor, screen} from "@testing-library/react";
-import Index from "../../../src/pages/orders";
-import {getServerSideProps} from "@/pages/orders";
-import {LoggedInContext, User} from '@/contexts/LoggedInUserContext';
+import { render, waitFor, screen } from '@testing-library/react';
+import Index from '../../../src/pages/orders';
+import { getServerSideProps } from '@/pages/orders';
+import { LoggedInContext, User } from '@/contexts/LoggedInUserContext';
 import { AppContext } from '@/contexts/AppContext';
-import {enqueueSnackbar} from "notistack";
-import React from "react";
+import { enqueueSnackbar } from 'notistack';
+import React from 'react';
 
 jest.mock('next/config', () => () => ({
   publicRuntimeConfig: { basePath: '' },
@@ -219,7 +219,6 @@ const AppContextProps = {
 
 (enqueueSnackbar as jest.Mock).mockImplementation(jest.fn());
 
-
 const loggedInContextProps = {
   accessToken: 'abc',
   setAccessToken: jest.fn(),
@@ -258,7 +257,7 @@ it('Renders successfully', async () => {
         {WrappedIndex}
       </LoggedInContext.Provider>
     </AppContext.Provider>
-  )
+  );
   await waitFor(() => {
     screen.getByText('test address name');
   });
@@ -278,7 +277,7 @@ it('Renders without access token', async () => {
         <Index />
       </LoggedInContext.Provider>
     </AppContext.Provider>
-  )
+  );
 });
 
 it('Errors in getAllOrders', async () => {
@@ -296,7 +295,7 @@ it('Errors in getAllOrders', async () => {
         <Index />
       </LoggedInContext.Provider>
     </AppContext.Provider>
-  )
+  );
 });
 
 it('should fetch server side props with translations', async () => {
@@ -319,5 +318,5 @@ it('Has no user access token', async () => {
         <Index />
       </LoggedInContext.Provider>
     </AppContext.Provider>
-  )
+  );
 });
