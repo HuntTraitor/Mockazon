@@ -1,10 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import {
-  AppContextProvider,
-  useAppContext,
-} from '@/contexts/AppContext';
-import Layout from "@/components/Layout";
+import { AppContextProvider, useAppContext } from '@/contexts/AppContext';
+import Layout from '@/components/Layout';
 
 jest.mock('next/router', () => ({
   useRouter: () => ({
@@ -30,7 +27,6 @@ jest.mock('next/router', () => ({
 }));
 
 describe('AppContextProvider', () => {
-
   test('provides initial context values', () => {
     const TestComponent = () => {
       const { backDropOpen, mockazonMenuDrawerOpen } = useAppContext();
