@@ -37,12 +37,6 @@ import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
-interface Product {
-  data: {
-    name: string;
-  };
-}
-
 const highlightMatch = (text: string, query: string) => {
   if (!text.toLowerCase().startsWith(query.toLowerCase())) {
     return <span style={{ fontWeight: 'bold' }}>{text}</span>;
@@ -116,22 +110,11 @@ const TopHeader = () => {
         return;
       }
 
-      const graphqlQuery = {
-        query: `query GetProducts($search: String!) {
-          getProducts(search: $search) {
-            data {
-              name
-            }
-          }
-        }`,
-        variables: { search: query },
-      };
-
       try {
         const response = await fetch(`${basePath}/api/graphql`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(graphqlQuery),
+          body: JSON.stringify({ query: `{getSearchSuggestions(search: "${query}")}` }),
         });
 
         if (!response.ok) {
@@ -144,13 +127,8 @@ const TopHeader = () => {
           return;
         }
 
-        if (data.data.getProducts.length > 0) {
-          const filteredSuggestions = data.data.getProducts
-            .map((product: Product) => product.data.name)
-            .filter((name: string) =>
-              name.toLowerCase().startsWith(query.toLowerCase())
-            );
-          setSuggestions(filteredSuggestions);
+        if (data.data.getSearchSuggestions.length > 0) {
+          setSuggestions(data.data.getSearchSuggestions);
         } else {
           setSuggestions([]);
         }
@@ -293,7 +271,6 @@ const TopHeader = () => {
                   alt="Logo"
                   priority
                 />
-                {/* Replace with a new logo */}
               </Link>
             </Box>
             <Box
@@ -509,7 +486,7 @@ const TopHeader = () => {
                   onChange: e => {
                     setSearch(e.target.value);
                     setDisplayedValue(e.target.value);
-                    setSuggestionIndex(-1); // Reset index on new input
+                    setSuggestionIndex(-1);
                   },
                   onKeyDown: handleKeyDown,
                   endAdornment: (
@@ -566,8 +543,8 @@ const TopHeader = () => {
               <Paper
                 sx={{
                   width: '100%',
-                  maxHeight: 'none',
-                  overflow: 'visible',
+                  maxHeight: '45vh',
+                  overflow: 'auto',
                 }}
               >
                 <List>
