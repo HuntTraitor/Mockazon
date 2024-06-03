@@ -9,7 +9,7 @@ describe('Retrieving products', () => {
   test('Should retrieve all products', async () => {
     const products = await supertest(server).get('/api/v0/product').expect(200);
 
-    expect(products.body).toHaveLength(3);
+    expect(products.body).toHaveLength(4);
     for (const product of products.body) {
       validateProduct(product);
     }
@@ -172,22 +172,21 @@ describe('Getting reviews', () => {
 test('Should retrieve search suggestions', async () => {
   const suggestions = await supertest(server)
     .get('/api/v0/product/suggestions')
-    .query({ search: 'Gatsby' })
+    .query({ search: 'test producto' })
     .expect(200);
 
   expect(suggestions.body).toHaveLength(1);
-  expect(suggestions.body[0]).toContain('Gatsby');
+  expect(suggestions.body[0]).toContain('test producto');
 });
 
 test('Should retrieve search suggestions for a partial search', async () => {
   const suggestions = await supertest(server)
     .get('/api/v0/product/suggestions')
-    .query({ search: 'G' })
+    .query({ search: 't' })
     .expect(200);
 
   console.log(suggestions.body);
-  expect(suggestions.body).toHaveLength(1);
-  expect(suggestions.body[0]).toContain('Gatsby');
+  expect(suggestions.body[0]).toContain('test producto');
 });
 
 test('Should return an empty array for no search suggestions', async () => {
@@ -199,11 +198,15 @@ test('Should return an empty array for no search suggestions', async () => {
   expect(suggestions.body).toHaveLength(0);
 });
 
+test('Should return 400 for missing search query', async () => {
+  await supertest(server).get('/api/v0/product/suggestions').expect(400);
+});
+
 test('Should retrieve product count success 200', async () => {
   await supertest(server)
     .get('/api/v0/product/count')
     .expect(200)
     .then(res => {
-      expect(res.body).toBe(3);
+      expect(res.body).toBe(4);
     });
 });
