@@ -142,6 +142,8 @@ export class ProductService {
     };
 
     const { rows } = await pool.query(query);
+
+
     const products = rows.map(row => row);
     return products;
   }
@@ -226,6 +228,22 @@ export class ProductService {
 
     const { rows } = await pool.query(query);
     const suggestions: string[] = rows.map(row => row.name);
+
+    if (suggestions.length < 10) {
+      const selectMore = `SELECT DISTINCT data->>'name' AS name FROM product WHERE data->>'name' ILIKE $1::TEXT LIMIT 10`;
+      const queryMore = {
+        text: selectMore,
+        values: [`%${search}%`],
+      };
+      const { rows: moreRows } = await pool.query(queryMore);
+      const moreSuggestions: string[] = moreRows.map(row => row.name);
+      moreSuggestions.forEach(suggestion => {
+        if (!suggestions.includes(suggestion)) {
+          suggestions.push(suggestion);
+        }
+      });
+    }
+
     console.log(suggestions);
     return suggestions;
   }

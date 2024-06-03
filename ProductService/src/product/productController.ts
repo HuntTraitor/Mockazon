@@ -46,22 +46,11 @@ export class ProductController extends Controller {
     @Query() search: string
   ): Promise<string[] | undefined> {
     console.log(`Received search query: ${search}`);
-    if (!search) {
-      console.error('Search query is required');
-      this.setStatus(400);
-      return;
-    }
-    try {
-      const suggestions = await new ProductService().getSearchSuggestions(
-        search
-      );
-      console.log(`Suggestions found: ${suggestions}`);
-      return suggestions;
-    } catch (error) {
-      console.error('Error retrieving suggestions:', error);
-      this.setStatus(500);
-      return;
-    }
+    const suggestions = await new ProductService().getSearchSuggestions(
+      search
+    );
+    console.log(`Suggestions found: ${suggestions}`);
+    return suggestions;
   }
 
   @Get('count')
