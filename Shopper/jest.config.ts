@@ -30,6 +30,7 @@ const customJestConfig = {
     'src/pages/_document.tsx',
     // ok to ignore schema.ts as there's an issue with next and graphql
     'schema.ts',
+    'resolver.ts',
   ],
   testMatch: ['**/test/**/?(*.)+(spec|test).[jt]s?(x)'],
   reporters: [

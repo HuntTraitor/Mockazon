@@ -96,7 +96,6 @@ describe('AppContextProvider', () => {
     expect(
       screen.getByText('mockazonMenuDrawerOpen: false')
     ).toBeInTheDocument();
-
   });
 
   test('updates context values', async () => {
