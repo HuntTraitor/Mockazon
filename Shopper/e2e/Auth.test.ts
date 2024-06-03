@@ -1,8 +1,7 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { randomUUID } from 'crypto';
+import {getRandomEmail, signUp} from "./helpers";
 
-const randomEmail = `${randomUUID()}@test.com`;
-
+const email = getRandomEmail();
 describe('Auth', () => {
   // set timeout to 10 seconds
   jest.setTimeout(20000);
@@ -30,7 +29,7 @@ describe('Auth', () => {
     await page.goto('http://localhost:3000/login');
     await page.waitForSelector('form');
 
-    await page.type('div[aria-label="Email"] input', randomEmail);
+    await page.type('div[aria-label="Email"] input', email);
     await page.type('div[aria-label="Password"] input', 'password');
     await page.click('button[type="submit"]');
 
@@ -48,16 +47,7 @@ describe('Auth', () => {
   });
 
   test('Creates a new account', async () => {
-    await page.goto('http://localhost:3000/signup');
-    await page.waitForSelector('form');
-
-    await page.type('div[aria-label="Name"] input', 'Test User');
-    await page.type('div[aria-label="Email"] input', randomEmail);
-    await page.type('div[aria-label="Password"] input', 'password');
-    await page.type('div[aria-label="Re-enter password"] input', 'password');
-    await page.click('button[type="submit"]');
-    await page.waitForNavigation();
-
+    await signUp(page, 'Test User', 'password', email);
     expect(page.url()).toBe('http://localhost:3000/');
   });
 
@@ -66,7 +56,7 @@ describe('Auth', () => {
     await page.waitForSelector('form');
 
     await page.type('div[aria-label="Name"] input', 'Test User');
-    await page.type('div[aria-label="Email"] input', randomEmail);
+    await page.type('div[aria-label="Email"] input', email);
     await page.type('div[aria-label="Password"] input', 'password');
     await page.type('div[aria-label="Re-enter password"] input', 'password');
     await page.click('button[type="submit"]');
@@ -80,7 +70,7 @@ describe('Auth', () => {
     await page.goto('http://localhost:3000/login');
     await page.waitForSelector('form');
 
-    await page.type('div[aria-label="Email"] input', randomEmail);
+    await page.type('div[aria-label="Email"] input', email);
     await page.type('div[aria-label="Password"] input', 'password');
     await page.click('button[type="submit"]');
     await page.waitForNavigation();
