@@ -3,6 +3,13 @@ import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from '../../api/requestHandler';
+import {render, waitFor, screen} from "@testing-library/react";
+import Index from "../../../src/pages/orders";
+import {getServerSideProps} from "@/pages/orders";
+import {LoggedInContext, User} from '@/contexts/LoggedInUserContext';
+import { AppContext } from '@/contexts/AppContext';
+import {enqueueSnackbar} from "notistack";
+import React from "react";
 
 jest.mock('next/config', () => () => ({
   publicRuntimeConfig: { basePath: '' },
@@ -13,61 +20,129 @@ let server: http.Server<
   typeof http.ServerResponse
 >;
 
-let errorInFetchProduct = false;
-let errorInShoppingCart = false;
-const errorInGraphQLShoppingCart = false;
+let errorInGetAllOrders = false;
 
 const handlers = [
-  graphql.query('GetShoppingCart', () => {
-    if (errorInShoppingCart) {
-      if (errorInGraphQLShoppingCart) {
-        return HttpResponse.json(
-          { errors: [{ message: 'error' }] },
-          { status: 200 }
-        );
-      }
-      return HttpResponse.json({}, { status: 400 });
+  graphql.query('getAllOrders', () => {
+    if (errorInGetAllOrders) {
+      return HttpResponse.json(
+        { errors: [{ message: 'error' }] },
+        { status: 400 }
+      );
     } else {
       return HttpResponse.json(
         {
           data: {
-            getShoppingCart: [
+            getAllOrders: [
               {
                 id: '123',
-                product_id: '123',
-                shopper_id: '123',
-                vendor_id: '123',
-                data: {
-                  quantity: '3',
+                createdAt: '2022-01-01T00:00:00Z',
+                shippingAddress: {
+                  name: 'test address name',
+                  addressLine1: 'test',
+                  city: 'test',
+                  state: 'test',
+                  postalCode: 'test',
+                  country: 'test',
                 },
+                paymentMethod: 'test',
+                paymentDigits: 'test',
+                paymentBrand: 'test',
+                subtotal: 1,
+                tax: 1,
+                total: 1,
+                shipped: true,
+                delivered: true,
+                deliveryTime: 'test',
+                products: [
+                  {
+                    id: '123',
+                    quantity: 1,
+                    data: {
+                      name: 'test',
+                      brand: 'test',
+                      image: 'test',
+                      price: 1,
+                      rating: 'test',
+                      description: 'test',
+                      deliveryDate: 'test',
+                    },
+                  },
+                ],
+              },
+              {
+                id: '456',
+                createdAt: '2022-02-03T00:00:00Z',
+                shippingAddress: {
+                  name: 'test',
+                  addressLine1: 'test',
+                  city: 'test',
+                  state: 'test',
+                  postalCode: 'test',
+                  country: 'test',
+                },
+                paymentMethod: 'test',
+                paymentDigits: 'test',
+                paymentBrand: 'test',
+                subtotal: 1,
+                tax: 1,
+                total: 1,
+                shipped: true,
+                delivered: true,
+                deliveryTime: 'test',
+                products: [
+                  {
+                    id: '123',
+                    quantity: 1,
+                    data: {
+                      name: 'test',
+                      brand: 'test',
+                      image: 'test',
+                      price: 1,
+                      rating: 'test',
+                      description: 'test',
+                      deliveryDate: 'test',
+                    },
+                  },
+                ],
+              },
+              {
+                id: '789',
+                createdAt: '2022-02-02T00:00:00Z',
+                shippingAddress: {
+                  name: 'test',
+                  addressLine1: 'test',
+                  city: 'test',
+                  state: 'test',
+                  postalCode: 'test',
+                  country: 'test',
+                },
+                paymentMethod: 'test',
+                paymentDigits: 'test',
+                paymentBrand: 'test',
+                subtotal: 1,
+                tax: 1,
+                total: 1,
+                shipped: true,
+                delivered: true,
+                deliveryTime: 'test',
+                products: [
+                  {
+                    id: '123',
+                    quantity: 1,
+                    data: {
+                      name: 'test',
+                      brand: 'test',
+                      image: 'test',
+                      price: 1,
+                      rating: 'test',
+                      description: 'test',
+                      deliveryDate: 'test',
+                    },
+                  },
+                ],
               },
             ],
-          },
-        },
-        { status: 200 }
-      );
-    }
-  }),
-  graphql.query('GetProduct', () => {
-    if (errorInFetchProduct) {
-      return HttpResponse.json({}, { status: 400 });
-    } else {
-      return HttpResponse.json(
-        {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          id: '123',
-          data: {
-            getProduct: {
-              data: {
-                brand: 'test',
-                name: 'test name',
-                rating: 'test',
-                price: 1,
-                deliveryDate: 'test',
-                image: 'test',
-              },
-            },
           },
         },
         { status: 200 }
@@ -86,8 +161,6 @@ beforeAll(async () => {
 
 beforeEach(() => {
   microServices.resetHandlers();
-  errorInFetchProduct = false;
-  errorInShoppingCart = false;
 });
 
 afterAll(done => {
@@ -128,6 +201,123 @@ jest.mock('next/router', () => ({
   }),
 }));
 
+jest.mock('notistack', () => ({
+  ...jest.requireActual('notistack'),
+  enqueueSnackbar: jest.fn(),
+}));
+
+const AppContextProps = {
+  backDropOpen: false,
+  setBackDropOpen: jest.fn(),
+  mockazonMenuDrawerOpen: false,
+  setMockazonMenuDrawerOpen: jest.fn(),
+  isMobile: false,
+  setIsMobile: jest.fn(),
+  accountDrawerOpen: false,
+  setAccountDrawerOpen: jest.fn(),
+};
+
+(enqueueSnackbar as jest.Mock).mockImplementation(jest.fn());
+
+
+const loggedInContextProps = {
+  accessToken: 'abc',
+  setAccessToken: jest.fn(),
+  location: 'content',
+  setLocation: jest.fn(),
+  locale: 'en',
+  setLocale: jest.fn(),
+  user: {} as User,
+  setUser: jest.fn(),
+};
+
+const loggedInContextPropsWithNoAccessToken = {
+  accessToken: '',
+  setAccessToken: jest.fn(),
+  location: 'content',
+  setLocation: jest.fn(),
+  locale: 'en',
+  setLocale: jest.fn(),
+  user: {} as User,
+  setUser: jest.fn(),
+};
+
 it('Renders successfully', async () => {
-  expect(true).toBe(true);
+  const mockUser = {
+    accessToken: 'testToken',
+    id: 'testId',
+    name: 'testName',
+    role: 'testRole',
+  };
+  localStorage.setItem('user', JSON.stringify(mockUser));
+  const WrappedIndex = Index.getLayout(<Index />);
+
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        {WrappedIndex}
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  )
+  await waitFor(() => {
+    screen.getByText('test address name');
+  });
+});
+
+it('Renders without access token', async () => {
+  const mockUser = {
+    accessToken: 'testToken',
+    id: 'testId',
+    name: 'testName',
+    role: 'testRole',
+  };
+  localStorage.setItem('user', JSON.stringify(mockUser));
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={loggedInContextPropsWithNoAccessToken}>
+        <Index />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  )
+});
+
+it('Errors in getAllOrders', async () => {
+  errorInGetAllOrders = true;
+  const mockUser = {
+    accessToken: 'testToken',
+    id: 'testId',
+    name: 'testName',
+    role: 'testRole',
+  };
+  localStorage.setItem('user', JSON.stringify(mockUser));
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Index />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  )
+});
+
+it('should fetch server side props with translations', async () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  await getServerSideProps({ locale: 'en' });
+});
+
+it('should fetch server side props with translations without locale', async () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  await getServerSideProps({});
+});
+
+it('Has no user access token', async () => {
+  localStorage.removeItem('user');
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Index />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  )
 });
