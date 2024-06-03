@@ -13,9 +13,10 @@ import styles from '@/styles/ProductCard.module.css';
 
 interface ProductProps {
   product: Product;
+  ariaLabel: string;
 }
 
-export default function ProductCard({ product }: ProductProps) {
+export default function ProductCard({ product, ariaLabel }: ProductProps) {
   const { t } = useTranslation('viewProduct');
   const price = product.data.price.toFixed(2).toString();
   const theme = useTheme();
@@ -39,7 +40,7 @@ export default function ProductCard({ product }: ProductProps) {
         transition: 'all 0.3s ease',
       }}
     >
-      <Link href={`/products/${product.id}`} underline="none">
+      <Link href={`/products/${product.id}`} underline="none" aria-label={`${ariaLabel}-${product.data.name}`}>
         <Box
           className={
             isMobile ? styles.imageContainerMobile : styles.imageContainer

@@ -17,11 +17,13 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 interface ProductCarouselProps {
   products: Product[];
   title: string;
+  ariaLabel: string;
 }
 
 const ProductCarousel: React.FC<ProductCarouselProps> = ({
   products,
   title,
+  ariaLabel,
 }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const scrollAmount = 1500;
@@ -59,7 +61,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           }}
         >
           {products.map((product, index) => (
-            <Box key={index} sx={{ flexShrink: 0, marginRight: '16px' }}>
+            <Box aria-label={`${ariaLabel}-${product.data.name}`} key={index} sx={{ flexShrink: 0, marginRight: '16px' }}>
               <Button
                 href={`/products/${product.id}`}
                 className={styles.productImage}

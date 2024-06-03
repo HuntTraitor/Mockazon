@@ -356,11 +356,13 @@ const Index = () => {
             <ProductCarousel
               title={t('products:whatNew')}
               products={newProducts}
+              ariaLabel={t('products:whatNew')}
             />
             {orders.length > 0 && (
               <ProductCarousel
                 title={t('products:buyAgain')}
                 products={orders}
+                ariaLabel={t('products:buyAgain')}
               />
             )}
           </div>
@@ -380,7 +382,7 @@ const Index = () => {
               <Grid container spacing={1} justifyContent="center">
                 {products.slice().map((product, index) => (
                   <Grid item key={index}>
-                    <ProductCard product={product} />
+                    <ProductCard ariaLabel={t('products:moreProducts')} product={product} />
                   </Grid>
                 ))}
               </Grid>
@@ -407,7 +409,7 @@ const Index = () => {
         <Grid container spacing={1}>
           {products.map((product, index) => (
             <Grid item key={index}>
-              <ProductCard product={product} />
+              <ProductCard ariaLabel={`search-product-${product.data.name}`} product={product} />
             </Grid>
           ))}
         </Grid>
