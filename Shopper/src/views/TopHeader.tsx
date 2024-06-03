@@ -114,7 +114,9 @@ const TopHeader = () => {
         const response = await fetch(`${basePath}/api/graphql`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: `{getSearchSuggestions(search: "${query}")}` }),
+          body: JSON.stringify({
+            query: `{getSearchSuggestions(search: "${query}")}`,
+          }),
         });
 
         if (!response.ok) {

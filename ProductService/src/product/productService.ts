@@ -143,7 +143,6 @@ export class ProductService {
 
     const { rows } = await pool.query(query);
 
-
     const products = rows.map(row => row);
     return products;
   }

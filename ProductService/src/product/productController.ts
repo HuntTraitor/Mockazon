@@ -46,9 +46,7 @@ export class ProductController extends Controller {
     @Query() search: string
   ): Promise<string[] | undefined> {
     console.log(`Received search query: ${search}`);
-    const suggestions = await new ProductService().getSearchSuggestions(
-      search
-    );
+    const suggestions = await new ProductService().getSearchSuggestions(search);
     console.log(`Suggestions found: ${suggestions}`);
     return suggestions;
   }
