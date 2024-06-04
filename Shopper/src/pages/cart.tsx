@@ -1,14 +1,4 @@
-import styles from '@/styles/cart.module.css';
-
 import {
-  Container,
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  CardActionArea,
-  Divider,
   useTheme,
   useMediaQuery,
 } from '@mui/material';
@@ -16,21 +6,16 @@ import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import Link from 'next/link';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
-import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import getConfig from 'next/config';
-import CheckoutButton from '@/views/CheckoutButton';
-import Subtotal from '@/views/Subtotal';
 import { useRouter } from 'next/router';
 const { basePath } = getConfig().publicRuntimeConfig;
 import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
 import { Product, ProductFromFetch } from '../../types';
-import AppBackDrop from '@/components/AppBackdrop';
 import { enqueueSnackbar } from 'notistack';
-import Image from 'next/image';
-import Price from '../views/product/Price';
+import DesktopCart from '@/views/cart/DesktopCart';
+import MobileCart from '@/views/cart/MobileCart';
 
 const namespaces = [
   'products',
@@ -111,7 +96,6 @@ const Cart = ({ locale }: { locale: string }) => {
             autoHideDuration: 3000,
             anchorOrigin: { horizontal: 'center', vertical: 'top' },
           });
-          //console.error(shoppingCartProducts.errors[0].message);
           return;
         }
         const fetchPromises = shoppingCartProducts.data.getShoppingCart.map(
@@ -153,7 +137,6 @@ const Cart = ({ locale }: { locale: string }) => {
                 autoHideDuration: 3000,
                 anchorOrigin: { horizontal: 'center', vertical: 'top' },
               });
-              //console.error('Error fetching product:', err);
             }
           }
         );
@@ -179,7 +162,6 @@ const Cart = ({ locale }: { locale: string }) => {
               autoHideDuration: 3000,
               anchorOrigin: { horizontal: 'center', vertical: 'top' },
             });
-            //console.error('Error fetching shoppingCartProducts:', err);
           });
       })
       .catch(() => {
@@ -189,13 +171,8 @@ const Cart = ({ locale }: { locale: string }) => {
           autoHideDuration: 3000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
-        //console.error('Error fetching shopping cart:', err);
       });
   }, [router, user, accessToken, t]);
-
-  // if(JSON.stringify(user) === '{}') {
-  //   return null
-  // }
 
   const handleRemove = (productId: string) => {
     const query = {
@@ -322,301 +299,25 @@ const Cart = ({ locale }: { locale: string }) => {
   };
 
   // Desktop Cart
-
-  if (!isMobile) {
-    return (
-      <div className={styles.exterior}>
-        <Container
-          className={isMobile ? styles.containerMobile : styles.container}
-        >
-          <Grid container spacing={2}>
-            <Grid id={'cart'} className={styles.topDivider} item xs={12} md={9}>
-              <div className={styles.cart}>
-                <div className={styles.cartHeader}>
-                  <Typography className={`${styles.h1}`} variant="h1">
-                    {t('cart:title')}
-                  </Typography>
-                  <div className={styles.priceHeader}>
-                    <Typography
-                      style={{ fontSize: '0.8rem' }}
-                    >{`Price`}</Typography>
-                  </div>
-                  <Divider />
-                </div>
-                {products.map((product, index) => (
-                  <Box key={product.id + '_index_' + index}>
-                    <Card className={styles.card} variant={'outlined'}>
-                      <Box className={styles.cardImageBorder}>
-                        <Link
-                          aria-label={`product-link-${product.id}`}
-                          className={styles.productLink}
-                          href={`/products/${product.data.getProduct.id}`}
-                        >
-                          <CardActionArea>
-                            <Box
-                              className={
-                                isMobile
-                                  ? styles.imageContainerMobile
-                                  : styles.imageContainer
-                              }
-                            >
-                              <Image
-                                style={{ outline: '2px solid #f0eeee' }}
-                                src={`${product.data.getProduct.data.image}`}
-                                alt="Product image"
-                                layout="fill"
-                                objectFit="contain"
-                              />
-                            </Box>
-                          </CardActionArea>
-                        </Link>
-                      </Box>
-                      <CardContent sx={{ flex: 'auto' }}>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                            }}
-                          >
-                            <Link
-                              aria-label={`product-link-${product.id}`}
-                              className={styles.productLink}
-                              href={`/products/${product.data.getProduct.id}`}
-                            >
-                              <Typography className={styles.productName}>
-                                {`${product.data.getProduct.data.brand} ${product.data.getProduct.data.name}`}
-                              </Typography>
-                            </Link>
-                            <Typography
-                              style={{ fontSize: '0.8rem' }}
-                              aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
-                            >
-                              {t('FREE delivery')}:{' '}
-                              {new Intl.DateTimeFormat('en-US', {
-                                weekday: 'long',
-                                month: 'short',
-                                day: 'numeric',
-                              }).format(
-                                new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                              )}
-                            </Typography>
-                            <Link
-                              aria-label={`add-shopping-cart-${product.id}`}
-                              className={styles.deleteLink}
-                              href={`/cart`}
-                            >
-                              <Box className={styles.cardToolbar}>
-                                <select
-                                  className={styles.quantityDropdown}
-                                  value={product.quantity}
-                                  onChange={e =>
-                                    handleQuantityChange(
-                                      product.data.getProduct.id,
-                                      e.target.value
-                                    )
-                                  }
-                                >
-                                  {Array.from({ length: 10 }, (_, i) => (
-                                    <option key={i + 1} value={`${i + 1}`}>
-                                      Qty: {i + 1}
-                                    </option>
-                                  ))}
-                                </select>
-                                <Divider orientation="vertical" flexItem />
-                                <Typography
-                                  aria-label={`${t('cart:Delete')} ${product.data.getProduct.data.name}`}
-                                  style={{
-                                    fontSize: '0.8rem',
-                                    marginLeft: '0.5rem',
-                                  }}
-                                  className={styles.removeText}
-                                  onClick={() =>
-                                    handleRemove(product.data.getProduct.id)
-                                  }
-                                >
-                                  {t('cart:Delete')}
-                                </Typography>
-                              </Box>
-                            </Link>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                            }}
-                          >
-                            <Typography
-                              style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
-                              aria-label={`price is ${product.data.getProduct.data.price}`}
-                            >
-                              {`$${Number(product.data.getProduct.data.price).toFixed(2)}`}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                    {<Divider />}
-                  </Box>
-                ))}
-                <div className={styles.cartSubtotal}>
-                  <Subtotal
-                    numberOfProducts={products.length}
-                    subtotal={subtotal}
-                  />
-                </div>
-              </div>
-            </Grid>
-            <Grid
-              id={'buyItNow'}
-              className={styles.topDivider}
-              item
-              xs={12}
-              md={3}
-            >
-              <div>
-                <CheckoutButton
-                  subtotal={subtotal}
-                  productsWithContent={products}
-                  shopperId={user.id}
-                  locale={locale}
-                />
-              </div>
-              <Card className={styles.buyAgainBox}>{}</Card>
-            </Grid>
-          </Grid>
-        </Container>
-        <MockazonMenuDrawer />
-        <AppBackDrop />
-      </div>
-    );
-  }
-  // Mobile Cart
-  else {
-    return (
-      <div className={styles.exterior}>
-        <Container className={styles.containerMobile}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <div>
-                <CheckoutButton
-                  subtotal={subtotal}
-                  productsWithContent={products}
-                  shopperId={user.id}
-                  locale={locale}
-                />
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div className={styles.cart}>
-                <Divider />
-                {products.map((product, index) => (
-                  <Box key={product.id + '_index_' + index}>
-                    <Card className={styles.cardMobile} variant={'outlined'}>
-                      <Box className={styles.cardContentMobile}>
-                        <Link
-                          aria-label={`product-link-${product.id}`}
-                          className={styles.productLink}
-                          href={`/products/${product.data.getProduct.id}`}
-                        >
-                          <CardActionArea>
-                            <Box className={styles.imageContainerMobile}>
-                              <Image
-                                src={`${product.data.getProduct.data.image}`}
-                                alt="Product image"
-                                layout="fill"
-                                objectFit="contain"
-                              />
-                            </Box>
-                          </CardActionArea>
-                        </Link>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            marginLeft: '1rem',
-                          }}
-                        >
-                          <Link
-                            aria-label={`product-link-${product.id}`}
-                            className={styles.productLink}
-                            href={`/products/${product.data.getProduct.id}`}
-                          >
-                            <Typography className={styles.productNameMobile}>
-                              {`${product.data.getProduct.data.brand} ${product.data.getProduct.data.name}`}
-                            </Typography>
-                          </Link>
-                          <Price price={`${Number(product.data.getProduct.data.price).toFixed(2)}`} />
-                          <Typography
-                            style={{ fontSize: '0.8rem' }}
-                            aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
-                          >
-                            {t('FREE delivery')}:{' '}
-                            {new Intl.DateTimeFormat('en-US', {
-                              weekday: 'short',
-                              month: 'short',
-                              day: 'numeric',
-                            }).format(
-                              new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                            )}
-                          </Typography>
-                          <Box className={styles.quantityControlMobile}>
-                            <button
-                              className={styles.quantityButton}
-                              onClick={() =>
-                                handleQuantityChange(
-                                  product.data.getProduct.id,
-                                  (parseInt(product.quantity) - 1).toString()
-                                )
-                              }
-                              disabled={parseInt(product.quantity) <= 1}
-                            >
-                              -
-                            </button>
-                            <Typography className={styles.quantityDisplay}>
-                              {product.quantity}
-                            </Typography>
-                            <button
-                              className={styles.quantityButton}
-                              onClick={() =>
-                                handleQuantityChange(
-                                  product.data.getProduct.id,
-                                  (parseInt(product.quantity) + 1).toString()
-                                )
-                              }
-                              disabled={parseInt(product.quantity) >= 10}
-                            >
-                              +
-                            </button>
-                          </Box>
-                          <Typography
-                            aria-label={`${t('cart:Delete')} ${product.data.getProduct.data.name}`}
-                            style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}
-                            className={styles.removeText}
-                            onClick={() =>
-                              handleRemove(product.data.getProduct.id)
-                            }
-                          >
-                            {t('cart:Delete')}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Card>
-                    {<Divider />}
-                  </Box>
-                ))}
-              </div>
-            </Grid>
-          </Grid>
-        </Container>
-      </div>
-    );
-  }
+  return isMobile ? (
+    <MobileCart
+      products={products}
+      subtotal={subtotal}
+      user={user}
+      locale={locale}
+      handleRemove={handleRemove}
+      handleQuantityChange={handleQuantityChange}
+    />
+  ) : (
+    <DesktopCart
+      products={products}
+      subtotal={subtotal}
+      user={user}
+      locale={locale}
+      handleRemove={handleRemove}
+      handleQuantityChange={handleQuantityChange}
+    />
+  );
 };
 
 Cart.getLayout = (page: ReactElement) => {
