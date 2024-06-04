@@ -1,11 +1,12 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import {getRandomEmail, signUp} from "../helpers";
 
 describe('Next.js App', () => {
   let browser: Browser;
   let page: Page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: true });
+    browser = await puppeteer.launch({headless: true});
     page = await browser.newPage();
   });
 
@@ -13,27 +14,42 @@ describe('Next.js App', () => {
     await browser.close();
   });
 
-  test('Navigate to home page', async () => {
+  test("Navigate to home page and clicks on a what's new item", async () => {
+    await signUp(page, 'Test User', 'password', getRandomEmail());
     await page.goto('http://localhost:3000');
+    await page.waitForSelector('[aria-label^="Search Mockazon"]');
+    await page.type('[aria-label^="Search Mockazon"]', 'Huel');
+    await page.click('[aria-label^="Search Button"]');
+
+    await page.waitForSelector('[aria-label^="Add to cart button"]');
+    await page.click('[aria-label^="Add to cart button"]');
+
+    await page.waitForSelector('[aria-label^="search-product"]');
+    await page.click('[aria-label^="search-product"]');
+
+    await page.waitForSelector('[aria-label^="Quantity Selector"]');
+    await page.click('[aria-label^="Quantity Selector"]');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    await page.waitForSelector('[aria-label^="Add to cart button"]');
+    await page.click('[aria-label^="Add to cart button"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    await page.waitForSelector('[aria-label^="Cart Button"]');
+    await page.click('[aria-label^="Cart Button"]');
+    await page.waitForNavigation();
+
+    await page.waitForSelector('[aria-label^="Quantity Selector for"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    const selectedValue = await page.evaluate(() => {
+      const selectElement = document.querySelector('[aria-label^="Quantity Selector for"]') as HTMLSelectElement;
+      return selectElement.value;
+    });
+    expect(selectedValue).toBe('5');
   });
-
-  // test('Clicking translate button', async () => {
-  //   await page.goto('http://localhost:3000/products');
-
-  //   await page.waitForSelector('a[aria-label^="product-link"]');
-  //   await page.click('a[aria-label*="product-link"]');
-  //   await page.waitForNavigation();
-
-  //   await page.waitForSelector('a[aria-label*="translate-spanish"]');
-  //   await page.click('a[aria-label*="translate-spanish"]');
-  //   const selector = '[aria-label*="buy new"]';
-  //   await page.waitForSelector(selector);
-  //   const expectedTextEnglish = 'Comprar nuevo';
-  //   await findByTextAndSelector(page, selector, expectedTextEnglish);
-
-  //   await page.click('a[aria-label*="translate"]');
-
-  //   const expectedText = 'Buy new';
-  //   await findByTextAndSelector(page, selector, expectedText);
-  // });
 });
