@@ -277,7 +277,7 @@ const TopHeader = () => {
                   <Image
                     aria-label="bar logo"
                     src={`${basePath}/mockazon_logo_clone(2).png`}
-                    alt="Product image"
+                    alt="Logo"
                     layout="fill"
                     objectFit="contain"
                   />
@@ -466,7 +466,7 @@ const TopHeader = () => {
                   <Image
                     aria-label="bar logo"
                     src={`${basePath}/mockazon_logo_clone(2).png`}
-                    alt="Product image"
+                    alt="Logo"
                     layout="fill"
                     objectFit="contain"
                   />
