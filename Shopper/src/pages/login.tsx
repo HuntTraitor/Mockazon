@@ -7,6 +7,8 @@ import {
   Button,
   TextField,
   ThemeProvider,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   CredentialResponse,
@@ -42,6 +44,8 @@ const Login = () => {
   const { accessToken, setAccessToken, setUser } = useContext(LoggedInContext);
   const { t, i18n } = useTranslation(['common', 'login']);
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     localStorage.removeItem('user');
@@ -143,20 +147,30 @@ const Login = () => {
 
   return (
     <ThemeProvider theme={mainTheme}>
-      <Box className={styles.loginContainer}>
+      <Box
+        className={
+          isMobile ? styles.loginContainerMobile : styles.loginContainer
+        }
+      >
         <Image
           src="/mockazon_logo_white.png"
           alt="logo"
-          width={180}
-          height={100}
+          width={isMobile ? 120 : 180}
+          height={isMobile ? 80 : 100}
           className={styles.logo}
           onClick={() => router.push('/')}
           priority
         />
-        <Paper elevation={3} className={styles.loginForm}>
+        <Paper
+          elevation={3}
+          className={isMobile ? styles.loginFormMobile : styles.loginForm}
+        >
           <form onSubmit={handleFormSubmit}>
             <div className={styles.titleContainer}>
-              <Typography variant="h4" className={styles.title}>
+              <Typography
+                variant={isMobile ? 'h5' : 'h4'}
+                className={styles.title}
+              >
                 {t('login:title')}
               </Typography>
             </div>
@@ -196,7 +210,7 @@ const Login = () => {
             <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
               <GoogleLogin
                 shape="rectangular"
-                width="350px"
+                width={isMobile ? '280px' : '350px'}
                 context="signin"
                 aria-label="Google Login Button"
                 locale={i18n.language == 'en' ? 'en-US' : 'es-US'}
@@ -212,12 +226,22 @@ const Login = () => {
             </Typography>
           </form>
         </Paper>
-        <Divider className={styles.newToAmazonDivider}>
+        <Divider
+          className={
+            isMobile
+              ? styles.newToAmazonDividerMobile
+              : styles.newToAmazonDivider
+          }
+        >
           {t('login:newToMockazon')}
         </Divider>
         <Button
           aria-label="Create Account Button"
-          className={styles.createAccountButton}
+          className={
+            isMobile
+              ? styles.createAccountButtonMobile
+              : styles.createAccountButton
+          }
           onClick={() => router.push('/signup')}
         >
           {t('login:createAccount')}
