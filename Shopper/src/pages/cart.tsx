@@ -30,6 +30,7 @@ import { Product, ProductFromFetch } from '../../types';
 import AppBackDrop from '@/components/AppBackdrop';
 import { enqueueSnackbar } from 'notistack';
 import Image from 'next/image';
+import Price from '../views/product/Price';
 
 const namespaces = [
   'products',
@@ -540,71 +541,76 @@ const Cart = ({ locale }: { locale: string }) => {
                             </Box>
                           </CardActionArea>
                         </Link>
-                        <CardContent sx={{ flex: 'auto' }}>
-                          <Box
-                            sx={{ display: 'flex', flexDirection: 'column' }}
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            marginLeft: '1rem',
+                          }}
+                        >
+                          <Link
+                            aria-label={`product-link-${product.id}`}
+                            className={styles.productLink}
+                            href={`/products/${product.data.getProduct.id}`}
                           >
-                            <Link
-                              aria-label={`product-link-${product.id}`}
-                              className={styles.productLink}
-                              href={`/products/${product.data.getProduct.id}`}
-                            >
-                              <Typography className={styles.productNameMobile}>
-                                {`${product.data.getProduct.data.brand} ${product.data.getProduct.data.name}`}
-                              </Typography>
-                            </Link>
-                            <Typography
-                              style={{ fontSize: '0.8rem' }}
-                              aria-label={`price is ${product.data.getProduct.data.price}`}
-                            >
-                              {`$${Number(product.data.getProduct.data.price).toFixed(2)}`}
+                            <Typography className={styles.productNameMobile}>
+                              {`${product.data.getProduct.data.brand} ${product.data.getProduct.data.name}`}
                             </Typography>
-                            <Typography
-                              style={{ fontSize: '0.8rem' }}
-                              aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
+                          </Link>
+                          <Price price={`${Number(product.data.getProduct.data.price).toFixed(2)}`} />
+                          <Typography
+                            style={{ fontSize: '0.8rem' }}
+                            aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
+                          >
+                            {t('FREE delivery')}:{' '}
+                            {new Intl.DateTimeFormat('en-US', {
+                              weekday: 'short',
+                              month: 'short',
+                              day: 'numeric',
+                            }).format(
+                              new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                            )}
+                          </Typography>
+                          <Box className={styles.quantityControlMobile}>
+                            <button
+                              className={styles.quantityButton}
+                              onClick={() =>
+                                handleQuantityChange(
+                                  product.data.getProduct.id,
+                                  (parseInt(product.quantity) - 1).toString()
+                                )
+                              }
+                              disabled={parseInt(product.quantity) <= 1}
                             >
-                              {t('FREE delivery')}:{' '}
-                              {new Intl.DateTimeFormat('en-US', {
-                                weekday: 'short',
-                                month: 'short',
-                                day: 'numeric',
-                              }).format(
-                                new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                              )}
+                              -
+                            </button>
+                            <Typography className={styles.quantityDisplay}>
+                              {product.quantity}
                             </Typography>
-                            <Box className={styles.cardToolbarMobile}>
-                              <select
-                                className={styles.quantityDropdownMobile}
-                                value={product.quantity}
-                                onChange={e =>
-                                  handleQuantityChange(
-                                    product.data.getProduct.id,
-                                    e.target.value
-                                  )
-                                }
-                              >
-                                {Array.from({ length: 10 }, (_, i) => (
-                                  <option key={i + 1} value={`${i + 1}`}>
-                                    Qty: {i + 1}
-                                  </option>
-                                ))}
-                              </select>
-                              <Typography
-                                aria-label={`${t('cart:Delete')} ${product.data.getProduct.data.name}`}
-                                style={{
-                                  fontSize: '0.8rem',
-                                  marginLeft: '0.5rem',
-                                }}
-                                className={styles.removeText}
-                                onClick={() =>
-                                  handleRemove(product.data.getProduct.id)
-                                }
-                              >
-                                {t('cart:Delete')}
-                              </Typography>
-                            </Box>
+                            <button
+                              className={styles.quantityButton}
+                              onClick={() =>
+                                handleQuantityChange(
+                                  product.data.getProduct.id,
+                                  (parseInt(product.quantity) + 1).toString()
+                                )
+                              }
+                              disabled={parseInt(product.quantity) >= 10}
+                            >
+                              +
+                            </button>
                           </Box>
-                        </CardContent>
+                          <Typography
+                            aria-label={`${t('cart:Delete')} ${product.data.getProduct.data.name}`}
+                            style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}
+                            className={styles.removeText}
+                            onClick={() =>
+                              handleRemove(product.data.getProduct.id)
+                            }
+                          >
+                            {t('cart:Delete')}
+                          </Typography>
+                        </Box>
                       </Box>
                     </Card>
                     {<Divider />}
