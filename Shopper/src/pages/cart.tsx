@@ -355,7 +355,7 @@ const Cart = ({ locale }: { locale: string }) => {
                         </CardActionArea>
                       </Link>
                     </Box>
-                    <CardContent>
+                    <CardContent sx={{ flex: 'auto' }}>
                       <Box
                         sx={{
                           display: 'flex',
@@ -391,12 +391,6 @@ const Cart = ({ locale }: { locale: string }) => {
                               new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
                             )}
                           </Typography>
-                          {/* <Typography
-                            style={{ fontSize: '0.8rem' }}
-                            aria-label={`quantity is ${product.quantity}`}
-                          >
-                            {t('products:quantity')}: {product.quantity}
-                          </Typography> */}
                           <Link
                             aria-label={`add-shopping-cart-${product.id}`}
                             className={styles.deleteLink}
