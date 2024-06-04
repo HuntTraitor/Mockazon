@@ -27,18 +27,68 @@ export class AccountService {
         }
       )
         .then(res => {
-          // Commented out because Microservice throws error, does not return anything but sucesss
-          // if (!res.ok) {
-          //   throw res;
-          // }
           return res.json();
         })
         .then(json => {
           resolve(json);
         });
-      // .catch(e => {
-      //   reject(new GraphQLError(e));
-      // });
     });
+  }
+
+  public async reject(id: string): Promise<Account> {
+    return new Promise(resolve => {
+      fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/requests/${id}/reject`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then(res => {
+        return res.json();
+      })
+      .then(json => {
+        resolve(json)
+      })
+    })
+  }
+
+  public async suspend(id: string): Promise<Account> {
+    return new Promise(resolve => {
+      fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/account/${id}/suspend`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then(res => {
+        return res.json()
+      })
+      .then(json => {
+        resolve(json)
+      })
+    })
+  }
+
+  public async resume(id: string): Promise<Account> {
+    return new Promise(resolve => {
+      fetch(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/account/${id}/resume`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .then(res => {
+        return res.json()
+      })
+      .then(json => {
+        resolve(json)
+      })
+    })
   }
 }
