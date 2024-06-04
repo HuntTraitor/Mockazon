@@ -233,6 +233,11 @@ h1.h1 {
 .productNameMobile {
   font-size: 1rem;
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .cardToolbarMobile {
