@@ -201,48 +201,6 @@ VALUES
         )
     );
 
-INSERT INTO
-    vendor (id, data)
-VALUES
-    (
-        '78b9467a-8029-4c1f-afd9-ea56932c3f45',
-        jsonb_build_object(
-            'email',
-            'vincent@books.com',
-            'pwhash',
-            crypt('pass', '87'),
-            'name',
-            'Vincent Vendor',
-            'username',
-            'vincentvendor',
-            'role',
-            'vendor',
-            'suspended',
-            false
-        )
-    );
-
-INSERT INTO
-    vendor (id, data)
-VALUES
-    (
-        '89f5cbfb-40a9-470d-ac8f-99e0416c6234',
-        jsonb_build_object(
-            'email',
-            'victor@books.com',
-            'pwhash',
-            crypt('pass', '87'),
-            'name',
-            'Victor Vendor',
-            'username',
-            'victorvendor',
-            'role',
-            'vendor',
-            'suspended',
-            false
-        )
-    );
-
 -- Request Data --
 INSERT INTO
     request (data)
@@ -278,26 +236,6 @@ VALUES
             'Demo Dominique',
             'username',
             'demodominique',
-            'role',
-            'shopper',
-            'suspended',
-            false
-        )
-    );
-
-INSERT INTO
-    shopper(data)
-VALUES
-    (
-        jsonb_build_object(
-            'sub',
-            'pass',
-            'email',
-            'addelros@ucsc.edu',
-            'name',
-            'Alfonso Del Rosario',
-            'username',
-            'addelros',
             'role',
             'shopper',
             'suspended',
@@ -355,7 +293,7 @@ VALUES
 
 -- Lukas vendors
 INSERT INTO
-    shopper (id, data)
+    vendor (id, data)
 VALUES
     (
         'a4213cf8-c2e4-4424-8688-0907a6c58fd2',
@@ -371,7 +309,7 @@ VALUES
     );
 
 INSERT INTO
-    shopper (id, data)
+    vendor (id, data)
 VALUES
     (
         'a4213cf8-c2e4-4424-8688-0907a6c58fd3',
@@ -387,7 +325,7 @@ VALUES
     );
 
 INSERT INTO
-    shopper (id, data)
+    vendor (id, data)
 VALUES
     (
         'a4213cf8-c2e4-4424-8688-0907a6c58fd4',
