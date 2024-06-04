@@ -21,7 +21,7 @@ test('Authorized user can fetch product', async () => {
     .set('x-api-key', `bf582726-1927-4604-8d94-7f1540a7eb37`)
     .expect(200)
     .then((res) => {
-      console.log(res.body)
+      expect(res.body.length).toBeGreaterThan(0)
     })
 });
 test('Unauthorized user cannot post a product', async () => {
