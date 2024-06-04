@@ -14,7 +14,7 @@ export function LoginForm({ navigate }: LoginFormProps) {
   const router = useRouter();
 
   const handleClickError = () => {
-    enqueueSnackbar('Oops! Something went wrong, please try again', {
+    enqueueSnackbar('Login Unsuccessful, please try again!', {
       variant: 'error',
       persist: true,
       anchorOrigin: { horizontal: 'center', vertical: 'top' },

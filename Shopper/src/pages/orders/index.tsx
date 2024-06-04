@@ -101,13 +101,13 @@ export default function Index() {
         setOrders(data.data.getAllOrders);
       })
       .catch(() => {
-        enqueueSnackbar(t('errorFetchingOrders'), {
-          variant: 'error',
-          persist: false,
-          autoHideDuration: 3000,
-          anchorOrigin: { horizontal: 'center', vertical: 'top' },
-        });
-        //console.error('Error fetching orders:', error);
+        // enqueueSnackbar(t('errorFetchingOrders'), {
+        //   variant: 'error',
+        //   persist: false,
+        //   autoHideDuration: 3000,
+        //   anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        // });
+        console.error('Error fetching orders');
       });
   }, [accessToken, t]);
 

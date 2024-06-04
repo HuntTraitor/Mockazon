@@ -169,13 +169,13 @@ const Index = () => {
       .then(response => response.json())
       .then(data => {
         if (data.errors && data.errors.length > 0) {
-          //console.error('Error fetching products:', data.errors);
-          enqueueSnackbar(t('products:errorFetchingProducts'), {
-            variant: 'error',
-            persist: false,
-            autoHideDuration: 3000,
-            anchorOrigin: { horizontal: 'center', vertical: 'top' },
-          });
+          console.error('Error fetching products');
+          // enqueueSnackbar(t('products:errorFetchingProducts'), {
+          //   variant: 'error',
+          //   persist: false,
+          //   autoHideDuration: 3000,
+          //   anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          // });
           return;
         }
         setNewProducts(data.data.getProducts);
@@ -251,24 +251,24 @@ const Index = () => {
       .then(data => {
         if (data.errors && data.errors.length > 0) {
           //console.error('Error fetching products:', data.errors);
-          enqueueSnackbar(t('products:errorFetchingProducts'), {
-            variant: 'error',
-            persist: false,
-            autoHideDuration: 3000,
-            anchorOrigin: { horizontal: 'center', vertical: 'top' },
-          });
+          // enqueueSnackbar(t('products:errorFetchingProducts'), {
+          //   variant: 'error',
+          //   persist: false,
+          //   autoHideDuration: 3000,
+          //   anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          // });
           return;
         }
         setProducts(data.data.getProducts);
       })
       .catch(() => {
-        //console.error('Error fetching products:', error);
-        enqueueSnackbar(t('products:errorFetchingProducts'), {
-          variant: 'error',
-          persist: false,
-          autoHideDuration: 3000,
-          anchorOrigin: { horizontal: 'center', vertical: 'top' },
-        });
+        console.error('Error fetching products');
+        // enqueueSnackbar(t('products:errorFetchingProducts'), {
+        //   variant: 'error',
+        //   persist: false,
+        //   autoHideDuration: 3000,
+        //   anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        // });
       });
   };
 
@@ -304,13 +304,13 @@ const Index = () => {
       .then(response => response.json())
       .then(data => {
         if (data.errors && data.errors.length > 0) {
-          //console.error('Error fetching orders:', data.errors);
-          enqueueSnackbar(t('products:errorFetchingOrders'), {
-            variant: 'error',
-            persist: false,
-            autoHideDuration: 3000,
-            anchorOrigin: { horizontal: 'center', vertical: 'top' },
-          });
+          console.error('Error fetching orders');
+          // enqueueSnackbar(t('products:errorFetchingOrders'), {
+          //   variant: 'error',
+          //   persist: false,
+          //   autoHideDuration: 3000,
+          //   anchorOrigin: { horizontal: 'center', vertical: 'top' },
+          // });
           return;
         }
 
@@ -320,13 +320,13 @@ const Index = () => {
         setOrders(orderProducts);
       })
       .catch(() => {
-        //console.error('Error fetching orders:', error);
-        enqueueSnackbar(t('products:errorFetchingOrders'), {
-          variant: 'error',
-          persist: false,
-          autoHideDuration: 3000,
-          anchorOrigin: { horizontal: 'center', vertical: 'top' },
-        });
+        console.error('Error fetching orders');
+        // enqueueSnackbar(t('products:errorFetchingOrders'), {
+        //   variant: 'error',
+        //   persist: false,
+        //   autoHideDuration: 3000,
+        //   anchorOrigin: { horizontal: 'center', vertical: 'top' },
+        // });
       });
   };
 
