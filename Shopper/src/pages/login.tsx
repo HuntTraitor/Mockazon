@@ -207,16 +207,26 @@ const Login = () => {
               {t('common:signInText')}
             </Button>
             <Divider className={styles.divider}>{t('common:or')}</Divider>
-            <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
-              <GoogleLogin
-                shape="rectangular"
-                width={isMobile ? '280px' : '350px'}
-                context="signin"
-                aria-label="Google Login Button"
-                locale={i18n.language == 'en' ? 'en-US' : 'es-US'}
-                onSuccess={handleGoogleSuccess}
-              />
-            </GoogleOAuthProvider>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
+                <Box sx={{ maxWidth: !isMobile ? 'none' : '220px' }}>
+                  <GoogleLogin
+                    shape="rectangular"
+                    width={isMobile ? '250px' : '350px'}
+                    context="signin"
+                    aria-label="Google Login Button"
+                    locale={i18n.language == 'en' ? 'en-US' : 'es-US'}
+                    onSuccess={handleGoogleSuccess}
+                  />
+                </Box>
+              </GoogleOAuthProvider>
+            </Box>
             <Typography
               variant="body2"
               color="textSecondary"
