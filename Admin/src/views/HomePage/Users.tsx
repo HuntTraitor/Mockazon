@@ -14,6 +14,7 @@ import {
 import getConfig from 'next/config';
 import { LoginContext } from '@/contexts/Login';
 import { RefetchContext } from '@/contexts/Refetch';
+import Button from '@mui/material/Button';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -28,7 +29,7 @@ interface User {
 // eslint-disable-next-line @typescript-eslint/ban-types
 const fetchAccounts = async (setAccounts: Function, accessToken: string) => {
   const query = {
-    query: `query GetAccounts {account {id, name, email}}`,
+    query: `query GetAccounts {account {id, name, email role suspended}}`,
   };
 
   fetch(`${basePath}/api/graphql`, {
@@ -73,9 +74,57 @@ export function Users() {
     // eslint-disable-next-line
   }, [accessToken, refetch]);
 
-  // const handleDeleteUser = (userId: number) => {
-  //   console.log(`Deleting user with ID: ${userId}`);
-  // };
+  const handleSuspendUser = (userId: number) => {
+    const query = {
+      query: `mutation suspendAccount{suspendAccount(id: "${userId}") {
+        id name role suspended
+      }}`
+    }
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(query),
+    })
+    .then(res => {
+      return res.json()
+    })
+    .then(() => {
+      setRefetch(true)
+    })
+    .catch(e => {
+      console.error(e)
+    })
+  };
+
+  const handleResumeUser = (userId: number) => {
+    const query = {
+      query: `mutation resumeAccount{resumeAccount(id: "${userId}") {
+        id name role suspended
+      }}`
+    }
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(query),
+    })
+    .then(res => {
+      return res.json()
+    })
+    .then(() => {
+      setRefetch(true)
+    })
+    .catch(e => {
+      console.error(e)
+    })
+  }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', padding: 3 }}>
@@ -95,7 +144,8 @@ export function Users() {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
-                {/* <TableCell>Action</TableCell> */}
+                <TableCell>Role</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -103,15 +153,24 @@ export function Users() {
                 <TableRow key={account.id}>
                   <TableCell>{account.name}</TableCell>
                   <TableCell>{account.email}</TableCell>
+                  <TableCell>{account.role}</TableCell>
                   <TableCell>
-                    {/* <Button
+                    {account.suspended ? (
+                      <Button
+                      variant="outlined"
+                      data-testid={`delete-account-${account.id}`}
+                      onClick={() => handleResumeUser(account.id)}
+                      >
+                        Resume
+                      </Button>
+                    ) : <Button
                       variant="outlined"
                       color="error"
                       data-testid={`delete-account-${account.id}`}
-                      onClick={() => handleDeleteUser(account.id)}
-                    >
-                      Delete
-                    </Button> */}
+                      onClick={() => handleSuspendUser(account.id)}
+                      >
+                        Suspend
+                      </Button>}
                   </TableCell>
                 </TableRow>
               ))}

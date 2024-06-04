@@ -227,3 +227,14 @@
     transform: rotate(0deg);
   }
 }
+
+.signInButton {
+  text-transform: capitalize;
+  background-color: #ffDA00;
+  color: #0f1111;
+  width: 100%;
+}
+
+.signInButton:hover {
+  background-color: #f7ca00;
+}

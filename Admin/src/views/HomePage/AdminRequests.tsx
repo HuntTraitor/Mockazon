@@ -67,6 +67,7 @@ export function AdminRequests() {
   const { refetch, setRefetch } = useContext(RefetchContext);
 
   React.useEffect(() => {
+    console.log("refetched...")
     fetchRequests(setRequests, accessToken);
     setRefetch(false);
 
@@ -96,17 +97,40 @@ export function AdminRequests() {
         return res.json();
       })
       .then(() => {
-        //   if (json.errors) {
-        //     throw new Error(json.errors[0].message);
-        //   } else {
-        //     // console.log(json);
-        //     setRefetch(true);
-        //   }
         setRefetch(true);
       });
-    // .catch(e => {
-    //   alert(e.toString());
-    // });
+  };
+
+  const handleRejectRequest = (
+    vendorId: number,
+    accessToken: string,
+    setRefetch: (refetch: boolean) => void
+  ) => {
+    const query = {
+      query: `mutation rejectVendor{rejectVendor(VendorId: "${vendorId}") {
+        id email name role suspended
+      }}`,
+    };
+
+    fetch(`${basePath}/api/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(query),
+    })
+      .then(res => {
+        console.log(res)
+        return res.json()
+      })
+      .then((json) => {
+        console.log(json)
+        setRefetch(true)
+      })
+      .catch(e => {
+        console.error(e)
+      })
   };
 
   return (
@@ -151,15 +175,20 @@ export function AdminRequests() {
                     >
                       Approve
                     </Button>
-                    {/* }
                     <Button
                       variant="outlined"
                       color="error"
                       data-testid={`reject-request-${request.id}`}
+                      onClick={(() => {
+                        handleRejectRequest(
+                          request.id,
+                          accessToken,
+                          setRefetch
+                        )
+                      })}
                     >
                       Reject
                     </Button>
-                    */}
                   </TableCell>
                 </TableRow>
               ))}
