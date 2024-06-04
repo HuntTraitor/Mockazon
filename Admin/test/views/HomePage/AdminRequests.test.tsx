@@ -76,17 +76,17 @@ it('Renders table', async () => {
 it('Approve button for request with ID 1 is clickable', async () => {
   render(<AdminRequests />);
   const approveButtonForRequest1 =
-    await screen.findByTestId('approve-request-1');
+  await screen.findByTestId('approve-request-1');
   fireEvent.click(approveButtonForRequest1);
   expect(approveButtonForRequest1).not.toBeNull();
 });
 
-// it('Reject button for request with ID 1 is clickable', async () => {
-//   render(<AdminRequests />);
-//   const rejectButtonForRequest1 = await screen.findByTestId('reject-request-1');
-//   fireEvent.click(rejectButtonForRequest1);
-//   expect(rejectButtonForRequest1).not.toBeNull();
-// });
+it('Reject button for request with ID 1 is clickable', async () => {
+  render(<AdminRequests />);
+  const rejectButtonForRequest1 = await screen.findByTestId('reject-request-1');
+  fireEvent.click(rejectButtonForRequest1);
+  expect(rejectButtonForRequest1).not.toBeNull();
+});
 
 it('Handles error', async () => {
   requestsError = true;

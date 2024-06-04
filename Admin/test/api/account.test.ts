@@ -62,6 +62,63 @@ const handlers = [
       }
     }
   ),
+  rest.put(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/requests/someId/reject`,
+    async () => {
+      if (error) {
+        return new HttpResponse(null, { status: 500 });
+      } else {
+        return HttpResponse.json(
+          {
+            id: '81c689b1-b7a7-4100-8b2d-309908b444f7',
+            email: 'test@email.com',
+            name: 'test account 3',
+            role: 'vendor',
+            suspended: false,
+          },
+          { status: 200 }
+        );
+      }
+    }
+  ),
+  rest.put(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/account/someId/suspend`,
+    async() => {
+      if (error) {
+        return new HttpResponse(null, {status: 500})
+      } else {
+        return HttpResponse.json(
+          {
+            id: '81c689b1-b7a7-4100-8b2d-309908b444f7',
+            email: 'test@email.com',
+            name: 'test account 3',
+            role: 'vendor',
+            suspended: true,
+          },
+          { status: 200 }
+        )
+      }
+    }
+  ),
+  rest.put(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/account/someId/resume`,
+    async() => {
+      if (error) {
+        return new HttpResponse(null, {status: 500})
+      } else {
+        return HttpResponse.json(
+          {
+            id: '81c689b1-b7a7-4100-8b2d-309908b444f7',
+            email: 'test@email.com',
+            name: 'test account 3',
+            role: 'vendor',
+            suspended: false,
+          },
+          { status: 200 }
+        )
+      }
+    }
+  ),
   rest.get(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/check?someToken`,
     async () => {
@@ -112,7 +169,6 @@ it('fetches all accounts', async () => {
     })
     .expect(200)
     .then(res => {
-      console.log(res.body);
       expect(res.body.data).toHaveProperty('account');
       expect(res.body.data.account).toHaveLength(2);
     });
@@ -128,11 +184,58 @@ it('approve an existing vendor request', async () => {
     })
     .expect(200)
     .then(res => {
-      console.log(res.body);
       expect(res.body.data).toHaveProperty('approveVendor');
       expect(res.body.data.approveVendor).toBeDefined();
     });
 });
+
+it('Rejects an exisitng vendor request', async() => {
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query:
+        'mutation rejectVendor{rejectVendor(VendorId: "someId") {id email name role suspended}}',
+    })
+    .expect(200)
+    .then(res => {
+      expect(res.body.data).toHaveProperty('rejectVendor');
+      expect(res.body.data.rejectVendor).toBeDefined();
+    });
+});
+
+it('Suspends an account', async() => {
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query:
+        'mutation suspendAccount{suspendAccount(id: "someId") {id name role suspended}}',
+    })
+    .expect(200)
+    .then(res => {
+      console.log(res.body);
+      expect(res.body.data).toHaveProperty('suspendAccount');
+      expect(res.body.data.suspendAccount).toBeDefined();
+    });
+})
+
+it('Resumes an account', async() => {
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query:
+        'mutation resumeAccount{resumeAccount(id: "someId") {id name role suspended}}',
+    })
+    .expect(200)
+    .then(res => {
+      console.log(res.body);
+      expect(res.body.data).toHaveProperty('resumeAccount');
+      expect(res.body.data.resumeAccount).toBeDefined();
+    });
+})
+
 
 it('approve an existing vendor request with error', async () => {
   error = true;

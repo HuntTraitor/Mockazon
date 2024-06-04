@@ -109,3 +109,12 @@ it('fetches all requests', async () => {
       });
     });
 });
+
+it('Approves a request', async() => {
+  await supertest(server)
+    .post('/api/graphql')
+    .set('Authorization', 'Bearer someToken')
+    .send({
+      query: 'query GetRequests {request {id name email role suspended}}',
+    })
+})
