@@ -266,14 +266,22 @@ const TopHeader = () => {
           >
             <Box className={`${styles.logo}`}>
               <Link href="/">
-                <Image
-                  aria-label="bar logo"
-                  src={`${basePath}/mockazon_logo_white_transparent.png`}
-                  width={130}
-                  height={40}
-                  alt="Logo"
-                  priority
-                />
+                <Box
+                  sx={{
+                    marginTop: '10px',
+                    position: 'relative',
+                    height: '45px',
+                    width: '160px',
+                  }}
+                >
+                  <Image
+                    aria-label="bar logo"
+                    src={`${basePath}/mockazon_logo_clone(2).png`}
+                    alt="Product image"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </Box>
               </Link>
             </Box>
             <Box
@@ -282,7 +290,6 @@ const TopHeader = () => {
                 alignItems: 'center',
                 flexDirection: 'row',
                 justifyContent: 'center',
-                transform: 'translateY(-15%)',
               }}
             >
               <SignInDropdown />
@@ -449,15 +456,21 @@ const TopHeader = () => {
           <Box className={styles.topHeaderLeft}>
             <Box className={`${styles.logo} ${styles.hoverContainer}`}>
               <Link href="/">
-                <Image
-                  aria-label="bar logo"
-                  src={`${basePath}/mockazon_logo_white_transparent.png`}
-                  width={150}
-                  height={50}
-                  alt="Logo"
-                  priority
-                />
-                {/* Replace with a new logo */}
+                <Box
+                  sx={{
+                    position: 'relative',
+                    height: '50px',
+                    width: '180px',
+                  }}
+                >
+                  <Image
+                    aria-label="bar logo"
+                    src={`${basePath}/mockazon_logo_clone(2).png`}
+                    alt="Product image"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </Box>
               </Link>
             </Box>
           </Box>
