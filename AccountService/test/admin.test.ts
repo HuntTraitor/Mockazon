@@ -132,7 +132,7 @@ describe("API TEST (ADMIN) - General", () => {
     await supertest(server)
       .put(`/api/v0/admin/account/${userTwo}/suspend`)
       .then((res) => {
-        expect(res.status).toBe(204);
+        expect(res.status).toBe(200);
       });
 
     // assert account is suspended
@@ -180,7 +180,7 @@ describe("API TEST (ADMIN) - General", () => {
     await supertest(server)
       .put(`/api/v0/admin/account/${userTwo}/resume`)
       .then((res) => {
-        expect(res.status).toBe(204);
+        expect(res.status).toBe(200);
       });
 
     // assert account is resumed
@@ -254,7 +254,7 @@ describe("API TEST (ADMIN) - General", () => {
     await supertest(server)
       .put(`/api/v0/admin/requests/${requestDeny}/reject`)
       .then((res) => {
-        expect(res.status).toBe(204);
+        expect(res.status).toBe(200);
       });
 
     // assert account is resumed

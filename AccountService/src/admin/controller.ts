@@ -62,15 +62,13 @@ export class AdminController extends Controller {
 
   // suspend an existing account
   @Put("account/{id}/suspend")
-  public async suspend(id: UUID): Promise<void> {
-    console.log(id);
+  public async suspend(id: UUID): Promise<User|undefined> {
     return new AdminService().suspend(id);
   }
 
   // resume a suspended account
   @Put("account/{id}/resume")
-  public async resume(id: UUID): Promise<void> {
-    console.log(id);
+  public async resume(id: UUID): Promise<User|undefined> {
     return new AdminService().resume(id);
   }
 
@@ -82,7 +80,7 @@ export class AdminController extends Controller {
 
   // reject inbound request || takes: {account_id} to be rejected
   @Put("requests/{id}/reject")
-  public async reject(id: string): Promise<void> {
+  public async reject(id: string): Promise<Vendor> {
     return new AdminService().reject(id);
   }
 }

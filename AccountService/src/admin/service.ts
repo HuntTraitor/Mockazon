@@ -4,6 +4,7 @@ import { Credentials, Authenticated } from "../types";
 import { SessionUser } from "../types";
 import * as jwt from "jsonwebtoken";
 import { Vendor } from "../vendor";
+import { Account } from "../types";
 
 export class AdminService {
   public async login(
@@ -65,6 +66,7 @@ export class AdminService {
           (data->>'suspended')::boolean AS shopper_suspended
         FROM
           shopper
+        ORDER BY shopper_Id
       `,
     };
 
@@ -78,6 +80,7 @@ export class AdminService {
           (data->>'suspended')::boolean AS vendor_suspended
         FROM
           vendor
+        ORDER BY vendor_id
       `,
     };
 
@@ -98,7 +101,6 @@ export class AdminService {
       role: row.vendor_role,
       suspended: row.vendor_suspended,
     }));
-
     const users: User[] = [...shoppers, ...vendors];
 
     return users;
@@ -122,13 +124,14 @@ export class AdminService {
     return users;
   }
 
-  public async suspend(id: UUID): Promise<void> {
+  public async suspend(id: UUID): Promise<User|undefined> {
+    let user: User;
     const shopperQuery = {
-      text: "UPDATE shopper SET data = jsonb_set(data, '{suspended}', to_jsonb(true), false) WHERE id = $1",
+      text: "UPDATE shopper SET data = jsonb_set(data, '{suspended}', to_jsonb(true), false) WHERE id = $1 RETURNING *",
       values: [id],
     };
     const vendorQuery = {
-      text: "UPDATE vendor SET data = jsonb_set(data, '{suspended}', to_jsonb(true), false) WHERE id = $1",
+      text: "UPDATE vendor SET data = jsonb_set(data, '{suspended}', to_jsonb(true), false) WHERE id = $1 RETURNING *",
       values: [id],
     };
 
@@ -138,6 +141,24 @@ export class AdminService {
 
       if (shopperResult.rowCount === 0 && vendorResult.rowCount === 0) {
         throw new Error("No matching user found");
+      } else if (shopperResult.rowCount === 0) {
+        user = {
+          id: vendorResult.rows[0].id,
+          email: vendorResult.rows[0].data.email,
+          name: vendorResult.rows[0].data.name,
+          role: vendorResult.rows[0].data.role,
+          suspended: vendorResult.rows[0].data.suspended,
+        };
+        return user
+      } else if (vendorResult.rowCount === 0) {
+        user = {
+          id: shopperResult.rows[0].id,
+          email: shopperResult.rows[0].data.email,
+          name: shopperResult.rows[0].data.name,
+          role: shopperResult.rows[0].data.role,
+          suspended: shopperResult.rows[0].data.suspended,
+        };
+        return user
       }
     } catch (error) {
       console.error(error);
@@ -145,13 +166,14 @@ export class AdminService {
     }
   }
 
-  public async resume(id: UUID): Promise<void> {
+  public async resume(id: UUID): Promise<User|undefined> {
+    let user: User;
     const shopperQuery = {
-      text: "UPDATE shopper SET data = jsonb_set(data, '{suspended}', to_jsonb(false), false) WHERE id = $1",
+      text: "UPDATE shopper SET data = jsonb_set(data, '{suspended}', to_jsonb(false), false) WHERE id = $1 RETURNING *",
       values: [id],
     };
     const vendorQuery = {
-      text: "UPDATE vendor SET data = jsonb_set(data, '{suspended}', to_jsonb(false), false) WHERE id = $1",
+      text: "UPDATE vendor SET data = jsonb_set(data, '{suspended}', to_jsonb(false), false) WHERE id = $1 RETURNING *",
       values: [id],
     };
 
@@ -161,6 +183,24 @@ export class AdminService {
 
       if (shopperResult.rowCount === 0 && vendorResult.rowCount === 0) {
         throw new Error("No matching user found");
+      } else if (shopperResult.rowCount === 0) {
+        user = {
+          id: vendorResult.rows[0].id,
+          email: vendorResult.rows[0].data.email,
+          name: vendorResult.rows[0].data.name,
+          role: vendorResult.rows[0].data.role,
+          suspended: vendorResult.rows[0].data.suspended,
+        };
+        return user
+      } else if (vendorResult.rowCount === 0) {
+        user = {
+          id: shopperResult.rows[0].id,
+          email: shopperResult.rows[0].data.email,
+          name: shopperResult.rows[0].data.name,
+          role: shopperResult.rows[0].data.role,
+          suspended: shopperResult.rows[0].data.suspended,
+        };
+        return user
       }
     } catch (error) {
       console.error(error);
@@ -205,12 +245,19 @@ export class AdminService {
     return user;
   }
 
-  public async reject(id: string): Promise<void> {
+  public async reject(id: string): Promise<Vendor> {
     const query = {
-      text: "DELETE FROM request WHERE id = $1",
+      text: "DELETE FROM request WHERE id = $1 RETURNING *",
       values: [id],
     };
-    await pool.query(query);
-    return;
+    const res = await pool.query(query);
+    const user: Vendor = {
+      id: res.rows[0].id,
+      email: res.rows[0].data.email,
+      name: res.rows[0].data.name,
+      role: res.rows[0].data.role,
+      suspended: res.rows[0].data.suspended,
+    };
+    return user;
   }
 }
