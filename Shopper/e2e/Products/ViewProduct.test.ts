@@ -20,15 +20,20 @@ describe('Next.js App', () => {
     await page.waitForSelector('[aria-label^="Search Mockazon"]');
     await page.type('[aria-label^="Search Mockazon"]', 'Huel');
     await page.click('[aria-label^="Search Button"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     await page.waitForSelector('[aria-label^="Add to cart button"]');
     await page.click('[aria-label^="Add to cart button"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     await page.waitForSelector('[aria-label^="search-product"]');
     await page.click('[aria-label^="search-product"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     await page.waitForSelector('[aria-label^="Quantity Selector"]');
     await page.click('[aria-label^="Quantity Selector"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('ArrowDown');
