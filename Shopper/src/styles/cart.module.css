@@ -14,6 +14,12 @@ https://chatgpt.com/share/872a5a3a-b9fa-4b65-aff1-7267086d14ce
   background-color: #eaeded;
 }
 
+@media (max-width: 1800px) {
+  .container {
+    max-width: 100%;
+  }
+}
+
 .cart {
   display: flex;
   flex-direction: column;
@@ -23,6 +29,12 @@ https://chatgpt.com/share/872a5a3a-b9fa-4b65-aff1-7267086d14ce
 
 .topDivider {
   margin-top: 20px !important;
+}
+
+@media (max-width: 900px) {
+  .topDivider {
+    margin-top: 65px !important;
+  }
 }
 
 .heading {
@@ -187,4 +199,60 @@ h1.h1 {
   position: relative;
   width: 180px;
   height: 180px;
+}
+
+.imageContainerMobile{
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.containerMobile {
+  padding-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #eaeded;
+  max-width: 100%;
+}
+
+.cardMobile {
+  display: flex;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  border: none;
+  box-shadow: none;
+}
+
+.cardContentMobile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.productNameMobile {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+}
+
+.cardToolbarMobile {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.quantityDropdownMobile {
+  margin-right: 0.5rem;
+  width: 60px;
+  height: 25px;
+  border-color: #c5c5c5;
+  background: #eaeded;
+  border-radius: 8px;
+  color: black;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.07);
+  font-size: 12px;
+  padding-left: 3px;
 }

@@ -9,6 +9,8 @@ import {
   Box,
   CardActionArea,
   Divider,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
@@ -53,6 +55,8 @@ const Cart = ({ locale }: { locale: string }) => {
   const [subtotal, setSubtotal] = useState(0.0);
   const { user, accessToken } = useContext(LoggedInContext);
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // https://chat.openai.com/share/66cd884d-cc95-4e82-8b4f-a4d035f844af
   // https://chat.openai.com/share/86f158f1-110e-4905-ac4a-85ae8282f2c2
@@ -316,89 +320,261 @@ const Cart = ({ locale }: { locale: string }) => {
       });
   };
 
-  return (
-    <div className={styles.exterior}>
-      <Container className={styles.container}>
-        <Grid container spacing={2}>
-          <Grid id={'cart'} className={styles.topDivider} item xs={12} md={9}>
-            <div className={styles.cart}>
-              <div className={styles.cartHeader}>
-                <Typography className={`${styles.h1}`} variant="h1">
-                  {t('cart:title')}
-                </Typography>
-                <div className={styles.priceHeader}>
-                  <Typography
-                    style={{ fontSize: '0.8rem' }}
-                  >{`Price`}</Typography>
+  // Desktop Cart
+
+  if (!isMobile) {
+    return (
+      <div className={styles.exterior}>
+        <Container
+          className={isMobile ? styles.containerMobile : styles.container}
+        >
+          <Grid container spacing={2}>
+            <Grid id={'cart'} className={styles.topDivider} item xs={12} md={9}>
+              <div className={styles.cart}>
+                <div className={styles.cartHeader}>
+                  <Typography className={`${styles.h1}`} variant="h1">
+                    {t('cart:title')}
+                  </Typography>
+                  <div className={styles.priceHeader}>
+                    <Typography
+                      style={{ fontSize: '0.8rem' }}
+                    >{`Price`}</Typography>
+                  </div>
+                  <Divider />
                 </div>
-                <Divider />
-              </div>
-              {products.map((product, index) => (
-                <Box key={product.id + '_index_' + index}>
-                  <Card className={styles.card} variant={'outlined'}>
-                    <Box className={styles.cardImageBorder}>
-                      <Link
-                        aria-label={`product-link-${product.id}`}
-                        className={styles.productLink}
-                        href={`/products/${product.data.getProduct.id}`}
-                      >
-                        <CardActionArea>
-                          <Box className={styles.imageContainer}>
-                            <Image
-                              style={{ outline: '2px solid #f0eeee' }}
-                              src={`${product.data.getProduct.data.image}`}
-                              alt="Product image"
-                              layout="fill"
-                              objectFit="contain"
-                            />
-                          </Box>
-                        </CardActionArea>
-                      </Link>
-                    </Box>
-                    <CardContent sx={{ flex: 'auto' }}>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}
-                      >
+                {products.map((product, index) => (
+                  <Box key={product.id + '_index_' + index}>
+                    <Card className={styles.card} variant={'outlined'}>
+                      <Box className={styles.cardImageBorder}>
+                        <Link
+                          aria-label={`product-link-${product.id}`}
+                          className={styles.productLink}
+                          href={`/products/${product.data.getProduct.id}`}
+                        >
+                          <CardActionArea>
+                            <Box
+                              className={
+                                isMobile
+                                  ? styles.imageContainerMobile
+                                  : styles.imageContainer
+                              }
+                            >
+                              <Image
+                                style={{ outline: '2px solid #f0eeee' }}
+                                src={`${product.data.getProduct.data.image}`}
+                                alt="Product image"
+                                layout="fill"
+                                objectFit="contain"
+                              />
+                            </Box>
+                          </CardActionArea>
+                        </Link>
+                      </Box>
+                      <CardContent sx={{ flex: 'auto' }}>
                         <Box
                           sx={{
                             display: 'flex',
-                            flexDirection: 'column',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
                           }}
                         >
-                          <Link
-                            aria-label={`product-link-${product.id}`}
-                            className={styles.productLink}
-                            href={`/products/${product.data.getProduct.id}`}
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                            }}
                           >
-                            <Typography className={styles.productName}>
-                              {`${product.data.getProduct.data.brand} ${product.data.getProduct.data.name}`}
+                            <Link
+                              aria-label={`product-link-${product.id}`}
+                              className={styles.productLink}
+                              href={`/products/${product.data.getProduct.id}`}
+                            >
+                              <Typography className={styles.productName}>
+                                {`${product.data.getProduct.data.brand} ${product.data.getProduct.data.name}`}
+                              </Typography>
+                            </Link>
+                            <Typography
+                              style={{ fontSize: '0.8rem' }}
+                              aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
+                            >
+                              {t('FREE delivery')}:{' '}
+                              {new Intl.DateTimeFormat('en-US', {
+                                weekday: 'long',
+                                month: 'short',
+                                day: 'numeric',
+                              }).format(
+                                new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                              )}
                             </Typography>
-                          </Link>
-                          <Typography
-                            style={{ fontSize: '0.8rem' }}
-                            aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
+                            <Link
+                              aria-label={`add-shopping-cart-${product.id}`}
+                              className={styles.deleteLink}
+                              href={`/cart`}
+                            >
+                              <Box className={styles.cardToolbar}>
+                                <select
+                                  className={styles.quantityDropdown}
+                                  value={product.quantity}
+                                  onChange={e =>
+                                    handleQuantityChange(
+                                      product.data.getProduct.id,
+                                      e.target.value
+                                    )
+                                  }
+                                >
+                                  {Array.from({ length: 10 }, (_, i) => (
+                                    <option key={i + 1} value={`${i + 1}`}>
+                                      Qty: {i + 1}
+                                    </option>
+                                  ))}
+                                </select>
+                                <Divider orientation="vertical" flexItem />
+                                <Typography
+                                  aria-label={`${t('cart:Delete')} ${product.data.getProduct.data.name}`}
+                                  style={{
+                                    fontSize: '0.8rem',
+                                    marginLeft: '0.5rem',
+                                  }}
+                                  className={styles.removeText}
+                                  onClick={() =>
+                                    handleRemove(product.data.getProduct.id)
+                                  }
+                                >
+                                  {t('cart:Delete')}
+                                </Typography>
+                              </Box>
+                            </Link>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                            }}
                           >
-                            {t('FREE delivery')}:{' '}
-                            {new Intl.DateTimeFormat('en-US', {
-                              weekday: 'long',
-                              month: 'short',
-                              day: 'numeric',
-                            }).format(
-                              new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                            )}
-                          </Typography>
-                          <Link
-                            aria-label={`add-shopping-cart-${product.id}`}
-                            className={styles.deleteLink}
-                            href={`/cart`}
+                            <Typography
+                              style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                              aria-label={`price is ${product.data.getProduct.data.price}`}
+                            >
+                              {`$${Number(product.data.getProduct.data.price).toFixed(2)}`}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                    {<Divider />}
+                  </Box>
+                ))}
+                <div className={styles.cartSubtotal}>
+                  <Subtotal
+                    numberOfProducts={products.length}
+                    subtotal={subtotal}
+                  />
+                </div>
+              </div>
+            </Grid>
+            <Grid
+              id={'buyItNow'}
+              className={styles.topDivider}
+              item
+              xs={12}
+              md={3}
+            >
+              <div>
+                <CheckoutButton
+                  subtotal={subtotal}
+                  productsWithContent={products}
+                  shopperId={user.id}
+                  locale={locale}
+                />
+              </div>
+              <Card className={styles.buyAgainBox}>{}</Card>
+            </Grid>
+          </Grid>
+        </Container>
+        <MockazonMenuDrawer />
+        <AppBackDrop />
+      </div>
+    );
+  }
+  // Mobile Cart
+  else {
+    return (
+      <div className={styles.exterior}>
+        <Container className={styles.containerMobile}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <div>
+                <CheckoutButton
+                  subtotal={subtotal}
+                  productsWithContent={products}
+                  shopperId={user.id}
+                  locale={locale}
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <div className={styles.cart}>
+                <div className={styles.cartHeader}>
+                  <Typography className={`${styles.h1}`} variant="h1">
+                    {t('cart:title')}
+                  </Typography>
+                  <Divider />
+                </div>
+                {products.map((product, index) => (
+                  <Box key={product.id + '_index_' + index}>
+                    <Card className={styles.cardMobile} variant={'outlined'}>
+                      <Box className={styles.cardContentMobile}>
+                        <Link
+                          aria-label={`product-link-${product.id}`}
+                          className={styles.productLink}
+                          href={`/products/${product.data.getProduct.id}`}
+                        >
+                          <CardActionArea>
+                            <Box className={styles.imageContainerMobile}>
+                              <Image
+                                style={{ outline: '2px solid #f0eeee' }}
+                                src={`${product.data.getProduct.data.image}`}
+                                alt="Product image"
+                                layout="fill"
+                                objectFit="contain"
+                              />
+                            </Box>
+                          </CardActionArea>
+                        </Link>
+                        <CardContent sx={{ flex: 'auto' }}>
+                          <Box
+                            sx={{ display: 'flex', flexDirection: 'column' }}
                           >
-                            <Box className={styles.cardToolbar}>
+                            <Link
+                              aria-label={`product-link-${product.id}`}
+                              className={styles.productLink}
+                              href={`/products/${product.data.getProduct.id}`}
+                            >
+                              <Typography className={styles.productNameMobile}>
+                                {`${product.data.getProduct.data.brand} ${product.data.getProduct.data.name}`}
+                              </Typography>
+                            </Link>
+                            <Typography
+                              style={{ fontSize: '0.8rem' }}
+                              aria-label={`price is ${product.data.getProduct.data.price}`}
+                            >
+                              {`$${Number(product.data.getProduct.data.price).toFixed(2)}`}
+                            </Typography>
+                            <Typography
+                              style={{ fontSize: '0.8rem' }}
+                              aria-label={`deliveryDate is ${product.data.getProduct.data.deliveryDate}`}
+                            >
+                              {t('FREE delivery')}:{' '}
+                              {new Intl.DateTimeFormat('en-US', {
+                                weekday: 'short',
+                                month: 'short',
+                                day: 'numeric',
+                              }).format(
+                                new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                              )}
+                            </Typography>
+                            <Box className={styles.cardToolbarMobile}>
                               <select
-                                className={styles.quantityDropdown}
+                                className={styles.quantityDropdownMobile}
                                 value={product.quantity}
                                 onChange={e =>
                                   handleQuantityChange(
@@ -413,7 +589,6 @@ const Cart = ({ locale }: { locale: string }) => {
                                   </option>
                                 ))}
                               </select>
-                              <Divider orientation="vertical" flexItem />
                               <Typography
                                 aria-label={`${t('cart:Delete')} ${product.data.getProduct.data.name}`}
                                 style={{
@@ -428,57 +603,20 @@ const Cart = ({ locale }: { locale: string }) => {
                                 {t('cart:Delete')}
                               </Typography>
                             </Box>
-                          </Link>
-                        </Box>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                          }}
-                        >
-                          <Typography
-                            style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
-                            aria-label={`price is ${product.data.getProduct.data.price}`}
-                          >
-                            {`$${Number(product.data.getProduct.data.price).toFixed(2)}`}
-                          </Typography>
-                        </Box>
+                          </Box>
+                        </CardContent>
                       </Box>
-                    </CardContent>
-                  </Card>
-                  {<Divider />}
-                </Box>
-              ))}
-              <div className={styles.cartSubtotal}>
-                <Subtotal
-                  numberOfProducts={products.length}
-                  subtotal={subtotal}
-                />
+                    </Card>
+                    {<Divider />}
+                  </Box>
+                ))}
               </div>
-            </div>
+            </Grid>
           </Grid>
-          <Grid
-            id={'buyItNow'}
-            className={styles.topDivider}
-            item
-            xs={12}
-            md={3}
-          >
-            <div>
-              <CheckoutButton
-                subtotal={subtotal}
-                productsWithContent={products}
-                shopperId={user.id}
-                locale={locale}
-              />
-            </div>
-            <Card className={styles.buyAgainBox}>{}</Card>
-          </Grid>
-        </Grid>
-      </Container>
-      <MockazonMenuDrawer />
-      <AppBackDrop />
-    </div>
-  );
+        </Container>
+      </div>
+    );
+  }
 };
 
 Cart.getLayout = (page: ReactElement) => {
