@@ -514,12 +514,7 @@ const Cart = ({ locale }: { locale: string }) => {
             </Grid>
             <Grid item xs={12}>
               <div className={styles.cart}>
-                <div className={styles.cartHeader}>
-                  <Typography className={`${styles.h1}`} variant="h1">
-                    {t('cart:title')}
-                  </Typography>
-                  <Divider />
-                </div>
+                <Divider />
                 {products.map((product, index) => (
                   <Box key={product.id + '_index_' + index}>
                     <Card className={styles.cardMobile} variant={'outlined'}>
@@ -532,7 +527,6 @@ const Cart = ({ locale }: { locale: string }) => {
                           <CardActionArea>
                             <Box className={styles.imageContainerMobile}>
                               <Image
-                                style={{ outline: '2px solid #f0eeee' }}
                                 src={`${product.data.getProduct.data.image}`}
                                 alt="Product image"
                                 layout="fill"
