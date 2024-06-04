@@ -1,7 +1,4 @@
-import {
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
+import { useTheme, useMediaQuery } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -177,11 +174,11 @@ const Cart = ({ locale }: { locale: string }) => {
   const handleRemove = (productId: string) => {
     const query = {
       query: `mutation RemoveFromShoppingCart {
-    removeFromShoppingCart(productId: "${productId}") {
-      product_id
-      shopper_id
-    }
-  }`,
+      removeFromShoppingCart(productId: "${productId}") {
+        product_id
+        shopper_id
+      }
+    }`,
     };
     fetch(`${basePath}/api/graphql`, {
       method: 'POST',
@@ -199,7 +196,6 @@ const Cart = ({ locale }: { locale: string }) => {
       })
       .then(removedProduct => {
         if (removedProduct.errors && removedProduct.errors.length > 0) {
-          //console.error(removedProduct.errors[0].message);
           enqueueSnackbar(t('cart:errorRemovingProduct'), {
             variant: 'error',
             persist: false,
@@ -212,18 +208,26 @@ const Cart = ({ locale }: { locale: string }) => {
           product => product.data.getProduct.id !== productId
         );
         setProducts(listsOfProductsToKeep);
-        const subtotal: number = products.reduce(
-          (accumulator: number, currentValue: Product) => {
-            return (
-              accumulator + (currentValue.data.getProduct.data.price as number)
-            );
-          },
-          0
-        );
-        setSubtotal(subtotal);
+
+        // Check if the products array is empty after removing the item
+        if (listsOfProductsToKeep.length === 0) {
+          // If empty, set the subtotal to 0
+          setSubtotal(0);
+        } else {
+          // Otherwise, recalculate the subtotal
+          const subtotal: number = listsOfProductsToKeep.reduce(
+            (accumulator: number, currentValue: Product) => {
+              return (
+                accumulator +
+                (currentValue.data.getProduct.data.price as number)
+              );
+            },
+            0
+          );
+          setSubtotal(subtotal);
+        }
       })
       .catch(() => {
-        //console.error('Error removing product:', err);
         enqueueSnackbar(t('cart:errorRemovingProduct'), {
           variant: 'error',
           persist: false,
@@ -231,6 +235,20 @@ const Cart = ({ locale }: { locale: string }) => {
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       });
+  };
+
+  const calculateSubtotal = (updatedProducts: Product[]) => {
+    const newSubtotal: number = updatedProducts.reduce(
+      (accumulator: number, currentValue: Product) => {
+        return (
+          accumulator +
+          (currentValue.data.getProduct.data.price as number) *
+            parseInt(currentValue.quantity)
+        );
+      },
+      0
+    );
+    setSubtotal(Math.round(newSubtotal * 100) / 100);
   };
 
   const handleQuantityChange = (productId: string, quantity: string) => {
@@ -286,6 +304,7 @@ const Cart = ({ locale }: { locale: string }) => {
           return product;
         });
         setProducts(updatedProducts);
+        calculateSubtotal(updatedProducts);
       })
       .catch(() => {
         //console.error('Error updating quantity:', err);
