@@ -6,6 +6,8 @@ import {
   TextField,
   Typography,
   ThemeProvider,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   CredentialResponse,
@@ -44,6 +46,8 @@ const Signup = () => {
   const { accessToken, setAccessToken, setUser } = useContext(LoggedInContext);
   const { t, i18n } = useTranslation(['common', 'signup']);
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     localStorage.removeItem('user');
@@ -168,19 +172,29 @@ const Signup = () => {
 
   return (
     <ThemeProvider theme={mainTheme}>
-      <Box className={styles.signUpContainer}>
+      <Box
+        className={
+          isMobile ? styles.signUpContainerMobile : styles.signUpContainer
+        }
+      >
         <Image
           src="/mockazon_logo_white.png"
           alt="logo"
-          width={180}
-          height={100}
+          width={isMobile ? 120 : 180}
+          height={isMobile ? 80 : 100}
           className={styles.logo}
           onClick={() => router.push('/')}
         />
-        <Paper elevation={3} className={styles.signUpForm}>
+        <Paper
+          elevation={3}
+          className={isMobile ? styles.signUpFormMobile : styles.signUpForm}
+        >
           <form onSubmit={handleFormSubmit}>
             <div className={styles.titleContainer}>
-              <Typography variant="h4" className={styles.title}>
+              <Typography
+                variant={isMobile ? 'h5' : 'h4'}
+                className={styles.title}
+              >
                 {t('signup:title')}
               </Typography>
             </div>
@@ -203,7 +217,7 @@ const Signup = () => {
               onChange={event => setEmail(event.target.value)}
               fullWidth
               margin="normal"
-            />
+            />{' '}
             <TextField
               className={styles.passwordInput}
               label={t('signup:password')}
@@ -238,16 +252,26 @@ const Signup = () => {
               {t('signup:signUpText')}
             </Button>
             <Divider className={styles.divider}>{t('common:or')}</Divider>
-            <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
-              <GoogleLogin
-                shape="rectangular"
-                width="350px"
-                context="signup"
-                text="signup_with"
-                locale={i18n.language == 'en' ? 'en-US' : 'es-US'}
-                onSuccess={handleGoogleSuccess}
-              />
-            </GoogleOAuthProvider>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <GoogleOAuthProvider clientId={OAUTH_CLIENT_ID}>
+                <Box sx={{ maxWidth: !isMobile ? 'none' : '220px' }}>
+                  <GoogleLogin
+                    shape="rectangular"
+                    width={isMobile ? '250px' : '350px'}
+                    context="signup"
+                    text="signup_with"
+                    locale={i18n.language === 'en' ? 'en-US' : 'es-US'}
+                    onSuccess={handleGoogleSuccess}
+                  />
+                </Box>
+              </GoogleOAuthProvider>
+            </Box>
             <Typography
               variant="body2"
               color="textSecondary"
@@ -256,13 +280,20 @@ const Signup = () => {
               {t('signup:agreement')}
             </Typography>
             <div className={styles.titleContainer}>
-              <Typography variant="body2" className={styles.alreadyHaveAccount}>
+              <Typography
+                variant="body2"
+                className={
+                  isMobile
+                    ? styles.alreadyHaveAccountMobile
+                    : styles.alreadyHaveAccount
+                }
+              >
                 {t('signup:alreadyHaveAccount')}{' '}
                 <Link className={styles.signInButton} href="/login">
                   {t('common:signInText')}
                 </Link>
               </Typography>
-            </div>
+            </div>{' '}
           </form>
         </Paper>
       </Box>

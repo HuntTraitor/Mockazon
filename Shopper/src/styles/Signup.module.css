@@ -75,6 +75,34 @@
   justify-content: flex-start;
 }
 
+.alreadyHaveAccountMobile {
+  margin-top: 1rem;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .signInButton {
   text-transform: capitalize;
 }
+
+.signUpContainerMobile {
+  display: flex;
+  justify-content: top;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 1rem;
+}
+
+.signUpFormMobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+}
+
