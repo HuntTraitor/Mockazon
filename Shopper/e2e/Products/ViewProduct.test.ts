@@ -4,10 +4,13 @@ import { getRandomEmail, signUp } from '../helpers';
 describe('Next.js App', () => {
   let browser: Browser;
   let page: Page;
-
+  let isProduction: boolean;
+  let homeURL: string;
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
+    isProduction = process.env.NODE_ENV === 'production';
+    homeURL = isProduction ? 'https://mockazon.com' : 'http://localhost:3000';
   });
 
   afterAll(async () => {
@@ -16,7 +19,7 @@ describe('Next.js App', () => {
 
   test("Navigate to home page and clicks on a what's new item", async () => {
     await signUp(page, 'Test User', 'password', getRandomEmail());
-    await page.goto('http://localhost:3000');
+    await page.goto(homeURL);
     await page.waitForSelector('[aria-label^="Search Mockazon"]');
     await page.type('[aria-label^="Search Mockazon"]', 'Huel');
     await page.click('[aria-label^="Search Button"]');
