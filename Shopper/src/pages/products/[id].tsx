@@ -162,7 +162,7 @@ const ProductPage = () => {
                 label={t('quantity')}
                 defaultValue="1"
                 onChange={handleQuantityChange}
-                aria-label={t('quantitySelector') ?? ''}
+                aria-label={t('quantitySelector') as string}
               >
                 {numbers.map(number => (
                   <MenuItem

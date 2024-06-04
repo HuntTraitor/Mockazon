@@ -337,6 +337,7 @@ const TopHeader = () => {
         </Button> */}
             <Box sx={{ width: '100%' }}>
               <CustomTextField
+                aria-label={t('searchPlaceholder') as string}
                 inputRef={inputRef}
                 placeholder={t('searchPlaceholder') as string}
                 InputProps={{

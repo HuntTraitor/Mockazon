@@ -404,6 +404,7 @@ const Cart = ({ locale }: { locale: string }) => {
                           >
                             <Box className={styles.cardToolbar}>
                               <select
+                                aria-label={`Quantity Selector for ${product.data.getProduct.data.name}`}
                                 className={styles.quantityDropdown}
                                 value={product.quantity}
                                 onChange={e =>
