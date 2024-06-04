@@ -1,12 +1,12 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import {getRandomEmail, signUp} from "../helpers";
+import { getRandomEmail, signUp } from '../helpers';
 
 describe('Next.js App', () => {
   let browser: Browser;
   let page: Page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({headless: true});
+    browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
   });
 
@@ -47,7 +47,9 @@ describe('Next.js App', () => {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     const selectedValue = await page.evaluate(() => {
-      const selectElement = document.querySelector('[aria-label^="Quantity Selector for"]') as HTMLSelectElement;
+      const selectElement = document.querySelector(
+        '[aria-label^="Quantity Selector for"]'
+      ) as HTMLSelectElement;
       return selectElement.value;
     });
     expect(selectedValue).toBe('5');
