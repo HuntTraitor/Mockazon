@@ -86,6 +86,7 @@ export function SignupForm({ navigate }: LoginFormProps) {
               id="firstName"
               autoFocus
               aria-label="name-input"
+              role='input'
             />
           </Grid>
           <Grid item xs={12}>
@@ -97,6 +98,7 @@ export function SignupForm({ navigate }: LoginFormProps) {
               fullWidth
               id="email"
               name="email"
+              role='input'
               autoComplete="email"
               aria-label="email-input"
             />
@@ -108,6 +110,7 @@ export function SignupForm({ navigate }: LoginFormProps) {
             <TextField
               required
               fullWidth
+              role='input'
               name="password"
               type="password"
               id="password"
@@ -139,6 +142,7 @@ export function SignupForm({ navigate }: LoginFormProps) {
         </Grid>
         <Button
           type="submit"
+          role='button'
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
@@ -150,6 +154,8 @@ export function SignupForm({ navigate }: LoginFormProps) {
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Link
+              aria-label='login-link'
+              role="link"
               href="#"
               variant="body2"
               color="secondary"
