@@ -164,7 +164,7 @@ export default function OrderCard({ order }: { order: Order }) {
         enqueueSnackbar(t('addedToCart'), {
           variant: 'success',
           persist: false,
-          autoHideDuration: 3000,
+          autoHideDuration: 1000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       })
@@ -173,7 +173,7 @@ export default function OrderCard({ order }: { order: Order }) {
         enqueueSnackbar(t('errorAddingToCart'), {
           variant: 'error',
           persist: false,
-          autoHideDuration: 3000,
+          autoHideDuration: 1000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       });

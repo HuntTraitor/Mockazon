@@ -48,7 +48,7 @@ export default function AddToCartButton({ product, quantity }: ProductProps) {
         enqueueSnackbar(t('productAddedToCart'), {
           variant: 'success',
           persist: false,
-          autoHideDuration: 3000,
+          autoHideDuration: 1000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
         // console.log(shoppingCart);
@@ -58,7 +58,7 @@ export default function AddToCartButton({ product, quantity }: ProductProps) {
         enqueueSnackbar(t('productNotAddedToCart'), {
           variant: 'error',
           persist: false,
-          autoHideDuration: 3000,
+          autoHideDuration: 1000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       });
