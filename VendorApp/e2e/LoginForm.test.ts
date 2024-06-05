@@ -31,6 +31,8 @@ describe('Vendor Login', () => {
 
   test('Successful Login', async () => {
     await page.goto('http://localhost:3003/login');
+
+    await page.waitForSelector('aria/login-link');
     await page.click('aria/login-link');
 
     await page.type('[aria-label="email-input"] input', 'htratar@ucsc.edu');
@@ -50,6 +52,8 @@ describe('Vendor Login', () => {
 
   test('Unsuccessful Login', async () => {
     await page.goto('http://localhost:3003/login');
+
+    await page.waitForSelector('aria/login-link');
     await page.click('aria/login-link');
 
     await page.type(
