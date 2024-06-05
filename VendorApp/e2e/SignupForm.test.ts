@@ -56,4 +56,33 @@ describe('Vendor Signup', () => {
       });
     }
   });
+
+  test('Unsuccessful Signup', async () => {
+    await page.goto('http://localhost:3003/login');
+    const name = await page.$('aria/name-input[role=input]');
+    const email = await page.$('aria/email-input[role=input]');
+    const password = await page.$('aria/password-input[role=input]');
+    const repeatPassword = await page.$(
+      'aria/repeatpassword-input[role=input]'
+    );
+
+    if (name && email && password && repeatPassword) {
+      await name.type('CSE187 Student');
+      await email.type('cse187student@vendor.com');
+      // Must be at least 6 characters
+      await password.type('n');
+      await repeatPassword.type('n');
+
+      await page.click('aria/submit-request');
+
+      await page.waitForFunction(() => {
+        const element = document.querySelector('body');
+        return (
+          element &&
+          element.textContent &&
+          element.textContent.includes('Oops! Something went wrong, please try again')
+        );
+      });
+    }
+  });
 });
