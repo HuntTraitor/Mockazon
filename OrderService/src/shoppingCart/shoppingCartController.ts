@@ -40,7 +40,9 @@ export class ShoppingCartController extends Controller {
   public async updateShoppingCart(
     @Body() order: ShoppingCartInput
   ): Promise<ShoppingCartItem | undefined> {
-    const updatedCart = await new ShoppingCartService().updateShoppingCart(order);
+    const updatedCart = await new ShoppingCartService().updateShoppingCart(
+      order
+    );
     return updatedCart ?? this.setStatus(404);
   }
 
@@ -49,7 +51,9 @@ export class ShoppingCartController extends Controller {
   public async removeFromShoppingCart(
     @Body() order: ShoppingCartRemoveInput
   ): Promise<ShoppingCartRemoveInput | undefined> {
-    const updatedCart = await new ShoppingCartService().removeFromShoppingCart(order);
+    const updatedCart = await new ShoppingCartService().removeFromShoppingCart(
+      order
+    );
     return updatedCart ?? this.setStatus(404);
   }
 }

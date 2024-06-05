@@ -80,13 +80,11 @@ describe('Update Shopping Cart', () => {
         quantity: '2',
       });
 
-    const result = await supertest(server)
-      .put(`/api/v0/shoppingCart`)
-      .send({
-        product_id: productId,
-        shopper_id: shopperId,
-        quantity: '3',
-      });
+    const result = await supertest(server).put(`/api/v0/shoppingCart`).send({
+      product_id: productId,
+      shopper_id: shopperId,
+      quantity: '3',
+    });
     expect(result.status).toBe(201);
   });
 
@@ -94,13 +92,11 @@ describe('Update Shopping Cart', () => {
     const shopperId = randomUUID();
     const productId = randomUUID();
 
-    const result = await supertest(server)
-      .put(`/api/v0/shoppingCart`)
-      .send({
-        product_id: productId,
-        shopper_id: shopperId,
-        quantity: '3',
-      });
+    const result = await supertest(server).put(`/api/v0/shoppingCart`).send({
+      product_id: productId,
+      shopper_id: shopperId,
+      quantity: '3',
+    });
     expect(result.status).toBe(404);
   });
 });
@@ -118,12 +114,10 @@ describe('Remove from Shopping Cart', () => {
         quantity: '2',
       });
 
-    const result = await supertest(server)
-      .delete(`/api/v0/shoppingCart`)
-      .send({
-        product_id: productId,
-        shopper_id: shopperId,
-      });
+    const result = await supertest(server).delete(`/api/v0/shoppingCart`).send({
+      product_id: productId,
+      shopper_id: shopperId,
+    });
     expect(result.status).toBe(201);
   });
 
@@ -131,12 +125,10 @@ describe('Remove from Shopping Cart', () => {
     const shopperId = randomUUID();
     const productId = randomUUID();
 
-    const result = await supertest(server)
-      .delete(`/api/v0/shoppingCart`)
-      .send({
-        product_id: productId,
-        shopper_id: shopperId,
-      });
+    const result = await supertest(server).delete(`/api/v0/shoppingCart`).send({
+      product_id: productId,
+      shopper_id: shopperId,
+    });
     expect(result.status).toBe(404);
   });
 });
