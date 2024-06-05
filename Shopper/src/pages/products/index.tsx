@@ -25,6 +25,9 @@ import { enqueueSnackbar } from 'notistack';
 import { Order } from '@/graphql/types';
 import AccountDrawer from '@/views/AccountDrawer';
 
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import BannerCarousel from '@/views/BannerCarousel';
+
 const { basePath } = getConfig().publicRuntimeConfig;
 
 const namespaces = [
@@ -223,7 +226,7 @@ const Index = () => {
           vendorId: $vendorId,
           active: $active,
           page: $page,
-          pageSize: 10,
+          pageSize: 21,
           search: $search,
           orderBy: $orderBy,
           descending: $descending
@@ -344,14 +347,13 @@ const Index = () => {
         <Container
           className={
             isMobile
-              ? `${styles.mobileContent} ${styles.gradientContainer}`
-              : `${styles.content} ${styles.gradientContainer}`
+              ? `${styles.mobileContent}`
+              : `${styles.content}`
           }
         >
-          <Box className={isMobile ? styles.titleMobile : styles.title}>
-            <h1>{t('common:welcomeToMockazon')}</h1>
-            <h2>{t('common:secondaryWelcome')}</h2>
-          </Box>
+          <div>
+            <BannerCarousel />
+          </div>
           <div>
             <ProductCarousel
               title={t('products:whatNew')}
@@ -377,7 +379,7 @@ const Index = () => {
                   textAlign: isMobile ? 'left' : 'center',
                 }}
               >
-                {t('products:moreProducts')}
+                {/* {t('products:moreProducts')} */}
               </Typography>
               <Grid container spacing={1} justifyContent="center">
                 {products.slice().map((product, index) => (

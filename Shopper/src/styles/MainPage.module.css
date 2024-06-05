@@ -1,25 +1,18 @@
-.gradientContainer {
-  position: relative;
-  background-image: linear-gradient(
-    to bottom,
-    #51c9ed,
-    #51c9ed 50%,
-    rgba(255, 255, 255, 0)
-  );
-  background-repeat: no-repeat;
-  background-size: 100% 50vh;
-}
-
 .exterior {
   display: flex;
   background-color: #eaeded;
   padding-bottom: 1rem;
   min-height: 100vh;
+  position: relative;
 }
 
 .content {
   background-color: #eaeded;
-  max-width: 65%;
+  max-width: 100%;
+  position: relative;
+  z-index: 1;
+  padding-top: 500px /* max-width 100% */
+  /*padding-top: 250px /* max-width 65% */
 }
 
 .mobileContent {
@@ -123,4 +116,16 @@
   position: relative;
   width: 125px;
   height: 125px;
+}
+
+.carousel {
+  width: 100%;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.carousel div {
+  position: relative;
+  width: 100%;
+  padding-top: 34.19%; /* Maintain the aspect ratio (400 / 1170 * 100) */
 }
