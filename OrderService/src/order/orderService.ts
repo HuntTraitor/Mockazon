@@ -120,6 +120,8 @@ export class OrderService {
     const { rows } = await pool.query(query);
     let order = rows[0];
 
+    if (!order) return order;
+
     // Get the product ids in the order
     const productSelect = `SELECT product_id AS id, quantity FROM order_product WHERE order_id = $1`;
     const productQuery = {
@@ -217,6 +219,7 @@ export class OrderService {
       values: [shipped, orderId],
     };
     const { rows } = await pool.query(query);
+    if (!rows.length) return rows[0];
 
     // get the shopper order's id
     const select = `SELECT shopper_order_id FROM vendor_shopper_order WHERE vendor_order_id = $1`;
@@ -256,6 +259,7 @@ export class OrderService {
       values: [delivered, orderId],
     };
     const { rows } = await pool.query(query);
+    if (!rows.length) return rows[0];
 
     // get the shopper order's id
     const select = `SELECT shopper_order_id FROM vendor_shopper_order WHERE vendor_order_id = $1`;
