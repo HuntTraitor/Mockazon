@@ -227,7 +227,7 @@ it('Renders unsuccessfully', async () => {
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
-  
+
   await waitFor(() => {
     const elements = screen.queryAllByText('testName', { exact: false });
     expect(elements).toHaveLength(elements.length);

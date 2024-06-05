@@ -52,7 +52,11 @@ describe('ProductCarousel', () => {
     render(
       <AppContext.Provider value={AppContextProps}>
         <SnackbarProvider>
-          <ProductCarousel products={products} title={'title of products'} ariaLabel={''} />
+          <ProductCarousel
+            products={products}
+            title={'title of products'}
+            ariaLabel={''}
+          />
         </SnackbarProvider>
       </AppContext.Provider>
     );
@@ -61,7 +65,11 @@ describe('ProductCarousel', () => {
     render(
       <AppContext.Provider value={AppContextProps}>
         <SnackbarProvider>
-          <ProductCarousel products={products} title={'title of products'} ariaLabel={''} />
+          <ProductCarousel
+            products={products}
+            title={'title of products'}
+            ariaLabel={''}
+          />
         </SnackbarProvider>
       </AppContext.Provider>
     );
@@ -71,7 +79,11 @@ describe('ProductCarousel', () => {
     render(
       <AppContext.Provider value={AppContextProps}>
         <SnackbarProvider>
-          <ProductCarousel products={products} title={'title of products'} ariaLabel={''} />
+          <ProductCarousel
+            products={products}
+            title={'title of products'}
+            ariaLabel={''}
+          />
         </SnackbarProvider>
       </AppContext.Provider>
     );
@@ -82,7 +94,11 @@ describe('ProductCarousel', () => {
     render(
       <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
         <SnackbarProvider>
-          <ProductCarousel products={products} title={'title of products'} ariaLabel={''} />
+          <ProductCarousel
+            products={products}
+            title={'title of products'}
+            ariaLabel={''}
+          />
         </SnackbarProvider>
       </AppContext.Provider>
     );

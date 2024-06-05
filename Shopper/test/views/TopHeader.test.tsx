@@ -42,18 +42,18 @@ jest.mock('next-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       switch (key) {
-      case 'deliveryText':
-        return 'Delivery to';
-      case 'searchPlaceholder':
-        return 'Search Mockazon';
-      case 'returns':
-        return 'Returns';
-      case 'orders':
-        return '& Orders';
-      case 'cart':
-        return 'Cart';
-      default:
-        return key;
+        case 'deliveryText':
+          return 'Delivery to';
+        case 'searchPlaceholder':
+          return 'Search Mockazon';
+        case 'returns':
+          return 'Returns';
+        case 'orders':
+          return '& Orders';
+        case 'cart':
+          return 'Cart';
+        default:
+          return key;
       }
     },
     i18n: {
@@ -103,13 +103,13 @@ describe('Top Header Desktop', () => {
     render(
       <LoggedInContext.Provider
         value={{
-          accessToken : 'test',
+          accessToken: 'test',
           setAccessToken: jest.fn(),
           location: '',
           setLocation: jest.fn(),
           locale: '',
           setLocale: jest.fn(),
-          user : { accessToken: 'test', id: '1', name: 'test', role: 'shopper' },
+          user: { accessToken: 'test', id: '1', name: 'test', role: 'shopper' },
           setUser: jest.fn(),
         }}
       >
@@ -137,13 +137,13 @@ describe('Top Header Desktop', () => {
     render(
       <LoggedInContext.Provider
         value={{
-          accessToken : 'test',
+          accessToken: 'test',
           setAccessToken: jest.fn(),
           location: '',
           setLocation: jest.fn(),
           locale: '',
           setLocale: jest.fn(),
-          user : { accessToken: 'test', id: '1', name: 'test', role: 'shopper' },
+          user: { accessToken: 'test', id: '1', name: 'test', role: 'shopper' },
           setUser: jest.fn(),
         }}
       >

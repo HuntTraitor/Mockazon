@@ -72,7 +72,7 @@ beforeAll(async () => {
 afterEach(() => {
   microServices.resetHandlers();
   returnError = false;
-  graphQLReturnError = false
+  graphQLReturnError = false;
 });
 
 afterAll(done => {
@@ -145,7 +145,9 @@ describe('Desktop Product Page', () => {
         </SnackbarProvider>
       </AppContext.Provider>
     );
-    await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+    await waitFor(() =>
+      expect(screen.getByText('test name', { exact: false }))
+    );
   });
 
   it('renders with layout', () => {
@@ -154,23 +156,21 @@ describe('Desktop Product Page', () => {
     const layout = ProductPage.getLayout(page);
 
     const { getByText } = render(
-      <AppContextProvider>
-        {layout}
-      </AppContextProvider>
+      <AppContextProvider>{layout}</AppContextProvider>
     );
 
     expect(getByText('Test')).toBeInTheDocument();
   });
 
   it('should fetch server side props with translations', async () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     await getServerSideProps({ locale: 'en' });
   });
 
   it('should fetch server side props with translations without locale', async () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     await getServerSideProps({});
   });
 
@@ -224,7 +224,9 @@ describe('Desktop Product Page', () => {
         </SnackbarProvider>
       </AppContext.Provider>
     );
-    await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+    await waitFor(() =>
+      expect(screen.getByText('test name', { exact: false }))
+    );
     const quantitySelector = screen.getByRole('combobox');
 
     /* https://stackoverflow.com/questions/55184037/react-testing-library-on-change-for-material-ui-select-component */
@@ -232,12 +234,12 @@ describe('Desktop Product Page', () => {
     fireEvent.mouseDown(quantitySelector);
 
     // Wait for the option to be in the document
-    expect(screen.getByRole("listbox")).not.toEqual(null);
+    expect(screen.getByRole('listbox')).not.toEqual(null);
     const listbox = within(screen.getByRole('presentation')).getByRole(
       'listbox'
     );
     const options = within(listbox).getAllByRole('option');
-    const optionValues = options.map((li) => li.getAttribute('data-value'));
+    const optionValues = options.map(li => li.getAttribute('data-value'));
     expect(optionValues).toEqual(['1', '2', '3', '4', '5']);
     fireEvent.click(options[1]);
 
@@ -273,7 +275,9 @@ describe('Mobile Product Page', () => {
         </SnackbarProvider>
       </AppContext.Provider>
     );
-    await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+    await waitFor(() =>
+      expect(screen.getByText('test name', { exact: false }))
+    );
   });
 
   it('Renders with error', async () => {
@@ -342,7 +346,9 @@ describe('Mobile Product Page', () => {
         </SnackbarProvider>
       </AppContext.Provider>
     );
-    await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+    await waitFor(() =>
+      expect(screen.getByText('test name', { exact: false }))
+    );
     const quantitySelector = screen.getByRole('combobox');
 
     /* https://stackoverflow.com/questions/55184037/react-testing-library-on-change-for-material-ui-select-component */
@@ -350,12 +356,12 @@ describe('Mobile Product Page', () => {
     fireEvent.mouseDown(quantitySelector);
 
     // Wait for the option to be in the document
-    expect(screen.getByRole("listbox")).not.toEqual(null);
+    expect(screen.getByRole('listbox')).not.toEqual(null);
     const listbox = within(screen.getByRole('presentation')).getByRole(
       'listbox'
     );
     const options = within(listbox).getAllByRole('option');
-    const optionValues = options.map((li) => li.getAttribute('data-value'));
+    const optionValues = options.map(li => li.getAttribute('data-value'));
     expect(optionValues).toEqual(['1', '2', '3', '4', '5']);
     fireEvent.click(options[1]);
 

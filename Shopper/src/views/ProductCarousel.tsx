@@ -1,11 +1,6 @@
 // ProductCarousel.tsx
 import React, { useRef } from 'react';
-import {
-  Box,
-  Button,
-  CardActionArea,
-  Typography,
-} from '@mui/material';
+import { Box, Button, CardActionArea, Typography } from '@mui/material';
 import Image from 'next/image';
 import styles from '@/styles/MainPage.module.css';
 import { Product } from '@/graphql/types';
@@ -26,7 +21,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
 }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const scrollAmount = 1500;
-  const {isMobile} = useAppContext();
+  const { isMobile } = useAppContext();
 
   const handleScroll = (direction: 'prev' | 'next') => {
     if (carouselRef.current) {

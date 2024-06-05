@@ -347,7 +347,7 @@ const TopHeader = () => {
                             setSuggestionIndex(-1);
                           }}
                           size="small"
-                          aria-label='Clear Search Input'
+                          aria-label="Clear Search Input"
                           className={styles.clearIndicator}
                         >
                           <ClearIcon sx={{ width: '19px' }} />
@@ -514,7 +514,7 @@ const TopHeader = () => {
                             setSuggestionIndex(-1);
                           }}
                           size="small"
-                          aria-label='Clear Search Input'
+                          aria-label="Clear Search Input"
                           className={styles.clearIndicator}
                         >
                           <ClearIcon sx={{ width: '19px' }} />

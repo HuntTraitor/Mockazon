@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container} from '@mui/material';
+import { Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -121,7 +121,7 @@ const OrderView: React.FC = () => {
   const { id } = router.query;
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  const {isMobile} = useAppContext();
+  const { isMobile } = useAppContext();
   const { t } = useTranslation('order');
 
   useEffect(() => {

@@ -54,8 +54,7 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState('1');
   const [error, setError] = useState(false);
   const numbers = Array.from({ length: 5 }, (_, index) => index + 1);
-  const {isMobile} = useAppContext();
-
+  const { isMobile } = useAppContext();
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
@@ -159,7 +158,11 @@ const ProductPage = () => {
               <Select
                 id="Quantity Selector"
                 defaultValue="1"
-                onChange={handleQuantityChange as (event: SelectChangeEvent<string>) => void}
+                onChange={
+                  handleQuantityChange as (
+                    event: SelectChangeEvent<string>
+                  ) => void
+                }
                 aria-label={t('quantitySelector') as string}
               >
                 {numbers.map(number => (

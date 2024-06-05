@@ -107,7 +107,10 @@ describe('Desktop', () => {
     render(
       <AppContext.Provider value={AppContextProps}>
         <SnackbarProvider>
-          <MainPageProductCard product={mockProductWithLongName} ariaLabel={''} />
+          <MainPageProductCard
+            product={mockProductWithLongName}
+            ariaLabel={''}
+          />
         </SnackbarProvider>
       </AppContext.Provider>
     );
@@ -135,7 +138,10 @@ describe('Mobile', () => {
     render(
       <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
         <SnackbarProvider>
-          <MainPageProductCard product={mockProductWithLongName} ariaLabel={''} />
+          <MainPageProductCard
+            product={mockProductWithLongName}
+            ariaLabel={''}
+          />
         </SnackbarProvider>
       </AppContext.Provider>
     );
