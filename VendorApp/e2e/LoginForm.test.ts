@@ -50,4 +50,26 @@ describe('Vendor Login', () => {
       });
     }
   });
+
+  test('Unsuccessful Login', async () => {
+    await page.goto('http://localhost:3003/login');
+    await page.click('aria/login-link[role="link"]');
+    const email = await page.$('aria/email-input[role=input]');
+    const password = await page.$('aria/password-input[role=input]');
+
+    if (email && password) {
+      await email.type('asdfasdfasdf@books.com');
+      await password.type('a');
+
+      await page.click('aria/submit-request[role="button"]');
+      await page.waitForFunction(() => {
+        const element = document.querySelector('body');
+        return (
+          element &&
+          element.textContent &&
+          element.textContent.includes('Login Unsuccessful, please try again!')
+        );
+      });
+    }
+  });
 });
