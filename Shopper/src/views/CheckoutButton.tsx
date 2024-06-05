@@ -103,7 +103,7 @@ export default function CheckoutButton({
         enqueueSnackbar(t('cart:errorCreatingCheckoutSession'), {
           variant: 'error',
           persist: false,
-          autoHideDuration: 3000,
+          autoHideDuration: 1000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       });
@@ -115,7 +115,12 @@ export default function CheckoutButton({
     <form onSubmit={handleSubmit}>
       <div className={styles.checkoutBox}>
         <Subtotal numberOfProducts={productQuantity} subtotal={subtotal} />
-        <button className={styles.checkoutButton} type="submit" role="link">
+        <button
+          aria-label={t('cart:proceedToCheckout') as string}
+          className={styles.checkoutButton}
+          type="submit"
+          role="link"
+        >
           {t('cart:proceedToCheckout')}
         </button>
       </div>

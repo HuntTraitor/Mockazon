@@ -90,7 +90,7 @@ const Cart = ({ locale }: { locale: string }) => {
           enqueueSnackbar(t('cart:errorFetchingProducts'), {
             variant: 'error',
             persist: false,
-            autoHideDuration: 3000,
+            autoHideDuration: 1000,
             anchorOrigin: { horizontal: 'center', vertical: 'top' },
           });
           return;
@@ -131,7 +131,7 @@ const Cart = ({ locale }: { locale: string }) => {
               enqueueSnackbar(t('cart:errorFetchingProducts'), {
                 variant: 'error',
                 persist: false,
-                autoHideDuration: 3000,
+                autoHideDuration: 1000,
                 anchorOrigin: { horizontal: 'center', vertical: 'top' },
               });
             }
@@ -156,7 +156,7 @@ const Cart = ({ locale }: { locale: string }) => {
             enqueueSnackbar(t('cart:errorFetchingProducts'), {
               variant: 'error',
               persist: false,
-              autoHideDuration: 3000,
+              autoHideDuration: 1000,
               anchorOrigin: { horizontal: 'center', vertical: 'top' },
             });
           });
@@ -165,7 +165,7 @@ const Cart = ({ locale }: { locale: string }) => {
         enqueueSnackbar(t('cart:errorFetchingProducts'), {
           variant: 'error',
           persist: false,
-          autoHideDuration: 3000,
+          autoHideDuration: 1000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       });
@@ -199,7 +199,7 @@ const Cart = ({ locale }: { locale: string }) => {
           enqueueSnackbar(t('cart:errorRemovingProduct'), {
             variant: 'error',
             persist: false,
-            autoHideDuration: 3000,
+            autoHideDuration: 1000,
             anchorOrigin: { horizontal: 'center', vertical: 'top' },
           });
           return;
@@ -231,7 +231,7 @@ const Cart = ({ locale }: { locale: string }) => {
         enqueueSnackbar(t('cart:errorRemovingProduct'), {
           variant: 'error',
           persist: false,
-          autoHideDuration: 3000,
+          autoHideDuration: 1000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       });
@@ -288,7 +288,7 @@ const Cart = ({ locale }: { locale: string }) => {
           enqueueSnackbar(t('cart:errorUpdatingQuantity'), {
             variant: 'error',
             persist: false,
-            autoHideDuration: 3000,
+            autoHideDuration: 1000,
             anchorOrigin: { horizontal: 'center', vertical: 'top' },
           });
           return;
@@ -311,7 +311,7 @@ const Cart = ({ locale }: { locale: string }) => {
         enqueueSnackbar(t('cart:errorUpdatingQuantity'), {
           variant: 'error',
           persist: false,
-          autoHideDuration: 3000,
+          autoHideDuration: 1000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       });

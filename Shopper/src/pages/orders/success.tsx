@@ -93,7 +93,7 @@ const CheckoutSuccessPage = () => {
       <TopNav />
       <div className={styles.container}>
         <div className={styles.header}>
-          <Typography variant="h2">
+          <Typography aria-label={t('successStatus')} variant="h2">
             {t('successStatus')}{' '}
             {
               <CheckCircleIcon

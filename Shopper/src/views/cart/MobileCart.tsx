@@ -119,7 +119,10 @@ const MobileCart: React.FC<MobileCartProps> = ({
                           >
                             -
                           </button>
-                          <Typography className={styles.quantityDisplay}>
+                          <Typography
+                            aria-label={`Quantity Selector for ${product.id}`}
+                            className={styles.quantityDisplay}
+                          >
                             {product.quantity}
                           </Typography>
                           <button

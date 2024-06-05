@@ -78,6 +78,4 @@ describe('Auth', () => {
     expect(page.url()).toBe('http://localhost:3000/');
     expect(dialogHandler).not.toHaveBeenCalled();
   });
-
-  // FIXME: E2E tests for google oauth, shouldn't implement?
 });

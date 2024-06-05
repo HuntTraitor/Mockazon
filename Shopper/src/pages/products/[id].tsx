@@ -84,7 +84,7 @@ const ProductPage = () => {
           enqueueSnackbar(t('errorFetchingProduct'), {
             variant: 'error',
             persist: false,
-            autoHideDuration: 3000,
+            autoHideDuration: 1000,
             anchorOrigin: { horizontal: 'center', vertical: 'top' },
           });
           setError(true);
@@ -96,7 +96,7 @@ const ProductPage = () => {
         enqueueSnackbar(t('errorFetchingProduct'), {
           variant: 'error',
           persist: false,
-          autoHideDuration: 3000,
+          autoHideDuration: 1000,
           anchorOrigin: { horizontal: 'center', vertical: 'top' },
         });
       }
