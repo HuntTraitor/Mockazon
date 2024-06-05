@@ -81,6 +81,7 @@ export function LoginForm({ navigate }: LoginFormProps) {
             <TextField
               required
               fullWidth
+              role="input"
               id="email"
               name="email"
               autoComplete="email"
@@ -94,6 +95,7 @@ export function LoginForm({ navigate }: LoginFormProps) {
             <TextField
               required
               fullWidth
+              role="input"
               name="password"
               type="password"
               id="password"
@@ -104,6 +106,7 @@ export function LoginForm({ navigate }: LoginFormProps) {
         </Grid>
         <Button
           type="submit"
+          role="button"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
@@ -115,6 +118,8 @@ export function LoginForm({ navigate }: LoginFormProps) {
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Link
+              aria-label="login-link"
+              role="link"
               href="#"
               variant="body2"
               color="secondary"
