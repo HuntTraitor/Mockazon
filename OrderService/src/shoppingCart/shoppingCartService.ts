@@ -54,6 +54,7 @@ export class ShoppingCartService {
       values: [`${NewOrder.shopper_id}`, `${NewOrder.product_id}`],
     };
     const { rows } = await pool.query(query);
+    if (rows.length === 0) return rows[0];
     return { product_id: rows[0].product_id, shopper_id: rows[0].shopper_id };
   }
 
