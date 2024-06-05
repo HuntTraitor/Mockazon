@@ -180,7 +180,9 @@ const APIKeys = () => {
               ))}
             </TableBody>
             <TableFooter>
-              <TableCell>Key Count: {keyContext.keys.length}</TableCell>
+              <TableCell aria-label="key-count" role="text">
+                Key Count: {keyContext.keys.length}
+              </TableCell>
             </TableFooter>
           </Table>
         </TableContainer>
