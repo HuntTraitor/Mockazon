@@ -3,10 +3,9 @@ import {
   Typography,
   Box,
   Divider,
-  TextField,
+  Select,
   MenuItem,
-  useTheme,
-  useMediaQuery,
+  SelectChangeEvent,
 } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -25,6 +24,7 @@ import Layout from '@/components/Layout';
 import getConfig from 'next/config';
 import AppBackDrop from '@/components/AppBackdrop';
 import { enqueueSnackbar } from 'notistack';
+import { useAppContext } from '@/contexts/AppContext';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -54,8 +54,8 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState('1');
   const [error, setError] = useState(false);
   const numbers = Array.from({ length: 5 }, (_, index) => index + 1);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const {isMobile} = useAppContext();
+
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
@@ -156,24 +156,22 @@ const ProductPage = () => {
             >
               <Price price={product.data.price.toString()} />
               <DeliveryText deliveryDate={product.data.deliveryDate} />
-              <TextField
+              <Select
                 id="Quantity Selector"
-                select
-                label={t('quantity')}
                 defaultValue="1"
-                onChange={handleQuantityChange}
+                onChange={handleQuantityChange as (event: SelectChangeEvent<string>) => void}
                 aria-label={t('quantitySelector') as string}
               >
                 {numbers.map(number => (
                   <MenuItem
                     key={number}
                     value={number}
-                    aria-label="Quantity number"
+                    aria-label={`Quantity Number ${number}`}
                   >
                     {number}
                   </MenuItem>
                 ))}
-              </TextField>
+              </Select>
               <AddToCartButton product={product} quantity={quantity} />
               <Box className={styles.checkoutMoreInformation}>
                 <Box>

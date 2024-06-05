@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import { screen, within } from '@testing-library/dom';
 import ProductPage from '@/pages/products/[id]';
 import { getServerSideProps } from '@/pages/products/[id]';
 import http from 'http';
@@ -9,6 +9,7 @@ import { AppContext } from '@/contexts/AppContext';
 import { HttpResponse, graphql } from 'msw';
 import { setupServer } from 'msw/node';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
+import { AppContextProvider } from '@/contexts/AppContext';
 
 import requestHandler from '../../api/requestHandler';
 
@@ -70,6 +71,8 @@ beforeAll(async () => {
 
 afterEach(() => {
   microServices.resetHandlers();
+  returnError = false;
+  graphQLReturnError = false
 });
 
 afterAll(done => {
@@ -133,83 +136,230 @@ const AppContextProps = {
   setAccountDrawerOpen: jest.fn(),
 };
 
-it('Renders successfully', async () => {
-  render(
-    <AppContext.Provider value={AppContextProps}>
-      <SnackbarProvider>
-        <ProductPage />
-      </SnackbarProvider>
-    </AppContext.Provider>
-  );
-  await waitFor(() => expect(screen.getByText('test name', { exact: false })));
-});
+describe('Desktop Product Page', () => {
+  it('Renders successfully', async () => {
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+  });
 
-it('should fetch server side props with translations', async () => {
+  it('renders with layout', () => {
+    const TestComponent = () => <div>Test</div>;
+    const page = <TestComponent />;
+    const layout = ProductPage.getLayout(page);
+
+    const { getByText } = render(
+      <AppContextProvider>
+        {layout}
+      </AppContextProvider>
+    );
+
+    expect(getByText('Test')).toBeInTheDocument();
+  });
+
+  it('should fetch server side props with translations', async () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  await getServerSideProps({ locale: 'en' });
-});
+    await getServerSideProps({ locale: 'en' });
+  });
 
-it('should fetch server side props with translations without locale', async () => {
+  it('should fetch server side props with translations without locale', async () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  await getServerSideProps({});
+    await getServerSideProps({});
+  });
+
+  it('Renders with error', async () => {
+    returnError = true;
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+  });
+
+  it('Renders with error in graphQL', async () => {
+    returnError = true;
+    graphQLReturnError = true;
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+  });
+
+  it('Click Backdrop', () => {
+    render(
+      <AppContext.Provider
+        value={{
+          ...AppContextProps,
+          backDropOpen: true,
+        }}
+      >
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    const backdrop = document.querySelector('.MuiBackdrop-root');
+    if (backdrop) {
+      fireEvent.click(backdrop);
+    }
+  });
+
+  it('Renders successfully with quantity change', async () => {
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+    const quantitySelector = screen.getByRole('combobox');
+
+    /* https://stackoverflow.com/questions/55184037/react-testing-library-on-change-for-material-ui-select-component */
+    // Open the select dropdown
+    fireEvent.mouseDown(quantitySelector);
+
+    // Wait for the option to be in the document
+    expect(screen.getByRole("listbox")).not.toEqual(null);
+    const listbox = within(screen.getByRole('presentation')).getByRole(
+      'listbox'
+    );
+    const options = within(listbox).getAllByRole('option');
+    const optionValues = options.map((li) => li.getAttribute('data-value'));
+    expect(optionValues).toEqual(['1', '2', '3', '4', '5']);
+    fireEvent.click(options[1]);
+
+    // expect quantity to be 2 on screen
+    expect(screen.getByDisplayValue('2')).toBeTruthy();
+  });
+
+  it('Displays product not found error', async () => {
+    returnError = true;
+    graphQLReturnError = true;
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    await waitFor(() => expect(screen.getByText('productNotFound')));
+  });
 });
 
-it('Renders with error', async () => {
-  returnError = true;
-  render(
-    <AppContext.Provider value={AppContextProps}>
-      <SnackbarProvider>
-        <ProductPage />
-      </SnackbarProvider>
-    </AppContext.Provider>
-  );
-});
+describe('Mobile Product Page', () => {
+  it('Renders successfully', async () => {
+    render(
+      <AppContext.Provider
+        value={{
+          ...AppContextProps,
+          isMobile: true,
+        }}
+      >
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+  });
 
-it('Renders with error in graphQL', async () => {
-  returnError = true;
-  graphQLReturnError = true;
-  render(
-    <AppContext.Provider value={AppContextProps}>
-      <SnackbarProvider>
-        <ProductPage />
-      </SnackbarProvider>
-    </AppContext.Provider>
-  );
-});
+  it('Renders with error', async () => {
+    returnError = true;
+    render(
+      <AppContext.Provider
+        value={{
+          ...AppContextProps,
+          isMobile: true,
+        }}
+      >
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+  });
 
-it('Click Backdrop', () => {
-  render(
-    <AppContext.Provider
-      value={{
-        ...AppContextProps,
-        backDropOpen: true,
-      }}
-    >
-      <SnackbarProvider>
-        <ProductPage />
-      </SnackbarProvider>
-    </AppContext.Provider>
-  );
-  const backdrop = document.querySelector('.MuiBackdrop-root');
-  if (backdrop) {
-    fireEvent.click(backdrop);
-  }
-});
+  it('Renders with error in graphQL', async () => {
+    returnError = true;
+    graphQLReturnError = true;
+    render(
+      <AppContext.Provider
+        value={{
+          ...AppContextProps,
+          isMobile: true,
+        }}
+      >
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+  });
 
-// it('Renders successfully with quantity change', async () => {
-//   render(
-//     <AppContext.Provider value={AppContextProps}>
-//       <SnackbarProvider>
-//         <ProductPage />
-//       </SnackbarProvider>
-//     </AppContext.Provider>
-//   );
-//   await waitFor(() => expect(screen.getByText('test name', { exact: false })));
-//   const quantitySelector = screen.getByLabelText('quantitySelector');
-//
-//   fireEvent.mouseDown(quantitySelector);
-//   const quantitySelector2 = screen.getByLabelText('Quantity number2');
-//   fireEvent.click(quantitySelector2);
-// });
+  it('Click Backdrop', () => {
+    render(
+      <AppContext.Provider
+        value={{
+          ...AppContextProps,
+          backDropOpen: true,
+          isMobile: true,
+        }}
+      >
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    const backdrop = document.querySelector('.MuiBackdrop-root');
+    if (backdrop) {
+      fireEvent.click(backdrop);
+    }
+  });
+
+  it('Renders successfully with quantity change', async () => {
+    render(
+      <AppContext.Provider
+        value={{
+          ...AppContextProps,
+          isMobile: true,
+        }}
+      >
+        <SnackbarProvider>
+          <ProductPage />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    await waitFor(() => expect(screen.getByText('test name', { exact: false })));
+    const quantitySelector = screen.getByRole('combobox');
+
+    /* https://stackoverflow.com/questions/55184037/react-testing-library-on-change-for-material-ui-select-component */
+    // Open the select dropdown
+    fireEvent.mouseDown(quantitySelector);
+
+    // Wait for the option to be in the document
+    expect(screen.getByRole("listbox")).not.toEqual(null);
+    const listbox = within(screen.getByRole('presentation')).getByRole(
+      'listbox'
+    );
+    const options = within(listbox).getAllByRole('option');
+    const optionValues = options.map((li) => li.getAttribute('data-value'));
+    expect(optionValues).toEqual(['1', '2', '3', '4', '5']);
+    fireEvent.click(options[1]);
+
+    // expect quantity to be 2 on screen
+    expect(screen.getByDisplayValue('2')).toBeTruthy();
+  });
+});
