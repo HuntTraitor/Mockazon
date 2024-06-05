@@ -108,6 +108,7 @@ const MobileCart: React.FC<MobileCartProps> = ({
                         </Typography>
                         <Box className={styles.quantityControlMobile}>
                           <button
+                            aria-label={`Subtract Quantity for ${product.id}`}
                             className={styles.quantityButton}
                             onClick={() =>
                               handleQuantityChange(
@@ -126,6 +127,7 @@ const MobileCart: React.FC<MobileCartProps> = ({
                             {product.quantity}
                           </Typography>
                           <button
+                            aria-label={`Increase Quantity for ${product.id}`}
                             className={styles.quantityButton}
                             onClick={() =>
                               handleQuantityChange(
