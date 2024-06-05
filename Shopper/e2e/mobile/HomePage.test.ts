@@ -1,17 +1,19 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { getRandomEmail, signUp } from './helpers';
+import { getRandomEmail, signUp } from '../helpers';
 
 describe('Next.js App', () => {
   let browser: Browser;
   let page: Page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: true });
+    browser = await puppeteer.launch({ headless: false });
     page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1');
+    await page.setViewport({ width: 375, height: 667 });
   });
 
   afterAll(async () => {
-    await browser.close();
+    // await browser.close();
   });
 
   test('Navigate to home page', async () => {
@@ -27,8 +29,8 @@ describe('Next.js App', () => {
 
   test("Navigate to home page and clicks right arrow on what's new then clicks on a what's new item", async () => {
     await page.goto('http://localhost:3000');
-    await page.waitForSelector('[data-testid="ArrowForwardIosIcon"]');
-    await page.click('[data-testid="ArrowForwardIosIcon"]');
+    await page.waitForSelector('[data-testid="NavigateNextIcon"]');
+    await page.click('[data-testid="NavigateNextIcon"]');
     await new Promise(resolve => setTimeout(resolve, 1000));
     await page.waitForSelector('[aria-label^="What\'s New-"]');
     await page.click('[aria-label^="What\'s New-"]');
@@ -40,12 +42,6 @@ describe('Next.js App', () => {
     await page.waitForSelector('[aria-label^="More Products-"]');
     await page.click('[aria-label^="More Products-"]');
     await page.waitForNavigation();
-  });
-
-  test('Navigate to home page and add a more products item to cart', async () => {
-    await signUp(page, 'Test User', 'password', getRandomEmail());
-    await page.waitForSelector('[aria-label^="Add to cart button"]');
-    await page.click('[aria-label^="Add to cart button"]');
   });
 
   test('Navigate to home page and clicks next page on more products then clicks on a product', async () => {

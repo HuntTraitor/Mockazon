@@ -1,7 +1,6 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { findByTextAndSelector } from './helpers';
 
-describe('Next.js App', () => {
+describe('Shopping cart', () => {
   let browser: Browser;
   let page: Page;
 
@@ -18,7 +17,7 @@ describe('Next.js App', () => {
     await page.goto('http://localhost:3000');
   });
 
-  // test('Clicking translate button', async () => {
+  // test('Adding a product to the shopping cart', async () => {
   //   await page.goto('http://localhost:3000/login');
 
   //   await page.click('a[aria-label="translate-spanish"]');

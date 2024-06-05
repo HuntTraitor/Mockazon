@@ -1,5 +1,4 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { findByTextAndSelector } from '../helpers';
 
 describe('Next.js App', () => {
   let browser: Browser;
@@ -8,6 +7,8 @@ describe('Next.js App', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1');
+    await page.setViewport({ width: 375, height: 667 });
   });
 
   afterAll(async () => {

@@ -1,5 +1,10 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { addFiveItemsToCart, getRandomEmail, signUp } from '../helpers';
+import {
+  addFiveItemsToCart,
+  checkoutAndSeeSuccessPage,
+  getRandomEmail,
+  signUp,
+} from '../helpers';
 
 describe('Next.js App', () => {
   let browser: Browser;
@@ -15,13 +20,10 @@ describe('Next.js App', () => {
     await browser.close();
   });
 
-  // test('True is true', () => {
-  //   expect(true).toBe(true);
-  // });
-
-  test("Navigate to home page and clicks on a what's new item", async () => {
+  test('Adding five items to cart and then checking out', async () => {
     await signUp(page, 'Test User', 'password', getRandomEmail());
     await page.goto('http://localhost:3000');
     await addFiveItemsToCart(page);
+    await checkoutAndSeeSuccessPage(page);
   });
 });

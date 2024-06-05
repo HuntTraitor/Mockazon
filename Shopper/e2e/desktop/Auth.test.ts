@@ -1,10 +1,8 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { getRandomEmail, signUp } from './helpers';
+import { getRandomEmail, signUp } from '../helpers';
 
 const email = getRandomEmail();
 describe('Auth', () => {
-  // set timeout to 10 seconds
-  jest.setTimeout(20000);
   let browser: Browser;
   let page: Page;
 
