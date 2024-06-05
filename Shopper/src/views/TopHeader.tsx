@@ -401,7 +401,7 @@ const TopHeader = () => {
                 }}
               >
                 <List>
-                  {suggestions.map((option, index) => (
+                  {suggestions.splice(0, 5).map((option, index) => (
                     <ListItem
                       button
                       key={option}
