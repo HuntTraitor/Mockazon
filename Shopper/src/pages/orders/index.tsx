@@ -108,7 +108,7 @@ export default function Index() {
         // });
         console.error('Error fetching orders');
       });
-  }, [accessToken, t]);
+  }, [accessToken]);
 
   useEffect(() => {
     if (!orders) {

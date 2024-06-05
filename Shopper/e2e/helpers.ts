@@ -35,19 +35,20 @@ export async function signUp(
   await page.type('div[aria-label="Password"] input', password);
   await page.type('div[aria-label="Re-enter password"] input', password);
   await page.click('button[type="submit"]');
-  await page.waitForNavigation({ timeout: 50000 });}
+  await page.waitForNavigation({ timeout: 50000 });
+}
 
 export function getRandomEmail() {
   return `${randomUUID()}@test.com`;
 }
 
-export async function addFiveItemsToCart(page: Page, mobile=false) {
+export async function addFiveItemsToCart(page: Page, mobile = false) {
   await page.waitForSelector('[aria-label^="Search Mockazon"]');
   await page.type('[aria-label^="Search Mockazon"]', 'Huel');
   await page.click('[aria-label^="Search Button"]');
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  if(!mobile) {
+  if (!mobile) {
     await page.waitForSelector('[aria-label^="Add to cart button"]');
     await page.click('[aria-label^="Add to cart button"]');
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -79,18 +80,16 @@ export async function addFiveItemsToCart(page: Page, mobile=false) {
   await page.waitForSelector('[aria-label^="Quantity Selector for"]');
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  const selectedValue = await page.evaluate((mobile) => {
+  const selectedValue = await page.evaluate(mobile => {
     const selectElement = document.querySelector(
       '[aria-label^="Quantity Selector for"]'
     ) as HTMLSelectElement;
-    if(mobile)
-      return selectElement.textContent;
-    else
-      return selectElement.value;
+    if (mobile) return selectElement.textContent;
+    else return selectElement.value;
   }, mobile);
-  if(mobile){
+  if (mobile) {
     expect(selectedValue).toBe('4');
-  }else{
+  } else {
     expect(selectedValue).toBe('5');
   }
 }
