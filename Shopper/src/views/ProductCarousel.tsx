@@ -5,14 +5,13 @@ import {
   Button,
   CardActionArea,
   Typography,
-  useTheme,
-  useMediaQuery,
 } from '@mui/material';
 import Image from 'next/image';
 import styles from '@/styles/MainPage.module.css';
 import { Product } from '@/graphql/types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useAppContext } from '@/contexts/AppContext';
 
 interface ProductCarouselProps {
   products: Product[];
@@ -27,8 +26,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
 }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const scrollAmount = 1500;
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const {isMobile} = useAppContext();
 
   const handleScroll = (direction: 'prev' | 'next') => {
     if (carouselRef.current) {

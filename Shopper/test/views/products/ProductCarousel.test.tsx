@@ -52,7 +52,7 @@ describe('ProductCarousel', () => {
     render(
       <AppContext.Provider value={AppContextProps}>
         <SnackbarProvider>
-          <ProductCarousel products={products} title={'title of products'} />
+          <ProductCarousel products={products} title={'title of products'} ariaLabel={''} />
         </SnackbarProvider>
       </AppContext.Provider>
     );
@@ -61,7 +61,7 @@ describe('ProductCarousel', () => {
     render(
       <AppContext.Provider value={AppContextProps}>
         <SnackbarProvider>
-          <ProductCarousel products={products} title={'title of products'} />
+          <ProductCarousel products={products} title={'title of products'} ariaLabel={''} />
         </SnackbarProvider>
       </AppContext.Provider>
     );
@@ -71,10 +71,20 @@ describe('ProductCarousel', () => {
     render(
       <AppContext.Provider value={AppContextProps}>
         <SnackbarProvider>
-          <ProductCarousel products={products} title={'title of products'} />
+          <ProductCarousel products={products} title={'title of products'} ariaLabel={''} />
         </SnackbarProvider>
       </AppContext.Provider>
     );
     fireEvent.click(screen.getByLabelText('next button'));
+  });
+
+  it('Renders on mobile', () => {
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <SnackbarProvider>
+          <ProductCarousel products={products} title={'title of products'} ariaLabel={''} />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
   });
 });
