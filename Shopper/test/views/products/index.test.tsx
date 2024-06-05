@@ -773,3 +773,38 @@ it('Renders successfully no query params and mobile set', async () => {
     </AppContext.Provider>
   );
 });
+
+it('Renders successfully query params and mobile set', async () => {
+  queryParams = { active: true };
+  mobile = true;
+  window.matchMedia = jest.fn().mockImplementation(query => {
+    const isSmallScreen = true;
+    AppContextProps.isMobile = true;
+    return {
+      matches: isSmallScreen, // Mock 'sm' breakpoint to always match
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    };
+  });
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      accessToken: 'abc',
+      id: 'abc',
+      name: 'John',
+      role: 'Shopper',
+    })
+  );
+  render(
+    <AppContext.Provider value={AppContextProps}>
+      <SnackbarProvider>
+        <Products />
+      </SnackbarProvider>
+    </AppContext.Provider>
+  );
+});

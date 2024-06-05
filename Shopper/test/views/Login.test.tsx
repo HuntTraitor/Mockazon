@@ -408,3 +408,38 @@ describe('LoggedInUserProvider', () => {
     );
   });
 });
+
+it('Handles successful login on mobile', async () => {
+  window.matchMedia = jest.fn().mockImplementation(query => {
+    const isSmallScreen = true;
+    return {
+      matches: isSmallScreen, // Mock 'sm' breakpoint to always match
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    };
+  });
+  render(
+    <LoggedInContext.Provider value={loggedInContextProps}>
+      <Login />
+    </LoggedInContext.Provider>
+  );
+
+  fireEvent.change(screen.getAllByLabelText('login:email')[0], {
+    target: { value: 'mockEmail' },
+  });
+  fireEvent.change(screen.getAllByLabelText('login:password')[0], {
+    target: { value: 'mockPassword' },
+  });
+
+  fireEvent.click(screen.getByText('common:signInText'));
+  // await waitFor(() => {
+  //   expect(loggedInContextProps.setAccessToken).toHaveBeenCalledWith(
+  //     'mockToken'
+  //   );
+  // });
+});

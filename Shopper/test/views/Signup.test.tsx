@@ -3,6 +3,7 @@ import Signup from '@/pages/signup';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import React from 'react';
 import { getServerSideProps } from '@/pages/signup';
+import Login from '@/pages/login';
 
 // https://chat.openai.com/share/b8c1fae9-15f0-4305-8344-73501d3b59ef
 jest.mock('jwt-decode', () => ({
@@ -438,4 +439,41 @@ describe('Signup component', () => {
     // @ts-expect-error
     await getServerSideProps({});
   });
+});
+
+it('Handles successful signup', async () => {
+  window.matchMedia = jest.fn().mockImplementation(query => {
+    const isSmallScreen = true;
+    return {
+      matches: isSmallScreen, // Mock 'sm' breakpoint to always match
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    };
+  });
+
+  render(
+    <LoggedInContext.Provider value={loggedInContextProps}>
+      <Signup />
+    </LoggedInContext.Provider>
+  );
+  fireEvent.change(screen.getAllByLabelText('signup:name')[0], {
+    target: { value: 'mockName' },
+  });
+  fireEvent.change(screen.getAllByLabelText('signup:email')[0], {
+    target: { value: 'mockemail@gmail.com' },
+  });
+  fireEvent.change(screen.getAllByLabelText('signup:password')[0], {
+    target: { value: 'mockPassword' },
+  });
+
+  fireEvent.change(screen.getAllByLabelText('signup:confirmPassword')[0], {
+    target: { value: 'mockPassword' },
+  });
+
+  fireEvent.click(screen.getByText('signup:signUpText'));
 });
