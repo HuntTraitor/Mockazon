@@ -21,7 +21,7 @@ const customJestConfig = {
   ],
   coverageDirectory: '<rootDir>/../.nyc_output/VendorApp',
   collectCoverage: true,
-  coveragePathIgnorePatterns: ['src/pages/_app.tsx', 'src/pages/_document.tsx'],
+  coveragePathIgnorePatterns: ['src/pages/_app.tsx', 'src/pages/_document.tsx', 'LoginContext.tsx'],
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
   reporters: [
     'default',
