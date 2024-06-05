@@ -31,45 +31,42 @@ describe('Vendor Login', () => {
 
   test('Successful Login', async () => {
     await page.goto('http://localhost:3003/login');
-    await page.click('aria/login-link[role="link"]');
-    const email = await page.$('aria/email-input[role=input]');
-    const password = await page.$('aria/password-input[role=input]');
+    await page.click('aria/login-link');
 
-    if (email && password) {
-      await email.type('victor@books.com');
-      await password.type('victorvendor');
+    await page.type('[aria-label="email-input"] input', 'htratar@ucsc.edu');
+    await page.type('[aria-label="password-input"] input', 'pass');
 
-      await page.click('aria/submit-request[role="button"]');
-      await page.waitForFunction(() => {
-        const element = document.querySelector('body');
-        return (
-          element &&
-          element.textContent &&
-          element.textContent.includes('API Keys')
-        );
-      });
-    }
+    await page.click('aria/submit-request');
+    await page.waitForNavigation();
+    await page.waitForFunction(() => {
+      const element = document.querySelector('body');
+      return (
+        element &&
+        element.textContent &&
+        element.textContent.includes('API Keys')
+      );
+    });
   });
 
   test('Unsuccessful Login', async () => {
     await page.goto('http://localhost:3003/login');
-    await page.click('aria/login-link[role="link"]');
-    const email = await page.$('aria/email-input[role=input]');
-    const password = await page.$('aria/password-input[role=input]');
+    await page.click('aria/login-link');
 
-    if (email && password) {
-      await email.type('asdfasdfasdf@books.com');
-      await password.type('a');
+    await page.type(
+      '[aria-label="email-input"] input',
+      'victorlasdfsadlkfasldkf@books.com'
+    );
+    await page.type('[aria-label="password-input"] input', 'asdfaslkfdjasdojf');
 
-      await page.click('aria/submit-request[role="button"]');
-      await page.waitForFunction(() => {
-        const element = document.querySelector('body');
-        return (
-          element &&
-          element.textContent &&
-          element.textContent.includes('Login Unsuccessful, please try again!')
-        );
-      });
-    }
+    await page.click('aria/submit-request');
+
+    await page.waitForFunction(() => {
+      const element = document.querySelector('body');
+      return (
+        element &&
+        element.textContent &&
+        element.textContent.includes('Login Unsuccessful, please try again!')
+      );
+    });
   });
 });
