@@ -134,6 +134,7 @@ const DesktopCart: React.FC<DesktopCartProps> = ({
                           >
                             <Box className={styles.cardToolbar}>
                               <select
+                                aria-label={`Quantity Selector for ${product.id}`}
                                 className={styles.quantityDropdown}
                                 value={product.quantity}
                                 onChange={e =>
