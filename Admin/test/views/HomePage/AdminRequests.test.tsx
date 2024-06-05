@@ -53,6 +53,25 @@ const handlers = [
       },
     });
   }),
+  graphql.mutation('rejectVendor', ({ query /*, variables*/ }) => {
+    console.log(query);
+    if (approveError) {
+      return HttpResponse.json({
+        errors: [{ message: 'Some Error' }],
+      });
+    }
+    return HttpResponse.json({
+      data: {
+        approveVendor: {
+          id: 1,
+          email: 'rejected@email.com',
+          name: 'rejected account',
+          role: 'rejected',
+          suspended: false,
+        },
+      },
+    });
+  }),
 ];
 
 const server = setupServer(...handlers);

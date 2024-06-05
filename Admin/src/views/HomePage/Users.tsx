@@ -74,57 +74,57 @@ export function Users() {
     // eslint-disable-next-line
   }, [accessToken, refetch]);
 
-  const handleSuspendUser = (userId: number) => {
-    const query = {
-      query: `mutation suspendAccount{suspendAccount(id: "${userId}") {
-        id name role suspended
-      }}`
-    }
+  // const handleSuspendUser = (userId: number) => {
+  //   const query = {
+  //     query: `mutation suspendAccount{suspendAccount(id: "${userId}") {
+  //       id name role suspended
+  //     }}`
+  //   }
 
-    fetch(`${basePath}/api/graphql`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
-      },
-      body: JSON.stringify(query),
-    })
-    .then(res => {
-      return res.json()
-    })
-    .then(() => {
-      setRefetch(true)
-    })
-    .catch(e => {
-      console.error(e)
-    })
-  };
+  //   fetch(`${basePath}/api/graphql`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${accessToken}`
+  //     },
+  //     body: JSON.stringify(query),
+  //   })
+  //   .then(res => {
+  //     return res.json()
+  //   })
+  //   .then(() => {
+  //     setRefetch(true)
+  //   })
+  //   .catch(e => {
+  //     console.error(e)
+  //   })
+  // };
 
-  const handleResumeUser = (userId: number) => {
-    const query = {
-      query: `mutation resumeAccount{resumeAccount(id: "${userId}") {
-        id name role suspended
-      }}`
-    }
+  // const handleResumeUser = (userId: number) => {
+  //   const query = {
+  //     query: `mutation resumeAccount{resumeAccount(id: "${userId}") {
+  //       id name role suspended
+  //     }}`
+  //   }
 
-    fetch(`${basePath}/api/graphql`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
-      },
-      body: JSON.stringify(query),
-    })
-    .then(res => {
-      return res.json()
-    })
-    .then(() => {
-      setRefetch(true)
-    })
-    .catch(e => {
-      console.error(e)
-    })
-  }
+  //   fetch(`${basePath}/api/graphql`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${accessToken}`
+  //     },
+  //     body: JSON.stringify(query),
+  //   })
+  //   .then(res => {
+  //     return res.json()
+  //   })
+  //   .then(() => {
+  //     setRefetch(true)
+  //   })
+  //   .catch(e => {
+  //     console.error(e)
+  //   })
+  // }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', padding: 3 }}>
@@ -145,7 +145,7 @@ export function Users() {
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Role</TableCell>
-                <TableCell>Action</TableCell>
+                {/* <TableCell>Action</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -154,7 +154,7 @@ export function Users() {
                   <TableCell>{account.name}</TableCell>
                   <TableCell>{account.email}</TableCell>
                   <TableCell>{account.role}</TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     {account.suspended ? (
                       <Button
                       variant="outlined"
@@ -171,7 +171,7 @@ export function Users() {
                       >
                         Suspend
                       </Button>}
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>

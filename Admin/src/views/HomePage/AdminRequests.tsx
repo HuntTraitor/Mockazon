@@ -128,9 +128,6 @@ export function AdminRequests() {
         console.log(json)
         setRefetch(true)
       })
-      .catch(e => {
-        console.error(e)
-      })
   };
 
   return (
