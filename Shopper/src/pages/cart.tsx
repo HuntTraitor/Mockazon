@@ -1,4 +1,3 @@
-import { useTheme, useMediaQuery } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -13,6 +12,7 @@ import { Product, ProductFromFetch } from '../../types';
 import { enqueueSnackbar } from 'notistack';
 import DesktopCart from '@/views/cart/DesktopCart';
 import MobileCart from '@/views/cart/MobileCart';
+import { useAppContext } from '@/contexts/AppContext';
 
 const namespaces = [
   'products',
@@ -38,8 +38,7 @@ const Cart = ({ locale }: { locale: string }) => {
   const [subtotal, setSubtotal] = useState(0.0);
   const { user, accessToken } = useContext(LoggedInContext);
   const router = useRouter();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { isMobile } = useAppContext();
 
   // https://chat.openai.com/share/66cd884d-cc95-4e82-8b4f-a4d035f844af
   // https://chat.openai.com/share/86f158f1-110e-4905-ac4a-85ae8282f2c2
