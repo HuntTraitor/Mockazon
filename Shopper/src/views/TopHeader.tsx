@@ -154,26 +154,23 @@ const TopHeader = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [suggestionClicked, search]);
 
+  const disableDocumentKeydown = (event: KeyboardEvent) => {
+    if (['ArrowUp', 'ArrowDown', 'Tab'].includes(event.key)) {
+      event.preventDefault();
+    }
+  };
+
   const handleFocus = () => {
     setFocused(true);
     setBackDropOpen(true);
 
-    const disableDocumentKeydown = (event: KeyboardEvent) => {
-      if (['ArrowUp', 'ArrowDown', 'Tab'].includes(event.key)) {
-        event.preventDefault();
-      }
-    };
-
     document.addEventListener('keydown', disableDocumentKeydown);
-
-    return () => {
-      document.removeEventListener('keydown', disableDocumentKeydown);
-    };
   };
 
   const handleBlur = () => {
     setFocused(false);
     setBackDropOpen(false);
+    document.removeEventListener('keydown', disableDocumentKeydown);
   };
 
   const handleSearch = () => {
@@ -232,20 +229,6 @@ const TopHeader = () => {
       setDisplayedValue(search);
     }
   }, [suggestionIndex, suggestions, search]);
-
-  useEffect(() => {
-    const handleRouteChange = () => {
-      setFocused(false);
-      if (inputRef.current) {
-        inputRef.current.blur();
-      }
-    };
-
-    router.events.on('routeChangeStart', handleRouteChange);
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChange);
-    };
-  }, [router.events]);
 
   return (
     <Box
@@ -364,6 +347,7 @@ const TopHeader = () => {
                             setSuggestionIndex(-1);
                           }}
                           size="small"
+                          aria-label='Clear Search Input'
                           className={styles.clearIndicator}
                         >
                           <ClearIcon sx={{ width: '19px' }} />
@@ -421,6 +405,7 @@ const TopHeader = () => {
                     <ListItem
                       button
                       key={option}
+                      aria-label={option}
                       onMouseDown={() => handleSuggestionClick(option)}
                       sx={{
                         display: 'flex',
@@ -510,6 +495,7 @@ const TopHeader = () => {
             <Box sx={{ width: '100%' }}>
               <CustomTextField
                 inputRef={inputRef}
+                aria-label={t('searchPlaceholder') as string}
                 placeholder={t('searchPlaceholder') as string}
                 InputProps={{
                   onChange: e => {
@@ -528,6 +514,7 @@ const TopHeader = () => {
                             setSuggestionIndex(-1);
                           }}
                           size="small"
+                          aria-label='Clear Search Input'
                           className={styles.clearIndicator}
                         >
                           <ClearIcon sx={{ width: '19px' }} />
@@ -581,6 +568,7 @@ const TopHeader = () => {
                     <ListItem
                       button
                       key={option}
+                      aria-label={option}
                       onMouseDown={() => handleSuggestionClick(option)}
                       sx={{
                         display: 'flex',
