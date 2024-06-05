@@ -79,5 +79,4 @@ describe('Auth', () => {
     expect(dialogHandler).not.toHaveBeenCalled();
   });
 
-  // FIXME: E2E tests for google oauth, shouldn't implement?
 });
