@@ -4,12 +4,13 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { Product } from '@/graphql/types';
-import { Link, Box, useTheme, useMediaQuery } from '@mui/material';
+import { Link, Box } from '@mui/material';
 import Price from './Price';
 import DeliveryText from './DeliveryText';
 import AddToCartButton from './AddToCartButton';
 import { useTranslation } from 'next-i18next';
 import styles from '@/styles/ProductCard.module.css';
+import { useAppContext } from '@/contexts/AppContext';
 
 interface ProductProps {
   product: Product;
@@ -19,8 +20,7 @@ interface ProductProps {
 export default function ProductCard({ product, ariaLabel }: ProductProps) {
   const { t } = useTranslation('viewProduct');
   const price = product.data.price.toFixed(2).toString();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { isMobile } = useAppContext();
 
   // Set the maximum number of characters for the product name
   const maxCharacters = isMobile ? 20 : 40;

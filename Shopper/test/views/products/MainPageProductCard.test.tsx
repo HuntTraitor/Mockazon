@@ -91,28 +91,58 @@ const mockProductWithLongName = {
   },
 };
 
-it('Loads product', async () => {
-  render(
-    <AppContext.Provider value={AppContextProps}>
-      <SnackbarProvider>
-        <MainPageProductCard product={mockProduct} />
-      </SnackbarProvider>
-    </AppContext.Provider>
-  );
-  expect(screen.getByText(mockProduct.data.name)).toBeInTheDocument();
+describe('Desktop', () => {
+  it('Loads product', async () => {
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <SnackbarProvider>
+          <MainPageProductCard product={mockProduct} ariaLabel={''} />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    expect(screen.getByText(mockProduct.data.name)).toBeInTheDocument();
+  });
+
+  it('Loads product with truncated name', async () => {
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <SnackbarProvider>
+          <MainPageProductCard product={mockProductWithLongName} ariaLabel={''} />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    expect(
+      screen.getByText('Test product nameTest product nameTest p...', {
+        exact: false,
+      })
+    ).toBeInTheDocument();
+  });
 });
 
-it('Loads product with truncated name', async () => {
-  render(
-    <AppContext.Provider value={AppContextProps}>
-      <SnackbarProvider>
-        <MainPageProductCard product={mockProductWithLongName} />
-      </SnackbarProvider>
-    </AppContext.Provider>
-  );
-  expect(
-    screen.getByText('Test product nameTest product nameTest p...', {
-      exact: false,
-    })
-  ).toBeInTheDocument();
+describe('Mobile', () => {
+  it('Loads product on mobile', async () => {
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <SnackbarProvider>
+          <MainPageProductCard product={mockProduct} ariaLabel={''} />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    expect(screen.getByText(mockProduct.data.name)).toBeInTheDocument();
+  });
+
+  it('Loads product with truncated name on mobile', async () => {
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <SnackbarProvider>
+          <MainPageProductCard product={mockProductWithLongName} ariaLabel={''} />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+    expect(
+      screen.getByText('Test product nameTes...', {
+        exact: false,
+      })
+    ).toBeInTheDocument();
+  });
 });
