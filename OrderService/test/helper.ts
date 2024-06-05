@@ -1,4 +1,4 @@
-import { Order, NewOrder, UpdateOrder } from '../src/order';
+import { Order, NewOrder, UpdateOrder, ShopperOrder } from '../src/order';
 
 import * as http from 'http';
 
@@ -34,6 +34,21 @@ const validateOrder = (order: Order) => {
   expect(order.data.purchaseDate).toBeDefined();
   expect(order.data.shipped).toBeDefined();
   expect(order.data.delivered).toBeDefined();
+};
+
+const validateShopperOrder = (order: ShopperOrder) => {
+  expect(order).toBeDefined();
+  expect(order.tax).toBeDefined();
+  expect(order.total).toBeDefined();
+  expect(order.shipped).toBeDefined();
+  expect(order.subtotal).toBeDefined();
+  expect(order.createdAt).toBeDefined();
+  expect(order.delivered).toBeDefined();
+  expect(order.deliveryTime).toBeDefined();
+  expect(order.paymentDigits).toBeDefined();
+  expect(order.paymentMethod).toBeDefined();
+  expect(order.paymentBrand).toBeDefined();
+  expect(order.shippingAddress).toBeDefined();
 };
 
 const validateNewOrder = (order: NewOrder) => {
@@ -80,4 +95,5 @@ export {
   compareOrders,
   compareNewOrders,
   compareUpdateOrders,
+  validateShopperOrder,
 };
