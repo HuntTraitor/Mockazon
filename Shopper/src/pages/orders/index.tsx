@@ -18,7 +18,6 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 import getConfig from 'next/config';
 import { useTranslation } from 'next-i18next';
-import { enqueueSnackbar } from 'notistack';
 import Layout from '@/components/Layout';
 import { ReactElement } from 'react';
 const { basePath } = getConfig().publicRuntimeConfig;

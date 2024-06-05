@@ -62,13 +62,13 @@ export class AdminController extends Controller {
 
   // suspend an existing account
   @Put("account/{id}/suspend")
-  public async suspend(id: UUID): Promise<User|undefined> {
+  public async suspend(id: UUID): Promise<User | undefined> {
     return new AdminService().suspend(id);
   }
 
   // resume a suspended account
   @Put("account/{id}/resume")
-  public async resume(id: UUID): Promise<User|undefined> {
+  public async resume(id: UUID): Promise<User | undefined> {
     return new AdminService().resume(id);
   }
 

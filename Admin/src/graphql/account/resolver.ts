@@ -20,18 +20,18 @@ export class AccountResolver {
   @Authorized('admin')
   @Mutation(() => Account)
   async rejectVendor(@Arg('VendorId') vendorId: string): Promise<Account> {
-    return new AccountService().reject(vendorId)
+    return new AccountService().reject(vendorId);
   }
 
   @Authorized('admin')
   @Mutation(() => Account)
   async suspendAccount(@Arg('id') id: string): Promise<Account> {
-    return new AccountService().suspend(id)
+    return new AccountService().suspend(id);
   }
 
   @Authorized('admin')
   @Mutation(() => Account)
   async resumeAccount(@Arg('id') id: string): Promise<Account> {
-    return new AccountService().resume(id)
+    return new AccountService().resume(id);
   }
 }

@@ -83,9 +83,9 @@ const handlers = [
   ),
   rest.put(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/account/someId/suspend`,
-    async() => {
+    async () => {
       if (error) {
-        return new HttpResponse(null, {status: 500})
+        return new HttpResponse(null, { status: 500 });
       } else {
         return HttpResponse.json(
           {
@@ -96,15 +96,15 @@ const handlers = [
             suspended: true,
           },
           { status: 200 }
-        )
+        );
       }
     }
   ),
   rest.put(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3014/api/v0/admin/account/someId/resume`,
-    async() => {
+    async () => {
       if (error) {
-        return new HttpResponse(null, {status: 500})
+        return new HttpResponse(null, { status: 500 });
       } else {
         return HttpResponse.json(
           {
@@ -115,7 +115,7 @@ const handlers = [
             suspended: false,
           },
           { status: 200 }
-        )
+        );
       }
     }
   ),
@@ -189,7 +189,7 @@ it('approve an existing vendor request', async () => {
     });
 });
 
-it('Rejects an exisitng vendor request', async() => {
+it('Rejects an exisitng vendor request', async () => {
   await supertest(server)
     .post('/api/graphql')
     .set('Authorization', 'Bearer someToken')
@@ -204,7 +204,7 @@ it('Rejects an exisitng vendor request', async() => {
     });
 });
 
-it('Suspends an account', async() => {
+it('Suspends an account', async () => {
   await supertest(server)
     .post('/api/graphql')
     .set('Authorization', 'Bearer someToken')
@@ -218,9 +218,9 @@ it('Suspends an account', async() => {
       expect(res.body.data).toHaveProperty('suspendAccount');
       expect(res.body.data.suspendAccount).toBeDefined();
     });
-})
+});
 
-it('Resumes an account', async() => {
+it('Resumes an account', async () => {
   await supertest(server)
     .post('/api/graphql')
     .set('Authorization', 'Bearer someToken')
@@ -234,8 +234,7 @@ it('Resumes an account', async() => {
       expect(res.body.data).toHaveProperty('resumeAccount');
       expect(res.body.data.resumeAccount).toBeDefined();
     });
-})
-
+});
 
 it('approve an existing vendor request with error', async () => {
   error = true;

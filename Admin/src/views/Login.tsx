@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LoginContext } from '../contexts/Login';
 import getConfig from 'next/config';
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -130,7 +130,7 @@ const Login = () => {
               name="login-button"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2}}
+              sx={{ mt: 3, mb: 2 }}
               className={styles.signInButton}
             >
               Sign In

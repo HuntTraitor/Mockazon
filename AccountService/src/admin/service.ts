@@ -4,7 +4,6 @@ import { Credentials, Authenticated } from "../types";
 import { SessionUser } from "../types";
 import * as jwt from "jsonwebtoken";
 import { Vendor } from "../vendor";
-import { Account } from "../types";
 
 export class AdminService {
   public async login(
@@ -124,7 +123,7 @@ export class AdminService {
     return users;
   }
 
-  public async suspend(id: UUID): Promise<User|undefined> {
+  public async suspend(id: UUID): Promise<User | undefined> {
     let user: User;
     const shopperQuery = {
       text: "UPDATE shopper SET data = jsonb_set(data, '{suspended}', to_jsonb(true), false) WHERE id = $1 RETURNING *",
@@ -149,7 +148,7 @@ export class AdminService {
           role: vendorResult.rows[0].data.role,
           suspended: vendorResult.rows[0].data.suspended,
         };
-        return user
+        return user;
       } else if (vendorResult.rowCount === 0) {
         user = {
           id: shopperResult.rows[0].id,
@@ -158,7 +157,7 @@ export class AdminService {
           role: shopperResult.rows[0].data.role,
           suspended: shopperResult.rows[0].data.suspended,
         };
-        return user
+        return user;
       }
     } catch (error) {
       console.error(error);
@@ -166,7 +165,7 @@ export class AdminService {
     }
   }
 
-  public async resume(id: UUID): Promise<User|undefined> {
+  public async resume(id: UUID): Promise<User | undefined> {
     let user: User;
     const shopperQuery = {
       text: "UPDATE shopper SET data = jsonb_set(data, '{suspended}', to_jsonb(false), false) WHERE id = $1 RETURNING *",
@@ -191,7 +190,7 @@ export class AdminService {
           role: vendorResult.rows[0].data.role,
           suspended: vendorResult.rows[0].data.suspended,
         };
-        return user
+        return user;
       } else if (vendorResult.rowCount === 0) {
         user = {
           id: shopperResult.rows[0].id,
@@ -200,7 +199,7 @@ export class AdminService {
           role: shopperResult.rows[0].data.role,
           suspended: shopperResult.rows[0].data.suspended,
         };
-        return user
+        return user;
       }
     } catch (error) {
       console.error(error);

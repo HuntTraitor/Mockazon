@@ -95,7 +95,7 @@ it('Renders table', async () => {
 it('Approve button for request with ID 1 is clickable', async () => {
   render(<AdminRequests />);
   const approveButtonForRequest1 =
-  await screen.findByTestId('approve-request-1');
+    await screen.findByTestId('approve-request-1');
   fireEvent.click(approveButtonForRequest1);
   expect(approveButtonForRequest1).not.toBeNull();
 });

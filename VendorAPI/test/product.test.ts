@@ -11,5 +11,5 @@ test('Authorized user can fetch product', async () => {
   await supertest(server)
     .get('/v0/product/')
     .set('x-api-key', `bf582726-1927-4604-8d94-7f1540a7eb37`)
-    .expect(200)
+    .expect(200);
 });

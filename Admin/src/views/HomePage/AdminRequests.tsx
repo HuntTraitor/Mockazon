@@ -67,7 +67,7 @@ export function AdminRequests() {
   const { refetch, setRefetch } = useContext(RefetchContext);
 
   React.useEffect(() => {
-    console.log("refetched...")
+    console.log('refetched...');
     fetchRequests(setRequests, accessToken);
     setRefetch(false);
 
@@ -116,18 +116,18 @@ export function AdminRequests() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(query),
     })
       .then(res => {
-        console.log(res)
-        return res.json()
+        console.log(res);
+        return res.json();
       })
-      .then((json) => {
-        console.log(json)
-        setRefetch(true)
-      })
+      .then(json => {
+        console.log(json);
+        setRefetch(true);
+      });
   };
 
   return (
@@ -176,13 +176,13 @@ export function AdminRequests() {
                       variant="outlined"
                       color="error"
                       data-testid={`reject-request-${request.id}`}
-                      onClick={(() => {
+                      onClick={() => {
                         handleRejectRequest(
                           request.id,
                           accessToken,
                           setRefetch
-                        )
-                      })}
+                        );
+                      }}
                     >
                       Reject
                     </Button>
