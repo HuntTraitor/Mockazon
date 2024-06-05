@@ -132,6 +132,7 @@ export function SignupForm({ navigate }: LoginFormProps) {
             <TextField
               required
               fullWidth
+              role="input"
               name="repeatpassword"
               type="password"
               id="repeatpassword"
