@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/dom';
 import puppeteer, { Browser, Page } from 'puppeteer';
 
-describe('Next.js App', () => {
+describe('Vendor Signup', () => {
   let browser: Browser;
   let page: Page;
   /**
