@@ -124,7 +124,6 @@ describe('Vendor Get Orders', () => {
   // test('Gets all order bad account id 400', async () => {
   //   await supertest(server).get(`/api/v0/order?accountId=123123`).expect(400);
   // });
-
 });
 
 describe('Shopper Get Orders', () => {
@@ -180,12 +179,13 @@ describe('Shopper Get Orders', () => {
         .expect(201);
     }
 
-    const response = await supertest(server).get(`/api/v0/order/shopperOrder?shopperId=${shopper_id}`).expect(200);
+    const response = await supertest(server)
+      .get(`/api/v0/order/shopperOrder?shopperId=${shopper_id}`)
+      .expect(200);
     expect(response.body).toBeDefined();
     expect(response.body.length).toBe(newShopperOrders.length);
     for (const shopperOrder of response.body) {
       validateShopperOrder(shopperOrder);
     }
   });
-
 });

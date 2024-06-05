@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, useMediaQuery, useTheme } from '@mui/material';
+import { Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -12,6 +12,7 @@ import AppBackDrop from '@/components/AppBackdrop';
 import getConfig from 'next/config';
 import { enqueueSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
+import { useAppContext } from '@/contexts/AppContext';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -120,8 +121,7 @@ const OrderView: React.FC = () => {
   const { id } = router.query;
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { isMobile } = useAppContext();
   const { t } = useTranslation('order');
 
   useEffect(() => {
@@ -143,7 +143,7 @@ const OrderView: React.FC = () => {
     }
   }, [id, order, router, t]);
 
-  if (loading || !order) return <TopNav />;
+  if (loading) return <TopNav />;
 
   return (
     <>
@@ -154,7 +154,7 @@ const OrderView: React.FC = () => {
       >
         <OrderDetails order={order} />
       </Container>
-      <OrderCard order={order} />
+      <OrderCard order={order!} />
       <AppBackDrop />
     </>
   );

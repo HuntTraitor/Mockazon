@@ -3,6 +3,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { AppContext } from '@/contexts/AppContext';
 import debounce from 'lodash/debounce';
+import userEvent from '@testing-library/user-event';
+import { LoggedInContext } from '@/contexts/LoggedInUserContext';
 
 const pushMock = jest.fn();
 const locale = 'en';
@@ -73,7 +75,7 @@ const AppContextProps = {
 
 jest.mock('lodash/debounce', () => jest.fn(fn => fn));
 
-describe('Top Header', () => {
+describe('Top Header Desktop', () => {
   beforeEach(() => {
     pushMock.mockClear();
   });
@@ -97,6 +99,29 @@ describe('Top Header', () => {
     expect(pushMock).toHaveBeenCalledWith('/login');
   });
 
+  it('Clicking on orders navigates to orders page, signed in', async () => {
+    render(
+      <LoggedInContext.Provider
+        value={{
+          accessToken: 'test',
+          setAccessToken: jest.fn(),
+          location: '',
+          setLocation: jest.fn(),
+          locale: '',
+          setLocale: jest.fn(),
+          user: { accessToken: 'test', id: '1', name: 'test', role: 'shopper' },
+          setUser: jest.fn(),
+        }}
+      >
+        <AppContext.Provider value={AppContextProps}>
+          <TopHeader />
+        </AppContext.Provider>
+      </LoggedInContext.Provider>
+    );
+    fireEvent.click(screen.getByLabelText('Orders Button'));
+    expect(pushMock).toHaveBeenCalledWith('/orders');
+  });
+
   it('Clicking on the cart navigates to the login page when not signed in', async () => {
     render(
       <AppContext.Provider value={AppContextProps}>
@@ -106,6 +131,29 @@ describe('Top Header', () => {
     const cart = screen.getByLabelText('Cart Button');
     cart.click();
     expect(pushMock).toHaveBeenCalledWith('/login');
+  });
+
+  it('Clicking on cart while signed in navigates to the cart page', async () => {
+    render(
+      <LoggedInContext.Provider
+        value={{
+          accessToken: 'test',
+          setAccessToken: jest.fn(),
+          location: '',
+          setLocation: jest.fn(),
+          locale: '',
+          setLocale: jest.fn(),
+          user: { accessToken: 'test', id: '1', name: 'test', role: 'shopper' },
+          setUser: jest.fn(),
+        }}
+      >
+        <AppContext.Provider value={AppContextProps}>
+          <TopHeader />
+        </AppContext.Provider>
+      </LoggedInContext.Provider>
+    );
+    fireEvent.click(screen.getByLabelText('Cart Button'));
+    expect(pushMock).toHaveBeenCalledWith('/cart');
   });
 
   it('Typing in search bar fetches suggestions', async () => {
@@ -139,6 +187,353 @@ describe('Top Header', () => {
     // await waitFor(() =>
     //   expect(screen.getByText('test product 2')).toBeInTheDocument()
     // );
+
+    fetchMock.mockRestore();
+  });
+
+  it('Typing in search bar highlights suggestions', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it('Typing in search bar with no suggestions', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: [],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'potato');
+    }
+
+    await waitFor(() => {
+      expect(screen.queryByLabelText('test product 1')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('second test product 2')
+      ).not.toBeInTheDocument();
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it('Clicking on a suggestion searches for the product', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+    const suggestion = screen.getByLabelText('test product 1');
+    fireEvent.mouseDown(suggestion);
+    await waitFor(() => expect(pushMock).toHaveBeenCalled());
+
+    fetchMock.mockRestore();
+  });
+
+  it('Using arrow keys to navigate suggestions', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+
+    userEvent.keyboard('{arrowdown}');
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('test product 1')).toBeInTheDocument();
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it('Removing focus from search bar hides suggestions', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+
+    if (searchInput) {
+      fireEvent.blur(searchInput);
+    }
+    await waitFor(() => {
+      expect(screen.queryByLabelText('test product 1')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('second test product 2')
+      ).not.toBeInTheDocument();
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it('Arrow keys and enter key select a suggestion', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+
+    userEvent.keyboard('{arrowdown}');
+    userEvent.keyboard('{arrowdown}');
+    userEvent.keyboard('{arrowup}');
+    userEvent.keyboard('{enter}');
+    await waitFor(() => expect(pushMock).toHaveBeenCalled());
+
+    fetchMock.mockRestore();
+  });
+
+  it('Clicking the clear button clears the search bar', async () => {
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+    const clearButton = screen.getByLabelText('Clear Search Input');
+    fireEvent.click(clearButton);
+    await waitFor(() =>
+      expect(screen.getByPlaceholderText('Search Mockazon')).toHaveValue('')
+    );
+  });
+
+  it('Enter key searches for the product', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+
+    userEvent.keyboard('{enter}');
+    await waitFor(() => expect(pushMock).toHaveBeenCalled());
+
+    fetchMock.mockRestore();
+  });
+
+  it('Pressing tab key hides suggestions', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+
+    userEvent.keyboard('{arrowdown}');
+    userEvent.keyboard('{tab}');
+    await waitFor(() => {
+      expect(screen.queryByLabelText('test product 1')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('second test product 2')
+      ).not.toBeInTheDocument();
+    });
 
     fetchMock.mockRestore();
   });
@@ -256,4 +651,265 @@ describe('Top Header', () => {
   //   expect(consoleSpy).toHaveBeenCalled();
   //   // FIXME: This test will need to be updated when the address editor is implemented
   // });
+});
+
+describe('Top Header Mobile', () => {
+  beforeEach(() => {
+    pushMock.mockClear();
+  });
+
+  it('Renders successfully', async () => {
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+    await screen.getByLabelText('Cart Button');
+  });
+
+  it('Clicking on the cart navigates to the login page when not signed in', async () => {
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+    const cart = screen.getByLabelText('Cart Button');
+    cart.click();
+    expect(pushMock).toHaveBeenCalledWith('/login');
+  });
+
+  it('Clicking on cart while signed in navigates to the cart page', async () => {
+    render(
+      <LoggedInContext.Provider
+        value={{
+          accessToken: 'test',
+          setAccessToken: jest.fn(),
+          location: '',
+          setLocation: jest.fn(),
+          locale: '',
+          setLocale: jest.fn(),
+          user: { accessToken: 'test', id: '1', name: 'test', role: 'shopper' },
+          setUser: jest.fn(),
+        }}
+      >
+        <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+          <TopHeader />
+        </AppContext.Provider>
+      </LoggedInContext.Provider>
+    );
+    const cart = screen.getByLabelText('Cart Button');
+    cart.click();
+    expect(pushMock).toHaveBeenCalledWith('/cart');
+  });
+
+  it('Typing in search bar fetches suggestions', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() =>
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getProducts: [
+                { data: { name: 'test product 1' } },
+                { data: { name: 'test product 2' } },
+              ],
+            },
+          }),
+          { status: 200 }
+        )
+      )
+    );
+
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+    const searchInput = screen.getByPlaceholderText('Search Mockazon');
+    fireEvent.change(searchInput, { target: { value: 'test' } });
+    await waitFor(() => expect(debounce).toHaveBeenCalled());
+    // await waitFor(() =>
+    //   expect(screen.getByText('test product 1')).toBeInTheDocument()
+    // );
+    // await waitFor(() =>
+    //   expect(screen.getByText('test product 2')).toBeInTheDocument()
+    // );
+
+    fetchMock.mockRestore();
+  });
+
+  it('Typing in search bar highlights suggestions', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it('Typing in search bar with no suggestions', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: [],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'potato');
+    }
+
+    await waitFor(() => {
+      expect(screen.queryByLabelText('test product 1')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('second test product 2')
+      ).not.toBeInTheDocument();
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it('Clicking on clear button clears the search bar', async () => {
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+    const clearButton = screen.getByLabelText('Clear Search Input');
+    fireEvent.click(clearButton);
+    await waitFor(() =>
+      expect(screen.getByPlaceholderText('Search Mockazon')).toHaveValue('')
+    );
+  });
+
+  it('Clicking on a suggestion searches for the product', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+
+    const suggestion = screen.getByLabelText('test product 1');
+    fireEvent.mouseDown(suggestion);
+    await waitFor(() => expect(pushMock).toHaveBeenCalled());
+
+    fetchMock.mockRestore();
+  });
+
+  it('Using arrow keys to navigate suggestions', async () => {
+    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              getSearchSuggestions: ['test product 1', 'second test product 2'],
+            },
+          }),
+          { status: 200 }
+        )
+      );
+    });
+
+    render(
+      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+        <TopHeader />
+      </AppContext.Provider>
+    );
+
+    const searchInput = screen
+      .getByLabelText('Search Mockazon')
+      .querySelector('input');
+    if (searchInput) {
+      await userEvent.type(searchInput, 'test');
+    }
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('second test product 2')
+      ).toBeInTheDocument();
+    });
+
+    userEvent.keyboard('{arrowdown}');
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('test product 1')).toBeInTheDocument();
+    });
+
+    fetchMock.mockRestore();
+  });
 });

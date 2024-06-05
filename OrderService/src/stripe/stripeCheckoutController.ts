@@ -17,9 +17,6 @@ export class StripeCheckoutController extends Controller {
       sessionInput.origin,
       sessionInput.locale
     );
-    if ('status' in result && result.status) {
-      this.setStatus(result.status);
-    }
     return result;
   }
 }
