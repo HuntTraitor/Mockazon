@@ -36,6 +36,7 @@ describe('Vendor API Keys', () => {
 
   test('Keys Visible', async () => {
     await page.goto('http://localhost:3003/login');
+    await page.waitForSelector('aria/login-link');
     await page.click('aria/login-link');
 
     await page.type('[aria-label="email-input"] input', 'htratar@ucsc.edu');
