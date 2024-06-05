@@ -3,7 +3,7 @@ import { graphql, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from '../../api/requestHandler';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import Individual from '../../../src/pages/orders/[id]';
 import { getServerSideProps } from '@/pages/orders/[id]';
 import { LoggedInContext, User } from '@/contexts/LoggedInUserContext';
@@ -11,6 +11,7 @@ import { AppContext } from '@/contexts/AppContext';
 import { enqueueSnackbar } from 'notistack';
 import React from 'react';
 import { randomUUID } from 'crypto';
+import { screen, waitFor } from '@testing-library/dom';
 
 jest.mock('next/router', () => ({
   useRouter: () => ({
@@ -71,11 +72,21 @@ const handlers = [
           data: {
             getOrder: {
               id: 'testId',
-              paymentDigits: '1234',
+              createdAt: '2021-12-12',
+              shippingAddress: {
+                name: 'testName',
+                addressLine1: 'testAddressLine1',
+                city: 'testCity',
+                state: 'testState',
+                postalCode: 'testPostalCode',
+                country: 'testCountry',
+              },
+              paymentMethod: 'Credit Card',
+              paymentDigits: 1234,
               paymentBrand: 'Visa',
               subtotal: 100,
+              totalBeforeTax: 90,
               tax: 10,
-              total: 110,
               shipped: true,
               delivered: true,
               deliveryTime: '2021-12-12',
@@ -84,16 +95,18 @@ const handlers = [
                   id: 'testId',
                   quantity: 1,
                   data: {
-                    name: 'testName',
                     brand: 'testBrand',
-                    image: 'testImage',
+                    name: 'testName',
+                    rating: '5',
                     price: 100,
-                    rating: 5,
-                    description: 'testDescription',
                     deliveryDate: '2021-12-12',
+                    image: 'testImage',
+                    description: 'testDescription',
                   },
                 },
               ],
+              quantities: [1],
+              total: 110,
             },
           },
         },
@@ -113,6 +126,9 @@ beforeAll(async () => {
 
 beforeEach(() => {
   microServices.resetHandlers();
+  errorInGetOrder = false;
+  errorInGetOrderGraphQL = false;
+  renderWithNullOrder = false;
 });
 
 afterAll(done => {
@@ -186,6 +202,12 @@ it('Renders successfully', async () => {
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
+
+  await waitFor(() => {
+    const elements = screen.queryAllByText('testName', { exact: false });
+    expect(elements).toHaveLength(elements.length);
+    expect(elements.length).toBeGreaterThan(0);
+  });
 });
 
 it('Renders unsuccessfully', async () => {
@@ -205,6 +227,12 @@ it('Renders unsuccessfully', async () => {
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
+  
+  await waitFor(() => {
+    const elements = screen.queryAllByText('testName', { exact: false });
+    expect(elements).toHaveLength(elements.length);
+    expect(elements.length).toBe(0);
+  });
 });
 
 it('Renders without access token', async () => {
@@ -301,4 +329,28 @@ it('Renders with null order', async () => {
       </LoggedInContext.Provider>
     </AppContext.Provider>
   );
+});
+
+it('Renders on mobile', async () => {
+  const mockUser = {
+    accessToken: 'testToken',
+    id: 'testId',
+    name: 'testName',
+    role: 'testRole',
+  };
+  localStorage.setItem('user', JSON.stringify(mockUser));
+
+  render(
+    <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
+      <LoggedInContext.Provider value={loggedInContextProps}>
+        <Individual />
+      </LoggedInContext.Provider>
+    </AppContext.Provider>
+  );
+
+  await waitFor(() => {
+    const elements = screen.queryAllByText('testName', { exact: false });
+    expect(elements).toHaveLength(elements.length);
+    expect(elements.length).toBeGreaterThan(0);
+  });
 });
