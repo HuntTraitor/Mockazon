@@ -11,7 +11,7 @@ describe('Next.js App', () => {
   let page: Page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: false });
+    browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
     await page.setUserAgent(
       'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
@@ -20,7 +20,7 @@ describe('Next.js App', () => {
   });
 
   afterAll(async () => {
-    // await browser.close();
+    await browser.close();
   });
 
   test('Adding five items to cart and then checking out', async () => {
