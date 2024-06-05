@@ -115,7 +115,12 @@ export default function CheckoutButton({
     <form onSubmit={handleSubmit}>
       <div className={styles.checkoutBox}>
         <Subtotal numberOfProducts={productQuantity} subtotal={subtotal} />
-        <button aria-label={t('cart:proceedToCheckout') as string} className={styles.checkoutButton} type="submit" role="link">
+        <button
+          aria-label={t('cart:proceedToCheckout') as string}
+          className={styles.checkoutButton}
+          type="submit"
+          role="link"
+        >
           {t('cart:proceedToCheckout')}
         </button>
       </div>

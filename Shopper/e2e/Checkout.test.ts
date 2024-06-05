@@ -1,5 +1,10 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import {addFiveItemsToCart, checkoutAndSeeSuccessPage, getRandomEmail, signUp} from "./helpers";
+import {
+  addFiveItemsToCart,
+  checkoutAndSeeSuccessPage,
+  getRandomEmail,
+  signUp,
+} from './helpers';
 // import { getRandomEmail, signUp } from '../helpers';
 
 describe('Next.js App', () => {

@@ -408,7 +408,7 @@ const Index = () => {
   return (
     <>
       <TopNav />
-      <Container sx={{ paddingTop: isMobile ? '3rem' : ''}}>
+      <Container sx={{ paddingTop: isMobile ? '3rem' : '' }}>
         <Box
           className={isMobile ? styles.productListMobile : styles.productList}
         >

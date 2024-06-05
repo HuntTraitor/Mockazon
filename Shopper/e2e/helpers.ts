@@ -98,6 +98,6 @@ export async function checkoutAndSeeSuccessPage(page: Page) {
   await page.type('input[aria-label="ZIP"]', '95060');
   await page.type('input[aria-label="Phone number"]', '8053414820');
   await page.click('[data-testid="hosted-payment-submit-button"]');
-  await page.waitForNavigation()
+  await page.waitForNavigation();
   await page.waitForSelector('[aria-label="Payment Successful"]');
 }

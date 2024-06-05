@@ -78,5 +78,4 @@ describe('Auth', () => {
     expect(page.url()).toBe('http://localhost:3000/');
     expect(dialogHandler).not.toHaveBeenCalled();
   });
-
 });
