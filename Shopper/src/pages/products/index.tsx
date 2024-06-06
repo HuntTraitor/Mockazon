@@ -388,7 +388,7 @@ const Index = () => {
               </Grid>
               <Box display="flex" justifyContent="center" marginTop={2}>
                 <Pagination
-                  count={Math.ceil(productCount / 10)}
+                  count={Math.ceil(productCount / 21)}
                   page={currentPage}
                   onChange={handlePageChange}
                 />
