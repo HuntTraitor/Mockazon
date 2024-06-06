@@ -10,7 +10,7 @@ describe('Next.js App', () => {
    */
   beforeEach(async () => {
     browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
     });
     page = await browser.newPage();
   });
@@ -36,16 +36,13 @@ describe('Next.js App', () => {
     const email = await page.$('aria/Email Address[role="textbox"]');
     const password = await page.$('aria/Password[role="textbox"]');
     if (email && password) {
-      await email.type('elkrishn@ucsc.edu');
-      await password.type('elk');
+      await email.type('htratar@ucsc.edu');
+      await password.type('pass');
       await page.click('aria/login-button[role="button"]');
-
-      await waitFor(() => {
+      await page.waitForFunction(() => {
         const element = document.querySelector('body');
         return (
-          element &&
-          element.textContent &&
-          element.textContent.includes('Settings')
+          element && element.textContent && element.textContent.includes('Role')
         );
       });
     }
