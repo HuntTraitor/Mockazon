@@ -29,6 +29,6 @@ describe('Next.js App', () => {
   });
 
   test('Successful Login', async () => {
-    await page.goto('http://localhost:3001');
+    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`);
   });
 });

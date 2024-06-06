@@ -18,7 +18,7 @@ describe('Next.js App', () => {
   });
 
   test('Navigate to home page', async () => {
-    await page.goto('http://localhost:3000');
+    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`);
   });
 
   // test('Clicking translate button', async () => {

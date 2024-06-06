@@ -14,6 +14,6 @@ describe('Next.js App', () => {
   });
 
   test('Navigate to home page', async () => {
-    await page.goto('http://localhost:3003');
+    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3003`);
   });
 });

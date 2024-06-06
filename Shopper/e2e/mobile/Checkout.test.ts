@@ -25,7 +25,7 @@ describe('Next.js App', () => {
 
   test('Adding five items to cart and then checking out', async () => {
     await signUp(page, 'Test User', 'password', getRandomEmail());
-    await page.goto('http://localhost:3000');
+    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`);
     await addFiveItemsToCart(page, true);
     await checkoutAndSeeSuccessPage(page);
   });

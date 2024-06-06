@@ -7,6 +7,7 @@ describe('Next.js App', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
+    await page.setViewport({ width: 1920, height: 1080 });
   });
 
   afterAll(async () => {
@@ -14,7 +15,7 @@ describe('Next.js App', () => {
   });
 
   test('Navigate to home page', async () => {
-    await page.goto('http://localhost:3000');
+    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`);
   });
 
   // test('Clicking translate button', async () => {
