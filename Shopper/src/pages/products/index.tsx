@@ -25,7 +25,6 @@ import { enqueueSnackbar } from 'notistack';
 import { Order } from '@/graphql/types';
 import AccountDrawer from '@/views/AccountDrawer';
 
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import BannerCarousel from '@/views/BannerCarousel';
 
 const { basePath } = getConfig().publicRuntimeConfig;
