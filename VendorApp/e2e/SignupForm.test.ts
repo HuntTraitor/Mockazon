@@ -31,7 +31,7 @@ describe('Vendor Signup', () => {
 
   test('Successful Signup', async () => {
     await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/login`
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/vendor/login`
     );
 
     await page.waitForSelector('[aria-label="name-input"] input');
@@ -57,7 +57,7 @@ describe('Vendor Signup', () => {
 
   test('Unsuccessful Signup', async () => {
     await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/login`
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/vendor/login`
     );
     await page.waitForSelector('[aria-label="name-input"] input');
     await page.type('[aria-label="name-input"] input', 'CSE187 Student');

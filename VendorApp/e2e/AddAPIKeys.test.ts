@@ -36,7 +36,7 @@ describe('Vendor API Keys', () => {
 
   test('Keys Visible', async () => {
     await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/login`
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/vendor/login`
     );
     await page.waitForSelector('aria/login-link');
     await page.click('aria/login-link');
