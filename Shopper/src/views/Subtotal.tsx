@@ -12,7 +12,7 @@ export default function Subtotal({
   const { t } = useTranslation(['products', 'cart']);
 
   return (
-    <span className={styles.subtotal}>
+    <span className={styles.subtotal} aria-label='Subtotal Text'>
       {t('cart:subtotal')}: ({numberOfProducts}{' '}
       {numberOfProducts > 1 ? t('cart:items') : t('cart:item')}):{' '}
       <strong>${Number(subtotal).toFixed(2)}</strong>

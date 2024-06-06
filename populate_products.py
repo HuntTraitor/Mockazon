@@ -91,7 +91,7 @@ def generate_sql_insert(product, vendor_id):
 def process_url(driver, product_url):
     try:
         product = scrape_product_details(product_url, driver)
-        if (product['price'] == '.' or product['rating'] == ''):  # Skip products with no price
+        if (product['price'] == '.' or product['price'] == '0.00' or product['rating'] == ''):  # Skip products with no price
             return
         insert = generate_sql_insert(product, 'a4213cf8-c2e4-4424-8688-0907a6c58fd2')
         with open('products.sql', 'a') as f:
