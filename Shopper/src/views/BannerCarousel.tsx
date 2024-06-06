@@ -79,6 +79,7 @@ const BannerCarousel = () => {
         className={`${styles.arrow} ${styles.arrowLeft} ${
           activeArrow === 'left' ? styles.active : ''
         }`}
+        aria-label='previous slide button'
         onClick={goToPrevSlide}
       >
         &lt;
@@ -87,6 +88,7 @@ const BannerCarousel = () => {
         className={`${styles.arrow} ${styles.arrowRight} ${
           activeArrow === 'right' ? styles.active : ''
         }`}
+        aria-label='next slide button'
         onClick={goToNextSlide}
       >
         &gt;

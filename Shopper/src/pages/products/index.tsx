@@ -345,11 +345,7 @@ const Index = () => {
     return (
       <div className={styles.exterior}>
         <Container
-          className={
-            isMobile
-              ? `${styles.mobileContent}`
-              : `${styles.content}`
-          }
+          className={isMobile ? `${styles.mobileContent}` : `${styles.content}`}
         >
           <div>
             <BannerCarousel />
