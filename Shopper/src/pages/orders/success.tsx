@@ -9,7 +9,15 @@ import TopNav from '@/views/TopNav';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import Image from 'next/image';
-import { Typography, List, ListItem, Stack, Link, Box } from '@mui/material';
+import {
+  Typography,
+  List,
+  ListItem,
+  Stack,
+  Box,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
 // import { useAppContext } from '@/contexts/AppContext';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'; // Assuming you have a CSS module file
@@ -57,6 +65,9 @@ const CheckoutSuccessPage = () => {
     query: { sessionId },
   } = useRouter();
   const URL = sessionId ? `/api/stripe/sessions/${sessionId}` : null;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const maxCharacterLength = 18;
 
   const { data: checkoutSession, error } = useSWR(URL, fetcher);
 
@@ -89,177 +100,213 @@ const CheckoutSuccessPage = () => {
   const { amount_discount: discount, amount_tax: tax } = total_details || {};
 
   return (
-    <>
+    <div
+      className={styles.ultraExterior}
+      style={{ paddingTop: isMobile ? '3rem' : '1rem' }}
+    >
       <TopNav />
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <Typography aria-label={t('successStatus')} variant="h2">
-            {t('successStatus')}{' '}
-            {
-              <CheckCircleIcon
-                sx={{ width: '40px', height: '40px' }}
-                color="success"
-              />
-            }
-          </Typography>
-          <Typography variant="h6">{t('thanks')}</Typography>
-          <Typography variant="h6">{t('appreciative')}</Typography>
-        </div>
+      <div className={styles.exterior}>
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <Typography aria-label={t('successStatus')} variant="h2">
+              {t('successStatus')}{' '}
+              {
+                <CheckCircleIcon
+                  sx={{ width: '40px', height: '40px' }}
+                  color="success"
+                />
+              }
+            </Typography>
+            <Typography variant="h6">{t('thanks')}</Typography>
+            <Typography variant="h6">{t('appreciative')}</Typography>
+          </div>
 
-        <div className={styles.orderInfo}>
-          <Typography variant="h4">
-            {t('orderNumber')}: {payment_intent?.id}
-          </Typography>
-        </div>
+          <div className={styles.orderInfo}>
+            {isMobile ? (
+              <Typography style={{ fontWeight: 'bold' }}>
+                {t('orderNumber')}: {payment_intent?.id}
+              </Typography>
+            ) : (
+              <Typography variant="h4">
+                {t('orderNumber')}: {payment_intent?.id}
+              </Typography>
+            )}
+          </div>
 
-        <div className={styles.orderDetails}>
-          <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-            {t('orderDetails')}
-          </Typography>
-          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-            {t('items')}
-          </Typography>
-          <List>
-            {products?.map((product: Product) => {
-              return (
-                <ListItem
-                  key={product.id}
-                  sx={{
-                    border: '1px solid black',
-                    borderRadius: '10px',
-                    justifyItems: 'space-between',
-                  }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <Box className={styles.imageContainer}>
-                    <Image
-                      src={product.images[0]}
-                      alt={product.description}
-                      layout="fill"
-                      objectFit="contain"
-                    />
-                  </Box>
-                  <Stack>
-                    <Link variant="h5" href={product.url} underline="none">
-                      {product.name}
-                    </Link>
-                    <Typography>
-                      <strong>
-                        {t('productDetails.productDescription')}:{' '}
-                      </strong>
-                      {product.description}
-                    </Typography>
-                    <Typography>
-                      <strong>{t('productDetails.quantity')}: </strong>
-                      {product.quantity}{' '}
-                    </Typography>
-                    <Typography>
-                      <strong>{t('productDetails.price')}: </strong>
-                      {(product.price / 100).toLocaleString('en-us', {
-                        style: 'currency',
-                        currency: 'USD',
-                      })}
-                    </Typography>
-                  </Stack>
-                </ListItem>
-              );
-            })}
-          </List>
-          <div className={styles.customerInfo}>
+          <div className={styles.orderDetails}>
             <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              {t('yourInfo')}
+              {t('orderDetails')}
             </Typography>
             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-              {t('payment')}
+              {t('items')}
             </Typography>
-            <div>
-              {payment?.card && (
-                <div>
-                  <strong>{t('paymentDetails.paymentInfo')}:</strong>
+            <List>
+              {products?.map((product: Product) => {
+                return (
+                  <ListItem
+                    key={product.id}
+                    sx={{
+                      gap: '10px',
+                      border: '1px solid #e0e0e0',
+                      justifyItems: 'space-between',
+                      backgroundColor: '#f9f9f9',
+                      marginBottom: '10px',
+                      padding: '15px',
+                    }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <Box
+                      className={
+                        isMobile
+                          ? styles.imageContainerMobile
+                          : styles.imageContainer
+                      }
+                    >
+                      <Image
+                        src={product.images[0]}
+                        alt={product.description}
+                        layout="fill"
+                        objectFit="contain"
+                      />
+                    </Box>
+                    <Stack>
+                      <div
+                        className={
+                          isMobile
+                            ? styles.productNameMobile
+                            : styles.productName
+                        }
+                      >
+                        {isMobile ? (
+                          <Typography>
+                            {product.name.length > maxCharacterLength
+                              ? `${product.name.slice(0, maxCharacterLength)}...`
+                              : product.name}
+                          </Typography>
+                        ) : (
+                          <Typography>{product.name}</Typography>
+                        )}
+                        {!isMobile && (
+                          <Typography>
+                            <strong>
+                              {t('productDetails.productDescription')}:{' '}
+                            </strong>
+                            {product.description}
+                          </Typography>
+                        )}
+                        <Typography>
+                          <strong>{t('productDetails.quantity')}: </strong>
+                          {product.quantity}{' '}
+                        </Typography>
+                        <Typography>
+                          <strong>{t('productDetails.price')}: </strong>
+                          {(product.price / 100).toLocaleString('en-us', {
+                            style: 'currency',
+                            currency: 'USD',
+                          })}
+                        </Typography>
+                      </div>
+                    </Stack>
+                  </ListItem>
+                );
+              })}
+            </List>
+            <div className={styles.customerInfo}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                {t('yourInfo')}
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                {t('payment')}
+              </Typography>
+              <div>
+                {payment?.card && (
                   <div>
-                    <p>{payment.card.wallet}</p>
-                    <p>{payment.card.brand.toUpperCase()}</p>
-                    <p>
-                      {t('paymentDetails.endingWith')} `{payment.card.last4}`
-                    </p>
-                    <p>
-                      {t('paymentDetails.expiresOn')} {payment.card.exp_month} /{' '}
-                      {payment.card.exp_year}
-                    </p>
+                    <strong>{t('paymentDetails.paymentInfo')}:</strong>
+                    <div>
+                      <p>{payment.card.wallet}</p>
+                      <p>{payment.card.brand.toUpperCase()}</p>
+                      <p>
+                        {t('paymentDetails.endingWith')} `{payment.card.last4}`
+                      </p>
+                      <p>
+                        {t('paymentDetails.expiresOn')} {payment.card.exp_month}{' '}
+                        / {payment.card.exp_year}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+              <div>
+                <strong>{t('billing')}:</strong>
+                <address>
+                  <span>
+                    {t('billingDetails.name')}: {customer?.name}
+                  </span>
+                  <br />
+                  <span>
+                    {t('billingDetails.email')}: {customer?.email}
+                  </span>
+                  <br />
+                  <span>
+                    {t('billingDetails.country')}: {customer?.address.country}
+                  </span>
+                  <br />
+                  <span>
+                    {t('billingDetails.postalCode')}:{' '}
+                    {customer?.address.postal_code}
+                  </span>
+                </address>
+              </div>
             </div>
-            <div>
-              <strong>{t('billing')}:</strong>
-              <address>
-                <span>
-                  {t('billingDetails.name')}: {customer?.name}
-                </span>
-                <br />
-                <span>
-                  {t('billingDetails.email')}: {customer?.email}
-                </span>
-                <br />
-                <span>
-                  {t('billingDetails.country')}: {customer?.address.country}
-                </span>
-                <br />
-                <span>
-                  {t('billingDetails.postalCode')}:{' '}
-                  {customer?.address.postal_code}
-                </span>
-              </address>
-            </div>
-          </div>
 
-          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-            {t('summary')}
-          </Typography>
-          <div className={styles.summary}>
-            <div>
-              <strong>{t('summaryDetails.subtotal')}:</strong>{' '}
-              <span>
-                {(amount_subtotal / 100).toLocaleString('en-CA', {
-                  style: 'currency',
-                  currency: 'CAD',
-                })}
-              </span>
-            </div>
-            <div>
-              <strong>{t('summaryDetails.discount')}:</strong>{' '}
-              <span>
-                -
-                {(discount / 100).toLocaleString('en-CA', {
-                  style: 'currency',
-                  currency: 'CAD',
-                })}
-              </span>
-            </div>
-            <div>
-              <strong>{t('summaryDetails.tax')}:</strong>{' '}
-              <span>
-                {(tax / 100).toLocaleString('en-CA', {
-                  style: 'currency',
-                  currency: 'CAD',
-                })}
-              </span>
-            </div>
-            <div>
-              <strong>{t('summaryDetails.total')}:</strong>{' '}
-              <span>
-                {(amount_total / 100).toLocaleString('en-CA', {
-                  style: 'currency',
-                  currency: 'CAD',
-                })}
-              </span>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              {t('summary')}
+            </Typography>
+            <div className={styles.summary}>
+              <div>
+                <strong>{t('summaryDetails.subtotal')}:</strong>{' '}
+                <span>
+                  {(amount_subtotal / 100).toLocaleString('en-CA', {
+                    style: 'currency',
+                    currency: 'CAD',
+                  })}
+                </span>
+              </div>
+              <div>
+                <strong>{t('summaryDetails.discount')}:</strong>{' '}
+                <span>
+                  -
+                  {(discount / 100).toLocaleString('en-CA', {
+                    style: 'currency',
+                    currency: 'CAD',
+                  })}
+                </span>
+              </div>
+              <div>
+                <strong>{t('summaryDetails.tax')}:</strong>{' '}
+                <span>
+                  {(tax / 100).toLocaleString('en-CA', {
+                    style: 'currency',
+                    currency: 'CAD',
+                  })}
+                </span>
+              </div>
+              <div>
+                <strong>{t('summaryDetails.total')}:</strong>{' '}
+                <span>
+                  {(amount_total / 100).toLocaleString('en-CA', {
+                    style: 'currency',
+                    currency: 'CAD',
+                  })}
+                </span>
+              </div>
             </div>
           </div>
         </div>
+        <MockazonMenuDrawer />
+        <AppBackDrop />
       </div>
-      <MockazonMenuDrawer />
-      <AppBackDrop />
-    </>
+    </div>
   );
 };
 
