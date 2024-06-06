@@ -1,0 +1,26 @@
+Failed to process URL https://www.amazon.com/Red-Sky-Mourning-A-Thriller/dp/B0CLHJ22WS/ref=zg_bs_g_audible_d_sccl_12/131-8019291-4680330?isALC=true: Error scraping product details: Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="acrPopover"]"}
+  (Session info: chrome=125.0.6422.142); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00DCB8E3+45827]
+	(No symbol) [0x00D5DCC4]
+	(No symbol) [0x00C5150F]
+	(No symbol) [0x00C920BC]
+	(No symbol) [0x00C9216B]
+	(No symbol) [0x00CCE0F2]
+	(No symbol) [0x00CB2E44]
+	(No symbol) [0x00CCC034]
+	(No symbol) [0x00CB2B96]
+	(No symbol) [0x00C86998]
+	(No symbol) [0x00C8751D]
+	GetHandleVerifier [0x01084513+2899763]
+	GetHandleVerifier [0x010D793D+3240797]
+	GetHandleVerifier [0x00E513B4+593364]
+	GetHandleVerifier [0x00E582DC+621820]
+	(No symbol) [0x00D670A4]
+	(No symbol) [0x00D637A8]
+	(No symbol) [0x00D63947]
+	(No symbol) [0x00D559FE]
+	BaseThreadInitThunk [0x76A57D69+25]
+	RtlInitializeExceptionChain [0x77B8BB9B+107]
+	RtlClearBits [0x77B8BB1F+191]
+
