@@ -127,7 +127,7 @@ describe("API TEST (ADMIN) - General", () => {
       });
   });
 
-  test("PUT /api/v0/admin/account/{id}/suspend", async () => {
+  test("PUT /api/v0/admin/account/{id}/suspend vendor", async () => {
     // suspend userTwo
     await supertest(server)
       .put(`/api/v0/admin/account/${userTwo}/suspend`)
@@ -175,10 +175,106 @@ describe("API TEST (ADMIN) - General", () => {
       });
   });
 
-  test("PUT /api/v0/admin/account/{id}/resume", async () => {
+  test("PUT /api/v0/admin/account/{id}/suspend shopper", async () => {
+    // suspend userTwo
+    await supertest(server)
+      .put(`/api/v0/admin/account/${userOne}/suspend`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+      });
+
+    // assert account is suspended
+    await supertest(server)
+      .get("/api/v0/admin/accounts")
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: userOne,
+              email: "shopper@email.com",
+              name: "shopper account 1",
+              role: "shopper",
+              suspended: true,
+            }),
+            expect.objectContaining({
+              id: userTwo,
+              email: "vendor@email.com",
+              name: "vendor account 1",
+              role: "vendor",
+              suspended: true,
+            }),
+            expect.objectContaining({
+              email: "victor@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f3",
+              name: "Victor",
+              role: "vendor",
+              suspended: false,
+            }),
+            expect.objectContaining({
+              email: "shirly@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f1",
+              name: "Shirly",
+              role: "shopper",
+              suspended: false,
+            }),
+          ]),
+        );
+      });
+  });
+
+  test("PUT /api/v0/admin/account/{id}/resume vendor", async () => {
     // resume userTwo
     await supertest(server)
       .put(`/api/v0/admin/account/${userTwo}/resume`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+      });
+
+    // assert account is resumed
+    await supertest(server)
+      .get("/api/v0/admin/accounts")
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: userOne,
+              email: "shopper@email.com",
+              name: "shopper account 1",
+              role: "shopper",
+              suspended: true,
+            }),
+            expect.objectContaining({
+              id: userTwo,
+              email: "vendor@email.com",
+              name: "vendor account 1",
+              role: "vendor",
+              suspended: false,
+            }),
+            expect.objectContaining({
+              email: "victor@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f3",
+              name: "Victor",
+              role: "vendor",
+              suspended: false,
+            }),
+            expect.objectContaining({
+              email: "shirly@books.com",
+              id: "81c689b1-b7a7-4100-8b2d-309908b444f1",
+              name: "Shirly",
+              role: "shopper",
+              suspended: false,
+            }),
+          ]),
+        );
+      });
+  });
+
+  test("PUT /api/v0/admin/account/{id}/resume shopper", async () => {
+    // resume userTwo
+    await supertest(server)
+      .put(`/api/v0/admin/account/${userOne}/resume`)
       .then((res) => {
         expect(res.status).toBe(200);
       });
@@ -303,3 +399,41 @@ describe("API TEST (ADMIN) - Error Handling", () => {
       });
   });
 });
+
+describe("API TEST (ADMIN) - Check", () => {
+  let token: string;
+
+  beforeAll(async () => {
+    await supertest(server)
+      .post("/api/v0/admin/login")
+      .send({ email: "anna@books.com", password: "annaadmin" })
+      .then(res => {
+        expect(res.body.accessToken).toBeDefined()
+        token = res.body.accessToken;
+      })
+  })
+
+  test('GET /api/v0/admin/check (authorized)', async() => {
+    await supertest(server)
+      .get(`/api/v0/admin/check?accessToken=${token}`)
+      .then(res => {
+        expect(res.status).toBe(200)
+      })
+  });
+
+  test("GET /api/v0/admin/check (unauthorized)", async() => {
+    await supertest(server)
+      .get("/api/v0/admin/check?accessToken=invalid")
+      .then(res => {
+        expect(res.status).toBe(401)
+      })
+  })
+
+  test("GET /api/v0/admin/check (invalid input)", async() => {
+    await supertest(server)
+      .get("/api/v0/admin/check")
+      .then(res => {
+        expect(res.status).toBe(400)
+      })
+  })
+})
