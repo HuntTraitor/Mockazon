@@ -13,6 +13,8 @@ import getConfig from 'next/config';
 import { enqueueSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '@/contexts/AppContext';
+import { ReactElement } from 'react';
+import Layout from '@/components/Layout';
 
 const { basePath } = getConfig().publicRuntimeConfig;
 
@@ -116,7 +118,7 @@ const fetchOrderById = async (id: string, accessToken: string, t: any) => {
   return order;
 };
 
-const OrderView: React.FC = () => {
+const OrderView = () => {
   const router = useRouter();
   const { id } = router.query;
   const [order, setOrder] = useState<Order | null>(null);
@@ -147,7 +149,6 @@ const OrderView: React.FC = () => {
 
   return (
     <>
-      <TopNav />
       <Container
         maxWidth={isMobile ? 'xs' : 'lg'}
         className={isMobile ? styles.mobileContainer : styles.container}
@@ -158,6 +159,10 @@ const OrderView: React.FC = () => {
       <AppBackDrop />
     </>
   );
+};
+
+OrderView.getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>;
 };
 
 export default OrderView;
