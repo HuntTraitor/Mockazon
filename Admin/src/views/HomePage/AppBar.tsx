@@ -20,6 +20,8 @@ export function MyAppBar() {
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <Button
+            aria-label='sign-out'
+            role='button'
             variant="outlined"
             color="primary"
             onClick={event => {

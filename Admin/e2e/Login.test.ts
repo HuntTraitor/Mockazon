@@ -42,6 +42,7 @@ describe('Admin Login Tests', () => {
         element && element.textContent && element.textContent.includes('Role')
       );
     });
+    await page.click('aria/sign-out[role="button"]');
   });
 
   test('Unsuccessful Login', async () => {
