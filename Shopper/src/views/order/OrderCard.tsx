@@ -144,10 +144,11 @@ export default function OrderCard({ order }: { order: Order }) {
                   : styles.orderNumberFlexWide
               }
             >
-              {t('order:orderNumber')}<div>{order.id}</div>
+              {t('order:orderNumber')}
+              <div>{order.id}</div>
             </Typography>
             <Link className={styles.viewOrderLink} href={`/orders/${order.id}`}>
-            {t('order:viewOrderDetails')}
+              {t('order:viewOrderDetails')}
             </Link>
           </div>
         </Paper>

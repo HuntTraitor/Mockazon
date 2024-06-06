@@ -5,7 +5,6 @@
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import styles from '@/styles/success.module.css';
-import TopNav from '@/views/TopNav';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import Image from 'next/image';
@@ -314,6 +313,5 @@ const CheckoutSuccessPage = () => {
 CheckoutSuccessPage.getLayout = (page: ReactElement) => {
   return <Layout>{page}</Layout>;
 };
-
 
 export default CheckoutSuccessPage;
