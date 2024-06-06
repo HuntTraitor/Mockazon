@@ -187,30 +187,37 @@ export default function OrderCard({ order }: { order: Order }) {
         </Typography>
       )}
       <div className={styles.wrapper}>
-        <div className={styles.cardHeader}>
-          <div style={{ paddingLeft: '15px' }}>
-            <Typography variant="subtitle2">ORDER PLACED</Typography>
+        <Paper elevation={isMobile ? 3 : 0} className={isMobile ? styles.mobileCardHeader : styles.cardHeader}>
+          <div className={isMobile ? styles.mobileDetailsContent: ''}>
+            <Typography variant="subtitle2" className={!isMobile ? styles.capitalize:''}>Order placed</Typography>
             <Typography variant="body2">{epicDate(order.createdAt)}</Typography>
           </div>
-          <div>
-            <Typography variant="subtitle2">TOTAL</Typography>
+          <div className={isMobile ? styles.mobileDetailsContent: ''}>
+            <Typography variant="subtitle2" className={!isMobile ? styles.capitalize:''}>Total</Typography>
             <Typography variant="body2">
               ${Number(order.total).toFixed(2)}
             </Typography>
           </div>
-          <div>
-            <Typography variant="subtitle2">SHIP TO</Typography>
-            <Typography variant="body2">
-              {order.shippingAddress.name}
+          {!isMobile && (
+            <div className={isMobile ? styles.mobileDetailsContent: ''}>
+              <Typography variant="subtitle2">SHIP TO</Typography>
+              <Typography variant="body2">
+                {order.shippingAddress.name}
+              </Typography>
+            </div>
+          )}
+          <div className={isMobile ? styles.orderNumberMobile : styles.orderNumberWide}>
+            <Typography variant="subtitle2" className={isMobile ? styles.orderNumberFlexMobile  : styles.orderNumberFlexWide}>
+              Order # 
+              <div>
+                {order.id}
+              </div>
             </Typography>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant="subtitle2">ORDER # {order.id}</Typography>
             <Link className={styles.viewOrderLink} href={`/orders/${order.id}`}>
               View order details
             </Link>
           </div>
-        </div>
+        </Paper>
         <Paper className={isMobile ? styles.paperMobile : styles.paperWide}>
           <Card variant="outlined" className={styles.card}>
             <Typography

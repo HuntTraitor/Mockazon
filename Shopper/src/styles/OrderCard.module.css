@@ -119,3 +119,47 @@
   color: #c7511f;
   text-decoration: underline;
 }
+
+.mobileCardHeader {
+  display: flex;
+  flex-direction: column;
+  max-width: 58rem;
+  width: 92%;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.mobileDetailsContent {
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+  background-color: var(--background-paper);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.orderNumberWide {
+  display: flex;
+  flex-direction: column;
+}
+
+.orderNumberMobile h6 {
+  font-weight: bold;
+  text-shadow: 0.2px 0.2px 0.2px rgba(0, 0, 0, 0.2);
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 0.76em;
+}
+
+.capitalize {
+  text-transform: uppercase;
+}
+
+.orderNumberFlexMobile {
+  display: flex;
+  justify-content: space-between;
+}
+
+.orderNumberFlexWide {
+  display: flex;
+}
