@@ -187,7 +187,9 @@ const DesktopCart: React.FC<DesktopCartProps> = ({
               ))}
               <div className={styles.cartSubtotal}>
                 <Subtotal
-                  numberOfProducts={products.map(p => parseInt(p.quantity)).reduce((a, b) => a + b, 0)}
+                  numberOfProducts={products
+                    .map(p => parseInt(p.quantity))
+                    .reduce((a, b) => a + b, 0)}
                   subtotal={subtotal}
                 />
               </div>
