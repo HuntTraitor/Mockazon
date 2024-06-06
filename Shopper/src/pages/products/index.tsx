@@ -405,22 +405,11 @@ const Index = () => {
   return (
     <>
       <TopNav />
-      <Container sx={{ paddingTop: isMobile ? '3rem' : '' }}>
+      <Container sx={{ paddingTop: isMobile ? '3rem' : '' , minWidth: '80%'}}>
         <Box
           className={isMobile ? styles.productListMobile : styles.productList}
         >
           <div className={styles.productlistContent}>
-            <Typography
-              variant={isMobile ? 'subtitle1' : 'h6'}
-              sx={{
-                fontWeight: 'bold',
-                textAlign: isMobile ? 'left' : 'center',
-                paddingLeft: isMobile ? '0.5rem' : '',
-                paddingBottom: '0.5rem',
-              }}
-            >
-              {t('products:results')}
-            </Typography>
             <Grid container spacing={1} justifyContent="center">
               {products.map((product, index) => (
                 <Grid item key={index}>
