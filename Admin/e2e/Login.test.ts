@@ -1,7 +1,7 @@
 import { waitFor } from '@testing-library/dom';
 import puppeteer, { Browser, Page } from 'puppeteer';
 
-describe('Next.js App', () => {
+describe('Admin Login Tests', () => {
   let browser: Browser;
   let page: Page;
   /**
@@ -33,43 +33,34 @@ describe('Next.js App', () => {
     await page.goto(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`
     );
-    const email = await page.$('aria/Email Address[role="textbox"]');
-    const password = await page.$('aria/Password[role="textbox"]');
-    if (email && password) {
-      await email.type('htratar@ucsc.edu');
-      await password.type('pass');
-      await page.click('aria/login-button[role="button"]');
-      await page.waitForFunction(() => {
-        const element = document.querySelector('body');
-        return (
-          element && element.textContent && element.textContent.includes('Role')
-        );
-      });
-    }
+    await page.type('aria/Email Address[role="textbox"]', 'htratar@ucsc.edu');
+    await page.type('aria/Password[role="textbox"]', 'pass');
+    await page.click('aria/login-button[role="button"]');
+    await page.waitForFunction(() => {
+      const element = document.querySelector('body');
+      return (
+        element && element.textContent && element.textContent.includes('Role')
+      );
+    });
   });
 
   test('Unsuccessful Login', async () => {
     await page.goto(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`
     );
-    const email = await page.$('aria/Email Address[role="textbox"]');
-    const password = await page.$('aria/Password[role="textbox"]');
-    if (email && password) {
-      await email.type('bob@ucsc.edu');
-      await password.type('elkdfasdfadsf');
-      await page.click('aria/login-button[role="button"]');
-      let alertMessage = '';
-      /* */
-      const dialogPromise = new Promise<void>(resolve => {
-        page.on('dialog', async dialog => {
-          alertMessage = dialog.message();
-          await dialog.accept();
-          resolve();
-        });
+
+    await page.type('aria/Email Address[role="textbox"]', 'htratar@ucsc.edu');
+    await page.type('aria/Password[role="textbox"]', 'asdfakdjfadf');
+    let alertMessage = '';
+    const dialogPromise = new Promise<void>(resolve => {
+      page.on('dialog', async dialog => {
+        alertMessage = dialog.message();
+        await dialog.accept();
+        resolve();
       });
-      await page.click('aria/login-button[role="button"]');
-      await dialogPromise;
-      expect(alertMessage).toEqual('Error logging in. Please try again.');
-    }
+    });
+    await page.click('aria/login-button[role="button"]');
+    await dialogPromise;
+    expect(alertMessage).toEqual('Error logging in. Please try again.');
   });
 });
