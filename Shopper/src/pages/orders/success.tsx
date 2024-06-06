@@ -23,6 +23,8 @@ import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'; // Assuming you have a CSS module file
 import AppBackDrop from '@/components/AppBackdrop';
 import { useTranslation } from 'next-i18next';
+import { ReactElement } from 'react';
+import Layout from '@/components/Layout';
 // TODO this entire page needs to be converted to graphQL
 
 export const fetcher = async (url: RequestInfo, init?: RequestInit) => {
@@ -104,7 +106,6 @@ const CheckoutSuccessPage = () => {
       className={styles.ultraExterior}
       style={{ paddingTop: isMobile ? '3rem' : '1rem' }}
     >
-      <TopNav />
       <div className={styles.exterior}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -309,5 +310,10 @@ const CheckoutSuccessPage = () => {
     </div>
   );
 };
+
+CheckoutSuccessPage.getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>;
+};
+
 
 export default CheckoutSuccessPage;
