@@ -31,7 +31,7 @@ const customJestConfig = {
     // ok to ignore schema.ts as there's an issue with next and graphql
     'schema.ts',
     'resolver.ts',
-    'src/pages/api/stripe/sessions/*'
+    'src/pages/api/stripe/sessions/*',
   ],
   testMatch: ['**/test/**/?(*.)+(spec|test).[jt]s?(x)'],
   reporters: [

@@ -16,18 +16,24 @@ describe('Next.js App', () => {
   });
 
   test('Navigate to home page', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
+    );
   });
 
   test("Navigate to home page and clicks on a what's new item", async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
+    );
     await page.waitForSelector('[aria-label^="What\'s New-"]');
     await page.click('[aria-label^="What\'s New-"]');
     await page.waitForNavigation();
   });
 
   test("Navigate to home page and clicks right arrow on what's new then clicks on a what's new item", async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
+    );
     await page.waitForSelector('[data-testid="ArrowForwardIosIcon"]');
     await page.click('[data-testid="ArrowForwardIosIcon"]');
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -37,7 +43,9 @@ describe('Next.js App', () => {
   });
 
   test('Navigate to home page and clicks on more products', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
+    );
     await page.waitForSelector('[aria-label^="More Products-"]');
     await page.click('[aria-label^="More Products-"]');
     await page.waitForNavigation();
@@ -50,7 +58,9 @@ describe('Next.js App', () => {
   });
 
   test('Navigate to home page and clicks next page on more products then clicks on a product', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
+    );
     await page.waitForSelector('[data-testid="NavigateNextIcon"]');
     await page.click('[data-testid="NavigateNextIcon"]');
     // wait a second

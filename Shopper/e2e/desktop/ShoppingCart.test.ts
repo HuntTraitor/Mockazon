@@ -15,7 +15,9 @@ describe('Shopping cart', () => {
   });
 
   test('Navigate to home page', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
+    );
   });
 
   // test('Adding a product to the shopping cart', async () => {

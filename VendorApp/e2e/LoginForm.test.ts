@@ -30,7 +30,9 @@ describe('Vendor Login', () => {
   });
 
   test('Successful Login', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/login`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/login`
+    );
 
     await page.waitForSelector('aria/login-link');
     await page.click('aria/login-link');
@@ -51,7 +53,9 @@ describe('Vendor Login', () => {
   });
 
   test('Unsuccessful Login', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/login`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/login`
+    );
 
     await page.waitForSelector('aria/login-link');
     await page.click('aria/login-link');

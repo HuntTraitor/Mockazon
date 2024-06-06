@@ -28,7 +28,9 @@ describe('Auth', () => {
   });
 
   test('Fails to log in with invalid credentials', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/login`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/login`
+    );
     await page.waitForSelector('form');
 
     await page.type('div[aria-label="Email"] input', email);
@@ -54,7 +56,9 @@ describe('Auth', () => {
   });
 
   test('Fails to create duplicate account', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/signup`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/signup`
+    );
     await page.waitForSelector('form');
 
     await page.type('div[aria-label="Name"] input', 'Test User');
@@ -69,7 +73,9 @@ describe('Auth', () => {
   });
 
   test('Logs in with valid credentials', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/login`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/login`
+    );
     await page.waitForSelector('form');
 
     await page.type('div[aria-label="Email"] input', email);
@@ -77,7 +83,9 @@ describe('Auth', () => {
     await page.click('button[type="submit"]');
     await page.waitForNavigation();
 
-    expect(page.url()).toBe(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/`);
+    expect(page.url()).toBe(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/`
+    );
     expect(dialogHandler).not.toHaveBeenCalled();
   });
 });

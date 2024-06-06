@@ -30,7 +30,9 @@ describe('Next.js App', () => {
   });
 
   test('Successful Login', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`
+    );
     const email = await page.$('aria/Email Address[role="textbox"]');
     const password = await page.$('aria/Password[role="textbox"]');
     if (email && password) {
@@ -50,7 +52,9 @@ describe('Next.js App', () => {
   });
 
   test('Unsuccessful Login', async () => {
-    await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`);
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`
+    );
     const email = await page.$('aria/Email Address[role="textbox"]');
     const password = await page.$('aria/Password[role="textbox"]');
     if (email && password) {

@@ -27,7 +27,9 @@ export async function signUp(
   password: string,
   email: string
 ) {
-  await page.goto(`http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/signup`);
+  await page.goto(
+    `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/signup`
+  );
   await page.waitForSelector('form');
 
   await page.type('div[aria-label="Name"] input', name);

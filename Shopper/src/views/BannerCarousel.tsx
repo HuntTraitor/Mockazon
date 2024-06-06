@@ -33,7 +33,9 @@ const BannerCarousel = () => {
   }, [slides.length]);
 
   const goToPrevSlide = () => {
-    setCurrentSlide(prevSlide => (prevSlide === 0 ? slides.length - 1 : prevSlide - 1));
+    setCurrentSlide(prevSlide =>
+      prevSlide === 0 ? slides.length - 1 : prevSlide - 1
+    );
     setActiveArrow('left');
   };
 
@@ -43,7 +45,10 @@ const BannerCarousel = () => {
   };
 
   const handleOutsideClick = (event: MouseEvent) => {
-    if (carouselRef.current && !carouselRef.current.contains(event.target as Node)) {
+    if (
+      carouselRef.current &&
+      !carouselRef.current.contains(event.target as Node)
+    ) {
       setActiveArrow(null);
     }
   };
@@ -79,7 +84,7 @@ const BannerCarousel = () => {
         className={`${styles.arrow} ${styles.arrowLeft} ${
           activeArrow === 'left' ? styles.active : ''
         }`}
-        aria-label='previous slide button'
+        aria-label="previous slide button"
         onClick={goToPrevSlide}
       >
         &lt;
@@ -88,7 +93,7 @@ const BannerCarousel = () => {
         className={`${styles.arrow} ${styles.arrowRight} ${
           activeArrow === 'right' ? styles.active : ''
         }`}
-        aria-label='next slide button'
+        aria-label="next slide button"
         onClick={goToNextSlide}
       >
         &gt;
