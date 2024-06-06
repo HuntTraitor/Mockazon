@@ -1,6 +1,21 @@
+.ultraExterior {
+  background-color: #eaeded;
+}
+
+.exterior {
+  display: flex;
+  background-color: #eaeded;
+  min-height: 100vh;
+  /* padding-top: 3rem; */
+}
+
 .container {
+  display: flex;
   padding: 20px;
   font-family: Arial, sans-serif;
+  background-color: #eaeded;
+  flex-direction: column;
+  flex: 1;
 }
 
 .header {
@@ -17,8 +32,10 @@
 }
 
 .orderInfo {
+  position: relative;
   margin: 20px 0;
   font-weight: bold;
+  word-wrap: break-word;
 }
 
 .orderDetails {
@@ -33,6 +50,20 @@
 .product {
   display: flex;
   margin: 20px 0;
+}
+
+.productName {
+  position: absolute;
+  top: 0;
+  margin-top: 1rem;
+  background-color: #f9f9f9;
+}
+
+.productNameMobile {
+  position: absolute;
+  top: 0;
+  margin-top: 1rem;
+  background-color: #f9f9f9;
 }
 
 .productImage {
@@ -86,4 +117,10 @@
   position: relative;
   width: 200px;
   height: 200px;
+}
+
+.imageContainerMobile {
+  position: relative;
+  width: 120px;
+  height: 120px;
 }
