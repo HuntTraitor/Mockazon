@@ -16,5 +16,9 @@
   "quantity": "Quantity",
   "errorFetchingOrder": "Error fetching order",
   "addedToCart": "Added to cart",
-  "errorAddingToCart": "Error adding to cart"
+  "errorAddingToCart": "Error adding to cart",
+  "orderPlaced": "Order Placed",
+  "orderNumber": "Order #",
+  "shipTo": "Ship To",
+  "viewOrderDetails": "View order details"
 }

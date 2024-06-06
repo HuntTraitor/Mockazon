@@ -13,94 +13,6 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useRouter } from 'next/router';
 
-/*
-const card = (
-  <React.Fragment>
-    <div className={styles.cardHeader}>
-      <Grid container spacing={3}>
-        <Grid item xs={2}>
-          <Typography variant="subtitle2">ORDER PLACED</Typography>
-          <Typography variant="body2">{mockOrder.purchased}</Typography>
-        </Grid>
-        <Grid item xs={2}>
-          <Typography variant="subtitle2">TOTAL</Typography>
-          <Typography variant="body2">${mockOrder.total}</Typography>
-        </Grid>
-        <Grid item xs={2}>
-          <Typography variant="subtitle2">SHIP TO</Typography>
-          <Typography variant="body2">
-            {mockOrder.shippingAddress.name}
-          </Typography>
-        </Grid>
-        <Grid item xs>
-          <Typography variant="subtitle2">
-            ORDER # {mockOrder.orderId}
-          </Typography>
-        </Grid>
-      </Grid>
-    </div>
-    <Divider />
-    <CardContent>
-      <Typography variant="h5" component="div">
-        Delivered {mockOrder.delieveredDate}
-      </Typography>
-      <Typography variant="body2" sx={{ mt: '1px' }}>
-        Your package was left near the front door or porch
-      </Typography>
-      <div className={styles.content}>
-        <div className={styles.contentWrapper}>
-          <div>
-            <Image
-              src="https://m.media-amazon.com/images/I/51B4RTFxcKL._SS142_.jpg"
-              alt="product-image"
-              width={100}
-              height={100}
-            />
-          </div>
-          <div className={styles.contentDetails}>
-            <Link underline="hover">{mockOrder.productName}</Link>
-            <Typography variant="body2">
-              Return or replace items: Eligible through June 5, 2024
-            </Typography>
-            <div className={styles.purchaseButtons}>
-              <Button variant="contained" className={styles.buyAgainIcon}>
-                <StorefrontIcon sx={{ mr: '5px' }} />
-                Buy it again
-              </Button>
-              <Button variant="contained" className={styles.buttonStyle}>
-                View your item
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className={styles.contentButtons}>
-          <div className={styles.buttonList}>
-            <Button variant="contained" className={styles.buttonStyle}>
-              Track package
-            </Button>
-            <Button variant="contained" className={styles.buttonStyle}>
-              Return or replace items
-            </Button>
-            <Button variant="contained" className={styles.buttonStyle}>
-              Share gift recipt
-            </Button>
-            <Button variant="contained" className={styles.buttonStyle}>
-              Write a product review
-            </Button>
-          </div>
-        </div>
-      </div>
-    </CardContent>
-    <Divider />
-    <CardActions>
-      <Button size="small" className={styles.archive}>
-        Archive order
-      </Button>
-    </CardActions>
-  </React.Fragment>
-);
-*/
-
 export default function OrderCard({ order }: { order: Order }) {
   // console.log(order);
   const { t, i18n } = useTranslation(['order', 'common']);
@@ -196,7 +108,7 @@ export default function OrderCard({ order }: { order: Order }) {
               variant="subtitle2"
               className={!isMobile ? styles.capitalize : ''}
             >
-              Order placed
+              {t('order:orderPlaced')}
             </Typography>
             <Typography variant="body2">{epicDate(order.createdAt)}</Typography>
           </div>
@@ -213,7 +125,7 @@ export default function OrderCard({ order }: { order: Order }) {
           </div>
           {!isMobile && (
             <div className={isMobile ? styles.mobileDetailsContent : ''}>
-              <Typography variant="subtitle2">SHIP TO</Typography>
+              <Typography variant="subtitle2">{t('order:shipTo')}</Typography>
               <Typography variant="body2">
                 {order.shippingAddress.name}
               </Typography>
@@ -232,10 +144,10 @@ export default function OrderCard({ order }: { order: Order }) {
                   : styles.orderNumberFlexWide
               }
             >
-              Order #<div>{order.id}</div>
+              {t('order:orderNumber')}<div>{order.id}</div>
             </Typography>
             <Link className={styles.viewOrderLink} href={`/orders/${order.id}`}>
-              View order details
+            {t('order:viewOrderDetails')}
             </Link>
           </div>
         </Paper>
