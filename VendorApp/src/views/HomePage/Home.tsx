@@ -34,7 +34,7 @@ export function Home() {
         <MyDrawer />
         <Box component="main" width={'100%'} sx={{ overflowY: 'scroll' }}>
           <MyAppBar />
-          <Divider />s
+          <Divider />
           <APIKeys />
           <AddAPIKey />
         </Box>

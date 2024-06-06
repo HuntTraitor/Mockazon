@@ -32,6 +32,7 @@ describe('Vendor Signup', () => {
   test('Successful Signup', async () => {
     await page.goto('http://localhost:3003/login');
 
+    await page.waitForSelector('[aria-label="name-input"] input');
     await page.type('[aria-label="name-input"] input', 'CSE187 Student');
     await page.type(
       '[aria-label="email-input"] input',
@@ -54,7 +55,7 @@ describe('Vendor Signup', () => {
 
   test('Unsuccessful Signup', async () => {
     await page.goto('http://localhost:3003/login');
-
+    await page.waitForSelector('[aria-label="name-input"] input');
     await page.type('[aria-label="name-input"] input', 'CSE187 Student');
     await page.type(
       '[aria-label="email-input"] input',

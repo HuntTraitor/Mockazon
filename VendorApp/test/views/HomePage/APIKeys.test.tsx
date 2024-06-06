@@ -6,6 +6,7 @@ import { LoginContext } from '@/contexts/LoginContext';
 import { Key, KeyContext } from '@/contexts/KeyContext';
 import '@testing-library/jest-dom';
 let returnError = false;
+let catchError = false;
 
 const handlers = [
   graphql.query('key', ({ query }) => {
@@ -42,6 +43,10 @@ const handlers = [
       return HttpResponse.json({
         errors: [{ message: 'Some Error' }],
       });
+    } else if (catchError) {
+      return HttpResponse.json({
+        data: {},
+      });
     }
     return HttpResponse.json({
       data: {
@@ -71,7 +76,67 @@ it('Renders', async () => {
   await screen.findByText('Actions');
 });
 
+it('Set key status with error', async () => {
+  catchError = true;
+  const id: string = 'some id';
+  const accessToken: string = 'some token';
+  const setAccessToken = jest.fn();
+  const setId = () => {};
+
+  let keys: Key[] = [
+    {
+      key: 'some key',
+      vendor_id: 'some id',
+      active: true,
+      blacklisted: false,
+    },
+    {
+      key: 'some key2',
+      vendor_id: 'some id',
+      active: false,
+      blacklisted: false,
+    },
+  ];
+  const setKeys = (newKeys: Key[]) => {
+    keys = newKeys;
+  };
+  returnError = false;
+  render(
+    <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
+      <KeyContext.Provider value={{ keys, setKeys }}>
+        <APIKeys />
+      </KeyContext.Provider>
+    </LoginContext.Provider>
+  );
+  await waitFor(() => {
+    // Understand why buttons are not displaying
+    expect(screen.queryAllByText('Activate').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('Deactivate').length).toBeGreaterThan(0);
+    console.log(keys);
+  });
+  const button = await screen.getByText('Activate');
+  await fireEvent.click(button);
+  waitFor(() => {
+    expect(keys.length).toEqual(2);
+    expect(keys[0].active).toBe(false);
+  });
+  render(
+    <LoginContext.Provider value={{ id, setId, accessToken, setAccessToken }}>
+      <KeyContext.Provider value={{ keys, setKeys }}>
+        <APIKeys />
+      </KeyContext.Provider>
+    </LoginContext.Provider>
+  );
+
+  await waitFor(() => {
+    // Understand why buttons are not displaying
+    expect(screen.queryAllByText('Deactivate').length).toBeGreaterThan(1);
+    console.log(keys);
+  });
+});
+
 it('Renders keys', async () => {
+  catchError = false;
   const id: string = 'some id';
   const accessToken: string = 'some token';
   const setAccessToken = jest.fn();
@@ -199,7 +264,7 @@ it('Renders blacklisted keys', async () => {
   const setAccessToken = jest.fn();
   const setId = () => {};
 
-  let keys: Key[] = [
+  const keys: Key[] = [
     {
       key: 'some key',
       vendor_id: 'some id',
@@ -230,7 +295,7 @@ it('Renders regular keys', async () => {
   const setAccessToken = jest.fn();
   const setId = () => {};
 
-  let keys: Key[] = [
+  const keys: Key[] = [
     {
       key: 'some key',
       vendor_id: 'some id',
