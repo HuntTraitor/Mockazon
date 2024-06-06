@@ -82,38 +82,38 @@ describe("API TEST (VENDOR) - Authorization", () => {
 
 describe("API TEST (VENDOR) - Check", () => {
   let token: string;
-  
+
   beforeAll(async () => {
     await supertest(server)
       .post("/api/v0/vendor/login")
       .send({ email: "victor@books.com", password: "victorvendor" })
-      .then(res => {
-        expect(res.body.accessToken).toBeDefined()
+      .then((res) => {
+        expect(res.body.accessToken).toBeDefined();
         token = res.body.accessToken;
-      })
-  })
+      });
+  });
 
-  test("GET /api/v0/vendor/check (authorized)", async() => {
+  test("GET /api/v0/vendor/check (authorized)", async () => {
     await supertest(server)
       .get(`/api/v0/vendor/check?accessToken=${token}`)
-      .then(res => {
-        expect(res.status).toBe(200)
-      })
-  })
+      .then((res) => {
+        expect(res.status).toBe(200);
+      });
+  });
 
-  test("GET /api/v0/vendor/check (unauthorized)", async() => {
+  test("GET /api/v0/vendor/check (unauthorized)", async () => {
     await supertest(server)
       .get("/api/v0/vendor/check?accessToken=invalid")
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(401);
-      })
-  })
+      });
+  });
 
-  test("GET /api/v0/vendor/check (invalid input)", async() => {
+  test("GET /api/v0/vendor/check (invalid input)", async () => {
     await supertest(server)
       .get("/api/v0/vendor/check")
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(400);
-      })
-  })
-})
+      });
+  });
+});

@@ -407,33 +407,33 @@ describe("API TEST (ADMIN) - Check", () => {
     await supertest(server)
       .post("/api/v0/admin/login")
       .send({ email: "anna@books.com", password: "annaadmin" })
-      .then(res => {
-        expect(res.body.accessToken).toBeDefined()
+      .then((res) => {
+        expect(res.body.accessToken).toBeDefined();
         token = res.body.accessToken;
-      })
-  })
-
-  test('GET /api/v0/admin/check (authorized)', async() => {
-    await supertest(server)
-      .get(`/api/v0/admin/check?accessToken=${token}`)
-      .then(res => {
-        expect(res.status).toBe(200)
-      })
+      });
   });
 
-  test("GET /api/v0/admin/check (unauthorized)", async() => {
+  test("GET /api/v0/admin/check (authorized)", async () => {
+    await supertest(server)
+      .get(`/api/v0/admin/check?accessToken=${token}`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+      });
+  });
+
+  test("GET /api/v0/admin/check (unauthorized)", async () => {
     await supertest(server)
       .get("/api/v0/admin/check?accessToken=invalid")
-      .then(res => {
-        expect(res.status).toBe(401)
-      })
-  })
+      .then((res) => {
+        expect(res.status).toBe(401);
+      });
+  });
 
-  test("GET /api/v0/admin/check (invalid input)", async() => {
+  test("GET /api/v0/admin/check (invalid input)", async () => {
     await supertest(server)
       .get("/api/v0/admin/check")
-      .then(res => {
-        expect(res.status).toBe(400)
-      })
-  })
-})
+      .then((res) => {
+        expect(res.status).toBe(400);
+      });
+  });
+});
