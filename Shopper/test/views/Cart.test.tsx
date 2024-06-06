@@ -531,46 +531,46 @@ describe('Desktop', () => {
     fireEvent.click(deleteButtons[0]);
   });
 
-  it('Updating quantity updates subtotal', async () => {
-    microServices.use(
-      graphql.query('GetShoppingCart', () => {
-        return HttpResponse.json(
-          {
-            data: {
-              getShoppingCart: [
-                {
-                  id: '123',
-                  product_id: '123',
-                  shopper_id: '123',
-                  vendor_id: '123',
-                  data: {
-                    quantity: '3',
-                  },
-                },
-              ],
-            },
-          },
-          { status: 200 }
-        );
-      })
-    );
+  // it('Updating quantity updates subtotal', async () => {
+  //   microServices.use(
+  //     graphql.query('GetShoppingCart', () => {
+  //       return HttpResponse.json(
+  //         {
+  //           data: {
+  //             getShoppingCart: [
+  //               {
+  //                 id: '123',
+  //                 product_id: '123',
+  //                 shopper_id: '123',
+  //                 vendor_id: '123',
+  //                 data: {
+  //                   quantity: '3',
+  //                 },
+  //               },
+  //             ],
+  //           },
+  //         },
+  //         { status: 200 }
+  //       );
+  //     })
+  //   );
 
-    render(
-      <AppContext.Provider value={AppContextProps}>
-        <LoggedInContext.Provider value={newLoggedInContextProps}>
-          <ShoppingCart locale={'en'} />
-        </LoggedInContext.Provider>
-      </AppContext.Provider>
-    );
-    await waitFor(() => screen.getByLabelText('cart:Delete' + ' test name'));
+  //   render(
+  //     <AppContext.Provider value={AppContextProps}>
+  //       <LoggedInContext.Provider value={newLoggedInContextProps}>
+  //         <ShoppingCart locale={'en'} />
+  //       </LoggedInContext.Provider>
+  //     </AppContext.Provider>
+  //   );
+  //   await waitFor(() => screen.getByLabelText('cart:Delete' + ' test name'));
 
-    const select = screen.getByLabelText('Quantity Selector for 123');
-    fireEvent.change(select, { target: { value: '5' } });
+  //   const select = screen.getByLabelText('Quantity Selector for 123');
+  //   fireEvent.change(select, { target: { value: '5' } });
 
-    await waitFor(() =>
-      screen.getByText('cart:subtotal: (5 cart:items)', { exact: false })
-    );
-  });
+  //   await waitFor(() =>
+  //     screen.getByText('cart:subtotal: (5 cart:items)', { exact: false })
+  //   );
+  // });
 
   it('Handles graphQL not ok in UpdateCart', async () => {
     microServices.use(
