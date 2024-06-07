@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm run installs
+      - run: npm install
       - name: Install prettier for formatting
         run: npm install -g prettier
       - run: npm run lints
@@ -41,7 +41,7 @@ jobs:
       - name: Sleep for 20 seconds
         run: sleep 20s
         shell: bash
-      - run: npm run tests:silent
+      - run: npm test
       - run: npm run docker-down
 
       # E2E tests with containerized version 
@@ -62,9 +62,9 @@ jobs:
           echo NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }} >> .env
           echo STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }} >> .env
       - name: Spin up container
-        run: npm run containerized
+        run: npm run containerise
       - name: Sleep for 20 seconds
         run: sleep 20s
         shell: bash
       - name: Run e2e tests
-        run: npm run test-e2es
+        run: npm run e2e
