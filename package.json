@@ -104,7 +104,7 @@
     "merge-coverage": "ts-node merge-coverage.ts",
     "display-coverage": "ts-node display-coverage.ts",
     "postinstall": "npm run install-admin && npm run install-account && npm run install-order && npm run install-shopper && npm run install-product && npm run install-vendor-app && npm run install-vendor-api && npm run install-key",
-    "zip": "zip -r Mockazon.Submission.zip . -x '*node_modules*/*' -x '*.next*/*' -x '*.swc*/*' -x '.nyc_output' -x 'merged_coverage'"
+    "zip": "zip -r Mockazon.Submission.zip . -x '*node_modules*/*' -x '*.next*/*' -x '*.swc*/*' -x '.nyc_output' -x 'merged_coverage' -x '.git' -x '.github'"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.35",
