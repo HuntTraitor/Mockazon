@@ -47,10 +47,6 @@ const AccountDrawer = () => {
     router.push('/orders');
   };
 
-  useEffect(() => {
-    console.log('AccountDrawer open:', accountDrawerOpen);
-  }, [accountDrawerOpen]);
-
   return (
     <>
       {accountDrawerOpen && (

@@ -42,7 +42,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       const msg = err.message;
-      console.log(`Error message: ${msg}`);
+      // console.log(`Error message: ${msg}`);
       res.status(400).send(`Webhook Error: ${msg}`);
       return;
     }
@@ -60,7 +60,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // @ts-expect-error
         const msg = err.message;
         res.status(400).send(`Error retrieving line items: ${msg}`);
-        console.log(`Error retrieving line items: ${msg}`);
+        // console.log(`Error retrieving line items: ${msg}`);
         return;
       }
 
@@ -104,7 +104,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // @ts-expect-error
         const msg = err.message;
         res.status(500).send(`Error creating orders: ${msg}`);
-        console.log(`Error creating orders: ${msg}`);
+        // console.log(`Error creating orders: ${msg}`);
         return;
       }
 
@@ -124,7 +124,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // @ts-expect-error
         const msg = err.message;
         res.status(500).send(`Error creating order history: ${msg}`);
-        console.log(`Error creating order history: ${msg}`);
+        // console.log(`Error creating order history: ${msg}`);
         return;
       }
 
@@ -139,13 +139,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           createdShopperOrder.id,
           productQuantities
         );
-        console.log(createdProductOrders);
+        // console.log(createdProductOrders);
       } catch (err) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const msg = err.message;
         res.status(500).send(`Error creating product orders: ${msg}`);
-        console.log(`Error creating product orders: ${msg}`);
+        // console.log(`Error creating product orders: ${msg}`);
         return;
       }
 
@@ -167,17 +167,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           pendingVendorOrders,
           shopperId
         );
-        console.log(removedCartItems);
+        // console.log(removedCartItems);
       } catch (err) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const msg = err.message;
         res.status(500).send(`Error removing shopping cart items: ${msg}`);
-        console.log(`Error removing shopping cart items: ${msg}`);
+        // console.log(`Error removing shopping cart items: ${msg}`);
         return;
       }
 
-      console.log(`Checkout Session was successful!`, lineItems);
+      // console.log(`Checkout Session was successful!`, lineItems);
       res.status(200).json({ message: 'Checkout complete' });
       return;
     }
@@ -298,7 +298,7 @@ async function createOrderProducts(
       }
     );
     if (!res.ok) {
-      console.log(res);
+      // console.log(res);
       throw new Error('Failed to create order product');
     }
     return await res.json();
@@ -396,7 +396,7 @@ async function createVendorShopperOrder(
       }
     );
     if (!res.ok) {
-      console.log(res);
+      // console.log(res);
       throw new Error(
         'Failed to create a vendor shopper order 😡😡😡😡😡😡😡😡😡'
       );
