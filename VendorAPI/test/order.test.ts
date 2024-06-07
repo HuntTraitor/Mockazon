@@ -1,12 +1,6 @@
 import supertest from 'supertest';
 import { server, mockMicroservices } from './helper';
 
-// const orderUpdateData = {
-//   quantity: '4',
-//   shipped: true,
-// };
-
-// let orderID: string = '';
 test('Unauthorized vendor cannot fetch orders', async () => {
   mockMicroservices.unauthorized = true;
   await supertest(server)

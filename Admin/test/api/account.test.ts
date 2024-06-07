@@ -5,7 +5,6 @@ import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import requestHandler from './requestHandler';
-import { HTTPResponse } from 'puppeteer';
 
 let server: http.Server<
   typeof http.IncomingMessage,
