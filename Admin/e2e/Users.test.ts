@@ -1,6 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 
-
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -52,8 +51,10 @@ describe('Admin List of Users Test', () => {
       const element = document.querySelector('body');
       // Can view one of the users
       return (
-        element && element.textContent && element.textContent.includes('shopper')
-        && element.textContent.includes('Evan Metcalf')
+        element &&
+        element.textContent &&
+        element.textContent.includes('shopper') &&
+        element.textContent.includes('Evan Metcalf')
       );
     });
   });
