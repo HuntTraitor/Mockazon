@@ -139,6 +139,7 @@ const APIKeys = () => {
                   {key.active ? (
                     <TableCell>
                       <Button
+                        aria-label={`inactive-button-${key.key}`}
                         disabled={key.blacklisted ? true : false}
                         onClick={event => {
                           event.preventDefault();
@@ -159,7 +160,7 @@ const APIKeys = () => {
                     <TableCell>
                       <Button
                         disabled={key.blacklisted}
-                        aria-label="active-button"
+                        aria-label={`active-button-${key.key}`}
                         variant="outlined"
                         color="success"
                         onClick={event => {
