@@ -31,7 +31,7 @@ describe('Admin Login Tests', () => {
 
   test('Successful Login', async () => {
     await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001/admin`
     );
     await page.type('aria/Email Address[role="textbox"]', 'htratar@ucsc.edu');
     await page.type('aria/Password[role="textbox"]', 'pass');
@@ -47,7 +47,7 @@ describe('Admin Login Tests', () => {
 
   test('Unsuccessful Login', async () => {
     await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001/admin`
     );
 
     await page.type('aria/Email Address[role="textbox"]', 'htratar@ucsc.edu');
