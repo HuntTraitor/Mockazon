@@ -80,7 +80,7 @@ const Signup = () => {
         if (data.errors && data.errors.length > 0) {
           if (data.errors[0].message === 'Duplicate account') {
             //console.error('Duplicate account:', data.errors[0].message);
-            alert(t('signup:duplicateAccount'));
+            // alert(t('signup:duplicateAccount'));
             return;
           } else {
             //console.error('Error signing up:', data.errors[0].message);
@@ -135,7 +135,7 @@ const Signup = () => {
         if (data.errors && data.errors.length > 0) {
           if (data.errors[0].message === 'Duplicate account') {
             //console.error('Duplicate account:', data.errors[0].message);
-            alert(t('signup:duplicateAccount'));
+            // alert(t('signup:duplicateAccount'));
             return;
           } else {
             //console.error('Error signing up:', data.errors[0].message);
