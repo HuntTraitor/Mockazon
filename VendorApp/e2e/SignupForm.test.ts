@@ -1,6 +1,6 @@
-import { screen } from '@testing-library/dom';
 import puppeteer, { Browser, Page } from 'puppeteer';
 
+const randomEmail = require('random-email');
 describe('Vendor Signup', () => {
   let browser: Browser;
   let page: Page;
@@ -10,7 +10,7 @@ describe('Vendor Signup', () => {
    */
   beforeEach(async () => {
     browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
     });
     page = await browser.newPage();
   });
@@ -30,6 +30,8 @@ describe('Vendor Signup', () => {
   });
 
   test('Successful Signup', async () => {
+    // Must reset DBs everytime you rerun this beacuse of email address
+    // repeating
     await page.goto(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003/vendor/login`
     );
@@ -38,7 +40,7 @@ describe('Vendor Signup', () => {
     await page.type('[aria-label="name-input"] input', 'CSE187 Student');
     await page.type(
       '[aria-label="email-input"] input',
-      'cse187student@vendor.com'
+      randomEmail({ domain: 'vendor.com' })
     );
     await page.type('[aria-label="password-input"] input', 'password');
     await page.type('[aria-label="repeatpassword-input"] input', 'password');

@@ -1,4 +1,3 @@
-import { screen } from '@testing-library/dom';
 import puppeteer, { Browser, Page } from 'puppeteer';
 
 describe('Vendor Login', () => {
