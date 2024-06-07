@@ -10,6 +10,7 @@ import { randomUUID } from 'crypto';
 import { useTranslation } from 'next-i18next';
 import useSWR from 'swr';
 import { fetcher } from '@/pages/orders/success';
+import { AppContextProvider } from '@/contexts/AppContext';
 import http from 'http';
 
 jest.mock('swr', () => jest.fn());
@@ -224,4 +225,16 @@ it('Slices the product name on mobile', async () => {
   await waitFor(() => {
     expect(screen.getByText('This is a waaaaaaa...')).toBeInTheDocument();
   });
+});
+
+it('renders with layout', () => {
+  const TestComponent = () => <div>Test</div>;
+  const page = <TestComponent />;
+  const layout = Success.getLayout(page);
+
+  const { getByText } = render(
+    <AppContextProvider>{layout}</AppContextProvider>
+  );
+
+  expect(getByText('Test')).toBeInTheDocument();
 });

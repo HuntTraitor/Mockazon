@@ -124,7 +124,7 @@ export default function OrderCard({ order }: { order: Order }) {
             </Typography>
           </div>
           {!isMobile && (
-            <div className={isMobile ? styles.mobileDetailsContent : ''}>
+            <div>
               <Typography variant="subtitle2">{t('order:shipTo')}</Typography>
               <Typography variant="body2">
                 {order.shippingAddress.name}

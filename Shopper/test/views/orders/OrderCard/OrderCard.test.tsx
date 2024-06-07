@@ -210,4 +210,17 @@ describe('OrderCard', () => {
     );
     fireEvent.click(screen.getByAltText('BuyAgain'));
   });
+
+  it('Renders on mobile', () => {
+    AppContextProps.isMobile = true;
+    render(
+      <AppContext.Provider value={AppContextProps}>
+        <SnackbarProvider>
+          <OrderCard order={mockOrder} />
+        </SnackbarProvider>
+      </AppContext.Provider>
+    );
+
+    screen.getByText(Number(mockOrder.total).toFixed(2), { exact: false });
+  });
 });

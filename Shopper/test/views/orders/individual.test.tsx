@@ -11,6 +11,7 @@ import { AppContext } from '@/contexts/AppContext';
 import { enqueueSnackbar } from 'notistack';
 import React from 'react';
 import { randomUUID } from 'crypto';
+import { AppContextProvider } from '@/contexts/AppContext';
 import { screen, waitFor } from '@testing-library/dom';
 
 jest.mock('next/router', () => ({
@@ -353,4 +354,16 @@ it('Renders on mobile', async () => {
     expect(elements).toHaveLength(elements.length);
     expect(elements.length).toBeGreaterThan(0);
   });
+});
+
+it('renders with layout', () => {
+  const TestComponent = () => <div>Test</div>;
+  const page = <TestComponent />;
+  const layout = Individual.getLayout(page);
+
+  const { getByText } = render(
+    <AppContextProvider>{layout}</AppContextProvider>
+  );
+
+  expect(getByText('Test')).toBeInTheDocument();
 });
