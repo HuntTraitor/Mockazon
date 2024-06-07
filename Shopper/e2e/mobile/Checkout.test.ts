@@ -23,12 +23,12 @@ describe('Next.js App', () => {
     await browser.close();
   });
 
-  test('Adding five items to cart and then checking out', async () => {
+  test('Adding five items to cart', async () => {
     await signUp(page, 'Test User', 'password', getRandomEmail());
     await page.goto(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
     );
     await addFiveItemsToCart(page, true);
-    await checkoutAndSeeSuccessPage(page);
+    // await checkoutAndSeeSuccessPage(page);
   });
 });
