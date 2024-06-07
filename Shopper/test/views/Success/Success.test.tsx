@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { screen, fireEvent, render, waitFor } from '@testing-library/react';
 import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
@@ -80,7 +80,7 @@ jest.mock('next/router', () => ({
               images: ['http://test-image.jpg'],
               description: 'Test Product Description',
               url: 'http://test-product-url',
-              name: 'Test Product Name',
+              name: 'This is a waaaaaaaaaaaaaaaaaay longer Test Product Name',
               price: 100,
             },
             unit_amount: 100,
@@ -206,4 +206,22 @@ it('Click Backdrop', () => {
   if (backdrop) {
     fireEvent.click(backdrop);
   }
+});
+
+it('Slices the product name on mobile', async () => {
+  fetchSucceeds = true;
+  render(
+    <AppContext.Provider
+      value={{
+        ...AppContextProps,
+        isMobile: true,
+      }}
+    >
+      <Success />
+    </AppContext.Provider>
+  );
+
+  await waitFor(() => {
+    expect(screen.getByText('This is a waaaaaaa...')).toBeInTheDocument();
+  });
 });

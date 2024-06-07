@@ -6,7 +6,6 @@ import requestHandler from '../../api/requestHandler';
 import Success from '@/pages/orders/success';
 import { getServerSideProps } from '@/pages/orders/success';
 import { AppContext } from '@/contexts/AppContext';
-import { randomUUID } from 'crypto';
 import { useTranslation } from 'next-i18next';
 import useSWR from 'swr';
 import { fetcher } from '@/pages/orders/success';

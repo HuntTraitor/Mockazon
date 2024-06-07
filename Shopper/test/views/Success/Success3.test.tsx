@@ -1,15 +1,13 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { screen, render, waitFor } from '@testing-library/react';
 import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import requestHandler from '../../api/requestHandler';
 import Success from '@/pages/orders/success';
-import { getServerSideProps } from '@/pages/orders/success';
 import { AppContext } from '@/contexts/AppContext';
 import { randomUUID } from 'crypto';
 import { useTranslation } from 'next-i18next';
 import useSWR from 'swr';
-import { fetcher } from '@/pages/orders/success';
 import http from 'http';
 
 jest.mock('swr', () => jest.fn());
@@ -61,6 +59,8 @@ jest.mock('next/router', () => ({
   }),
 }));
 
+const productName = 'Test Product';
+
 (useSWR as jest.Mock).mockReturnValue({
   data: {
     customer_details: {
@@ -80,7 +80,7 @@ jest.mock('next/router', () => ({
               images: ['http://test-image.jpg'],
               description: null,
               url: 'http://test-product-url',
-              name: 'Test Product Name',
+              name: productName,
               price: 100,
             },
             unit_amount: 100,
@@ -158,4 +158,25 @@ it('Renders one item without description successfully', async () => {
       <Success />
     </AppContext.Provider>
   );
+});
+
+it('Renders on mobile', async () => {
+  fetchSucceeds = true;
+  render(
+    <AppContext.Provider
+      value={{
+        ...AppContextProps,
+        isMobile: true,
+      }}
+    >
+      <Success />
+    </AppContext.Provider>
+  );
+
+  await waitFor(() => {
+    expect(screen.getByLabelText('successStatus')).toBeInTheDocument();
+  });
+  await waitFor(() => {
+    expect(screen.getByText('Test Product')).toBeInTheDocument();
+  });
 });

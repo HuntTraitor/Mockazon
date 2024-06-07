@@ -8,15 +8,7 @@ import styles from '@/styles/success.module.css';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MockazonMenuDrawer from '@/views/MockazonMenuDrawer';
 import Image from 'next/image';
-import {
-  Typography,
-  List,
-  ListItem,
-  Stack,
-  Box,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
+import { Typography, List, ListItem, Stack, Box } from '@mui/material';
 // import { useAppContext } from '@/contexts/AppContext';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'; // Assuming you have a CSS module file
@@ -24,6 +16,7 @@ import AppBackDrop from '@/components/AppBackdrop';
 import { useTranslation } from 'next-i18next';
 import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
+import { useAppContext } from '@/contexts/AppContext';
 // TODO this entire page needs to be converted to graphQL
 
 export const fetcher = async (url: RequestInfo, init?: RequestInit) => {
@@ -66,8 +59,7 @@ const CheckoutSuccessPage = () => {
     query: { sessionId },
   } = useRouter();
   const URL = sessionId ? `/api/stripe/sessions/${sessionId}` : null;
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { isMobile } = useAppContext();
   const maxCharacterLength = 18;
 
   const { data: checkoutSession, error } = useSWR(URL, fetcher);
