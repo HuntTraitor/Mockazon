@@ -2,6 +2,7 @@ import * as http from 'http';
 import app from '../src/app';
 import { http as rest, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import { randomUUID } from 'crypto';
 
 let server: http.Server<
   typeof http.IncomingMessage,
@@ -15,6 +16,7 @@ class MockMicroservices {
   orderNotFound = false;
   orderOwnership = true;
   orderError = false;
+  productError = false;
   orderQuantity = 1;
   server = setupServer(
     rest.get(
@@ -93,6 +95,60 @@ class MockMicroservices {
           },
           { status: 200 }
         );
+      }
+    ),
+    rest.get(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product*`,
+      async ({ request }) => {
+        if (this.productError) {
+          return new HttpResponse(null, { status: 500 });
+        }
+        const url = new URL(request.url);
+        const vendorId = url.searchParams.get('vendorId');
+        const active = url.searchParams.get('active');
+        const pageSize = url.searchParams.get('pageSize');
+
+        const responseProducts = Array.from(
+          { length: parseInt(pageSize ?? '') || 1 },
+          () => ({
+            id: randomUUID(),
+            vendor_id: vendorId || 'd712b8f2-a57f-4989-9703-5e527457f893',
+            active: active || true,
+            created: Date.now(),
+            posted: Date.now(),
+            data: {
+              name: 'Product',
+              brand: 'Brand',
+              image: 'https://example.com/image.jpg',
+              price: '100.00',
+              rating: '5',
+              description: 'Description',
+              deliveryDate: '2022-01-01',
+            },
+          })
+        );
+
+        return HttpResponse.json(responseProducts);
+      }
+    ),
+    rest.post(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product*`,
+      async ({ request }) => {
+        if (this.productError) {
+          return new HttpResponse(null, { status: 500 });
+        }
+        const url = new URL(request.url);
+        const vendorId = url.searchParams.get('vendorId');
+        const bodyText = await request.text();
+        const product = JSON.parse(bodyText);
+        return HttpResponse.json({
+          id: randomUUID(),
+          vendor_id: vendorId || 'd712b8f2-a57f-4989-9703-5e527457f893',
+          active: true,
+          created: Date.now(),
+          posted: Date.now(),
+          data: product,
+        });
       }
     )
   );

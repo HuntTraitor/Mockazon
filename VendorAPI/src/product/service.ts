@@ -65,9 +65,6 @@ export class ProductService {
   }
 
   async create(product: NewProduct, vendor_id?: UUID): Promise<Product> {
-    console.log(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product?vendorId=${vendor_id}`
-    );
     return new Promise((resolve, reject) => {
       fetch(
         `http://${process.env.MICROSERVICE_URL || 'localhost'}:3011/api/v0/product?vendorId=${vendor_id}`,
@@ -95,6 +92,7 @@ export class ProductService {
     });
   }
 
+  /*
   async edit(productId: UUID, product: NewProduct): Promise<Product> {
     return new Promise((resolve, reject) => {
       fetch(
@@ -176,4 +174,5 @@ export class ProductService {
         });
     });
   }
+  */
 }
