@@ -119,6 +119,8 @@
     "cli-table3": "^0.6.5",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
-    "node-fetch": "^2.7.0"
+    "email": "^0.2.6",
+    "node-fetch": "^2.7.0",
+    "random": "^4.1.0"
   }
 }

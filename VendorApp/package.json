@@ -28,6 +28,7 @@
     "next": "*",
     "notistack": "^3.0.1",
     "pg": "*",
+    "random-email": "^1.0.3",
     "react": "*",
     "react-dom": "*",
     "reflect-metadata": "*",
