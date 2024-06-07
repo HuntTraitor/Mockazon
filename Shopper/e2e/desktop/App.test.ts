@@ -1,4 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import { findByTextAndSelector } from '../helpers';
 
 describe('Next.js App', () => {
   let browser: Browser;
@@ -20,18 +21,20 @@ describe('Next.js App', () => {
     );
   });
 
-  // test('Clicking translate button', async () => {
-  //   await page.goto('http://localhost:3000/login');
-
-  //   await page.click('a[aria-label="translate-spanish"]');
-
-  //   const selector = '[aria-label="title"]';
-  //   const expectedText = 'Bienvenido a mockazon';
-  //   await findByTextAndSelector(page, selector, expectedText);
-
-  //   await page.click('a[aria-label="translate-english"]');
-
-  //   const expectedTextEnglish = 'Welcome to Mockazon';
-  //   await findByTextAndSelector(page, selector, expectedTextEnglish);
-  // });
+  test('Clicking translate button', async () => {
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
+    );
+    await page.click('[aria-label="Language Text"]');
+    await page.click('[aria-label="Translate to Spanish"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const selector = 'body';
+    const expectedText = '¿Qué hay de nuevo?';
+    await findByTextAndSelector(page, selector, expectedText);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await page.click('[aria-label="Language Text"]');
+    await page.click('[aria-label="Translate to English"]');
+    const expectedTextEnglish = "What's New";
+    await findByTextAndSelector(page, 'body', expectedTextEnglish);
+  });
 });

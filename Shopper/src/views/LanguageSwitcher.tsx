@@ -56,7 +56,10 @@ const LanguageSwitcher = () => {
         }
       >
         <Paper elevation={5}>
-          <MenuItem onClick={() => handleLocaleChange('en')}>
+          <MenuItem
+            aria-label={'Translate to English'}
+            onClick={() => handleLocaleChange('en')}
+          >
             <Radio checked={currentLocale === 'en'} />
             <span
               style={{ marginRight: '5px' }}
@@ -64,7 +67,10 @@ const LanguageSwitcher = () => {
             ></span>{' '}
             English
           </MenuItem>
-          <MenuItem onClick={() => handleLocaleChange('es')}>
+          <MenuItem
+            aria-label={'Translate to Spanish'}
+            onClick={() => handleLocaleChange('es')}
+          >
             <Radio checked={currentLocale === 'es'} />
             <span
               style={{ marginRight: '5px' }}

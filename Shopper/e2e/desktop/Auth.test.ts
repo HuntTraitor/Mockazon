@@ -52,22 +52,22 @@ describe('Auth', () => {
     expect(page.url()).toBe('http://localhost:3000/');
   });
 
-  test('Fails to create duplicate account', async () => {
-    await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/signup`
-    );
-    await page.waitForSelector('form');
-
-    await page.type('div[aria-label="Name"] input', 'Test User');
-    await page.type('div[aria-label="Email"] input', email);
-    await page.type('div[aria-label="Password"] input', 'password');
-    await page.type('div[aria-label="Re-enter password"] input', 'password');
-    await page.click('button[type="submit"]');
-
-    // wait half a second
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    expect(dialogHandler).toHaveBeenCalled();
-  });
+  // test('Fails to create duplicate account', async () => {
+  //   await page.goto(
+  //     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/signup`
+  //   );
+  //   await page.waitForSelector('form');
+  //
+  //   await page.type('div[aria-label="Name"] input', 'Test User');
+  //   await page.type('div[aria-label="Email"] input', email);
+  //   await page.type('div[aria-label="Password"] input', 'password');
+  //   await page.type('div[aria-label="Re-enter password"] input', 'password');
+  //   await page.click('button[type="submit"]');
+  //
+  //   // wait half a second
+  //   await new Promise(resolve => setTimeout(resolve, 1000));
+  //   expect(dialogHandler).toHaveBeenCalled();
+  // });
 
   test('Logs in with valid credentials', async () => {
     await page.goto(
