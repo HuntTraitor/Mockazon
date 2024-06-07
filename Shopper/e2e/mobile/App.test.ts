@@ -1,4 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import { findByTextAndSelector, getRandomEmail, signUp } from '../helpers';
 
 describe('Next.js App', () => {
   let browser: Browser;
@@ -23,18 +24,26 @@ describe('Next.js App', () => {
     );
   });
 
-  // test('Clicking translate button', async () => {
-  //   await page.goto('http://localhost:3000/login');
-
-  //   await page.click('a[aria-label="translate-spanish"]');
-
-  //   const selector = '[aria-label="title"]';
-  //   const expectedText = 'Bienvenido a mockazon';
-  //   await findByTextAndSelector(page, selector, expectedText);
-
-  //   await page.click('a[aria-label="translate-english"]');
-
-  //   const expectedTextEnglish = 'Welcome to Mockazon';
-  //   await findByTextAndSelector(page, selector, expectedTextEnglish);
-  // });
+  test('Clicking translate button', async () => {
+    await signUp(page, 'Test User', 'password', getRandomEmail());
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
+    );
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await page.click('[aria-label="Mobile Account Button"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await page.click('[aria-label="select spanish"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // await page.click('[data-testid="CloseIcon"]');
+    const selector = 'body';
+    const expectedText = '¿Qué hay de nuevo?';
+    await findByTextAndSelector(page, selector, expectedText);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await page.click('[aria-label="Mobile Account Button"]');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await page.click('[aria-label="select english"]');
+    // await page.click('[data-testid="CloseIcon"]');
+    const expectedTextEnglish = "What's New";
+    await findByTextAndSelector(page, 'body', expectedTextEnglish);
+  });
 });
