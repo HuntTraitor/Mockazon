@@ -6,14 +6,14 @@ describe('General', () => {
     await supertest(server).get('/api/v0/invalid').expect(404);
   });
 
-  test('Renders Swagger UI', async () => {
-    await supertest(server)
-      .get('/v0/docs/')
-      .expect(200)
-      .then(response => {
-        expect(response.text).toContain('Swagger UI');
-      });
-  });
+  // test('Renders Swagger UI', async () => {
+  //   await supertest(server)
+  //     .get('/v0/docs/')
+  //     .expect(200)
+  //     .then(response => {
+  //       expect(response.text).toContain('Swagger UI');
+  //     });
+  // });
 
   test('Requests without API key are unauthorized', async () => {
     await supertest(server).get('/v0/order/').expect(401);

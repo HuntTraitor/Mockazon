@@ -66,10 +66,6 @@ export const AppContextProvider: React.FC<PropsWithChildren<object>> = ({
     };
   }, []);
 
-  useEffect(() => {
-    console.log('AccountDrawer open:', accountDrawerOpen);
-  }, [accountDrawerOpen]);
-
   return (
     <AppContext.Provider
       value={{

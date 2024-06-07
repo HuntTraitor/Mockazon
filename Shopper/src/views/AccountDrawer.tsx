@@ -12,7 +12,7 @@ import {
   Radio,
 } from '@mui/material';
 import { useAppContext } from '@/contexts/AppContext';
-import { useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import styles from '@/styles/AccountDrawer.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
@@ -46,10 +46,6 @@ const AccountDrawer = () => {
     setAccountDrawerOpen(false);
     router.push('/orders');
   };
-
-  useEffect(() => {
-    console.log('AccountDrawer open:', accountDrawerOpen);
-  }, [accountDrawerOpen]);
 
   return (
     <>

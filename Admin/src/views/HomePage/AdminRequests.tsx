@@ -67,7 +67,6 @@ export function AdminRequests() {
   const { refetch, setRefetch } = useContext(RefetchContext);
 
   React.useEffect(() => {
-    console.log('refetched...');
     fetchRequests(setRequests, accessToken);
     setRefetch(false);
 
@@ -121,11 +120,10 @@ export function AdminRequests() {
       body: JSON.stringify(query),
     })
       .then(res => {
-        console.log(res);
         return res.json();
       })
+      // eslint-disable-next-line
       .then(json => {
-        console.log(json);
         setRefetch(true);
       });
   };
