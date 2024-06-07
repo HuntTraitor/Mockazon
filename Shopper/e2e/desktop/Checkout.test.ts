@@ -26,7 +26,9 @@ describe('Next.js App', () => {
     await page.goto(
       `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000`
     );
+    await new Promise(resolve => setTimeout(resolve, 1000));
     await addFiveItemsToCart(page);
+
     // await checkoutAndSeeSuccessPage(page);
   });
 });

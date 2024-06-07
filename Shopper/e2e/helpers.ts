@@ -30,6 +30,7 @@ export async function signUp(
   await page.goto(
     `http://${process.env.MICROSERVICE_URL || 'localhost'}:3000/signup`
   );
+  await new Promise(resolve => setTimeout(resolve, 1000));
   await page.waitForSelector('form');
 
   await page.type('div[aria-label="Name"] input', name);
@@ -55,7 +56,6 @@ export async function addFiveItemsToCart(page: Page, mobile = false) {
     await page.click('[aria-label^="Add to cart button"]');
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
-
   await page.waitForSelector('[aria-label^="search-product"]');
   await page.click('[aria-label^="search-product"]');
   await new Promise(resolve => setTimeout(resolve, 1000));
