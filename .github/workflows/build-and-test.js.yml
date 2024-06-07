@@ -58,6 +58,9 @@ jobs:
           echo MASTER_SECRET=${{ secrets.MASTER_SECRET }} >> .env
           echo MICROSERVICE_URL=${{ vars.MICROSERVICE_URL }} >> .env
           echo ENVIRONMENT=production >> .env
+          echo STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }} >> .env
+          echo NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }} >> .env
+          echo STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }} >> .env
       - name: Spin up container
         run: npm run containerized
       - name: Sleep for 20 seconds
