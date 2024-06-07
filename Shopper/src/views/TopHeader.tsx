@@ -401,7 +401,7 @@ const TopHeader = () => {
                 }}
               >
                 <List>
-                  {suggestions.splice(0, 5).map((option, index) => (
+                  {suggestions.splice(0, 5).map(option => (
                     <ListItem
                       button
                       key={option}
@@ -420,8 +420,7 @@ const TopHeader = () => {
                         primary={highlightMatch(option, search)}
                         primaryTypographyProps={{
                           style: {
-                            fontWeight:
-                              index === suggestionIndex ? 'bold' : 'normal',
+                            fontWeight: 'normal',
                             fontSize: '14px',
                           },
                         }}

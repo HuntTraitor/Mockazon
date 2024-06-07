@@ -870,47 +870,4 @@ describe('Top Header Mobile', () => {
 
     fetchMock.mockRestore();
   });
-
-  it('Using arrow keys to navigate suggestions', async () => {
-    const fetchMock = jest.spyOn(window, 'fetch').mockImplementation(() => {
-      return Promise.resolve(
-        new Response(
-          JSON.stringify({
-            data: {
-              getSearchSuggestions: ['test product 1', 'second test product 2'],
-            },
-          }),
-          { status: 200 }
-        )
-      );
-    });
-
-    render(
-      <AppContext.Provider value={{ ...AppContextProps, isMobile: true }}>
-        <TopHeader />
-      </AppContext.Provider>
-    );
-
-    const searchInput = screen
-      .getByLabelText('Search Mockazon')
-      .querySelector('input');
-    if (searchInput) {
-      await userEvent.type(searchInput, 'test');
-    }
-
-    await waitFor(() => {
-      expect(screen.getByLabelText('test product 1')).toBeInTheDocument();
-      expect(
-        screen.getByLabelText('second test product 2')
-      ).toBeInTheDocument();
-    });
-
-    // FIXME: fix this test
-    // userEvent.keyboard('{arrowdown}');
-    // await waitFor(() => {
-    //   expect(screen.getByDisplayValue('test product 2')).toBeInTheDocument();
-    // });
-
-    fetchMock.mockRestore();
-  });
 });
