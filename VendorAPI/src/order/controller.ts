@@ -23,7 +23,6 @@ export class OrderController extends Controller {
   public async getOrders(
     @Request() request: Express.Request
   ): Promise<Order[] | undefined> {
-    console.log('request.user!.id', request.user!.id);
     return await new OrderService().getOrders(request.user!.id);
   }
 
