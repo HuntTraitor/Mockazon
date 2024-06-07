@@ -14,4 +14,8 @@ describe('General', () => {
         expect(response.text).toContain('Swagger UI');
       });
   });
+
+  test('Requests without API key are unauthorized', async () => {
+    await supertest(server).get('/v0/order/').expect(401);
+  });
 });

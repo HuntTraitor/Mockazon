@@ -1,38 +1,6 @@
-import { Credentials, Authenticated } from '.';
 import { SessionUser, UUID } from '../types';
 
 export class AuthService {
-  public async request(credentials: Credentials): Promise<Authenticated> {
-    return new Promise((resolve, reject) => {
-      fetch(
-        `http://${
-          process.env.MICROSERVICE_URL || 'localhost'
-        }:3010/api/v0/authenticate`,
-        {
-          method: 'POST',
-          body: JSON.stringify(credentials),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-        .then(res => {
-          if (!res.ok) {
-            throw res;
-          }
-          return res.json();
-        })
-        .then(authenticated => {
-          console.log('resolved');
-          resolve(authenticated);
-        })
-        .catch(err => {
-          console.log(err);
-          reject(new Error('Unauthorized'));
-        });
-    });
-  }
-
   public async check(apiKey?: UUID): Promise<SessionUser> {
     return new Promise((resolve, reject) => {
       if (!apiKey) {
@@ -68,31 +36,27 @@ export class AuthService {
     order_id?: UUID
   ): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (!vendor_id || !order_id) {
-        reject(new Error('Unauthorized'));
-      } else {
-        fetch(
-          `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/${order_id}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+      fetch(
+        `http://${process.env.MICROSERVICE_URL || 'localhost'}:3012/api/v0/order/${order_id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+        .then(res => {
+          if (!res.ok) {
+            throw res;
           }
-        )
-          .then(res => {
-            if (!res.ok) {
-              throw res;
-            }
-            return res.json();
-          })
-          .then(data => {
-            resolve(data.vendor_id === vendor_id);
-          })
-          .catch(() => {
-            reject(new Error('Unauthorized'));
-          });
-      }
+          return res.json();
+        })
+        .then(data => {
+          resolve(data.vendor_id === vendor_id);
+        })
+        .catch(() => {
+          reject(new Error('Unauthorized'));
+        });
     });
   }
 }
