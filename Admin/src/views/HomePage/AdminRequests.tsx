@@ -159,6 +159,7 @@ export function AdminRequests() {
                       variant="outlined"
                       color="primary"
                       data-testid={`approve-request-${request.id}`}
+                      aria-label={`approve-request-${request.id}`}
                       onClick={() =>
                         handleApproveRequest(
                           request.id,
@@ -174,6 +175,7 @@ export function AdminRequests() {
                       variant="outlined"
                       color="error"
                       data-testid={`reject-request-${request.id}`}
+                      aria-label={`reject-request-${request.id}`}
                       onClick={() => {
                         handleRejectRequest(
                           request.id,

@@ -40,11 +40,13 @@ export function MyDrawer() {
       text: 'Users',
       icon: <PeopleAltOutlinedIcon />,
       onClick: handleUsersClick,
+      ariaLabel: 'Users tab'
     },
     {
       text: 'Requests',
       icon: <PersonAddAltIcon />,
       onClick: handleRequestsClick,
+      ariaLabel: 'Requests Tab'
     },
   ];
 
@@ -79,9 +81,9 @@ export function MyDrawer() {
       </Box>
       <Divider />
       <List>
-        {listItems.map(({ text, icon, onClick }) => (
+        {listItems.map(({ text, icon, onClick, ariaLabel }) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton onClick={onClick}>
+            <ListItemButton onClick={onClick} aria-label={ariaLabel}>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
