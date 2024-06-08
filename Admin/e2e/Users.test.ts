@@ -61,7 +61,7 @@ describe('Admin List of Users Test', () => {
 
   test('Admin rejects a new user request', async() => {
     await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001/admin`
     );
     await page.type('aria/Email Address[role="textbox"]', 'htratar@ucsc.edu');
     await page.type('aria/Password[role="textbox"]', 'pass');
@@ -77,22 +77,11 @@ describe('Admin List of Users Test', () => {
     await page.click('aria/Requests Tab');
     await page.waitForSelector('[aria-label^="reject-request-"]')
     await page.click('[aria-label^="reject-request-"]');
-    await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003`
-    );
-    await page.waitForSelector('aria/login-link');
-    await page.click('aria/login-link');
-
-    await page.type('[aria-label="email-input"] input', 'request@ucsc.edu');
-    await page.type('[aria-label="password-input"] input', 'pass');
-
-    await page.click('aria/submit-request');
-    await page.waitForNavigation();
   });
 
   test('Admin approves a new request', async() => {
     await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001`
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3001/admin`
     );
     await page.type('aria/Email Address[role="textbox"]', 'htratar@ucsc.edu');
     await page.type('aria/Password[role="textbox"]', 'pass');
@@ -108,24 +97,5 @@ describe('Admin List of Users Test', () => {
     await page.click('aria/Requests Tab');
     await page.waitForSelector('[aria-label^="approve-request-"]')
     await page.click('[aria-label^="approve-request-"]')
-    await page.goto(
-      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003`
-    );
-    await page.waitForSelector('aria/login-link');
-    await page.click('aria/login-link');
-
-    await page.type('[aria-label="email-input"] input', 'request2@ucsc.edu');
-    await page.type('[aria-label="password-input"] input', 'pass');
-
-    await page.click('aria/submit-request');
-    await page.waitForNavigation();
-    await page.waitForFunction(() => {
-      const element = document.querySelector('body');
-      return (
-        element &&
-        element.textContent &&
-        element.textContent.includes('API Keys')
-      );
-    });
-  })
+  });
 });

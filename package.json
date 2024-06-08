@@ -101,10 +101,10 @@
     "tests:silent": "npm run test-account:silent && npm run test-admin:silent && npm run test-key:silent && npm run test-order:silent && npm run test-product:silent && npm run test-shopper:silent && npm run test-vendorapi:silent && npm run test-vendorapp:silent && npm run merge-coverage && npm run display-coverage",
     "test-e2es": "cd VendorApp && npm run test-e2e && cd .. && cd Shopper && npm run test-e2e && cd .. && cd Admin && npm run test-e2e",
     "e2e": "cd VendorApp && npm run test-e2e && cd .. && cd Shopper && npm run test-e2e && cd .. && cd Admin && npm run test-e2e",
-    "merge-coverage": "echo y | ts-node merge-coverage.ts",
-    "display-coverage": "echo y | ts-node display-coverage.ts",
+    "merge-coverage": "ts-node merge-coverage.ts",
+    "display-coverage": "ts-node display-coverage.ts",
     "postinstall": "npm run install-admin && npm run install-account && npm run install-order && npm run install-shopper && npm run install-product && npm run install-vendor-app && npm run install-vendor-api && npm run install-key",
-    "zip": "zip -r Mockazon.Submission.zip . -x '*node_modules*/*' -x '*.next*/*' -x '*.swc*/*' -x '.nyc_output' -x 'merged_coverage' -x '.git' -x '.github'"
+    "zip": "zip -r Mockazon.Submission.zip . -x '*node_modules*/*' -x '*.next*/*' -x '*.swc*/*' -x '*.git*/*' -x '*.github*/*'"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.35",
@@ -129,6 +129,7 @@
     "email": "^0.2.6",
     "istanbul": "^0.4.5",
     "node-fetch": "^2.7.0",
-    "random": "^4.1.0"
+    "random": "^4.1.0",
+    "random-email": "^1.0.3"
   }
 }
