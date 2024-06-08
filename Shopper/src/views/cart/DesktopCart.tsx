@@ -12,8 +12,6 @@ import {
   Divider,
   useTheme,
   useMediaQuery,
-  Select,
-  MenuItem,
 } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
@@ -135,47 +133,23 @@ const DesktopCart: React.FC<DesktopCartProps> = ({
                             href={`/cart`}
                           >
                             <Box className={styles.cardToolbar}>
-                              <Select
+                              <select
                                 aria-label={`Quantity Selector for ${product.id}`}
                                 className={styles.quantityDropdown}
                                 value={product.quantity}
                                 onChange={e =>
                                   handleQuantityChange(
                                     product.data.getProduct.id,
-                                    e.target.value as string
+                                    e.target.value
                                   )
                                 }
-                                MenuProps={{
-                                  anchorOrigin: {
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                  },
-                                  transformOrigin: {
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                  },
-                                  PaperProps: {
-                                    style: {
-                                      maxHeight: '350px',
-                                      width: '20px',
-                                      backgroundColor: 'white',
-                                      boxShadow:
-                                        '0px 2px 8px rgba(0, 0, 0, 0.15)',
-                                      borderRadius: '4px',
-                                    },
-                                  },
-                                }}
                               >
                                 {Array.from({ length: 10 }, (_, i) => (
-                                  <MenuItem
-                                    key={i + 1}
-                                    value={`${i + 1}`}
-                                    style={{ fontSize: '12px' }} // Adjust the font size as needed
-                                  >
+                                  <option key={i + 1} value={`${i + 1}`}>
                                     Qty: {i + 1}
-                                  </MenuItem>
+                                  </option>
                                 ))}
-                              </Select>
+                              </select>
                               <Divider orientation="vertical" flexItem />
                               <Typography
                                 aria-label={`${t('cart:Delete')} ${product.data.getProduct.data.name}`}
