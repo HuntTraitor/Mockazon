@@ -48,8 +48,8 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker-compose build
-        docker-compose push
+        docker compose build
+        docker compose push
 
   deploy:
     needs: build
@@ -75,9 +75,9 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker-compose -f /root/docker-compose-production.yml pull
-          docker-compose -f /root/docker-compose-production.yml down
-          docker-compose -f /root/docker-compose-production.yml up -d
+          docker compose -f /root/docker-compose-production.yml pull
+          docker compose -f /root/docker-compose-production.yml down
+          docker compose -f /root/docker-compose-production.yml up -d
           docker system prune -a -f --volumes
     - name: Wait for 20 seconds
       run: sleep 20
