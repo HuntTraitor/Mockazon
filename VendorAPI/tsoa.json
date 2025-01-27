@@ -10,7 +10,7 @@
     "schemes": [
       "http"
     ],
-    "basePath": "/v0",
+    "basePath": "/vendorapi/v0",
     "securityDefinitions": {
       "ApiKeyAuth": {
         "type": "apiKey",

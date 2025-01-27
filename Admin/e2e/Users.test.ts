@@ -13,7 +13,7 @@ describe('Admin List of Users Test', () => {
    */
   beforeEach(async () => {
     browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
     });
     page = await browser.newPage();
   });
@@ -77,6 +77,17 @@ describe('Admin List of Users Test', () => {
     await page.click('aria/Requests Tab');
     await page.waitForSelector('[aria-label^="reject-request-"]')
     await page.click('[aria-label^="reject-request-"]');
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003`
+    );
+    await page.waitForSelector('aria/login-link');
+    await page.click('aria/login-link');
+
+    await page.type('[aria-label="email-input"] input', 'request@ucsc.edu');
+    await page.type('[aria-label="password-input"] input', 'pass');
+
+    await page.click('aria/submit-request');
+    await page.waitForNavigation();
   });
 
   test('Admin approves a new request', async() => {
@@ -97,5 +108,24 @@ describe('Admin List of Users Test', () => {
     await page.click('aria/Requests Tab');
     await page.waitForSelector('[aria-label^="approve-request-"]')
     await page.click('[aria-label^="approve-request-"]')
-  });
+    await page.goto(
+      `http://${process.env.MICROSERVICE_URL || 'localhost'}:3003`
+    );
+    await page.waitForSelector('aria/login-link');
+    await page.click('aria/login-link');
+
+    await page.type('[aria-label="email-input"] input', 'request2@ucsc.edu');
+    await page.type('[aria-label="password-input"] input', 'pass');
+
+    await page.click('aria/submit-request');
+    await page.waitForNavigation();
+    await page.waitForFunction(() => {
+      const element = document.querySelector('body');
+      return (
+        element &&
+        element.textContent &&
+        element.textContent.includes('API Keys')
+      );
+    });
+  })
 });
