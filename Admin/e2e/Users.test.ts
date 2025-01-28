@@ -1,3 +1,4 @@
+import { TrendingUp } from '@mui/icons-material';
 import puppeteer, { Browser, Page } from 'puppeteer';
 
 function sleep(ms: number) {
@@ -13,7 +14,7 @@ describe('Admin List of Users Test', () => {
    */
   beforeEach(async () => {
     browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
     });
     page = await browser.newPage();
   });
