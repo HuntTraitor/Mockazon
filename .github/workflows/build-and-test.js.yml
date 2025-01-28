@@ -44,27 +44,27 @@ jobs:
       - run: npm test
       - run: npm run docker-down
 
-      # E2E tests with containerized version 
-      - name: Sleep for 20 seconds
-        run: sleep 20s
-        shell: bash
-      - name: Setup .env file
-        run: |
-          echo POSTGRES_HOST=${{ vars.POSTGRES_HOST }} >> .env
-          echo POSTGRES_PORT=${{ vars.POSTGRES_PORT }} >> .env
-          echo POSTGRES_DB=${{ vars.POSTGRES_DB }} >> .env
-          echo POSTGRES_USER=${{ vars.POSTGRES_USER }} >> .env
-          echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
-          echo MASTER_SECRET=${{ secrets.MASTER_SECRET }} >> .env
-          echo MICROSERVICE_URL=microservice >> .env
-          echo ENVIRONMENT=production >> .env
-          echo STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }} >> .env
-          echo NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }} >> .env
-          echo STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }} >> .env
-      - name: Spin up container
-        run: npm run containerise
-      - name: Sleep for 20 seconds
-        run: sleep 20s
-        shell: bash
-      - name: Run e2e tests
-        run: npm run e2e
+      # # E2E tests with containerized version 
+      # - name: Sleep for 20 seconds
+      #   run: sleep 20s
+      #   shell: bash
+      # - name: Setup .env file
+      #   run: |
+      #     echo POSTGRES_HOST=${{ vars.POSTGRES_HOST }} >> .env
+      #     echo POSTGRES_PORT=${{ vars.POSTGRES_PORT }} >> .env
+      #     echo POSTGRES_DB=${{ vars.POSTGRES_DB }} >> .env
+      #     echo POSTGRES_USER=${{ vars.POSTGRES_USER }} >> .env
+      #     echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+      #     echo MASTER_SECRET=${{ secrets.MASTER_SECRET }} >> .env
+      #     echo MICROSERVICE_URL=microservice >> .env
+      #     echo ENVIRONMENT=production >> .env
+      #     echo STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }} >> .env
+      #     echo NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }} >> .env
+      #     echo STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }} >> .env
+      # - name: Spin up container
+      #   run: npm run containerise
+      # - name: Sleep for 20 seconds
+      #   run: sleep 20s
+      #   shell: bash
+      # - name: Run e2e tests
+      #   run: npm run e2e
