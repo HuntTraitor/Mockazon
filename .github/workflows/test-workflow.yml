@@ -20,6 +20,9 @@ jobs:
   conoect:
     runs-on: ubuntu-latest
     steps:
+      - name: Show if private key loads
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | grep "PRIVATE KEY"
+
       - uses: actions/checkout@v4
       - name: Copy docker compose
         uses: appleboy/scp-action@master

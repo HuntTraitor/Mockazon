@@ -1,8 +1,8 @@
 name: Mockazon CI
 
 on:
-  push:
-    branches: ["main"]
+#  push:
+#    branches: ["main"]
   workflow_dispatch:
 
 env:
