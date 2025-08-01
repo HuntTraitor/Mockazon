@@ -62,7 +62,7 @@ jobs:
       with:
         host: ${{ secrets.DROPLET_IP }}
         username: root
-        password: ${{ secrets.SSH_PASSWORD }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         source: "docker-compose-production.yml"
         target: "/root"
@@ -72,7 +72,7 @@ jobs:
       with:
         host: ${{ secrets.DROPLET_IP }}
         username: root
-        password: ${{ secrets.SSH_PASSWORD }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           docker-compose -f /root/docker-compose-production.yml pull
